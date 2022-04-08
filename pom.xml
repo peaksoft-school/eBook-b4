@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>kg.peaksoft</groupId>
-    <artifactId>eBook-b4</artifactId>
+    <artifactId>eBook-b4-a</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>eBook-b4</name>
-    <description>eBook-b4</description>
+    <description>eBook-b4-a</description>
     <properties>
         <java.version>11</java.version>
     </properties>
