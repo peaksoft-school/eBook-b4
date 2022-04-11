@@ -3,25 +3,23 @@ package kg.peaksoft.ebookb4.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "clients")
-public class Client {
+@Table(name = "users")
+public class User {
+
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "client_gen")
+            generator = "gen")
     @SequenceGenerator(
-            name = "client_gen",
-            sequenceName = "client_seq",
+            name = "gen",
+            sequenceName = "seq",
             allocationSize = 1)
 
-    private Long clientId;
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
     private String address;
-
-
-
-
+    private  int phoneNumber;
 
 }
