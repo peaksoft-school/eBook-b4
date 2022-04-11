@@ -8,7 +8,14 @@ public class Admin {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "admin_gen")
+    @SequenceGenerator(
+            name = "admin_gen",
+            sequenceName = "admin_seq",
+            allocationSize = 1)
+
     private Long adminId;
     private String firstName;
     private String lastName;
