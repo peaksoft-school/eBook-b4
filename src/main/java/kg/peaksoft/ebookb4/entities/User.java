@@ -1,32 +1,45 @@
 package kg.peaksoft.ebookb4.entities;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "gen")
-    @SequenceGenerator(
-            name = "gen",
-            sequenceName = "seq",
-            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private Long clientId;
-    private String fullName;
-    private Role role;
+    @NotBlank
+    @Size(max = 50)
+    @Email
     private String email;
-    private String address;
-    private  int phoneNumber;
 
-    @Transient
-    private ApplicationUser applicationUser;
+    @NotBlank
+    @Size(max = 120)
+    private String password;
+
+    private String number;
+
+    private String firstName;
+
+    private String lastName;
 
     @OneToMany
-    private List<Promocode> promocode;
+    private List<Book> books;
 
+    @OneToMany
+    private List<Favorites> favorites;
+    @OneToMany
+    private List<Basket> basket;
 
+    @OneToOne
+    private Role role;
+
+    public User() {
+    }
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }
