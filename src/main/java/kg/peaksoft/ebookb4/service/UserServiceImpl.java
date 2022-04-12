@@ -1,38 +1,56 @@
 package kg.peaksoft.ebookb4.service;
 
-import kg.peaksoft.ebookb4.entities.User;
+import kg.peaksoft.ebookb4.models.userClasses.User;
+import kg.peaksoft.ebookb4.payload.request.SignupRequest;
+import kg.peaksoft.ebookb4.payload.response.MessageResponse;
+import kg.peaksoft.ebookb4.repository.RoleRepository;
+import kg.peaksoft.ebookb4.repository.UserRepository;
+import kg.peaksoft.ebookb4.service.UserService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Locale;
 
+@Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
-    @Override
-    public User saveUser(User user) {
-        return null;
-    }
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
+    private final RoleRepository roleRepository;
 
     @Override
-    public void removeUserById(Long id) {
+    public ResponseEntity<?> register(SignupRequest signUpRequest, Long number) {
 
-    }
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
+        User user;
+        if (number==1L){
+            user = new User(
+                    signUpRequest.getEmail(),
+                    encoder.encode(signUpRequest.getPassword()));
+            user.setFirstName(signUpRequest.getFirstName());
+            user.setLastName("");
+            user.setNumber("");
+            user.setRole(roleRepository.getById(number));
+            userRepository.save(user);
+        }
+        else{
+            user = new User(
+                    signUpRequest.getEmail(),
+                    encoder.encode(signUpRequest.getPassword()));
+            user.setFirstName(signUpRequest.getFirstName());
+            user.setLastName(signUpRequest.getLastName());
+            user.setNumber(signUpRequest.getNumber());
+            user.setRole(roleRepository.getById(number));
+            userRepository.save(user);
+        }
 
-    @Override
-    public Optional<User> getById(Long id) {
-        return Optional.empty();
+        return ResponseEntity.ok(new MessageResponse(
+                String.format("User with email %s registered successfully!",user.getEmail().toUpperCase(Locale.ROOT))));
     }
-
-    @Override
-    public List<User> getAllUser() {
-        return null;
-    }
-
-    @Override
-    public User update(User user, Long id) {
-        return null;
-    }
-
-    @Override
-    public User findById(Long id) {
-        return null;
-    }
-}
