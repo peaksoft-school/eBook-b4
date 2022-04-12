@@ -10,7 +10,6 @@ import java.util.*;
 @Entity
 public class ApplicationUser implements UserDetails {
 
-
     @Id
     private Long id;
     private String email;
@@ -21,14 +20,11 @@ public class ApplicationUser implements UserDetails {
     private boolean isCredentialsNonExpired = true;
     private boolean isEnabled = true;
 
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
-    List<Role> roles = new ArrayList<>();
-
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return  Collections.singleton(role);
     }
 
     @Override
