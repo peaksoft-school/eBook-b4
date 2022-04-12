@@ -1,11 +1,12 @@
-package kg.peaksoft.ebookb4.service;
+package kg.peaksoft.ebookb4.service.impl;
 
 import kg.peaksoft.ebookb4.entities.User;
+import kg.peaksoft.ebookb4.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
 
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Override
     public User saveUser() {
         return saveUser();

@@ -1,6 +1,9 @@
 package kg.peaksoft.ebookb4.entities;
 
+import kg.peaksoft.ebookb4.enums.Role;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -15,11 +18,17 @@ public class User {
             sequenceName = "seq",
             allocationSize = 1)
 
-    private Long id;
-    private String firstName;
-    private String lastName;
+    private Long clientId;
+    private String fullName;
+    private Role role;
     private String email;
     private String address;
     private  int phoneNumber;
+
+    @Transient
+    private ApplicationUser applicationUser;
+
+    @OneToMany
+    private List<Promocode> promocode;
 
 }

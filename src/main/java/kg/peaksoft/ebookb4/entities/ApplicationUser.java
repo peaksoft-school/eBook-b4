@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.entities;
 
+import kg.peaksoft.ebookb4.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,7 +9,6 @@ import java.util.*;
 
 @Entity
 public class ApplicationUser implements UserDetails {
-
 
     @Id
     private Long id;
@@ -20,14 +20,11 @@ public class ApplicationUser implements UserDetails {
     private boolean isCredentialsNonExpired = true;
     private boolean isEnabled = true;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    List<Role> roles = new ArrayList<>();
-
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return  Collections.singleton(role);
     }
 
     @Override
