@@ -1,6 +1,7 @@
 package kg.peaksoft.ebookb4.models.bookClasses;
 
 import kg.peaksoft.ebookb4.models.userClasses.User;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
  * Date: 12/4/22
  */
 @Entity
+@RequiredArgsConstructor
 public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
