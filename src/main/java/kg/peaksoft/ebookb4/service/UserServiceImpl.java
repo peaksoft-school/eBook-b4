@@ -54,3 +54,4 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok(new MessageResponse(
                 String.format("User with email %s registered successfully!",user.getEmail().toUpperCase(Locale.ROOT))));
     }
+}
