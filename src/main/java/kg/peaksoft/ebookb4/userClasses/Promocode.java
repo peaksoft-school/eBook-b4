@@ -1,6 +1,5 @@
-package kg.peaksoft.ebookb4.entities;
+package kg.peaksoft.ebookb4.userClasses;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

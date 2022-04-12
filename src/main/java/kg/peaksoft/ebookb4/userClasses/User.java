@@ -1,6 +1,9 @@
-package kg.peaksoft.ebookb4.entities;
+package kg.peaksoft.ebookb4.userClasses;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -8,7 +11,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotBlank
     @Size(max = 50)
     @Email

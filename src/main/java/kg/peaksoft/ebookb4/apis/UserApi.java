@@ -1,6 +1,6 @@
 package kg.peaksoft.ebookb4.apis;
 
-import kg.peaksoft.ebookb4.entities.User;
+import kg.peaksoft.ebookb4.userClasses.User;
 import kg.peaksoft.ebookb4.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
