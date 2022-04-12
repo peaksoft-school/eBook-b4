@@ -1,18 +1,14 @@
 package kg.peaksoft.ebookb4.repository;
 
-import kg.peaksoft.ebookb4.models.UserAuth;
+import kg.peaksoft.ebookb4.models.userClasses.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 12/4/22
- */
 @Repository
-public interface UserRepository extends JpaRepository<UserAuth, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
+  Optional<User> findByEmail(String email);
 
-    Optional<UserAuth> findByEmail(String email);
-
+  Boolean existsByEmail(String email);
 }

@@ -9,18 +9,13 @@ import javax.persistence.*;
  * Date: 12/4/22
  */
 @Entity
-public class Favorites {
+public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
     @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
-    private Long favoriteId;
-
+    private Long basketId;
     @OneToOne
     private Book book;
-
     @OneToOne
-    @JoinColumn(name = "user_id")
-    private User User;
-
-
+    private User user;
 }

@@ -1,22 +1,17 @@
 package kg.peaksoft.ebookb4.service.impl;
 
-import kg.peaksoft.ebookb4.config.JwtUtils;
-import kg.peaksoft.ebookb4.dto.auth.AuthRequest;
-import kg.peaksoft.ebookb4.dto.auth.AuthResponse;
-import kg.peaksoft.ebookb4.exceptions.BadRequestException;
-import kg.peaksoft.ebookb4.exceptions.NotFoundException;
-import kg.peaksoft.ebookb4.models.UserAuth;
-import kg.peaksoft.ebookb4.models.enums.Role;
+import kg.peaksoft.ebookb4.models.userClasses.User;
+import kg.peaksoft.ebookb4.payload.request.SignupRequest;
+import kg.peaksoft.ebookb4.payload.response.MessageResponse;
+import kg.peaksoft.ebookb4.repository.RoleRepository;
 import kg.peaksoft.ebookb4.repository.UserRepository;
 import kg.peaksoft.ebookb4.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import java.util.Locale;
 
 /**
  * Author: Zhanarbek Abdurasulov
@@ -26,42 +21,42 @@ import javax.annotation.PostConstruct;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder encoder;
+    private final RoleRepository roleRepository;
 
-    //If user exists it return email, role and token!
-    public AuthResponse authenticate(AuthRequest authRequest) {
-        userRepository.findByEmail(authRequest.getEmail()).
-                orElseThrow(() -> new BadRequestException
-                        (String.format("User with %s email not found!",authRequest.getEmail())));
+    @Override
+    public ResponseEntity<?> register(SignupRequest signUpRequest, Long number) {
 
-        Authentication authentication;
-            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    authRequest.getEmail(),
-                    authRequest.getPassword()
-            ));
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
+        User user;
+        if (number==1L){
+            user = new User(
+                    signUpRequest.getEmail(),
+                    encoder.encode(signUpRequest.getPassword()));
+            user.setFirstName(signUpRequest.getFirstName());
+            user.setLastName("");
+            user.setNumber("");
+            user.setRole(roleRepository.getById(number));
+            userRepository.save(user);
+        }
+        else{
+            user = new User(
+                    signUpRequest.getEmail(),
+                    encoder.encode(signUpRequest.getPassword()));
+            user.setFirstName(signUpRequest.getFirstName());
+            user.setLastName(signUpRequest.getLastName());
+            user.setNumber(signUpRequest.getNumber());
+            user.setRole(roleRepository.getById(number));
+            userRepository.save(user);
+        }
 
-            userRepository.findByEmail(authRequest.getEmail()).
-                    orElseThrow(() -> new NotFoundException
-                            (String.format("User with %s email not found!",authRequest.getEmail())));
-
-        String generatedToken = jwtUtils.generateToken(authentication);
-        return AuthResponse.builder()
-                .email(authRequest.getEmail())
-                .role(userRepository.findByEmail(authRequest.getEmail()).get().getRole().name())
-                .token(generatedToken)
-                .build();
-    }
-    @PostConstruct
-    public void init(){
-        UserAuth user = new UserAuth();
-        user.setEmail("kutubekutush@gmail.com");
-        user.setPassword(passwordEncoder.encode("kutubek"));
-        user.setRole(Role.ADMIN);
-        userRepository.save(user);
+        return ResponseEntity.ok(new MessageResponse(
+                String.format("User with email %s registered successfully!",user.getEmail().toUpperCase(Locale.ROOT))));
     }
 
 }
