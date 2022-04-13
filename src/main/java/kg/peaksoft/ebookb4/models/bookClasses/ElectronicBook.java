@@ -19,8 +19,8 @@ public class ElectronicBook {
     @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
     private Long ebookId;
     private String publishingHouse;
-//    private File aboutBook;
-//    private File fragmentOfBook;
+    private String aboutBook;
+    private String fragmentOfBook;
     private Integer numberOfPages;
     private String urlOfBookFromCloud;
 
