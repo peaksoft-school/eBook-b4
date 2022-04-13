@@ -12,12 +12,14 @@ import java.io.File;
  * Author: Zhanarbek Abdurasulov
  * Date: 12/4/22
  */
+
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaperBook {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
     @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
