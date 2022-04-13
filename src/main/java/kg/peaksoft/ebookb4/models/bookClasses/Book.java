@@ -38,11 +38,8 @@ public class Book {
     private Boolean isBestSeller;
     private Language language;
     private BookType bookType;
-    @ElementCollection
-    @CollectionTable(name = "my_list",
-    joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "list")
-    private List<String> images;
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<FileSources> images;
     private Genre genre;
     private Integer likes;
 
