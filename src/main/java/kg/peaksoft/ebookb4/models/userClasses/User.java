@@ -23,6 +23,7 @@ import java.util.Set;
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "user_id")
   private Long id;
 
   @NotBlank
@@ -44,9 +45,10 @@ public class User {
   private List<Book> books;
 
   @OneToMany
-  private List<Favorites> favorites;
-  @OneToMany
-  private List<Basket> basket;
+  private List<Favorites> likedBooks;
+
+  @OneToOne
+  private Basket basket;
 
   @OneToOne
   private Role role;

@@ -1,6 +1,8 @@
 package kg.peaksoft.ebookb4.models.bookClasses;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,7 +12,10 @@ import javax.persistence.*;
  * Date: 13/4/22
  */
 @Entity
-@Getter @Setter
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class FileSources {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
@@ -18,5 +23,6 @@ public class FileSources {
     private Long id;
     private String name;
     @ManyToOne
+    @JoinColumn(name = "book_id")
     private Book book;
 }

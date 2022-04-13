@@ -1,6 +1,8 @@
 package kg.peaksoft.ebookb4.models.bookClasses;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,6 +15,8 @@ import java.io.File;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ElectronicBook {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
