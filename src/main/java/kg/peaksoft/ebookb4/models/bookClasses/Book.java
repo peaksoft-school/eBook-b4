@@ -13,7 +13,6 @@ import javax.persistence.*;
 import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -38,7 +37,7 @@ public class Book {
     private Boolean isBestSeller;
     private Language language;
     private BookType bookType;
-    private List<File> images;
+//    private Set<File> images;
     private Genre genre;
     private Integer likes;
 
