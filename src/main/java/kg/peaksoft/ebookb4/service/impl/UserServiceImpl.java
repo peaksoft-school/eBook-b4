@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.service;
+package kg.peaksoft.ebookb4.service.impl;
 
 import kg.peaksoft.ebookb4.models.userClasses.User;
 import kg.peaksoft.ebookb4.payload.request.SignupRequest;
@@ -54,4 +54,5 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok(new MessageResponse(
                 String.format("User with email %s registered successfully!",user.getEmail().toUpperCase(Locale.ROOT))));
     }
+
 }
