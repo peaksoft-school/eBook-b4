@@ -24,6 +24,7 @@ public class PaperBook {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
     @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
     private Long paperBookId;
+
     private String publishingHouse;
     private String aboutBook;
     private String fragmentOfBook;

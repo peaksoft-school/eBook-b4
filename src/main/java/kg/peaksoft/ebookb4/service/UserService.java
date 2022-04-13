@@ -1,6 +1,6 @@
 package kg.peaksoft.ebookb4.service;
 
-import kg.peaksoft.ebookb4.payload.request.SignupRequest;
+import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -9,6 +9,6 @@ import org.springframework.http.ResponseEntity;
  */
 public interface UserService {
 
-    ResponseEntity<?> register(SignupRequest signupRequest, Long number);
+    ResponseEntity<?> register(SignupRequestVendor signupRequestVendor, Long number);
 
 }

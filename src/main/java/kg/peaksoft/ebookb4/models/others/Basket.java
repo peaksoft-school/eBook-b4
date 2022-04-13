@@ -1,5 +1,6 @@
-package kg.peaksoft.ebookb4.models.bookClasses;
+package kg.peaksoft.ebookb4.models.others;
 
+import kg.peaksoft.ebookb4.models.bookClasses.Book;
 import kg.peaksoft.ebookb4.models.userClasses.User;
 import lombok.*;
 import lombok.RequiredArgsConstructor;

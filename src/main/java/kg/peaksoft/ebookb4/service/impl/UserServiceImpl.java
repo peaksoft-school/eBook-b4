@@ -1,8 +1,8 @@
 package kg.peaksoft.ebookb4.service.impl;
 
 import kg.peaksoft.ebookb4.models.userClasses.User;
-import kg.peaksoft.ebookb4.payload.request.SignupRequest;
-import kg.peaksoft.ebookb4.payload.response.MessageResponse;
+import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
+import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.repository.RoleRepository;
 import kg.peaksoft.ebookb4.repository.UserRepository;
 import kg.peaksoft.ebookb4.service.UserService;
@@ -13,10 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Locale;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 12/4/22
- */
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -26,9 +22,9 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
 
     @Override
-    public ResponseEntity<?> register(SignupRequest signUpRequest, Long number) {
+    public ResponseEntity<?> register(SignupRequestVendor signupRequestVendor, Long number) {
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByEmail(signupRequestVendor.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
@@ -36,9 +32,9 @@ public class UserServiceImpl implements UserService {
         User user;
         if (number==1L){
             user = new User(
-                    signUpRequest.getEmail(),
-                    encoder.encode(signUpRequest.getPassword()));
-            user.setFirstName(signUpRequest.getFirstName());
+                    signupRequestVendor.getEmail(),
+                    encoder.encode(signupRequestVendor.getPassword()));
+            user.setFirstName(signupRequestVendor.getFirstName());
             user.setLastName("");
             user.setNumber("");
             user.setRole(roleRepository.getById(number));
@@ -46,11 +42,11 @@ public class UserServiceImpl implements UserService {
         }
         else{
             user = new User(
-                    signUpRequest.getEmail(),
-                    encoder.encode(signUpRequest.getPassword()));
-            user.setFirstName(signUpRequest.getFirstName());
-            user.setLastName(signUpRequest.getLastName());
-            user.setNumber(signUpRequest.getNumber());
+                    signupRequestVendor.getEmail(),
+                    encoder.encode(signupRequestVendor.getPassword()));
+            user.setFirstName(signupRequestVendor.getFirstName());
+            user.setLastName(signupRequestVendor.getLastName());
+            user.setNumber(signupRequestVendor.getNumber());
             user.setRole(roleRepository.getById(number));
             userRepository.save(user);
         }

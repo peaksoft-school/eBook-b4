@@ -3,6 +3,7 @@ package kg.peaksoft.ebookb4.security.services;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.peaksoft.ebookb4.models.userClasses.User;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

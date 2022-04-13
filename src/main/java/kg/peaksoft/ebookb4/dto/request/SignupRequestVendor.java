@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.payload.request;
+package kg.peaksoft.ebookb4.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,10 +6,9 @@ import lombok.Setter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @Getter @Setter
-public class SignupRequest {
+public class SignupRequestVendor {
 
   @NotBlank
   @Size(max = 50)

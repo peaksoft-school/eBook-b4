@@ -1,6 +1,6 @@
-package kg.peaksoft.ebookb4.models.bookClasses;
+package kg.peaksoft.ebookb4.models.others;
 
-import kg.peaksoft.ebookb4.models.userClasses.User;
+import kg.peaksoft.ebookb4.models.bookClasses.Book;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,26 +10,21 @@ import javax.persistence.*;
 
 /**
  * Author: Zhanarbek Abdurasulov
- * Date: 12/4/22
+ * Date: 13/4/22
  */
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Favorites {
+public class FileSources {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
     @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
-    @Column(name = "favorite_id")
-    private Long favoriteId;
+    private Long id;
+
+    private String images;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
-
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User User;
-
 }

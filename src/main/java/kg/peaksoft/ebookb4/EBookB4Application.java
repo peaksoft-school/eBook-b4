@@ -1,6 +1,6 @@
 package kg.peaksoft.ebookb4;
 
-import kg.peaksoft.ebookb4.models.userClasses.ERole;
+import kg.peaksoft.ebookb4.models.enums.ERole;
 import kg.peaksoft.ebookb4.models.userClasses.Role;
 import kg.peaksoft.ebookb4.models.userClasses.User;
 import kg.peaksoft.ebookb4.repository.RoleRepository;
@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 @SpringBootApplication
 @AllArgsConstructor
