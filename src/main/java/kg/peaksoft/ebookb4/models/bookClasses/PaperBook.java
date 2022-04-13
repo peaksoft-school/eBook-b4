@@ -7,8 +7,10 @@ import java.io.File;
  * Author: Zhanarbek Abdurasulov
  * Date: 12/4/22
  */
+
 @Entity
 public class PaperBook {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
     @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
