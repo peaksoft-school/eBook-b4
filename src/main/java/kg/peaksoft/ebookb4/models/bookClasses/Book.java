@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -37,7 +38,11 @@ public class Book {
     private Boolean isBestSeller;
     private Language language;
     private BookType bookType;
-    private Set<String> images;
+    @ElementCollection
+    @CollectionTable(name = "my_list",
+    joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "list")
+    private List<String> images;
     private Genre genre;
     private Integer likes;
 
