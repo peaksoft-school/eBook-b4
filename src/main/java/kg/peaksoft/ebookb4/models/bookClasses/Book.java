@@ -37,7 +37,7 @@ public class Book {
     private Boolean isBestSeller;
     private Language language;
     private BookType bookType;
-//    private Set<File> images;
+    private Set<String> images;
     private Genre genre;
     private Integer likes;
 

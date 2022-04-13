@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 @SpringBootApplication
 @AllArgsConstructor
@@ -46,7 +47,6 @@ public class EBookB4Application {
         user.setPassword(encoder.encode("password"));
         user.setRole(roleRepository.getById(3L));
         userRepository.save(user);
-
     }
 
 }

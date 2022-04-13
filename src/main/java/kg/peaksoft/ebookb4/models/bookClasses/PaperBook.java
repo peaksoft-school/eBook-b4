@@ -14,8 +14,8 @@ public class PaperBook {
     @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
     private Long paperBookId;
     private String publishingHouse;
-//    private File aboutBook;
-//    private File fragmentOfBook;
+    private String aboutBook;
+    private String fragmentOfBook;
     private Integer numberOfPages;
     private Integer numberOfSelected;
 

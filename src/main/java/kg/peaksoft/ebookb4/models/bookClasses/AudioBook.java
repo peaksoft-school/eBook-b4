@@ -25,9 +25,9 @@ public class AudioBook {
 
     private LocalDate duration;
 
-//    private File fragment;
+    private String fragment;
 
-//    private File audioBook;
+    private String audioBook;
 
     private String urlOfBookFromCloud;
 }
