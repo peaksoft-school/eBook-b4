@@ -1,6 +1,7 @@
 package kg.peaksoft.ebookb4.models.bookClasses;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -14,9 +15,8 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class AudioBook {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
