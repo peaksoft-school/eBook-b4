@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.models.bookClasses;
 
+import kg.peaksoft.ebookb4.models.others.FileSources;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,8 +27,10 @@ public class PaperBook {
     private Long paperBookId;
 
     private String publishingHouse;
-    private String aboutBook;
-    private String fragmentOfBook;
+    @OneToOne
+    private FileSources aboutBook;
+    @OneToOne
+    private FileSources fragmentOfBook;
     private Integer numberOfPages;
     private Integer numberOfSelected;
 

@@ -27,8 +27,9 @@ public class AudioBook {
 
     private String audioBook;
 
-    @OneToMany
-    private List<FileSources> fragment;
+    @OneToOne
+    private FileSources fragment;
+
 
     private String urlOfBookFromCloud;
 }
