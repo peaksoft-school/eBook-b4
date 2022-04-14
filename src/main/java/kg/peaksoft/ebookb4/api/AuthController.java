@@ -1,11 +1,13 @@
 package kg.peaksoft.ebookb4.api;
 
 import kg.peaksoft.ebookb4.dto.request.LoginRequest;
+import kg.peaksoft.ebookb4.dto.request.SignupRequestClient;
 import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
 import kg.peaksoft.ebookb4.dto.response.JwtResponse;
 import kg.peaksoft.ebookb4.security.jwt.JwtUtils;
 import kg.peaksoft.ebookb4.security.services.UserDetailsImpl;
-import kg.peaksoft.ebookb4.service.UserService;
+import kg.peaksoft.ebookb4.service.ClientService;
+import kg.peaksoft.ebookb4.service.VendorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,7 +29,8 @@ public class AuthController {
 
     AuthenticationManager authenticationManager;
     JwtUtils jwtUtils;
-    UserService userService;
+    VendorService vendorService;
+    ClientService clientService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -51,13 +54,13 @@ public class AuthController {
     }
 
     @PostMapping("/signup/client")
-    public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequestVendor signUpRequest) {
-        return userService.register(signUpRequest, 1L);
+    public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequestClient client) {
+        return clientService.register(client, 1L);
     }
 
     @PostMapping("/signup/vendor")
-    public ResponseEntity<?> registerVendor(@Valid @RequestBody SignupRequestVendor signUpRequest) {
-        return userService.register(signUpRequest, 2L);
+    public ResponseEntity<?> registerVendor(@Valid @RequestBody SignupRequestVendor vendor) {
+        return vendorService.register(vendor, 2L);
     }
 
 }

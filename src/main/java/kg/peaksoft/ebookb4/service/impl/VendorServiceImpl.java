@@ -5,7 +5,7 @@ import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.repository.RoleRepository;
 import kg.peaksoft.ebookb4.repository.UserRepository;
-import kg.peaksoft.ebookb4.service.UserService;
+import kg.peaksoft.ebookb4.service.VendorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,7 +15,7 @@ import java.util.Locale;
 
 @Service
 @AllArgsConstructor
-public class UserServiceImpl implements UserService {
+public class VendorServiceImpl implements VendorService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
@@ -29,19 +29,7 @@ public class UserServiceImpl implements UserService {
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
-        User user;
-        if (number==1L){
-            user = new User(
-                    signupRequestVendor.getEmail(),
-                    encoder.encode(signupRequestVendor.getPassword()));
-            user.setFirstName(signupRequestVendor.getFirstName());
-            user.setLastName("");
-            user.setNumber("");
-            user.setRole(roleRepository.getById(number));
-            userRepository.save(user);
-        }
-        else{
-            user = new User(
+        User user = new User(
                     signupRequestVendor.getEmail(),
                     encoder.encode(signupRequestVendor.getPassword()));
             user.setFirstName(signupRequestVendor.getFirstName());
@@ -49,7 +37,6 @@ public class UserServiceImpl implements UserService {
             user.setNumber(signupRequestVendor.getNumber());
             user.setRole(roleRepository.getById(number));
             userRepository.save(user);
-        }
 
         return ResponseEntity.ok(new MessageResponse(
                 String.format("User with email %s registered successfully!",user.getEmail().toUpperCase(Locale.ROOT))));

@@ -9,14 +9,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.File;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 12/4/22
- */
-
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaperBook {
@@ -27,10 +21,9 @@ public class PaperBook {
     private Long paperBookId;
 
     private String publishingHouse;
-    @OneToOne
-    private FileSources aboutBook;
-    @OneToOne
-    private FileSources fragmentOfBook;
+
+
+    private String fragmentOfBook;
     private Integer numberOfPages;
     private Integer numberOfSelected;
 

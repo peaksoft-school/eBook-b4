@@ -11,6 +11,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +29,6 @@ public class Book {
     private Long bookId;
     private String title;
     private String authorFullName;
-
     private String aboutBook;
     @JsonFormat(pattern = "yyyy")
     private LocalDate yearOfIssue;
@@ -36,12 +36,12 @@ public class Book {
     private BigDecimal price;
     private Boolean isBestSeller;
 
-    private int baskets;
-    private int likes;
-
     private Language language;
     private BookType bookType;
     private Genre genre;
+
+    private int baskets;
+    private int likes;
 
 
     @OneToMany(mappedBy = "book")

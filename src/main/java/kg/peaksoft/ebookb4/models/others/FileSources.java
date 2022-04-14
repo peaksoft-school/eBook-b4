@@ -8,10 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 13/4/22
- */
 @Entity
 @Getter @Setter
 @AllArgsConstructor

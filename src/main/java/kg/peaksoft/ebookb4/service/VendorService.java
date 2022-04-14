@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
  * Author: Zhanarbek Abdurasulov
  * Date: 12/4/22
  */
-public interface UserService {
+public interface VendorService {
 
     ResponseEntity<?> register(SignupRequestVendor signupRequestVendor, Long number);
 

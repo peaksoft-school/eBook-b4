@@ -18,17 +18,14 @@ import java.util.List;
 public class AudioBook {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
     @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
     private Long audioBookId;
 
     @JsonFormat(pattern = "")
     private LocalDate duration;
 
-    private String audioBook;
-
-    @OneToOne
-    private FileSources fragment;
+    private String fragment;
 
 
     private String urlOfBookFromCloud;
