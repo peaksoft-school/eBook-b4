@@ -42,6 +42,18 @@ public class User {
     private String lastName;
 
     @OneToMany
+    @Column(name = "book_id")
+    @JoinTable(
+            name = "vendor_books",
+            joinColumns = @JoinColumn(
+                    name = "user_id",
+                    referencedColumnName = "user_id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "book_id",
+                    referencedColumnName = "book_id"
+            )
+    )
     private List<Book> books;
 
     @OneToMany

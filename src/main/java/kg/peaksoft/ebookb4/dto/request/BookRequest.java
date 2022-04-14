@@ -1,6 +1,8 @@
 package kg.peaksoft.ebookb4.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import kg.peaksoft.ebookb4.models.bookClasses.AudioBook;
+import kg.peaksoft.ebookb4.models.bookClasses.ElectronicBook;
+import kg.peaksoft.ebookb4.models.bookClasses.PaperBook;
 import kg.peaksoft.ebookb4.models.enums.BookType;
 import kg.peaksoft.ebookb4.models.enums.Genre;
 import kg.peaksoft.ebookb4.models.enums.Language;
@@ -11,9 +13,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter @Setter
-public class PaperBookRequest {
-
-//    private String images;
+public class BookRequest {
 
     private String title;
     private String authorFullName;
@@ -23,13 +23,9 @@ public class PaperBookRequest {
     private BigDecimal price;
     private Boolean isBestSeller;
     private Language language;
-
-    private BookType bookType;
     private Genre genre;
-
-
-    private String publishingHouse;
-    private String fragmentOfBook;
-    private Integer numberOfPages;
-    private Integer numberOfSelected;
+    private BookType bookType;
+    AudioBook audioBook ;
+    PaperBook paperBook;
+    ElectronicBook electronicBook;
 }

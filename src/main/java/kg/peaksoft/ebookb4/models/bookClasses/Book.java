@@ -14,10 +14,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 12/4/22
- */
 @Entity
 @RequiredArgsConstructor
 @Getter @Setter
@@ -26,18 +22,23 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
     @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
+    @Column(name = "book_id")
     private Long bookId;
     private String title;
     private String authorFullName;
     private String aboutBook;
-    @JsonFormat(pattern = "yyyy")
+
+
     private LocalDate yearOfIssue;
+
     private Integer discount;
     private BigDecimal price;
     private Boolean isBestSeller;
-
+    @Enumerated(value = EnumType.STRING)
     private Language language;
+    @Enumerated(value = EnumType.STRING)
     private BookType bookType;
+    @Enumerated(value = EnumType.STRING)
     private Genre genre;
 
     private int baskets;
@@ -51,7 +52,7 @@ public class Book {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "audiobook_id")
     private AudioBook audioBook;
 
@@ -62,4 +63,5 @@ public class Book {
     @OneToOne
     @JoinColumn(name = "paperbook_id")
     private PaperBook paperBook;
+
 }

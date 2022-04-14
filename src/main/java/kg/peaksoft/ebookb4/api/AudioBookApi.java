@@ -1,26 +1,27 @@
 package kg.peaksoft.ebookb4.api;
 
-import kg.peaksoft.ebookb4.dto.request.AudioBookRequest;
-import kg.peaksoft.ebookb4.service.AudioBookService;
+import kg.peaksoft.ebookb4.dto.request.BookRequest;
+import kg.peaksoft.ebookb4.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
 
 @RestController
-@RequestMapping("/api/audioBook")
+@RequestMapping("/api/book")
 @AllArgsConstructor
 public class AudioBookApi {
 
-    private final AudioBookService audioBookService ;
+    private final BookService bookService;
 
-    @PermitAll
-    @PostMapping("/save")
-    public ResponseEntity<?> saveAudioBook(AudioBookRequest audioBookRequest){
-        return audioBookService.register(audioBookRequest);
+    @PostMapping("/save/{userId}")
+    @PreAuthorize("hasRole('ROLE_VENDOR')")
+    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest,
+                                      @PathVariable("userId") Long userId){
+        System.out.println("Hello world!");
+        return  bookService.register(bookRequest, userId);
     }
 
 
