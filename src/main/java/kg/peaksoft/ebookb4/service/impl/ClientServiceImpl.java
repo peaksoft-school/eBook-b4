@@ -34,6 +34,8 @@ public class ClientServiceImpl implements ClientService {
                 encoder.encode(signupRequestClient.getPassword()));
         user.setFirstName(signupRequestClient.getFirstName());
         user.setRole(roleRepository.getById(number));
+        user.setLastName("");
+        user.setNumber("");
         userRepository.save(user);
 
 

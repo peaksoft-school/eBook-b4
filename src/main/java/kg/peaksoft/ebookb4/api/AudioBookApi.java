@@ -20,9 +20,7 @@ public class AudioBookApi {
     @PreAuthorize("hasRole('ROLE_VENDOR')")
     public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest,
                                       @PathVariable("userId") Long userId){
-        System.out.println("Hello world!");
         return  bookService.register(bookRequest, userId);
     }
-
 
 }

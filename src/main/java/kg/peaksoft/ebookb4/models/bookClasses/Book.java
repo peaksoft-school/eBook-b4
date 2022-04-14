@@ -56,11 +56,11 @@ public class Book {
     @JoinColumn(name = "audiobook_id")
     private AudioBook audioBook;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ebook_id")
     private ElectronicBook electronicBook;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "paperbook_id")
     private PaperBook paperBook;
 
