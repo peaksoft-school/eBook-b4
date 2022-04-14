@@ -15,10 +15,8 @@ import kg.peaksoft.ebookb4.repository.BookRepository;
 import kg.peaksoft.ebookb4.repository.UserRepository;
 import kg.peaksoft.ebookb4.service.BookService;
 import lombok.AllArgsConstructor;
-import org.springframework.cglib.core.internal.LoadingCache;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -159,22 +157,25 @@ public class BookServiceImpl implements BookService {
             book.setBookType(newBookType);
         }
 
-        if (newBook.getBookType().equals(BookType.PaperBook)) {
-            book.getPaperBook().setPublishingHouse(newBook.getPaperBook().getPublishingHouse());
-            book.getPaperBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
-            book.getPaperBook().setNumberOfPages(newBook.getPaperBook().getNumberOfPages());
-            book.getPaperBook().setNumberOfSelected(newBook.getPaperBook().getNumberOfSelected());
-        } else if (newBook.getBookType().equals(BookType.Ebook)) {
-            book.getElectronicBook().setPublishingHouse(newBook.getElectronicBook().getPublishingHouse());
-            book.getElectronicBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
-            book.getElectronicBook().setNumberOfPages(newBook.getElectronicBook().getNumberOfPages());
-            book.getElectronicBook().setUrlOfBookFromCloud(newBook.getElectronicBook().getUrlOfBookFromCloud());
-        } else
-
-            book.getAudioBook().setDuration(newBook.getAudioBook().getDuration());
-        book.getAudioBook().setFragment(newBook.getAudioBook().getFragment());
-        book.getAudioBook().setUrlOfBookFromCloud(newBook.getAudioBook().getUrlOfBookFromCloud());
-
+        switch (newBook.getBookType()) {
+            case PaperBook:
+                book.getPaperBook().setPublishingHouse(newBook.getPaperBook().getPublishingHouse());
+                book.getPaperBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
+                book.getPaperBook().setNumberOfPages(newBook.getPaperBook().getNumberOfPages());
+                book.getPaperBook().setNumberOfSelected(newBook.getPaperBook().getNumberOfSelected());
+                break;
+            case Ebook:
+                book.getElectronicBook().setPublishingHouse(newBook.getElectronicBook().getPublishingHouse());
+                book.getElectronicBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
+                book.getElectronicBook().setNumberOfPages(newBook.getElectronicBook().getNumberOfPages());
+                book.getElectronicBook().setUrlOfBookFromCloud(newBook.getElectronicBook().getUrlOfBookFromCloud());
+                break;
+            case AudioBook:
+                book.getAudioBook().setDuration(newBook.getAudioBook().getDuration());
+                book.getAudioBook().setFragment(newBook.getAudioBook().getFragment());
+                book.getAudioBook().setUrlOfBookFromCloud(newBook.getAudioBook().getUrlOfBookFromCloud());
+                break;
+        }
 
         return ResponseEntity.ok(new MessageResponse(
                 String.format("%s with name %s Update successfully!", book.getBookType().name(),
