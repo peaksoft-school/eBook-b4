@@ -18,14 +18,16 @@ public class BookRequest {
     private String title;
     private String authorFullName;
     private String aboutBook;
-    private LocalDate yearOfIssue;
     private Integer discount;
-    private BigDecimal price;
     private Boolean isBestSeller;
+    private LocalDate yearOfIssue;
+    private BigDecimal price;
+
     private Language language;
     private Genre genre;
     private BookType bookType;
-    AudioBook audioBook ;
+
+    AudioBook audioBook;
     PaperBook paperBook;
     ElectronicBook electronicBook;
 }
