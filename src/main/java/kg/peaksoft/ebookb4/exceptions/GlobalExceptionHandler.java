@@ -45,4 +45,5 @@ public class GlobalExceptionHandler {
         exceptionResponse.setMessage(badCredentialsException.getMessage());
         return exceptionResponse;
     }
+
 }

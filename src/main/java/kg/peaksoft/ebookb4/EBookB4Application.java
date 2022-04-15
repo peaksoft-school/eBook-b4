@@ -1,17 +1,16 @@
 package kg.peaksoft.ebookb4;
 
-import kg.peaksoft.ebookb4.models.userClasses.ERole;
-import kg.peaksoft.ebookb4.models.userClasses.Role;
-import kg.peaksoft.ebookb4.models.userClasses.User;
-import kg.peaksoft.ebookb4.repository.RoleRepository;
-import kg.peaksoft.ebookb4.repository.UserRepository;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
+import kg.peaksoft.ebookb4.db.models.userClasses.Role;
+import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.repository.RoleRepository;
+import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 @SpringBootApplication
 @AllArgsConstructor
