@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.models.others;
+package kg.peaksoft.ebookb4.db.models.others;
 
 /**
  * Author: Zhanarbek Abdurasulov

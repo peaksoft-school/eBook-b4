@@ -1,7 +1,8 @@
 package kg.peaksoft.ebookb4.api;
 
+import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import kg.peaksoft.ebookb4.dto.request.BookRequest;
-import kg.peaksoft.ebookb4.service.BookService;
+import kg.peaksoft.ebookb4.db.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,13 +26,13 @@ public class BookApi {
 
     @PreAuthorize("hasAnyAuthority('ROLE_VENDOR')")
     @GetMapping("/getById/{id}")
-    public kg.peaksoft.ebookb4.models.bookClasses.Book findById(@PathVariable Long id){
+    public Book findById(@PathVariable Long id){
         return bookService.findByBookId(id);
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_VENDOR')")
     @GetMapping("/getAll")
-    public List<kg.peaksoft.ebookb4.models.bookClasses.Book> findAll(){
+    public List<Book> findAll(){
         return bookService.findAll();
     }
 

@@ -1,7 +1,7 @@
-package kg.peaksoft.ebookb4.repository;
+package kg.peaksoft.ebookb4.db.repository;
 
-import kg.peaksoft.ebookb4.models.enums.ERole;
-import kg.peaksoft.ebookb4.models.userClasses.Role;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
+import kg.peaksoft.ebookb4.db.models.userClasses.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

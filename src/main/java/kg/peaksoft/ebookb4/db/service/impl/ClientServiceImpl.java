@@ -1,12 +1,11 @@
-package kg.peaksoft.ebookb4.service.impl;
+package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.dto.request.SignupRequestClient;
-import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
-import kg.peaksoft.ebookb4.models.userClasses.User;
-import kg.peaksoft.ebookb4.repository.RoleRepository;
-import kg.peaksoft.ebookb4.repository.UserRepository;
-import kg.peaksoft.ebookb4.service.ClientService;
+import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.repository.RoleRepository;
+import kg.peaksoft.ebookb4.db.repository.UserRepository;
+import kg.peaksoft.ebookb4.db.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;

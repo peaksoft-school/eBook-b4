@@ -1,5 +1,6 @@
-package kg.peaksoft.ebookb4.models.bookClasses;
+package kg.peaksoft.ebookb4.db.models.others;
 
+import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,16 +12,15 @@ import javax.persistence.*;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaperBook {
-
+public class FileSources {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
     @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
-    private Long paperBookId;
+    private Long id;
 
-    private String publishingHouse;
-    private String fragmentOfBook;
-    private Integer numberOfPages;
-    private Integer numberOfSelected;
+    private String images;
 
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 }

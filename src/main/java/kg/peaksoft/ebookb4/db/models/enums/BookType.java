@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.models.enums;
+package kg.peaksoft.ebookb4.db.models.enums;
 
 /**
  * Author: Zhanarbek Abdurasulov

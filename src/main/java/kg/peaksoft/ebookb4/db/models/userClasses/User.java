@@ -1,8 +1,8 @@
-package kg.peaksoft.ebookb4.models.userClasses;
+package kg.peaksoft.ebookb4.db.models.userClasses;
 
-import kg.peaksoft.ebookb4.models.others.Basket;
-import kg.peaksoft.ebookb4.models.bookClasses.Book;
-import kg.peaksoft.ebookb4.models.others.Favorites;
+import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
+import kg.peaksoft.ebookb4.db.models.others.Basket;
+import kg.peaksoft.ebookb4.db.models.others.Favorites;
 import lombok.*;
 
 import javax.persistence.*;

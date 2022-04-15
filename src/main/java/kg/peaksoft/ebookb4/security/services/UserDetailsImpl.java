@@ -1,19 +1,15 @@
 package kg.peaksoft.ebookb4.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import kg.peaksoft.ebookb4.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Getter @Setter
 public class UserDetailsImpl implements UserDetails {

@@ -1,7 +1,7 @@
 package kg.peaksoft.ebookb4.security.services;
 
-import kg.peaksoft.ebookb4.models.userClasses.User;
-import kg.peaksoft.ebookb4.repository.UserRepository;
+import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

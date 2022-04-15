@@ -1,6 +1,6 @@
-package kg.peaksoft.ebookb4.repository;
+package kg.peaksoft.ebookb4.db.repository;
 
-import kg.peaksoft.ebookb4.models.bookClasses.Book;
+import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

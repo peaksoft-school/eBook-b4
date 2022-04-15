@@ -1,11 +1,11 @@
 package kg.peaksoft.ebookb4.dto.request;
 
-import kg.peaksoft.ebookb4.models.bookClasses.AudioBook;
-import kg.peaksoft.ebookb4.models.bookClasses.ElectronicBook;
-import kg.peaksoft.ebookb4.models.bookClasses.PaperBook;
-import kg.peaksoft.ebookb4.models.enums.BookType;
-import kg.peaksoft.ebookb4.models.enums.Genre;
-import kg.peaksoft.ebookb4.models.enums.Language;
+import kg.peaksoft.ebookb4.db.models.bookClasses.AudioBook;
+import kg.peaksoft.ebookb4.db.models.bookClasses.ElectronicBook;
+import kg.peaksoft.ebookb4.db.models.bookClasses.PaperBook;
+import kg.peaksoft.ebookb4.db.models.enums.BookType;
+import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.db.models.enums.Language;
 import lombok.Getter;
 import lombok.Setter;
 

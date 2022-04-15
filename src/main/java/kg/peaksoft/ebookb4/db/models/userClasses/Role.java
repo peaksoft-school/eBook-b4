@@ -1,6 +1,6 @@
-package kg.peaksoft.ebookb4.models.userClasses;
+package kg.peaksoft.ebookb4.db.models.userClasses;
 
-import kg.peaksoft.ebookb4.models.enums.ERole;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
