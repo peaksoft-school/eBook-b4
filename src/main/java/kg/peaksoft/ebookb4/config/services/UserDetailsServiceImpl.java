@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.security.services;
+package kg.peaksoft.ebookb4.config.services;
 
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;

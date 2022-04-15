@@ -1,7 +1,7 @@
-package kg.peaksoft.ebookb4.security.jwt;
+package kg.peaksoft.ebookb4.config.jwt;
 
 import io.jsonwebtoken.*;
-import kg.peaksoft.ebookb4.security.services.UserDetailsImpl;
+import kg.peaksoft.ebookb4.config.services.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

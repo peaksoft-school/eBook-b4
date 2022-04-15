@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.security.jwt;
+package kg.peaksoft.ebookb4.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

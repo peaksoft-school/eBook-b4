@@ -1,8 +1,8 @@
-package kg.peaksoft.ebookb4.security;
+package kg.peaksoft.ebookb4.config;
 
-import kg.peaksoft.ebookb4.security.jwt.AuthEntryPointJwt;
-import kg.peaksoft.ebookb4.security.jwt.AuthTokenFilter;
-import kg.peaksoft.ebookb4.security.services.UserDetailsServiceImpl;
+import kg.peaksoft.ebookb4.config.jwt.AuthEntryPointJwt;
+import kg.peaksoft.ebookb4.config.jwt.AuthTokenFilter;
+import kg.peaksoft.ebookb4.config.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

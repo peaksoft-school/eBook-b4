@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.security.services;
+package kg.peaksoft.ebookb4.config.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
