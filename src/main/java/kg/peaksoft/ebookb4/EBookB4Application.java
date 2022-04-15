@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.userClasses.Role;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.annotation.PostConstruct;
 
 @SpringBootApplication
+@OpenAPIDefinition
 @AllArgsConstructor
 public class EBookB4Application {
 
