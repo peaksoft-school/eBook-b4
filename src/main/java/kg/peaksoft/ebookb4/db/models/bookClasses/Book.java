@@ -14,7 +14,8 @@ import java.util.List;
 
 @Entity
 @RequiredArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class Book {
 
     @Id
@@ -41,13 +42,8 @@ public class Book {
     private int baskets;
     private int likes;
 
-
     @OneToMany(mappedBy = "book")
     private List<FileSources> images;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "audiobook_id")

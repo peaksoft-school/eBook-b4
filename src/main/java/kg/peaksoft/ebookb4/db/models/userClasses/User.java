@@ -57,9 +57,22 @@ public class User {
     private List<Book> books;
 
     @OneToMany
+    @JoinTable(
+            name = "user_liked_books",
+            joinColumns = @JoinColumn(
+                    name = "user_id",
+                    referencedColumnName = "user_id"
+
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "favorite_id",
+                    referencedColumnName = "favorite_id"
+            )
+    )
     private List<Favorites> likedBooks;
 
     @OneToOne
+    @JoinColumn(name = "basket_id")
     private Basket basket;
 
     @OneToOne
