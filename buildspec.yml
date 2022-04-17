@@ -16,6 +16,6 @@ artifacts:
     - target/eBook-b4.jar
   discard-paths: yes
 
-cache:
-  path:
-    - '/root/.m2/**/*'
+#cache:
+#  path:
+#    - '/root/.m2/**/*'
