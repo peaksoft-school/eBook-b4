@@ -1,21 +1,21 @@
-version: 0.2
-
-phases:
-  pre_build:
-    commands:
-      - echo Nothing to do in the pre_build phase...
-  build:
-    commands:
-      - echo Build started on `date`
-      - mvn clean package install
-  post_build:
-    commands:
-      - echo Build completed on `date`
-artifacts:
-  files:
-    - target/eBook-b4.jar
-  discard-paths: yes
-
-#cache:
-#  path:
-#    - '/root/.m2/**/*'
+#version: 0.2
+#
+#phases:
+#  pre_build:
+#    commands:
+#      - echo Nothing to do in the pre_build phase...
+#  build:
+#    commands:
+#      - echo Build started on `date`
+#      - mvn clean package install
+#  post_build:
+#    commands:
+#      - echo Build completed on `date`
+#artifacts:
+#  files:
+#    - target/eBook-b4.jar
+#  discard-paths: yes
+#
+##cache:
+##  path:
+##    - '/root/.m2/**/*'
