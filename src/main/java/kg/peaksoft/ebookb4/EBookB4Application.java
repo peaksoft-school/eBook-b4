@@ -9,9 +9,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 
+@RestController
 @SpringBootApplication
 @AllArgsConstructor
 public class EBookB4Application {
@@ -20,6 +23,10 @@ public class EBookB4Application {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
 
+    @GetMapping("/")
+    public String greetingPage(){
+        return "<h1>Welcome to eBook application!!!<h1/>";
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(EBookB4Application.class, args);
