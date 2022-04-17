@@ -15,4 +15,3 @@ artifacts:
   files:
     - target/eBook-b4.jar
   discard-paths: yes
-
