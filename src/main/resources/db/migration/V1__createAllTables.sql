@@ -145,3 +145,15 @@ create table vendor_books
         constraint fkl3v27c2q3c3sv76ge4juv8j2y
             references book
 );
+
+insert into roles(id, name)
+values(1, 'ROLE_CLIENT');
+insert into roles(id, name)
+values(2, 'ROLE_VENDOR');
+insert into roles(id, name)
+values(3, 'ROLE_ADMIN');
+
+insert into users(user_id, email, password, role_id)
+values(1,'admin@gmail.com',
+       '$2a$10$Zz/PNXKsnLOSPmHtMP1zZ.WK31Bs69gv3a2N5mKAcn3/qP8Lq1Od.',
+       3);
