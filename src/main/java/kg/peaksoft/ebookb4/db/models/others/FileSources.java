@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class FileSources {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
-    @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
+    @SequenceGenerator(name = "z", sequenceName = "generator", allocationSize = 1)
     private Long id;
 
     private String images;

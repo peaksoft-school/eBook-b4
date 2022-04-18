@@ -14,8 +14,7 @@ import java.util.List;
 
 @Entity
 @RequiredArgsConstructor
-@Getter
-@Setter
+@Getter @Setter
 public class Book {
 
     @Id
