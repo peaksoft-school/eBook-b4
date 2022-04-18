@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Locale;
 
 @Service
@@ -35,7 +36,7 @@ public class ClientServiceImpl implements ClientService {
         user.setRole(roleRepository.getById(number));
         user.setLastName("");
         user.setNumber("");
-        userRepository.save(user);
+            userRepository.save(user);
 
 
         return ResponseEntity.ok(new MessageResponse(
