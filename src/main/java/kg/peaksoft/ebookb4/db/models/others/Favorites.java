@@ -16,8 +16,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Favorites {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
-    @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
+    @SequenceGenerator(name = "hibernate_seq", sequenceName = "favorites_seq", allocationSize = 1)
     @Column(name = "favorite_id")
     private Long favoriteId;
 

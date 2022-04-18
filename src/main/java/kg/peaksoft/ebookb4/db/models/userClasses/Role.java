@@ -13,7 +13,8 @@ import javax.persistence.*;
 @Component
 public class Role {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
+  @SequenceGenerator(name = "hibernate_seq", sequenceName = "role_seq", allocationSize = 1)
   private Long id;
 
   @Enumerated(EnumType.STRING)
