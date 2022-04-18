@@ -1,6 +1,7 @@
 package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import kg.peaksoft.ebookb4.dto.request.BookRequest;
 import kg.peaksoft.ebookb4.db.service.BookService;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequestMapping("/api/books")
 @AllArgsConstructor
 @RolesAllowed("ROLE_VENDOR")
+@Tag(name = "Books",description = "crud operations")
 public class BookApi {
 
     private final BookService bookService;
