@@ -1,10 +1,5 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
-import kg.peaksoft.ebookb4.dto.request.BookRequest;
-import kg.peaksoft.ebookb4.dto.response.MessageResponse;
-import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import kg.peaksoft.ebookb4.db.models.bookClasses.AudioBook;
 import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import kg.peaksoft.ebookb4.db.models.bookClasses.ElectronicBook;
@@ -14,9 +9,15 @@ import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
+import kg.peaksoft.ebookb4.db.service.BookService;
+import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
+import kg.peaksoft.ebookb4.dto.request.BookRequest;
+import kg.peaksoft.ebookb4.dto.response.MessageResponse;
+import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -98,7 +99,6 @@ public class BookServiceImpl implements BookService {
         return ResponseEntity.ok(new MessageResponse(
                 String.format("Book with id = %s successfully delete!", bookId)));
     }
-
 
     @Override
     @Transactional
