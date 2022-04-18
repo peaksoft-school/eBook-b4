@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.userClasses.Role;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
@@ -16,6 +17,7 @@ import javax.annotation.PostConstruct;
 
 @RestController
 @SpringBootApplication
+@OpenAPIDefinition
 @AllArgsConstructor
 public class EBookB4Application {
 

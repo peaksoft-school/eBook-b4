@@ -18,8 +18,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class ElectronicBook {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
-    @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
+    @SequenceGenerator(name = "hibernate_seq", sequenceName = "ebook_seq", allocationSize = 1)
     private Long ebookId;
     private String publishingHouse;
     private String fragmentOfBook;

@@ -14,8 +14,8 @@ import java.time.LocalTime;
 public class AudioBook {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
-    @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
+    @SequenceGenerator(name = "hibernate_seq", sequenceName = "audiobook_seq", allocationSize = 1)
     private Long audioBookId;
 
     @JsonFormat(pattern = "HH-mm-ss")

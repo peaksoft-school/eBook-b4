@@ -14,8 +14,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class FileSources {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator")
-    @SequenceGenerator(name = "generator", sequenceName = "generator", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
+    @SequenceGenerator(name = "hibernate_seq", sequenceName = "file_sources_seq", allocationSize = 1)
     private Long id;
 
     private String images;

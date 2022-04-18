@@ -22,7 +22,9 @@ import java.util.List;
 @ToString
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
+    @SequenceGenerator(name = "hibernate_seq", sequenceName = "user_seq", allocationSize = 1,
+    initialValue = 2)
     @Column(name = "user_id")
     private Long id;
 
