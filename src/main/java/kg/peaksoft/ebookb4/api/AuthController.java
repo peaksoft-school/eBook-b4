@@ -34,7 +34,7 @@ public class AuthController {
     JwtUtils jwtUtils;
     VendorService vendorService;
     ClientService clientService;
-
+@Operation(summary = "singup",description = "singup user")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
