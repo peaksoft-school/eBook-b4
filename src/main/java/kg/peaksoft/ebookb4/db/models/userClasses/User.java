@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -43,7 +44,7 @@ public class User {
 
     private String lastName;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @Column(name = "book_id")
     @JoinTable(
             name = "vendor_books",
@@ -56,7 +57,7 @@ public class User {
                     referencedColumnName = "book_id"
             )
     )
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
 
     @OneToMany
     @JoinTable(

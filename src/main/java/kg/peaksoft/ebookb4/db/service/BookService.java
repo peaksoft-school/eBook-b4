@@ -16,4 +16,5 @@ public interface BookService {
     ResponseEntity<?> delete(Long bookId);
 
     ResponseEntity<?> update(BookRequest bookRequest, Long userId);
+
 }

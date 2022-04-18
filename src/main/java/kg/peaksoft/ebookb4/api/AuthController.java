@@ -62,5 +62,4 @@ public class AuthController {
     public ResponseEntity<?> registerVendor(@Valid @RequestBody SignupRequestVendor vendor) {
         return vendorService.register(vendor, 2L);
     }
-
 }

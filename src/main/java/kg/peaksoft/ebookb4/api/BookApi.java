@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/books")
 @AllArgsConstructor
-//@RolesAllowed("ROLE_VENDOR")
 public class BookApi {
 
     private final BookService bookService;

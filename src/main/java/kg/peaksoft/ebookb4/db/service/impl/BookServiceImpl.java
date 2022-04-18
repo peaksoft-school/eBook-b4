@@ -33,6 +33,7 @@ public class BookServiceImpl implements BookService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public ResponseEntity<?> register(BookRequest bookRequest, Long userId) {
 
         Book book = mapper.create(bookRequest);
@@ -71,7 +72,7 @@ public class BookServiceImpl implements BookService {
                     .body(new MessageResponse(String.format("User with id %s doesn't exist!", userId)));
         }
 
-        repository.save(book);
+        userRepository.getById(userId).getBooks().add(mapper.create(bookRequest));
         return ResponseEntity.ok(new MessageResponse(
                 String.format("%s with name %s registered successfully!", book.getBookType().name(),
                         book.getTitle())));

@@ -41,6 +41,8 @@ public class Book {
     private int baskets;
     private int likes;
 
+
+
     @OneToMany(mappedBy = "book")
     private List<FileSources> images;
 

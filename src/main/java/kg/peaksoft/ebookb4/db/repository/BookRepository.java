@@ -3,6 +3,7 @@ package kg.peaksoft.ebookb4.db.repository;
 import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.db.models.enums.Language;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,13 +29,16 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.electronicBook is not null")
     List<Book> bookGetElectronic();
 
-    @Query("select b from Book b where b.isBestSeller = true ")
-    List<Book> bookGetBestseller();
-
     @Query("SELECT b FROM Book b WHERE b.bookType = ?1")
     List<Book> findByBookType(BookType bookType);
 
     @Query("SELECT b FROM Book b WHERE b.genre = ?1")
     List<Book> findByGenre(Genre genre);
+
+    @Query("SELECT b FROM Book b WHERE b.language = ?1")
+    List<Book> findByLanguage(Language language);
+
+
+//    List<Book> findBy(Genre genre ,BookType bookType);
 
 }
