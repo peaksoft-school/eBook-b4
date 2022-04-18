@@ -1,5 +1,7 @@
 package kg.peaksoft.ebookb4.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.dto.request.LoginRequest;
 import kg.peaksoft.ebookb4.dto.request.SignupRequestClient;
 import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 @AllArgsConstructor
+@Tag(name = "AuthController",description = "jwt token,")
 public class AuthController {
 
     AuthenticationManager authenticationManager;
@@ -53,13 +56,6 @@ public class AuthController {
                 roles));
     }
 
-    @PostMapping("/signup/client")
-    public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequestClient client) {
-        return clientService.register(client, 1L);
-    }
 
-    @PostMapping("/signup/vendor")
-    public ResponseEntity<?> registerVendor(@Valid @RequestBody SignupRequestVendor vendor) {
-        return vendorService.register(vendor, 2L);
-    }
+
 }

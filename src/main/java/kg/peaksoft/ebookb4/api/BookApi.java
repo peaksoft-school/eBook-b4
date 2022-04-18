@@ -1,5 +1,7 @@
 package kg.peaksoft.ebookb4.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import kg.peaksoft.ebookb4.dto.request.BookRequest;
 import kg.peaksoft.ebookb4.db.service.BookService;
@@ -15,35 +17,39 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/books")
 @AllArgsConstructor
+@RolesAllowed("ROLE_VENDOR")
+@Tag(name = "Books",description = "crud operations")
 public class BookApi {
 
     private final BookService bookService;
-    @PreAuthorize("hasRole('ROLE_VENDOR')")
+    @Operation(summary = "save book",description = "add a new book to the store")
     @PostMapping("{userId}")
     public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest,
                                       @PathVariable("userId") Long userId){
         return  bookService.register(bookRequest, userId);
-    }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_VENDOR','ROLE_CLIENT')")
+    }
+    @Operation(summary = "We can find by id",description = "We can find by id in the store the book")
     @GetMapping("{id}")
     public Book findById(@PathVariable Long id){
         return bookService.findByBookId(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_VENDOR','ROLE_CLIENT')")
+    @Operation(summary = "find All",description = "We can aal books find in the store")
     @GetMapping
     public List<Book> findAll(){
         return bookService.findAll();
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_VENDOR','ROLE_ADMIN')")
+    @Operation(summary = "delete",description = "We can delete by id book in the store")
+
     @DeleteMapping("{bookId}")
     public ResponseEntity<?> delete(@PathVariable Long bookId) {
         return bookService.delete(bookId);
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_VENDOR','ROLE_ADMIN')")
+    @Operation(summary = "update",description = "We can update or chage book here")
+
     @PatchMapping("{bookId}")
     public ResponseEntity<?> update(@RequestBody BookRequest request,
                                     @PathVariable Long bookId){
