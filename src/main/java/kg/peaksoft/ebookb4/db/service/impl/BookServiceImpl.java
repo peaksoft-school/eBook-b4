@@ -36,7 +36,6 @@ public class BookServiceImpl implements BookService {
 
         Book book = mapper.create(bookRequest);
         try {
-            book.setUser(userRepository.getById(userId));
             if (bookRequest.getBookType().name().equals(BookType.AudioBook.name())) {
                 System.out.println("Hello AudioBook");
                 AudioBook audio = new AudioBook();
