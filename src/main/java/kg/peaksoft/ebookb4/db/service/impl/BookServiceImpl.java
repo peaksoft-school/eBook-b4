@@ -32,7 +32,7 @@ public class BookServiceImpl implements BookService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<?> register(BookRequest bookRequest, Long userId) {
+    public ResponseEntity<?> register(BookRequest bookRequest, String username) {
 
         Book book = mapper.create(bookRequest);
         try {
@@ -62,7 +62,7 @@ public class BookServiceImpl implements BookService {
             System.out.println(e.getMessage());
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse(String.format("User with id %s doesn't exist!", userId)));
+                    .body(new MessageResponse(String.format("User with id %s doesn't exist!", username)));
         }
 
         repository.save(book);
