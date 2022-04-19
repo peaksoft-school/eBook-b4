@@ -38,29 +38,29 @@ public class EBookB4Application {
         System.out.println("Welcome colleagues, project name is eBook!");
     }
 
-//        @PostConstruct
-//    public void init(){
-//        Role client = new Role();
-//        client.setId(1L);
-//        client.setName(ERole.ROLE_CLIENT);
-//        Role vendor = new Role();
-//        vendor.setId(2L);
-//        vendor.setName(ERole.ROLE_VENDOR);
-//        Role admin = new Role();
-//        admin.setId(3L);
-//        admin.setName(ERole.ROLE_ADMIN);
-//        roleRepository.save(client);
-//        roleRepository.save(vendor);
-//        roleRepository.save(admin);
-//
-//        User user = new User();
-//        user.setEmail("admin@gmail.com");
-//        user.setPassword(encoder.encode("password"));
-//        user.setRole(roleRepository.getById(3L));
-//        Basket basket = new Basket();
-//        basket.setUser(user);
-//        user.setBasket(basket);
-//        userRepository.save(user);
-//    }
+        @PostConstruct
+    public void init(){
+        Role client = new Role();
+        client.setId(1L);
+        client.setName(ERole.ROLE_CLIENT);
+        Role vendor = new Role();
+        vendor.setId(2L);
+        vendor.setName(ERole.ROLE_VENDOR);
+        Role admin = new Role();
+        admin.setId(3L);
+        admin.setName(ERole.ROLE_ADMIN);
+        roleRepository.save(client);
+        roleRepository.save(vendor);
+        roleRepository.save(admin);
+
+        User user = new User();
+        user.setEmail("admin@gmail.com");
+        user.setPassword(encoder.encode("password"));
+        user.setRole(roleRepository.getById(3L));
+        Basket basket = new Basket();
+        basket.setUser(user);
+        user.setBasket(basket);
+        userRepository.save(user);
+    }
 
 }
