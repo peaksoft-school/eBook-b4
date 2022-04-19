@@ -1,5 +1,10 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
+import kg.peaksoft.ebookb4.db.service.BookService;
+import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
+import kg.peaksoft.ebookb4.dto.request.BookRequest;
+import kg.peaksoft.ebookb4.dto.response.MessageResponse;
+import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import kg.peaksoft.ebookb4.db.models.bookClasses.AudioBook;
 import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import kg.peaksoft.ebookb4.db.models.bookClasses.ElectronicBook;
@@ -9,17 +14,10 @@ import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
-import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
-import kg.peaksoft.ebookb4.dto.request.BookRequest;
-import kg.peaksoft.ebookb4.dto.response.MessageResponse;
-import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
-import java.beans.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -34,14 +32,12 @@ public class BookServiceImpl implements BookService {
     private final UserRepository userRepository;
 
     @Override
-    @Transactional
     public ResponseEntity<?> register(BookRequest bookRequest, Long userId) {
 
         Book book = mapper.create(bookRequest);
         try {
             if (bookRequest.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
                 AudioBook audio = new AudioBook();
-
                 audio.setDuration(bookRequest.getAudioBook().getDuration());
                 audio.setFragment(bookRequest.getAudioBook().getFragment());
                 audio.setUrlOfBookFromCloud(bookRequest.getAudioBook().getUrlOfBookFromCloud());
@@ -69,7 +65,7 @@ public class BookServiceImpl implements BookService {
                     .body(new MessageResponse(String.format("User with id %s doesn't exist!", userId)));
         }
 
-        userRepository.getById(userId).getVendorAddedBooks().add(mapper.create(bookRequest));
+        repository.save(book);
         return ResponseEntity.ok(new MessageResponse(
                 String.format("%s with name %s registered successfully!", book.getBookType().name(),
                         book.getTitle())));
@@ -97,6 +93,7 @@ public class BookServiceImpl implements BookService {
         return ResponseEntity.ok(new MessageResponse(
                 String.format("Book with id = %s successfully delete!", bookId)));
     }
+
 
     @Override
     @Transactional

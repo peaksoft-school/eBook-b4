@@ -42,6 +42,13 @@ public class Book {
     @Enumerated(value = EnumType.STRING)
     private Genre genre;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToMany(mappedBy="books")
+    private List<Basket> basket;
+
     private int baskets;
     private int likes;
     private boolean isActive;

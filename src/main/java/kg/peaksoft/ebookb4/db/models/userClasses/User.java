@@ -46,18 +46,7 @@ public class User {
 
     private String lastName;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "vendor_books",
-            joinColumns = @JoinColumn(
-                    name = "user_id",
-                    referencedColumnName = "user_id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "book_id",
-                    referencedColumnName = "book_id"
-            )
-    )
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<Book> vendorAddedBooks;
 
     @OneToMany
@@ -75,12 +64,12 @@ public class User {
     )
     private List<Favorites> likedBooks;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JoinColumn(name = "basket_id")
     private Basket basket;
 
-    @OneToMany(mappedBy = "user")
-    private List<Promocode> promocodes;
+    @OneToOne(mappedBy = "user")
+    private Promocode promocodes;
 
     @OneToOne
     @JoinColumn(name = "operation_id")

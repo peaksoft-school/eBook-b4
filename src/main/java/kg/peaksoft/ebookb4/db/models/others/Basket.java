@@ -19,7 +19,19 @@ public class Basket {
     @Column(name = "basket_id")
     private Long basketId;
 
-    @ManyToMany(mappedBy = "basked")
+    @ManyToMany
+    @JoinTable(
+            name = "basket_books",
+            joinColumns = @JoinColumn(
+                    name = "basket_id",
+                    referencedColumnName = "basket_id"
+
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "book_id",
+                    referencedColumnName = "book_id"
+            )
+    )
     private List<Book> books;
 
     @OneToOne
