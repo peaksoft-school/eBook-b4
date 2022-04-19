@@ -1,6 +1,5 @@
 package kg.peaksoft.ebookb4.db.models.others;
 
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 
 import javax.persistence.*;

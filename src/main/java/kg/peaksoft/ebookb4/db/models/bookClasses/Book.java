@@ -2,6 +2,7 @@ package kg.peaksoft.ebookb4.db.models.bookClasses;
 
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
+import kg.peaksoft.ebookb4.db.models.others.ClientOperations;
 import kg.peaksoft.ebookb4.db.models.others.FileSources;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
