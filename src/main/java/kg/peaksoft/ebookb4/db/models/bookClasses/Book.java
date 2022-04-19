@@ -2,6 +2,7 @@ package kg.peaksoft.ebookb4.db.models.bookClasses;
 
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
+import kg.peaksoft.ebookb4.db.models.others.Basket;
 import kg.peaksoft.ebookb4.db.models.others.ClientOperations;
 import kg.peaksoft.ebookb4.db.models.others.FileSources;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
@@ -39,6 +40,13 @@ public class Book {
     private BookType bookType;
     @Enumerated(value = EnumType.STRING)
     private Genre genre;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToMany(mappedBy="books")
+    private List<Basket> basket;
 
     private int baskets;
     private int likes;

@@ -8,6 +8,7 @@ import kg.peaksoft.ebookb4.db.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,10 +24,10 @@ public class BookVendorApi {
     private final BookService bookService;
 
     @Operation(summary = "save book",description = "add a new book to the store")
-    @PostMapping("/saveBook/{userId}")
-    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest,
-                                      @PathVariable("userId") Long userId){
-        return  bookService.register(bookRequest, userId);
+    @PostMapping("/saveBook")
+    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest){
+
+        return  bookService.register(bookRequest, SecurityContextHolder.getContext().getAuthentication().getName());
 
     }
 

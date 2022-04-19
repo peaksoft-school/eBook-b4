@@ -19,7 +19,7 @@ public class Basket {
     @Column(name = "basket_id")
     private Long basketId;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(
             name = "basket_books",
             joinColumns = @JoinColumn(

@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
+import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
 import kg.peaksoft.ebookb4.dto.request.BookRequest;
@@ -32,10 +33,12 @@ public class BookServiceImpl implements BookService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<?> register(BookRequest bookRequest, Long userId) {
-
+    public ResponseEntity<?> register(BookRequest bookRequest, String username) {
+        User user = userRepository.getUser(username).orElseThrow(()->
+                new NotFoundException(String.format("User with username: %s doesn't exist!",
+                        username)));
         Book book = mapper.create(bookRequest);
-        try {
+        book.setUser(user);
             if (bookRequest.getBookType().name().equals(BookType.AudioBook.name())) {
                 System.out.println("Hello AudioBook");
                 AudioBook audio = new AudioBook();
@@ -61,12 +64,7 @@ public class BookServiceImpl implements BookService {
                 book.setPaperBook(paperBook);
             }
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse(String.format("User with id %s doesn't exist!", userId)));
-        }
+
 
         repository.save(book);
         return ResponseEntity.ok(new MessageResponse(
