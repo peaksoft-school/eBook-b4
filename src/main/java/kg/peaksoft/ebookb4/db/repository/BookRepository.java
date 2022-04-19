@@ -4,20 +4,23 @@ import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
+import kg.peaksoft.ebookb4.db.models.others.SortBook;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     Optional<Book> findBookByTitle(String book);
 
-    //    @Query(value = "select s from Book s where s.price between :min and :max")
-    @Query(value = "select s from Book s where s.price > :min and s.price < :max")
+    //    @Query(value = "select s from Book s where s.price > :min and s.price < :max")
+    @Query(value = "select s from Book s where s.price between :min and :max")
     List<Book> getByPrice(@Param("min") BigDecimal min, @Param("max") BigDecimal max);
 
     @Query("select b from Book b where b.audioBook is not null")
@@ -33,12 +36,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByBookType(BookType bookType);
 
     @Query("SELECT b FROM Book b WHERE b.genre = ?1")
-    List<Book> findByGenre(Genre genre);
+    List<Book> findByGenre(List<Genre> genre);
 
     @Query("SELECT b FROM Book b WHERE b.language = ?1")
     List<Book> findByLanguage(Language language);
 
 
-//    List<Book> findBy(Genre genre ,BookType bookType);
+    @Query("select b from Book b where b.title like %?1% ")
+    List<Book> findAll(String keyword);
 
 }

@@ -43,6 +43,7 @@ public class BookApi {
 
     @Operation(summary = "delete",description = "We can delete by id book in the store")
 
+    @Operation(summary = "delete",description = "We can delete by id book in the store")
     @DeleteMapping("{bookId}")
     public ResponseEntity<?> delete(@PathVariable Long bookId) {
         return bookService.delete(bookId);
@@ -50,6 +51,7 @@ public class BookApi {
 
     @Operation(summary = "update",description = "We can update or chage book here")
 
+    @Operation(summary = "update",description = "We can update or chage book here")
     @PatchMapping("{bookId}")
     public ResponseEntity<?> update(@RequestBody BookRequest request,
                                     @PathVariable Long bookId){
