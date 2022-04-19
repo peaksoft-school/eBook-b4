@@ -39,21 +39,21 @@ public class BookGetApi {
         return bookGetService.bookGetElectronic();
     }
 
-//    @PreAuthorize("hasAnyAuthority('ROLE_VENDOR','ROLE_CLIENT')")
-//    @GetMapping("/genre/{by}")
-//    public List<Book> findAllByGenre(@PathVariable("by") Genre genre,@PathVariable("by") BookType bookType) {
-//        return bookRepository.findBy(genre,bookType);
-//    }
+    @PreAuthorize("hasAnyAuthority('ROLE_VENDOR','ROLE_CLIENT')")
+    @GetMapping("/genre/{genre}")
+    public List<Book> findAllByGenre(@PathVariable Genre genre) {
+        return bookRepository.findByGenre(genre);
+    }
 
     @PreAuthorize("hasAnyAuthority('ROLE_VENDOR','ROLE_CLIENT')")
-    @GetMapping("/bookType")
-    public List<Book> findAllByBookType(BookType bookType) {
+    @GetMapping("/bookType/{bookType}")
+    public List<Book> findAllByBookType(@PathVariable BookType bookType) {
         return bookGetService.findByBookType(bookType);
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_VENDOR','ROLE_CLIENT')")
-    @GetMapping("/language")
-    public List<Book> findAllByLanguage(Language language) {
+    @GetMapping("/language/{language}")
+    public List<Book> findAllByLanguage(@PathVariable Language language) {
         return bookGetService.findByLanguage(language);
     }
 
@@ -66,7 +66,7 @@ public class BookGetApi {
     @PreAuthorize("hasAnyAuthority('ROLE_VENDOR','ROLE_CLIENT')")
     @GetMapping("/findAll/{name}")
     public List<Book> findAll(@PathVariable String name) {
-        return bookRepository.findAll(name);
+        return bookGetService.findAll(name);
     }
 
 }

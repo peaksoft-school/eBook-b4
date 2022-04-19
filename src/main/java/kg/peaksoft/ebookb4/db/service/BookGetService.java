@@ -26,5 +26,7 @@ public interface BookGetService {
 
     List<Book> findByLanguage(Language language);
 
+    List<Book> findAll(String name);
+
 
 }

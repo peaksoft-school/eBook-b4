@@ -43,8 +43,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
 
     @Query("select b from Book b where b.title like %?1% " +
-            "or b.authorFullName like %?1%")
-
+            "or b.authorFullName like %?1%" +
+            "or b.publishingHouse like %?1%")
     List<Book> findAll(String keyword);
 
 }

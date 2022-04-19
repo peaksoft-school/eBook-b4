@@ -52,4 +52,9 @@ public class BookGetServiceImpl implements BookGetService {
     public List<Book> findByLanguage(Language language) {
         return repository.findByLanguage(language);
     }
+
+    @Override
+    public List<Book> findAll(String name) {
+        return repository.findAll(name);
+    }
 }

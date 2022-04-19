@@ -1,4 +1,4 @@
- drop table if exists audio_book cascade;
+drop table if exists audio_book cascade;
  drop table if exists basket cascade;
  drop table if exists basket_books cascade;
  drop table if exists book cascade;
@@ -38,13 +38,13 @@
  create table audio_book (audio_book_id int8 not null, duration time, fragment varchar(255), url_of_book_from_cloud varchar(255), primary key (audio_book_id));
  create table basket (basket_id int8 not null, user_id int8, primary key (basket_id));
  create table basket_books (basket_id int8 not null, book_id int8 not null);
- create table book (book_id int8 not null, about_book varchar(255), author_full_name varchar(255), baskets int4 not null, book_type varchar(255), discount int4, genre varchar(255), is_best_seller boolean, language varchar(255), likes int4 not null, price numeric(19, 2), title varchar(255), year_of_issue date, audiobook_id int8, ebook_id int8, paperbook_id int8, primary key (book_id));
+ create table book (book_id int8 not null, about_book varchar(255), author_full_name varchar(255), publishing_house varchar(255), baskets int4 not null, book_type varchar(255), discount int4, genre varchar(255), is_best_seller boolean, language varchar(255), likes int4 not null, price numeric(19, 2), title varchar(255), year_of_issue date, audiobook_id int8, ebook_id int8, paperbook_id int8, primary key (book_id));
  create table client_operation_books (operation_id int8 not null, book_id int8 not null);
  create table client_operations (operation_id int8 not null, user_id int8, primary key (operation_id));
- create table electronic_book (ebook_id int8 not null, fragment_of_book varchar(255), number_of_pages int4, publishing_house varchar(255), url_of_book_from_cloud varchar(255), primary key (ebook_id));
+ create table electronic_book (ebook_id int8 not null, fragment_of_book varchar(255), number_of_pages int4, url_of_book_from_cloud varchar(255), primary key (ebook_id));
  create table favorites (favorite_id int8 not null, user_id int8, book_id int8, primary key (favorite_id));
  create table file_sources (id int8 not null, images varchar(255), book_id int8, primary key (id));
- create table paper_book (paper_book_id int8 not null, fragment_of_book varchar(255), number_of_pages int4, number_of_selected int4, publishing_house varchar(255), primary key (paper_book_id));
+ create table paper_book (paper_book_id int8 not null, fragment_of_book varchar(255), number_of_pages int4, number_of_selected int4, primary key (paper_book_id));
  create table promocode (id int8 not null, beginning_day date, discount int4 not null, end_day date, promo_name varchar(255), user_id int8, primary key (id));
  create table roles (id int8 not null, name varchar(20), primary key (id));
  create table user_liked_books (user_id int8 not null, favorite_id int8 not null);

@@ -99,14 +99,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", number='" + number + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", vendor added books=" + vendorAddedBooks +
-                ", likedBooks=" + likedBooks +
-                ", basket=" + basket +
-                ", role=" + role +
-                '}';
+                '}'+"\n";
     }
 }

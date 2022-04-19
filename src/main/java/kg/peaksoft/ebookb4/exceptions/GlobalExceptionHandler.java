@@ -54,9 +54,4 @@ public class GlobalExceptionHandler {
         exceptionResponse.setMessage(constraintViolationException.getMessage());
         return exceptionResponse;
     }
-
-
-
-
-
 }

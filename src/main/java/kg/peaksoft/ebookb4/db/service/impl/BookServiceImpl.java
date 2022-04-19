@@ -40,16 +40,14 @@ public class BookServiceImpl implements BookService {
         Book book = mapper.create(bookRequest);
         try {
             if (bookRequest.getBookType().name().equals(BookType.AudioBook.name())) {
-                System.out.println("Hello AudioBook");
-                book.setPublishingHouse(null);
                 AudioBook audio = new AudioBook();
+
                 audio.setDuration(bookRequest.getAudioBook().getDuration());
                 audio.setFragment(bookRequest.getAudioBook().getFragment());
                 audio.setUrlOfBookFromCloud(bookRequest.getAudioBook().getUrlOfBookFromCloud());
                 book.setAudioBook(audio);
 
             } else if (bookRequest.getBookType().name().equals(BookType.Ebook.name())) {
-                System.out.println("Hello EBook");
                 ElectronicBook ebook = new ElectronicBook();
                 ebook.setFragmentOfBook(bookRequest.getElectronicBook().getFragmentOfBook());
                 ebook.setNumberOfPages(bookRequest.getElectronicBook().getNumberOfPages());
@@ -57,7 +55,6 @@ public class BookServiceImpl implements BookService {
                 book.setElectronicBook(ebook);
 
             } else {
-                System.out.println("Hello PaperBook");
                 PaperBook paperBook = new PaperBook();
                 paperBook.setFragmentOfBook(bookRequest.getPaperBook().getFragmentOfBook());
                 paperBook.setNumberOfSelected(bookRequest.getPaperBook().getNumberOfSelected());
@@ -169,7 +166,6 @@ public class BookServiceImpl implements BookService {
                 book.getElectronicBook().setUrlOfBookFromCloud(newBook.getElectronicBook().getUrlOfBookFromCloud());
                 break;
             case AudioBook:
-                book.setPublishingHouse(null);
                 book.getAudioBook().setDuration(newBook.getAudioBook().getDuration());
                 book.getAudioBook().setFragment(newBook.getAudioBook().getFragment());
                 book.getAudioBook().setUrlOfBookFromCloud(newBook.getAudioBook().getUrlOfBookFromCloud());

@@ -16,6 +16,7 @@ public class BookMapper {
         book.setGenre(dto.getGenre());
         book.setLanguage(dto.getLanguage());
         book.setYearOfIssue(dto.getYearOfIssue());
+        book.setPublishingHouse(dto.getPublishingHouse());
         book.setIsBestSeller(dto.getIsBestSeller());
         book.setPrice(dto.getPrice());
         book.setDiscount(dto.getDiscount());

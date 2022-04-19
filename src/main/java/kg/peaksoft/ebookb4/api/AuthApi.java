@@ -9,6 +9,7 @@ import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.db.service.VendorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,6 +32,7 @@ public class AuthApi {
     JwtUtils jwtUtils;
     VendorService vendorService;
     ClientService clientService;
+
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
