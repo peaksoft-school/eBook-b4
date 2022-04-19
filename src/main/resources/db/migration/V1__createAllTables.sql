@@ -1,4 +1,4 @@
- drop table if exists audio_book cascade;
+drop table if exists audio_book cascade;
  drop table if exists basket cascade;
  drop table if exists basket_books cascade;
  drop table if exists book cascade;

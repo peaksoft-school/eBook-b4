@@ -2,6 +2,7 @@ package kg.peaksoft.ebookb4.exceptions;
 
 import kg.peaksoft.ebookb4.exceptions.model.ExceptionResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -43,6 +44,14 @@ public class GlobalExceptionHandler {
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         exceptionResponse.setStatus(HttpStatus.UNAUTHORIZED);
         exceptionResponse.setMessage(badCredentialsException.getMessage());
+        return exceptionResponse;
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ExceptionResponse handleAccessDeniedException(AccessDeniedException accessDeniedException) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setStatus(HttpStatus.FORBIDDEN);
+        exceptionResponse.setMessage(accessDeniedException.getMessage());
         return exceptionResponse;
     }
 

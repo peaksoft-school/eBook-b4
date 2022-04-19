@@ -46,7 +46,7 @@ public class User {
 
     private String lastName;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "vendor_books",
             joinColumns = @JoinColumn(
@@ -99,14 +99,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", number='" + number + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", vendor added books=" + vendorAddedBooks +
-                ", likedBooks=" + likedBooks +
-                ", basket=" + basket +
-                ", role=" + role +
-                '}';
+                '}'+"\n";
     }
 }

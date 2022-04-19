@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.api;
+package kg.peaksoft.ebookb4.api.auth;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.dto.request.LoginRequest;

@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.api;
+package kg.peaksoft.ebookb4.api.auth;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,11 +18,11 @@ import javax.validation.Valid;
 @RequestMapping("/api/auth")
 @AllArgsConstructor
 @Tag(name = "AuthController",description = "singup user and  vendor")
-public class UserApi {
+public class SignUpApi {
     private final ClientService clientService;
     private  final VendorService vendorService;
 
-    @Operation(summary = "singup", description = "registered cliented")
+    @Operation(summary = "singup", description = "registered client")
     @PostMapping("/signup/client")
     public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequestClient client) {
         return clientService.register(client, 1L);
