@@ -8,14 +8,11 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 12/4/22
- */
 @Entity
 @Getter @Setter
 @RequiredArgsConstructor
 public class Basket {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
     @SequenceGenerator(name = "hibernate_seq", sequenceName = "basket_seq", allocationSize = 1)
@@ -36,6 +33,10 @@ public class Basket {
             )
     )
     private List<Book> books;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
 }

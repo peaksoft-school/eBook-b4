@@ -31,6 +31,7 @@ public class BookApi {
     }
     @Operation(summary = "We can find by id",description = "We can find by id in the store the book")
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_VENDOR', 'ROLE_CLIENT')")
     public Book findById(@PathVariable Long id){
         return bookService.findByBookId(id);
     }
