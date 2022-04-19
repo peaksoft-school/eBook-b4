@@ -1,10 +1,7 @@
 package kg.peaksoft.ebookb4.api;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.dto.request.LoginRequest;
-import kg.peaksoft.ebookb4.dto.request.SignupRequestClient;
-import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
 import kg.peaksoft.ebookb4.dto.response.JwtResponse;
 import kg.peaksoft.ebookb4.config.jwt.JwtUtils;
 import kg.peaksoft.ebookb4.config.services.UserDetailsImpl;
@@ -28,7 +25,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/auth")
 @AllArgsConstructor
 @Tag(name = "AuthController",description = "jwt token,")
-public class AuthController {
+public class AuthApi {
 
     AuthenticationManager authenticationManager;
     JwtUtils jwtUtils;

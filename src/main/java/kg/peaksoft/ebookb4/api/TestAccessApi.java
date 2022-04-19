@@ -1,15 +1,25 @@
 package kg.peaksoft.ebookb4.api;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/test")
-public class TestController {
+public class TestAccessApi {
+
+    @GetMapping("/secured")
+    public Collection<? extends GrantedAuthority> secured(){
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+    }
+
     @GetMapping("/all")
     public String allAccess() {
         return "Public Content.";

@@ -3,6 +3,7 @@ package kg.peaksoft.ebookb4.db.models.userClasses;
 import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import kg.peaksoft.ebookb4.db.models.others.Basket;
 import kg.peaksoft.ebookb4.db.models.others.Favorites;
+import kg.peaksoft.ebookb4.db.models.others.Promocode;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,7 +20,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
@@ -34,8 +34,9 @@ public class User {
     private String email;
 
     @NotBlank
-    @Size(max = 120)
+    @Size(min = 8, max = 64, message = "Password must be 8-64 char long")
     private String password;
+
 
     private String number;
 
@@ -44,7 +45,7 @@ public class User {
     private String lastName;
 
     @OneToMany
-    @Column(name = "book_id")
+    @Column(name = "vendor_added_books_id")
     @JoinTable(
             name = "vendor_books",
             joinColumns = @JoinColumn(
@@ -56,7 +57,7 @@ public class User {
                     referencedColumnName = "book_id"
             )
     )
-    private List<Book> books;
+    private List<Book> vendorAddedBooks;
 
     @OneToMany
     @JoinTable(
@@ -73,9 +74,12 @@ public class User {
     )
     private List<Favorites> likedBooks;
 
-    @OneToOne
+    @OneToOne(mappedBy = "user")
     @JoinColumn(name = "basket_id")
     private Basket basket;
+
+    @OneToMany(mappedBy = "user")
+    private List<Promocode> promocodes;
 
     @OneToOne
     private Role role;
@@ -83,5 +87,21 @@ public class User {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", number='" + number + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", vendor added books=" + vendorAddedBooks +
+                ", likedBooks=" + likedBooks +
+                ", basket=" + basket +
+                ", role=" + role +
+                '}';
     }
 }

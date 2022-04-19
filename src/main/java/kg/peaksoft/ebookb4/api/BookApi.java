@@ -35,21 +35,19 @@ public class BookApi {
         return bookService.findByBookId(id);
     }
 
-    @Operation(summary = "find All",description = "We can aal books find in the store")
+    @Operation(summary = "find All",description = "We can get all books from of the store")
     @GetMapping
     public List<Book> findAll(){
         return bookService.findAll();
     }
 
     @Operation(summary = "delete",description = "We can delete by id book in the store")
-
     @DeleteMapping("{bookId}")
     public ResponseEntity<?> delete(@PathVariable Long bookId) {
         return bookService.delete(bookId);
     }
 
     @Operation(summary = "update",description = "We can update or chage book here")
-
     @PatchMapping("{bookId}")
     public ResponseEntity<?> update(@RequestBody BookRequest request,
                                     @PathVariable Long bookId){

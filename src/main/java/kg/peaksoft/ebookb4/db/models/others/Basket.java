@@ -37,5 +37,9 @@ public class Basket {
     )
     private List<Book> books;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
 }
