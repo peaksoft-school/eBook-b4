@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.api.userApi;
+package kg.peaksoft.ebookb4.api.vendorApi;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @PreAuthorize("hasRole('ROLE_VENDOR')")
 @Tag(name = "Books",description = "crud operations")
-public class BookUserApi {
+public class BookVendorApi {
 
     private final BookService bookService;
 
