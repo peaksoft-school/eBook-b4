@@ -38,6 +38,7 @@ public class BookApi {
 
     @Operation(summary = "find All",description = "We can aal books find in the store")
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_VENDOR', 'ROLE_CLIENT')")
     public List<Book> findAll(){
         return bookService.findAll();
     }
