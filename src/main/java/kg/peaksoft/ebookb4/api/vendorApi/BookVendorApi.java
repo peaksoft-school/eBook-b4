@@ -23,33 +23,21 @@ public class BookVendorApi {
     private final BookService bookService;
 
     @Operation(summary = "save book",description = "add a new book to the store")
-    @PostMapping("{userId}")
+    @PostMapping("/saveBook/{userId}")
     public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest,
                                       @PathVariable("userId") Long userId){
         return  bookService.register(bookRequest, userId);
 
     }
 
-    @Operation(summary = "We can find by id",description = "We can find by id in the store the book")
-    @GetMapping("{id}")
-    public Book findById(@PathVariable Long id){
-        return bookService.findByBookId(id);
-    }
-
-    @Operation(summary = "find All",description = "We can find all books in the store")
-    @GetMapping
-    public List<Book> findAll(){
-        return bookService.findAll();
-    }
-
     @Operation(summary = "delete",description = "We can delete by id book in the store")
-    @DeleteMapping("{bookId}")
+    @DeleteMapping("/deleteBook/{bookId}")
     public ResponseEntity<?> delete(@PathVariable Long bookId) {
         return bookService.delete(bookId);
     }
 
     @Operation(summary = "update",description = "We can update or chage book here")
-    @PatchMapping("{bookId}")
+    @PatchMapping("/updateBook/{bookId}")
     public ResponseEntity<?> update(@RequestBody BookRequest request,
                                     @PathVariable Long bookId){
         return bookService.update(request,bookId);

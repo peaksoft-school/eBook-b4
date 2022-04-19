@@ -8,13 +8,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import java.util.List;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/books")
 @AllArgsConstructor
-@PreAuthorize("hasRole('ROLE_CLIENT')")
+@PermitAll
 @Tag(name = "Books",description = "crud operations")
 public class BookClientApi {
 
@@ -22,13 +23,13 @@ public class BookClientApi {
 
 
     @Operation(summary = "We can find by id",description = "We can find by id in the store the book")
-    @GetMapping("{id}")
+    @GetMapping("/getBook/{id}")
     public Book findById(@PathVariable Long id){
         return bookService.findByBookId(id);
     }
 
     @Operation(summary = "find All",description = "We can find all books in the store")
-    @GetMapping
+    @GetMapping("/getBooks")
     public List<Book> findAll(){
         return bookService.findAll();
     }

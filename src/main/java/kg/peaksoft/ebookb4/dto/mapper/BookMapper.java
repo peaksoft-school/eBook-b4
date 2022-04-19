@@ -12,6 +12,7 @@ public class BookMapper {
         Book book = new Book();
         book.setTitle(dto.getTitle());
         book.setAuthorFullName(dto.getAuthorFullName());
+        book.setPublishingHouse(dto.getPublishingHouse());
         book.setAboutBook(dto.getAboutBook());
         book.setGenre(dto.getGenre());
         book.setLanguage(dto.getLanguage());
