@@ -29,6 +29,8 @@ public class Book {
 
     private LocalDate yearOfIssue;
 
+    private String publishingHouse;
+
     private Integer discount;
     private BigDecimal price;
     private Boolean isBestSeller;

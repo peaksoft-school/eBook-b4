@@ -18,7 +18,6 @@ public class PaperBook {
     @SequenceGenerator(name = "hibernate_seq", sequenceName = "paperbook_seq", allocationSize = 1)
     private Long paperBookId;
 
-    private String publishingHouse;
     private String fragmentOfBook;
     private Integer numberOfPages;
     private Integer numberOfSelected;

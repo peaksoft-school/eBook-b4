@@ -74,3 +74,15 @@
  alter table if exists users add constraint FKp56c1712k691lhsyewcssf40f foreign key (role_id) references roles;
  alter table if exists vendor_books add constraint FKl3v27c2q3c3sv76ge4juv8j2y foreign key (book_id) references book;
  alter table if exists vendor_books add constraint FKp048a2rkyn4gfxlikbq0d0xiu foreign key (user_id) references users;
+
+ insert into roles(id, name)
+ values(1, 'ROLE_CLIENT');
+ insert into roles(id, name)
+ values(2, 'ROLE_VENDOR');
+ insert into roles(id, name)
+ values(3, 'ROLE_ADMIN');
+
+ insert into users(user_id, email, password, role_id)
+ values(1,'admin@gmail.com',
+        '$2a$10$Zz/PNXKsnLOSPmHtMP1zZ.WK31Bs69gv3a2N5mKAcn3/qP8Lq1Od.',
+        3);

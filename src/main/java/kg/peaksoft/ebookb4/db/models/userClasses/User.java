@@ -46,7 +46,7 @@ public class User {
 
     private String lastName;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "vendor_books",
             joinColumns = @JoinColumn(

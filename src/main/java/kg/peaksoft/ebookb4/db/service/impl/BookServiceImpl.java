@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.beans.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -40,6 +41,7 @@ public class BookServiceImpl implements BookService {
         try {
             if (bookRequest.getBookType().name().equals(BookType.AudioBook.name())) {
                 System.out.println("Hello AudioBook");
+                book.setPublishingHouse(null);
                 AudioBook audio = new AudioBook();
                 audio.setDuration(bookRequest.getAudioBook().getDuration());
                 audio.setFragment(bookRequest.getAudioBook().getFragment());
@@ -49,7 +51,6 @@ public class BookServiceImpl implements BookService {
             } else if (bookRequest.getBookType().name().equals(BookType.Ebook.name())) {
                 System.out.println("Hello EBook");
                 ElectronicBook ebook = new ElectronicBook();
-                ebook.setPublishingHouse(bookRequest.getElectronicBook().getPublishingHouse());
                 ebook.setFragmentOfBook(bookRequest.getElectronicBook().getFragmentOfBook());
                 ebook.setNumberOfPages(bookRequest.getElectronicBook().getNumberOfPages());
                 ebook.setUrlOfBookFromCloud(bookRequest.getElectronicBook().getUrlOfBookFromCloud());
@@ -58,7 +59,6 @@ public class BookServiceImpl implements BookService {
             } else {
                 System.out.println("Hello PaperBook");
                 PaperBook paperBook = new PaperBook();
-                paperBook.setPublishingHouse(bookRequest.getPaperBook().getPublishingHouse());
                 paperBook.setFragmentOfBook(bookRequest.getPaperBook().getFragmentOfBook());
                 paperBook.setNumberOfSelected(bookRequest.getPaperBook().getNumberOfSelected());
                 paperBook.setNumberOfPages(bookRequest.getPaperBook().getNumberOfPages());
@@ -159,18 +159,17 @@ public class BookServiceImpl implements BookService {
 
         switch (newBook.getBookType()) {
             case PaperBook:
-                book.getPaperBook().setPublishingHouse(newBook.getPaperBook().getPublishingHouse());
                 book.getPaperBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
                 book.getPaperBook().setNumberOfPages(newBook.getPaperBook().getNumberOfPages());
                 book.getPaperBook().setNumberOfSelected(newBook.getPaperBook().getNumberOfSelected());
                 break;
             case Ebook:
-                book.getElectronicBook().setPublishingHouse(newBook.getElectronicBook().getPublishingHouse());
                 book.getElectronicBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
                 book.getElectronicBook().setNumberOfPages(newBook.getElectronicBook().getNumberOfPages());
                 book.getElectronicBook().setUrlOfBookFromCloud(newBook.getElectronicBook().getUrlOfBookFromCloud());
                 break;
             case AudioBook:
+                book.setPublishingHouse(null);
                 book.getAudioBook().setDuration(newBook.getAudioBook().getDuration());
                 book.getAudioBook().setFragment(newBook.getAudioBook().getFragment());
                 book.getAudioBook().setUrlOfBookFromCloud(newBook.getAudioBook().getUrlOfBookFromCloud());
