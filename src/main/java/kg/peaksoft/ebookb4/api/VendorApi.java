@@ -1,10 +1,13 @@
 package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.peaksoft.ebookb4.db.service.PromoService;
+import kg.peaksoft.ebookb4.dto.request.PromoRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -14,12 +17,18 @@ import javax.annotation.security.RolesAllowed;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/api/vendor/create-promo")
+@RequestMapping("/api/vendor")
 @AllArgsConstructor
-@RolesAllowed("ROLE_VENDOR")
+@PreAuthorize("hasRole('ROLE_VENDOR')")
 @Tag(name = "Vendor",description = "Vendor accessible apis")
 public class VendorApi {
 
+    private PromoService promoService;
 
+    @PostMapping("/create-promo")
+    public ResponseEntity<?> createPromo(@RequestBody PromoRequest promoRequest){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return promoService.createPromo(promoRequest,username);
+    }
 
 }

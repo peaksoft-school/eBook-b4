@@ -15,7 +15,8 @@ import java.util.List;
 
 @Entity
 @RequiredArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class Book {
 
     @Id
@@ -26,12 +27,10 @@ public class Book {
     private String title;
     private String authorFullName;
     private String aboutBook;
+    private String publishingHouse;
 
     private LocalDate yearOfIssue;
 
-    private String publishingHouse;
-
-    private Integer discount;
     private BigDecimal price;
     private Boolean isBestSeller;
     @Enumerated(value = EnumType.STRING)
@@ -43,8 +42,9 @@ public class Book {
 
     private int baskets;
     private int likes;
-
-
+    private boolean isActive;
+    private Integer discount;
+    private Integer discountFromPromo;
 
     @OneToMany(mappedBy = "book")
     private List<FileSources> images;

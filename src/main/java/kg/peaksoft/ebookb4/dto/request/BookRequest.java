@@ -24,6 +24,7 @@ public class BookRequest {
     private Boolean isBestSeller;
     private LocalDate yearOfIssue;
     private BigDecimal price;
+    private String publishingHouse;
 
     private Language language;
     private Genre genre;
