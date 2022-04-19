@@ -5,5 +5,5 @@ package kg.peaksoft.ebookb4.db.models.enums;
  * Date: 12/4/22
  */
 public enum BookType {
-    PaperBook, Ebook, AudioBook;
+    PAPERBOOK, EBOOK, AUDIOBOOK;
 }

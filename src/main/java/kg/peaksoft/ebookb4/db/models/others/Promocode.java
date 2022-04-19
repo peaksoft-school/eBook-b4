@@ -20,6 +20,7 @@ public class Promocode {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
     @SequenceGenerator(name = "hibernate_seq", sequenceName = "promo_seq", allocationSize = 1)
     private Long id;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

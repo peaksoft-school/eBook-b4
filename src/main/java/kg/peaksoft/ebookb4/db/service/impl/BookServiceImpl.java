@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
 
         Book book = mapper.create(bookRequest);
         try {
-            if (bookRequest.getBookType().name().equals(BookType.AudioBook.name())) {
+            if (bookRequest.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
                 AudioBook audio = new AudioBook();
 
                 audio.setDuration(bookRequest.getAudioBook().getDuration());
@@ -47,7 +47,7 @@ public class BookServiceImpl implements BookService {
                 audio.setUrlOfBookFromCloud(bookRequest.getAudioBook().getUrlOfBookFromCloud());
                 book.setAudioBook(audio);
 
-            } else if (bookRequest.getBookType().name().equals(BookType.Ebook.name())) {
+            } else if (bookRequest.getBookType().name().equals(BookType.EBOOK.name())) {
                 ElectronicBook ebook = new ElectronicBook();
                 ebook.setFragmentOfBook(bookRequest.getElectronicBook().getFragmentOfBook());
                 ebook.setNumberOfPages(bookRequest.getElectronicBook().getNumberOfPages());
@@ -128,8 +128,8 @@ public class BookServiceImpl implements BookService {
         if (!Objects.equals(discount, newDiscount)) {
             book.setDiscount(newDiscount);
         }
-        BigDecimal price = book.getPrice();
-        BigDecimal newPrice = newBook.getPrice();
+        Double price = book.getPrice();
+        Double newPrice = newBook.getPrice();
         if (!Objects.equals(price, newPrice) && newPrice.intValue() > 0) {
             book.setPrice(newPrice);
         }
@@ -155,17 +155,17 @@ public class BookServiceImpl implements BookService {
         }
 
         switch (newBook.getBookType()) {
-            case PaperBook:
+            case PAPERBOOK:
                 book.getPaperBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
                 book.getPaperBook().setNumberOfPages(newBook.getPaperBook().getNumberOfPages());
                 book.getPaperBook().setNumberOfSelected(newBook.getPaperBook().getNumberOfSelected());
                 break;
-            case Ebook:
+            case EBOOK:
                 book.getElectronicBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
                 book.getElectronicBook().setNumberOfPages(newBook.getElectronicBook().getNumberOfPages());
                 book.getElectronicBook().setUrlOfBookFromCloud(newBook.getElectronicBook().getUrlOfBookFromCloud());
                 break;
-            case AudioBook:
+            case AUDIOBOOK:
                 book.getAudioBook().setDuration(newBook.getAudioBook().getDuration());
                 book.getAudioBook().setFragment(newBook.getAudioBook().getFragment());
                 book.getAudioBook().setUrlOfBookFromCloud(newBook.getAudioBook().getUrlOfBookFromCloud());
