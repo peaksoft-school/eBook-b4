@@ -72,7 +72,7 @@ public class BookServiceImpl implements BookService {
                     .body(new MessageResponse(String.format("User with id %s doesn't exist!", userId)));
         }
 
-        userRepository.getById(userId).getBooks().add(mapper.create(bookRequest));
+        userRepository.getById(userId).getVendorAddedBooks().add(mapper.create(bookRequest));
         return ResponseEntity.ok(new MessageResponse(
                 String.format("%s with name %s registered successfully!", book.getBookType().name(),
                         book.getTitle())));

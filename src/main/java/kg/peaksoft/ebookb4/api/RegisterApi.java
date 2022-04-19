@@ -18,13 +18,13 @@ import javax.validation.Valid;
 @RequestMapping("/api/auth")
 @AllArgsConstructor
 @Tag(name = "AuthController",description = "singup user and  vendor")
-public class UserApi {
+public class RegisterApi {
     private final ClientService clientService;
     private  final VendorService vendorService;
 
     @Operation(summary = "singup", description = "registered cliented")
     @PostMapping("/signup/client")
-    public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequestClient client) {
+    public ResponseEntity<?> registerClient(@RequestBody @Valid SignupRequestClient client) {
         return clientService.register(client, 1L);
     }
 

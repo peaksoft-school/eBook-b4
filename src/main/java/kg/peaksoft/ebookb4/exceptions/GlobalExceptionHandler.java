@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
+import javax.validation.ConstraintViolationException;
 import java.util.Map;
 
 
@@ -45,5 +46,17 @@ public class GlobalExceptionHandler {
         exceptionResponse.setMessage(badCredentialsException.getMessage());
         return exceptionResponse;
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ExceptionResponse handleBadCredentialsException(ConstraintViolationException constraintViolationException) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST);
+        exceptionResponse.setMessage(constraintViolationException.getMessage());
+        return exceptionResponse;
+    }
+
+
+
+
 
 }

@@ -62,4 +62,11 @@ public class BookGetApi {
     public List<Book> findAllByPrice(@RequestBody PriseDto priseDto) {
         return bookGetService.getByPrice(priseDto.getMin(), priseDto.getMax());
     }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_VENDOR','ROLE_CLIENT')")
+    @GetMapping("/findAll/{name}")
+    public List<Book> findAll(@PathVariable String name) {
+        return bookRepository.findAll(name);
+    }
+
 }
