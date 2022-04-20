@@ -1,6 +1,5 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
 import kg.peaksoft.ebookb4.dto.request.BookRequest;
@@ -35,21 +34,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public ResponseEntity<?> register(BookRequest bookRequest, String username) {
-        User user = userRepository.getUser(username).orElseThrow(()->
-                new NotFoundException(String.format("User with username: %s doesn't exist!",
-                        username)));
+
         Book book = mapper.create(bookRequest);
-        book.setUser(user);
-            if (bookRequest.getBookType().name().equals(BookType.AudioBook.name())) {
-                System.out.println("Hello AudioBook");
+        try {
+            if (bookRequest.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
                 AudioBook audio = new AudioBook();
                 audio.setDuration(bookRequest.getAudioBook().getDuration());
                 audio.setFragment(bookRequest.getAudioBook().getFragment());
                 audio.setUrlOfBookFromCloud(bookRequest.getAudioBook().getUrlOfBookFromCloud());
                 book.setAudioBook(audio);
 
-            } else if (bookRequest.getBookType().name().equals(BookType.Ebook.name())) {
-                System.out.println("Hello EBook");
+            } else if (bookRequest.getBookType().name().equals(BookType.EBOOK.name())) {
                 ElectronicBook ebook = new ElectronicBook();
                 ebook.setFragmentOfBook(bookRequest.getElectronicBook().getFragmentOfBook());
                 ebook.setNumberOfPages(bookRequest.getElectronicBook().getNumberOfPages());
@@ -57,7 +52,6 @@ public class BookServiceImpl implements BookService {
                 book.setElectronicBook(ebook);
 
             } else {
-                System.out.println("Hello PaperBook");
                 PaperBook paperBook = new PaperBook();
                 paperBook.setFragmentOfBook(bookRequest.getPaperBook().getFragmentOfBook());
                 paperBook.setNumberOfSelected(bookRequest.getPaperBook().getNumberOfSelected());
@@ -65,7 +59,12 @@ public class BookServiceImpl implements BookService {
                 book.setPaperBook(paperBook);
             }
 
-
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse(String.format("User with id %s doesn't exist!", username)));
+        }
 
         repository.save(book);
         return ResponseEntity.ok(new MessageResponse(
@@ -127,8 +126,8 @@ public class BookServiceImpl implements BookService {
         if (!Objects.equals(discount, newDiscount)) {
             book.setDiscount(newDiscount);
         }
-        BigDecimal price = book.getPrice();
-        BigDecimal newPrice = newBook.getPrice();
+        Double price = book.getPrice();
+        Double newPrice = newBook.getPrice();
         if (!Objects.equals(price, newPrice) && newPrice.intValue() > 0) {
             book.setPrice(newPrice);
         }
@@ -154,17 +153,17 @@ public class BookServiceImpl implements BookService {
         }
 
         switch (newBook.getBookType()) {
-            case PaperBook:
+            case PAPERBOOK:
                 book.getPaperBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
                 book.getPaperBook().setNumberOfPages(newBook.getPaperBook().getNumberOfPages());
                 book.getPaperBook().setNumberOfSelected(newBook.getPaperBook().getNumberOfSelected());
                 break;
-            case Ebook:
+            case EBOOK:
                 book.getElectronicBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
                 book.getElectronicBook().setNumberOfPages(newBook.getElectronicBook().getNumberOfPages());
                 book.getElectronicBook().setUrlOfBookFromCloud(newBook.getElectronicBook().getUrlOfBookFromCloud());
                 break;
-            case AudioBook:
+            case AUDIOBOOK:
                 book.getAudioBook().setDuration(newBook.getAudioBook().getDuration());
                 book.getAudioBook().setFragment(newBook.getAudioBook().getFragment());
                 book.getAudioBook().setUrlOfBookFromCloud(newBook.getAudioBook().getUrlOfBookFromCloud());

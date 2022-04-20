@@ -27,14 +27,15 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 @AllArgsConstructor
-@Tag(name = "AuthController",description = "jwt token,")
+@Tag(name = "AuthController", description = "jwt token,")
 public class AuthApi {
 
     AuthenticationManager authenticationManager;
     JwtUtils jwtUtils;
     VendorService vendorService;
     ClientService clientService;
-    @Operation(summary = "sign in",description = "sign in a user")
+
+    @Operation(summary = "Sign In", description = "Sign In Users")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -67,6 +68,7 @@ public class AuthApi {
     public ResponseEntity<?> registerVendor(@Valid @RequestBody SignupRequestVendor vendor) {
         return vendorService.register(vendor, 2L);
     }
+
 
 
 

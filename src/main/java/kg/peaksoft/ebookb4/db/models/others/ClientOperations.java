@@ -25,20 +25,19 @@ public class ClientOperations {
     @SequenceGenerator(name = "hibernate_seq", sequenceName = "operation_seq", allocationSize = 1)
     @Column(name = "operation_id")
     private Long id;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
     @OneToMany
     @JoinTable(
             name = "client_operation_books",
             joinColumns = @JoinColumn(
                     name = "operation_id",
-                    referencedColumnName = "operation_id"
-            ),
+                    referencedColumnName = "operation_id"),
             inverseJoinColumns = @JoinColumn(
                     name = "book_id",
-                    referencedColumnName = "book_id"
-            )
-    )
+                    referencedColumnName = "book_id"))
     private List<Book> boughtBooks;
 }

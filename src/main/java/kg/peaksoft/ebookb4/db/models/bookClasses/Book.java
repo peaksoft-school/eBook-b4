@@ -12,6 +12,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,7 +33,7 @@ public class Book {
 
     private LocalDate yearOfIssue;
 
-    private BigDecimal price;
+    private Double price;
     private Boolean isBestSeller;
     @Enumerated(value = EnumType.STRING)
     private Language language;
@@ -56,6 +57,10 @@ public class Book {
 
     @OneToMany(mappedBy = "book")
     private List<FileSources> images;
+
+
+    @ManyToMany
+    private List<Basket> basked;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "audiobook_id")

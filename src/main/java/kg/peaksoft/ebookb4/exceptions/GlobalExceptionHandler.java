@@ -2,7 +2,6 @@ package kg.peaksoft.ebookb4.exceptions;
 
 import kg.peaksoft.ebookb4.exceptions.model.ExceptionResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
+import javax.validation.ConstraintViolationException;
 import java.util.Map;
 
 
@@ -47,12 +47,11 @@ public class GlobalExceptionHandler {
         return exceptionResponse;
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ExceptionResponse handleAccessDeniedException(AccessDeniedException accessDeniedException) {
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ExceptionResponse handleBadCredentialsException(ConstraintViolationException constraintViolationException) {
         ExceptionResponse exceptionResponse = new ExceptionResponse();
-        exceptionResponse.setStatus(HttpStatus.FORBIDDEN);
-        exceptionResponse.setMessage(accessDeniedException.getMessage());
+        exceptionResponse.setStatus(HttpStatus.BAD_REQUEST);
+        exceptionResponse.setMessage(constraintViolationException.getMessage());
         return exceptionResponse;
     }
-
 }

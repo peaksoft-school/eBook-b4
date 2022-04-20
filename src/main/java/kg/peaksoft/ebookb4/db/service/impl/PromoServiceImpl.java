@@ -52,7 +52,6 @@ public class PromoServiceImpl implements PromoService {
             }
         }
 
-
         promoRepository.save(promo);
 
         return ResponseEntity.ok(new MessageResponse(

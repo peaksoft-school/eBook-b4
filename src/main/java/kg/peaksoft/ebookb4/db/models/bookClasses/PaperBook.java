@@ -14,8 +14,12 @@ import javax.persistence.*;
 public class PaperBook {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
-    @SequenceGenerator(name = "hibernate_seq", sequenceName = "paperbook_seq", allocationSize = 1)
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "hibernate_seq")
+    @SequenceGenerator(name = "hibernate_seq",
+            sequenceName = "paperbook_seq",
+            allocationSize = 1)
     private Long paperBookId;
 
     private String fragmentOfBook;
