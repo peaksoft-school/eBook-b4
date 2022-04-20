@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.dto.request.PromoRequest;
@@ -24,7 +25,7 @@ import javax.annotation.security.RolesAllowed;
 public class VendorApi {
 
     private PromoService promoService;
-
+    @Operation(summary = "promo", description = "Vendor creates a promo")
     @PostMapping("/create-promo")
     public ResponseEntity<?> createPromo(@RequestBody PromoRequest promoRequest){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
