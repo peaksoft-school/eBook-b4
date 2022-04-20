@@ -23,7 +23,7 @@ public class BookVendorApi {
 
     private final BookService bookService;
 
-    @Operation(summary = "save book",description = "add a new book to the store")
+    @Operation(summary = "save book",description = "save a new book")
     @PostMapping("/saveBook")
     public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest){
 
@@ -31,13 +31,13 @@ public class BookVendorApi {
 
     }
 
-    @Operation(summary = "delete",description = "We can delete by id book in the store")
+    @Operation(summary = "delete",description = "Delete a book")
     @DeleteMapping("/deleteBook/{bookId}")
     public ResponseEntity<?> delete(@PathVariable Long bookId) {
         return bookService.delete(bookId);
     }
 
-    @Operation(summary = "update",description = "We can update or chage book here")
+    @Operation(summary = "update",description = "Update a book")
     @PatchMapping("/updateBook/{bookId}")
     public ResponseEntity<?> update(@RequestBody BookRequest request,
                                     @PathVariable Long bookId){
