@@ -28,5 +28,6 @@ public class Promocode {
     private LocalDate beginningDay;
     private LocalDate endDay;
     private int discount;
+    private Boolean isActive;
 
 }

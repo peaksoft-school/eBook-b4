@@ -59,4 +59,6 @@ public class PromoServiceImpl implements PromoService {
                 String.format("Promo with promo_name %s has been saved",promoRequest.getPromoName())
         ));
     }
+
+
 }

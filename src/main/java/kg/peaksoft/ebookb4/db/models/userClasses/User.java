@@ -26,7 +26,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
     @SequenceGenerator(name = "hibernate_seq", sequenceName = "user_seq", allocationSize = 1,
-            initialValue = 2)
+            initialValue = 1)
     @Column(name = "user_id")
     private Long id;
 

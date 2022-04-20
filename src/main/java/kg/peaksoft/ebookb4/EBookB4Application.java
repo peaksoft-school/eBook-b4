@@ -53,14 +53,34 @@ public class EBookB4Application {
         roleRepository.save(vendor);
         roleRepository.save(admin);
 
-        User user = new User();
-        user.setEmail("admin@gmail.com");
-        user.setPassword(encoder.encode("password"));
-        user.setRole(roleRepository.getById(3L));
+            User c = new User();
+            c.setEmail("client@gmail.com");
+            c.setPassword(encoder.encode("client"));
+            c.setRole(roleRepository.getById(1L));
+            Basket basket1 = new Basket();
+            basket1.setUser(c);
+            c.setBasket(basket1);
+            userRepository.save(c);
+
+
+            User v = new User();
+            v.setEmail("vendor@gmail.com");
+            v.setPassword(encoder.encode("vendor"));
+            v.setRole(roleRepository.getById(2L));
+            Basket basket2 = new Basket();
+            basket2.setUser(v);
+            v.setBasket(basket2);
+            userRepository.save(v);
+
+        User a = new User();
+            a.setEmail("admin@gmail.com");
+            a.setPassword(encoder.encode("password"));
+            a.setRole(roleRepository.getById(3L));
         Basket basket = new Basket();
-        basket.setUser(user);
-        user.setBasket(basket);
-        userRepository.save(user);
+        basket.setUser(a);
+            a.setBasket(basket);
+        userRepository.save(a);
+
     }
 
 }

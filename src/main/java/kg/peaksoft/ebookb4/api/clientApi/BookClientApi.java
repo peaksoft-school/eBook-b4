@@ -22,13 +22,13 @@ public class BookClientApi {
     private final BookService bookService;
 
 
-    @Operation(summary = "We can find by id",description = "We can find by id in the store the book")
+    @Operation(summary = "book by id",description = "Get book by id")
     @GetMapping("/getBook/{id}")
     public Book findById(@PathVariable Long id){
         return bookService.findByBookId(id);
     }
 
-    @Operation(summary = "find All",description = "We can find all books in the store")
+    @Operation(summary = "get all",description = "Get all books in the store")
     @GetMapping("/getBooks")
     public List<Book> findAll(){
         return bookService.findAll();
