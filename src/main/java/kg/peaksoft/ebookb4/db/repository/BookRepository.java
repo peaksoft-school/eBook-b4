@@ -32,5 +32,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.bookId = ?1 and b.isActive = true")
     Optional<Book> findBookById(Long id);
 
-
+    @Query("select b from Book b where b.user = ?1")
+    List<Book> findBooksFromVendor(String username);
 }

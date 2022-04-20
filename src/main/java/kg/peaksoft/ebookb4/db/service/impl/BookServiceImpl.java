@@ -181,5 +181,10 @@ public class BookServiceImpl implements BookService {
                         book.getTitle())));
     }
 
+    @Override
+    public List<Book> findBooksFromVendor(String username) {
+        return repository.findBooksFromVendor(username);
+    }
+
 
 }
