@@ -57,13 +57,13 @@ public class AuthApi {
                 roles));
     }
 
-    @Operation(summary = "singup", description = "register a client")
+    @Operation(summary = "Sign Up ", description = "Register a Client")
     @PostMapping("/signup/client")
     public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequestClient client) {
         return clientService.register(client, 1L);
     }
 
-    @Operation(summary = "signup", description = "registr a vendor")
+    @Operation(summary = "Sign Up", description = "Register a Vendor")
     @PostMapping("/signup/vendor")
     public ResponseEntity<?> registerVendor(@Valid @RequestBody SignupRequestVendor vendor) {
         return vendorService.register(vendor, 2L);

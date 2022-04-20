@@ -36,6 +36,12 @@ public class Book {
 
     private Double price;
     private Boolean isBestSeller;
+    private int baskets;
+    private int likes;
+    private Boolean isActive = false;
+    private Integer discount;
+    private Integer discountFromPromo;
+
     @Enumerated(value = EnumType.STRING)
     private Language language;
     @Enumerated(value = EnumType.STRING)
@@ -48,21 +54,16 @@ public class Book {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(mappedBy="books")
+    @ManyToMany
+    @JoinTable(
+            name = "books_basket"
+            ,joinColumns = @JoinColumn(name = "book_id")
+            ,inverseJoinColumns = @JoinColumn(name = "basket_id"))
     private List<Basket> basket;
 
-    private int baskets;
-    private int likes;
-    private Boolean isActive = false;
-    private Integer discount;
-    private Integer discountFromPromo;
 
     @OneToMany(mappedBy = "book")
     private List<FileSources> images;
-
-
-    @ManyToMany
-    private List<Basket> basked;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "audiobook_id")

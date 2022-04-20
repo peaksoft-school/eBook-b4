@@ -44,7 +44,7 @@ public class BookGetApi {
     }
 
     @Operation(summary = "Find book by id", description = "Get a book by id")
-    @GetMapping("/findBookById{id}")
+    @GetMapping("/findBookById/{id}")
     public Book getBookById(@PathVariable Long id){
         return bookGetService.getBookById(id);
     }
