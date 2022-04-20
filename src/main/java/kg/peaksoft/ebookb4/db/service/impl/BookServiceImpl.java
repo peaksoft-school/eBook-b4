@@ -1,9 +1,11 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
+import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
 import kg.peaksoft.ebookb4.dto.request.BookRequest;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
+import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import kg.peaksoft.ebookb4.db.models.bookClasses.AudioBook;
 import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
@@ -35,8 +37,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public ResponseEntity<?> register(BookRequest bookRequest, String username) {
 
+        User user = userRepository.getUser(username).orElseThrow(()->
+                new BadRequestException(String.format("User with username %s doesn't exist!",username)));
         Book book = mapper.create(bookRequest);
-        try {
+        book.setUser(user);
             if (bookRequest.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
                 AudioBook audio = new AudioBook();
                 audio.setDuration(bookRequest.getAudioBook().getDuration());
@@ -58,13 +62,13 @@ public class BookServiceImpl implements BookService {
                 paperBook.setNumberOfPages(bookRequest.getPaperBook().getNumberOfPages());
                 book.setPaperBook(paperBook);
             }
+            user.getVendorAddedBooks().add(book);
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse(String.format("User with id %s doesn't exist!", username)));
-        }
+
+
+
+
+
 
         repository.save(book);
         return ResponseEntity.ok(new MessageResponse(
