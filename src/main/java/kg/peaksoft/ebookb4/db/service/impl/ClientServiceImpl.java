@@ -6,6 +6,7 @@ import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.ClientService;
+import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,11 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ResponseEntity<?> register( SignupRequestClient signupRequestClient, Long number) {
+
+        //checking if passwords are the same or not
+        if(!signupRequestClient.getPassword().equals(signupRequestClient.getConfirmPassword())){
+            throw new BadRequestException("Passwords are not the same!");
+        }
 
         if (userRepository.existsByEmail(signupRequestClient.getEmail())) {
             return ResponseEntity

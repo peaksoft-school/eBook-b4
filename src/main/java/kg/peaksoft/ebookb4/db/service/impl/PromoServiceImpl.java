@@ -3,6 +3,7 @@ package kg.peaksoft.ebookb4.db.service.impl;
 import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import kg.peaksoft.ebookb4.db.models.others.Promocode;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.PromoService;
@@ -31,6 +32,7 @@ public class PromoServiceImpl implements PromoService {
     private PromocodeRepository promoRepository;
     private UserRepository userRepository;
     private PromoMapper promoMapper;
+    private BookRepository bookRepository;
 
     @Override
     @Transactional
@@ -67,7 +69,19 @@ public class PromoServiceImpl implements PromoService {
         ));
     }
 
-
+    public void checkPromos(){
+        System.out.println("I am checking promo vor validation!");
+        List<Promocode> promos = promoRepository.getFalsePromosToCheck().orElseThrow(()->
+                new BadRequestException("There are no promo codes yes!"));
+        System.out.println(promos);
+        for(Promocode i: promos){
+            if(Period.between(i.getBeginningDay(),i.getEndDay()).getDays()<0
+            || !i.getIsActive()){
+                System.out.println("Срок прошёл!");
+                bookRepository.checkForPromos(i.getUser());
+            }
+        }
+    }
 
 
 }

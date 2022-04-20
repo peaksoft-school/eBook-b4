@@ -34,4 +34,16 @@ public class Promocode {
     private int discount;
     private Boolean isActive;
 
+    @Override
+    public String toString() {
+        return "Promocode{" +
+                "id=" + id +
+                ", user=" + user +
+                ", promocode='" + promocode + '\'' +
+                ", beginningDay=" + beginningDay +
+                ", endDay=" + endDay +
+                ", discount=" + discount +
+                ", isActive=" + isActive +
+                '}';
+    }
 }

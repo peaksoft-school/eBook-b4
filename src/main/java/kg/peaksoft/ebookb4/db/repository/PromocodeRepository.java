@@ -5,6 +5,7 @@ import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,4 +20,7 @@ public interface PromocodeRepository extends JpaRepository<Promocode, Long> {
 
     @Query("select p from Promocode p where p.user = ?1 and p.isActive=true")
     Promocode getActivePromo(User user);
+
+    @Query("select p from Promocode p where p.isActive = false")
+    Optional<List<Promocode>> getFalsePromosToCheck();
 }

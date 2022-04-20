@@ -12,4 +12,6 @@ public interface PromoService {
 
     ResponseEntity<?> createPromo(PromoRequest promoRequest, String username);
 
+    void checkPromos();
+
 }

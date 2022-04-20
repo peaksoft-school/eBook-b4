@@ -9,6 +9,7 @@ import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.others.SortBook;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
+import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.db.service.impl.BookGetServiceImpl;
 import kg.peaksoft.ebookb4.dto.PriseDto;
 import lombok.AllArgsConstructor;
@@ -25,25 +26,25 @@ public class BookGetApi {
 
     private final BookGetService bookGetService;
 
-    @Operation(summary = "Find All By Genre")
+    @Operation(summary = "find All By Genre", description = "Using enum genre")
     @GetMapping("/findBooksByGenre/{genre}")
     public List<Book> findBooksByGenre(@PathVariable Genre genre) {
         return bookGetService.findByGenre(genre);
     }
 
-    @Operation(summary = "Find All By Title,or AuthorName,or PublishingHouse")
+    @Operation(summary = "find books by name",description = "Using linear search while finding")
     @GetMapping("/findBooksByName/{name}")
     public List<Book> findBooksByName(@PathVariable String name) {
         return bookGetService.findBooksByName(name);
     }
 
-    @Operation(summary = "Find All books if needs being sorted" , description = "Sorted By Genre, BookType, Price, Language")
+    @Operation(summary = "Find active books" , description = "Sorted By Genre, BookType, Price, Language")
     @PostMapping("/getBooks")
     public List<Book> getBooks(@RequestBody SortBook sortBook) {
         return bookGetService.getAllBooksOrSortedOnes(sortBook);
     }
 
-    @Operation(summary = "Find book by id", description = "Get a book by id")
+    @Operation(summary = "find book by id", description = "Get a book by id")
     @GetMapping("/findBookById{id}")
     public Book getBookById(@PathVariable Long id){
         return bookGetService.getBookById(id);
