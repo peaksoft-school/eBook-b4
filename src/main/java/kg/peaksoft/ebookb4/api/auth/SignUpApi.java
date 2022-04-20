@@ -22,13 +22,13 @@ public class SignUpApi {
     private final ClientService clientService;
     private  final VendorService vendorService;
 
-    @Operation(summary = "singup", description = "registered client")
+    @Operation(summary = "singup", description = "register a client")
     @PostMapping("/signup/client")
     public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequestClient client) {
         return clientService.register(client, 1L);
     }
 
-    @Operation(summary = "signup", description = "registreted vendor")
+    @Operation(summary = "signup", description = "registr a vendor")
     @PostMapping("/signup/vendor")
     public ResponseEntity<?> registerVendor(@Valid @RequestBody SignupRequestVendor vendor) {
         return vendorService.register(vendor, 2L);
