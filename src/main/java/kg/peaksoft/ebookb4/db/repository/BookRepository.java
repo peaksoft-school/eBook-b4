@@ -41,7 +41,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 //    @Query("SELECT b FROM Book b WHERE b.language = ?1")
 //    List<Book> findByLanguage(Language language);
 
-
     @Query("select b from Book b where b.genre = ?1")
     List<Book> findAllByGenre(Genre genre);
 
@@ -49,12 +48,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "or b.authorFullName like %?1%" +
             "or b.publishingHouse like %?1%")
     List<Book> findAll(String keyword);
-
-
-    @Query("select b from Book b where b.title like %?1% " +
-            "or b.authorFullName like %?1%" +
-            "or b.publishingHouse like %?1%")
-    List<Book> findAllBy(SortBook sortBook);
-
 
 }

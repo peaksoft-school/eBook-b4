@@ -24,14 +24,10 @@ public class Basket {
             name = "basket_books",
             joinColumns = @JoinColumn(
                     name = "basket_id",
-                    referencedColumnName = "basket_id"
-
-            ),
+                    referencedColumnName = "basket_id"),
             inverseJoinColumns = @JoinColumn(
                     name = "book_id",
-                    referencedColumnName = "book_id"
-            )
-    )
+                    referencedColumnName = "book_id"))
     private List<Book> books;
 
     @OneToOne

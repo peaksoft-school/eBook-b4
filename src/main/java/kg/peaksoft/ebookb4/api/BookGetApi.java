@@ -1,6 +1,7 @@
 package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
@@ -20,10 +21,12 @@ import java.util.List;
 @RequestMapping("/api/books")
 @PreAuthorize("hasAnyAuthority('ROLE_VENDOR','ROLE_CLIENT')")
 @AllArgsConstructor
+@Tag(name = "Books",description = "Sort operations")
 public class BookGetApi {
 
     private final BookGetService bookGetService;
 
+    @Operation(summary = "Find All By Genre")
     @GetMapping("/genre/{genre}")
     public List<Book> findAllByGenre(@PathVariable Genre genre) {
         return bookGetService.findByGenre(genre);
@@ -35,7 +38,8 @@ public class BookGetApi {
         return bookGetService.findAll(name);
     }
 
-    @PostMapping("getBySort")
+    @Operation(summary = "Find All By Sorted" , description = "Sorted By Genre, BookType, Price, Language")
+    @PostMapping("/getBySort")
     public List<Book> getBook(@RequestBody SortBook sortBook) {
         return bookGetService.sortBooks(sortBook);
     }

@@ -9,12 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
-
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 19/4/22
- */
 @CrossOrigin
 @RestController
 @RequestMapping("/api/vendor")

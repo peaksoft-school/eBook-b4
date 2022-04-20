@@ -23,9 +23,7 @@ public class BookVendorApi {
     @Operation(summary = "save book",description = "add a new book to the store")
     @PostMapping("/saveBook")
     public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest){
-
         return  bookService.register(bookRequest, SecurityContextHolder.getContext().getAuthentication().getName());
-
     }
 
     @Operation(summary = "delete",description = "We can delete by id book in the store")

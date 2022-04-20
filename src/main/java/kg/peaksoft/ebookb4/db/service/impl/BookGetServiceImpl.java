@@ -19,41 +19,6 @@ public class BookGetServiceImpl implements BookGetService {
 
     private final BookRepository repository;
 
-//    @Override
-//    public List<Book> getByPrice(BigDecimal min, BigDecimal max) {
-//        return repository.getByPrice(min,max);
-//    }
-//
-//    @Override
-//    public List<Book> bookGetAudio() {
-//        return repository.bookGetAudio();
-//    }
-//
-//    @Override
-//    public List<Book> bookGetPaper() {
-//        return repository.bookGetPaper();
-//    }
-//
-//    @Override
-//    public List<Book> bookGetElectronic() {
-//        return repository.bookGetElectronic();
-//    }
-//
-//    @Override
-//    public List<Book> findByBookType(BookType bookType) {
-//        return repository.findByBookType(bookType);
-//    }
-//
-//    @Override
-//    public List<Book> findByGenre(Genre genre) {
-//        return repository.findByGenre(genre);
-//    }
-//
-//    @Override
-//    public List<Book> findByLanguage(Language language) {
-//        return repository.findByLanguage(language);
-//    }
-
     @Override
     public List<Book> findByGenre(Genre genre) {
         return repository.findAllByGenre(genre);

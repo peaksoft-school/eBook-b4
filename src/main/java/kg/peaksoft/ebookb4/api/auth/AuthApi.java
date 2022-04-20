@@ -3,6 +3,8 @@ package kg.peaksoft.ebookb4.api.auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.dto.request.LoginRequest;
+import kg.peaksoft.ebookb4.dto.request.SignupRequestClient;
+import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
 import kg.peaksoft.ebookb4.dto.response.JwtResponse;
 import kg.peaksoft.ebookb4.config.jwt.JwtUtils;
 import kg.peaksoft.ebookb4.config.services.UserDetailsImpl;
@@ -25,14 +27,27 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 @AllArgsConstructor
-@Tag(name = "AuthController",description = "jwt token,")
+@Tag(name = "AuthController", description = "jwt token,")
 public class AuthApi {
 
     AuthenticationManager authenticationManager;
     JwtUtils jwtUtils;
     VendorService vendorService;
     ClientService clientService;
-@Operation(summary = "singup",description = "singup user")
+
+    @Operation(summary = "Sign Up", description = "Registered client")
+    @PostMapping("/signup/client")
+    public ResponseEntity<?> registerClient(@RequestBody @Valid SignupRequestClient client) {
+        return clientService.register(client, 1L);
+    }
+
+    @Operation(summary = "Sign Up", description = "Registered Vendor")
+    @PostMapping("/signup/vendor")
+    public ResponseEntity<?> registerVendor(@Valid @RequestBody SignupRequestVendor vendor) {
+        return vendorService.register(vendor, 2L);
+    }
+
+    @Operation(summary = "Sign In", description = "Sign In Users")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -53,7 +68,5 @@ public class AuthApi {
                 userDetails.getEmail(),
                 roles));
     }
-
-
 
 }
