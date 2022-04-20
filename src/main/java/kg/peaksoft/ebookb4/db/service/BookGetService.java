@@ -15,9 +15,12 @@ public interface BookGetService {
 
 
     List<Book> findByGenre(Genre genre);
-    List<Book> findAll(String name);
 
-    List<Book> sortBooks(SortBook sortBook);
+    List<Book> findBooksByName(String name);
+
+    List<Book> getAllBooksOrSortedOnes(SortBook sortBook);
+
+    Book getBookById(Long id);
 
 
 }

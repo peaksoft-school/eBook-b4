@@ -26,20 +26,26 @@ public class BookGetApi {
     private final BookGetService bookGetService;
 
     @Operation(summary = "Find All By Genre")
-    @GetMapping("/genre/{genre}")
-    public List<Book> findAllByGenre(@PathVariable Genre genre) {
+    @GetMapping("/findBooksByGenre/{genre}")
+    public List<Book> findBooksByGenre(@PathVariable Genre genre) {
         return bookGetService.findByGenre(genre);
     }
 
     @Operation(summary = "Find All By Title,or AuthorName,or PublishingHouse")
-    @GetMapping("/findAll/{name}")
-    public List<Book> findAll(@PathVariable String name) {
-        return bookGetService.findAll(name);
+    @GetMapping("/findBooksByName/{name}")
+    public List<Book> findBooksByName(@PathVariable String name) {
+        return bookGetService.findBooksByName(name);
     }
 
-    @Operation(summary = "Find All By Sorted" , description = "Sorted By Genre, BookType, Price, Language")
-    @PostMapping("/getBySort")
-    public List<Book> getBook(@RequestBody SortBook sortBook) {
-        return bookGetService.sortBooks(sortBook);
+    @Operation(summary = "Find All books if needs being sorted" , description = "Sorted By Genre, BookType, Price, Language")
+    @PostMapping("/getBooks")
+    public List<Book> getBooks(@RequestBody SortBook sortBook) {
+        return bookGetService.getAllBooksOrSortedOnes(sortBook);
+    }
+
+    @Operation(summary = "Find book by id", description = "Get a book by id")
+    @GetMapping("/findBookById{id}")
+    public Book getBookById(@PathVariable Long id){
+        return bookGetService.getBookById(id);
     }
 }

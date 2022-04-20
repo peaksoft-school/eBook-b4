@@ -53,7 +53,7 @@ public class Book {
 
     private int baskets;
     private int likes;
-    private boolean isActive;
+    private Boolean isActive = false;
     private Integer discount;
     private Integer discountFromPromo;
 

@@ -35,19 +35,20 @@ public class PromoServiceImpl implements PromoService {
     @Override
     @Transactional
     public ResponseEntity<?> createPromo(PromoRequest promoRequest, String username) {
-
+        //Getting authenticated vendor from db if exists
         User user = userRepository.getUser(username).orElseThrow(()->
                 new NotFoundException(String.format("User with username: %s doesn't exist!",
                         username)));
 
-        System.out.println(promoRepository.ifVendorAlreadyCreatedPromo(user));
-
+        //If vendor already have active will be a bad request
         if(promoRepository.ifVendorAlreadyCreatedPromo(user)){
             throw new BadRequestException("You already have an active promo!");
         }
 
         Promocode promo = promoMapper.create(promoRequest);
-        System.out.println(Period.between(promo.getBeginningDay(),promo.getEndDay()).getDays());
+        if(Period.between(promo.getBeginningDay(),promo.getEndDay()).getDays()<0){
+            throw new BadRequestException("You entered invalid date!");
+        }
 
         promo.setUser(user);
         promo.setIsActive(true);

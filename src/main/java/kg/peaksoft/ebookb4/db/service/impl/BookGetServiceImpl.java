@@ -7,6 +7,7 @@ import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.others.SortBook;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
+import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +26,24 @@ public class BookGetServiceImpl implements BookGetService {
     }
 
     @Override
-    public List<Book> findAll(String name) {
-        return repository.findAll(name);
+    public List<Book> findBooksByName(String name) {
+        return repository.findByName(name);
     }
 
     @Override
-    public List<Book> sortBooks(SortBook sortBook) {
+    public List<Book> getAllBooksOrSortedOnes(SortBook sortBook) {
         int counter = 0;
-        List<Book> books = repository.findAll();
+        List<Book> books = repository.findAllActive();
+        //if it is empty it returns empty list
+        if(books.size()<1){
+            return books;
+        }
+        //show only active ones
+        for(int i = 0; i<books.size();i++){
+            if(!books.get(i).getIsActive()){
+                books.remove(i);
+            }
+        }
         //sorting if there are selected genres
         if (sortBook.getGenre() != null) {
             System.out.println("I am in sort by genre!");
@@ -99,4 +110,11 @@ public class BookGetServiceImpl implements BookGetService {
         }
         return books;
     }
+
+    @Override
+    public Book getBookById(Long id) {
+        return repository.findBookById(id).orElseThrow(()->
+                new BadRequestException("This book is not went through admin-check yet!"));
+    }
+
 }
