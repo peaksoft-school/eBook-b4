@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/books")
 @AllArgsConstructor
-@PermitAll
 @Tag(name = "Books",description = "crud operations")
 public class BookClientApi {
 

@@ -1,6 +1,7 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
 import kg.peaksoft.ebookb4.dto.request.BookRequest;
@@ -32,6 +33,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository repository;
     private final BookMapper mapper;
     private final UserRepository userRepository;
+    private final PromocodeRepository promoRepository;
 
 
     @Override
@@ -40,6 +42,12 @@ public class BookServiceImpl implements BookService {
         User user = userRepository.getUser(username).orElseThrow(()->
                 new BadRequestException(String.format("User with username %s doesn't exist!",username)));
         Book book = mapper.create(bookRequest);
+        if(promoRepository.ifVendorAlreadyCreatedPromo(user)){
+            if(book.getDiscount()==null){
+                book.setDiscountFromPromo(promoRepository.getActivePromo(user).getDiscount());
+            }
+        }
+
         book.setUser(user);
             if (bookRequest.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
                 AudioBook audio = new AudioBook();
@@ -63,12 +71,6 @@ public class BookServiceImpl implements BookService {
                 book.setPaperBook(paperBook);
             }
             user.getVendorAddedBooks().add(book);
-
-
-
-
-
-
 
         repository.save(book);
         return ResponseEntity.ok(new MessageResponse(

@@ -68,8 +68,8 @@ public class User {
     @JoinColumn(name = "basket_id")
     private Basket basket;
 
-    @OneToOne(mappedBy = "user")
-    private Promocode promocodes;
+    @OneToMany(mappedBy = "user")
+    private List<Promocode> promocodes;
 
     @OneToOne
     @JoinColumn(name = "operation_id")

@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 /**
@@ -38,12 +40,17 @@ public class PromoServiceImpl implements PromoService {
                 new NotFoundException(String.format("User with username: %s doesn't exist!",
                         username)));
 
+        System.out.println(promoRepository.ifVendorAlreadyCreatedPromo(user));
+
         if(promoRepository.ifVendorAlreadyCreatedPromo(user)){
-            throw new BadRequestException("You already have a promo!");
+            throw new BadRequestException("You already have an active promo!");
         }
 
         Promocode promo = promoMapper.create(promoRequest);
+        System.out.println(Period.between(promo.getBeginningDay(),promo.getEndDay()).getDays());
+
         promo.setUser(user);
+        promo.setIsActive(true);
         System.out.println(user);
         List<Book> vendorAddedBooks = user.getVendorAddedBooks();
         for (Book i: vendorAddedBooks) {
@@ -58,6 +65,8 @@ public class PromoServiceImpl implements PromoService {
                 String.format("Promo with promo_name %s has been saved",promoRequest.getPromoName())
         ));
     }
+
+
 
 
 }

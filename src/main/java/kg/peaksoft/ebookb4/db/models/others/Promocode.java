@@ -2,6 +2,8 @@ package kg.peaksoft.ebookb4.db.models.others;
 
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -21,11 +23,12 @@ public class Promocode {
     @SequenceGenerator(name = "hibernate_seq", sequenceName = "promo_seq", allocationSize = 1)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     private String promocode;
+    @CreatedDate
     private LocalDate beginningDay;
     private LocalDate endDay;
     private int discount;

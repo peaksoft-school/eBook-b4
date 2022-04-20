@@ -14,7 +14,9 @@ import java.util.Optional;
 public interface PromocodeRepository extends JpaRepository<Promocode, Long> {
 
     @Query("select case when count(s) > 0 then true else false end " +
-            "from Promocode s where s.user = ?1")
+            "from Promocode s where s.user = ?1 and s.isActive = true")
     Boolean ifVendorAlreadyCreatedPromo(User userId);
 
+    @Query("select p from Promocode p where p.user = ?1 and p.isActive=true")
+    Promocode getActivePromo(User user);
 }

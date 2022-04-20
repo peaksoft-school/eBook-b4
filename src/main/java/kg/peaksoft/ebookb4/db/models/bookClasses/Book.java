@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.models.bookClasses;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.others.Basket;
@@ -42,7 +43,8 @@ public class Book {
     @Enumerated(value = EnumType.STRING)
     private Genre genre;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 

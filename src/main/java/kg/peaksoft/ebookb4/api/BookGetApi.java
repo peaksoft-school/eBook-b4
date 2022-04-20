@@ -19,7 +19,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
-@PreAuthorize("hasAnyAuthority('ROLE_VENDOR','ROLE_CLIENT')")
 @AllArgsConstructor
 @Tag(name = "Books",description = "Sort operations")
 public class BookGetApi {
