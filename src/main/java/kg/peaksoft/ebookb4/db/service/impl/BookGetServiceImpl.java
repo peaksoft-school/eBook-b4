@@ -113,12 +113,6 @@ public class BookGetServiceImpl implements BookGetService {
 //                }
 //            }
         }
-//        PageRequest pageRequest = PageRequest.of(offset, pageSize, Sort.by("bookId"));
-//
-//        Page<Book> books = repository.findAll(pageRequest);
-//
-//
-//        return new CustomPageRequest<Book>(books).getContent();
 
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int)paging.getOffset(), books.size());
