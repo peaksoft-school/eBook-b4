@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.File;
 
 @Entity
 @Getter @Setter
@@ -20,6 +21,11 @@ public class FileSources {
     private Long id;
 
     private String images;
+
+    private String line1;
+    private String line2;
+    private String line3;
+    private String line4;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
