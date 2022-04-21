@@ -7,6 +7,10 @@ import javax.validation.Valid;
 
 public interface ClientService {
 
+
+
     ResponseEntity<?> register (SignupRequestClient signupRequestClient, Long number);
+
+    ResponseEntity<?> likeABook(Long bookId, String username);
 
 }

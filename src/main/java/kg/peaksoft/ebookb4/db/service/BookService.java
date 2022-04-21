@@ -16,4 +16,17 @@ public interface BookService {
     ResponseEntity<?> update(BookRequest bookRequest, Long userId);
 
     List<Book> findBooksFromVendor(Integer integer, int i, String username);
+
+    List<Book> findBooksFromVendorInFavorites(Integer integer, int i, String username);
+
+    List<Book> findBooksFromVendorInBasket(Integer integer, int i, String username);
+
+    List<Book> findBooksFromVendorWithDiscount(Integer integer, int i, String username);
+
+    List<Book> findBooksFromVendorInProcess(Integer integer, int i, String username);
+
+    List<Book> findBooksFromVendorInCancelled(Integer integer, int i, String username);
+
+
+
 }

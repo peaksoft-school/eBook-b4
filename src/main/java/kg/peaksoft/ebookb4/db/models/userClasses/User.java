@@ -3,7 +3,7 @@ package kg.peaksoft.ebookb4.db.models.userClasses;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
-import kg.peaksoft.ebookb4.db.models.booksClasses.Favorites;
+//import kg.peaksoft.ebookb4.db.models.booksClasses.Favorites;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
 import lombok.*;
 
@@ -48,20 +48,16 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<Book> vendorAddedBooks;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(
-            name = "user_liked_books",
+            name = "liked_books",
             joinColumns = @JoinColumn(
                     name = "user_id",
-                    referencedColumnName = "user_id"
-
-            ),
+                    referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(
-                    name = "favorite_id",
-                    referencedColumnName = "favorite_id"
-            )
-    )
-    private List<Favorites> likedBooks;
+                    name = "book_id",
+                    referencedColumnName = "book_id"))
+    private List<Book> likedBooks;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JoinColumn(name = "basket_id")

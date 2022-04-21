@@ -192,7 +192,30 @@ public class BookServiceImpl implements BookService {
         return repository.findBooksFromVendor(username);
     }
 
+    @Override
+    public List<Book> findBooksFromVendorInFavorites(Integer integer, int i, String username) {
+        return null;
+    }
 
+    @Override
+    public List<Book> findBooksFromVendorInBasket(Integer integer, int i, String username) {
+        return null;
+    }
+
+    @Override
+    public List<Book> findBooksFromVendorWithDiscount(Integer integer, int i, String username) {
+        return null;
+    }
+
+    @Override
+    public List<Book> findBooksFromVendorInProcess(Integer integer, int i, String username) {
+        return null;
+    }
+
+    @Override
+    public List<Book> findBooksFromVendorInCancelled(Integer integer, int i, String username) {
+        return null;
+    }
 
 
 }

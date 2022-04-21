@@ -45,8 +45,6 @@ public class Book {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(mappedBy="books")
-    private List<Basket> basket;
 
     private int baskets;
     private int likes;

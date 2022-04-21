@@ -1,5 +1,7 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
+import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.dto.request.SignupRequestClient;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.Locale;
@@ -22,6 +25,7 @@ public class ClientServiceImpl implements ClientService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
+    private final BookRepository bookRepository;
 
     @Override
     public ResponseEntity<?> register( SignupRequestClient signupRequestClient, Long number) {
@@ -48,6 +52,25 @@ public class ClientServiceImpl implements ClientService {
 
         return ResponseEntity.ok(new MessageResponse(
                 String.format("User with email %s registered successfully!", user.getEmail().toUpperCase(Locale.ROOT))));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> likeABook(Long bookId, String username) {
+
+        User user = userRepository.getUser(username).orElseThrow(()->
+                new BadRequestException("User doesn't exist!"));
+        Book book = bookRepository.getById(bookId);
+        if(!book.getIsActive()){
+            throw new BadRequestException("This book has not been went through admin-check!");
+        }
+        if(bookRepository.checkIfAlreadyPutLike(bookId, user.getId())>0){
+            throw new BadRequestException("You already put like to this book!");
+        }
+        user.getLikedBooks().add(book);
+        bookRepository.incrementLikesOfBook(bookId);
+        return ResponseEntity.ok(new MessageResponse(String.format(
+                "Book with id %s successfully has been liked by user with name %s",bookId,username)));
     }
 
 

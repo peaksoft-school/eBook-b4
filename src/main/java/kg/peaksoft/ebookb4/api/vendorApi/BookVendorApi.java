@@ -51,10 +51,16 @@ public class BookVendorApi {
         return bookService.findByBookId(id);
     }
 
+
     @Operation(summary = "get all books for vendor/admin", description = "get all books by id for vendor/admin")
     @GetMapping("/getBooks/{offset}")
     public List<Book> getBooks(@PathVariable Integer offset){
         return bookService.findBooksFromVendor(--offset, 12, SecurityContextHolder.getContext().getAuthentication().getName());
     }
+
+
+
+
+
 
 }
