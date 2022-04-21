@@ -46,6 +46,7 @@ public class PromoServiceImpl implements PromoService {
             throw new BadRequestException("You already have an active promo!");
         }
 
+        //creating promo
         Promocode promo = promoMapper.create(promoRequest);
         if(Period.between(promo.getBeginningDay(),promo.getEndDay()).getDays()<0){
             throw new BadRequestException("You entered invalid date!");
@@ -56,7 +57,7 @@ public class PromoServiceImpl implements PromoService {
         System.out.println(user);
         List<Book> vendorAddedBooks = user.getVendorAddedBooks();
         for (Book i: vendorAddedBooks) {
-            if(i.getDiscount() == null){
+            if(i.getDiscount() == null  /* & Period.between(promo.getBeginningDay(), promo.getEndDay()).getDays()>-1*/){
                 i.setDiscountFromPromo(promo.getDiscount());
             }
         }

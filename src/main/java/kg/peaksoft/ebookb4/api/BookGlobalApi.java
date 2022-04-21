@@ -25,7 +25,8 @@ public class BookGlobalApi {
         return bookGetService.findByGenre(genre);
     }
 
-    @Operation(summary = "find books by name",description = "Using linear search while finding")
+    @Operation(summary = "find books by name",description = "Using linear search while finding, name, title, authorName or " +
+            "publishing house")
     @GetMapping("/findBooksByName/{name}")
     public List<Book> findBooksByName(@PathVariable String name) {
         return bookGetService.findBooksByName(name);

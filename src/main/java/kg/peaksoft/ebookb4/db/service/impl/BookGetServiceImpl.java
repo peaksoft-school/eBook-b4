@@ -42,7 +42,6 @@ public class BookGetServiceImpl implements BookGetService {
 
         List<Book> books = repository.findAllActive();
 
-
         //if it is empty it returns empty list
         if(books.size()<1){
             return books;
@@ -124,7 +123,7 @@ public class BookGetServiceImpl implements BookGetService {
     @Override
     public Book getBookById(Long id) {
         promoService.checkPromos();
-        return repository.findBookById(id).orElseThrow(()->
+        return repository.findBookByIdAndActive(id).orElseThrow(()->
                 new BadRequestException("This book is not went through admin-check yet!"));
     }
 
