@@ -11,8 +11,6 @@ public interface BookService {
 
     Book findByBookId(Long bookId);
 
-    List<Book> findAll(int offset, int pageSize);
-
     ResponseEntity<?> delete(Long bookId);
 
     ResponseEntity<?> update(BookRequest bookRequest, Long userId);

@@ -21,6 +21,6 @@ public interface PromocodeRepository extends JpaRepository<Promocode, Long> {
     @Query("select p from Promocode p where p.user = ?1 and p.isActive=true")
     Promocode getActivePromo(User user);
 
-    @Query("select p from Promocode p where p.isActive = false")
-    Optional<List<Promocode>> getFalsePromosToCheck();
+    @Query("select p from Promocode p")
+    Optional<List<Promocode>> getPromos();
 }

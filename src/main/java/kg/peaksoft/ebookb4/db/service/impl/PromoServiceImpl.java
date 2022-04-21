@@ -1,6 +1,5 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
@@ -17,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
@@ -53,14 +53,20 @@ public class PromoServiceImpl implements PromoService {
         }
 
         promo.setUser(user);
-        promo.setIsActive(true);
-        System.out.println(user);
-        List<Book> vendorAddedBooks = user.getVendorAddedBooks();
-        for (Book i: vendorAddedBooks) {
-            if(i.getDiscount() == null  /* & Period.between(promo.getBeginningDay(), promo.getEndDay()).getDays()>-1*/){
-                i.setDiscountFromPromo(promo.getDiscount());
-            }
+        if(Period.between(LocalDate.now(),promo.getBeginningDay()).getDays()<=0){
+            System.out.println("Hello world");
+            promo.setIsActive(true);
         }
+        else{
+            promo.setIsActive(false);
+        }
+        System.out.println(user);
+//        List<Book> vendorAddedBooks = user.getVendorAddedBooks();
+//        for (Book i: vendorAddedBooks) {
+//            if(i.getDiscount() == null & Period.between(promo.getBeginningDay(), promo.getEndDay()).getDays()>-1){
+//                i.setDiscountFromPromo(promo.getDiscount());
+//            }
+//        }
 
         promoRepository.save(promo);
 
@@ -70,13 +76,26 @@ public class PromoServiceImpl implements PromoService {
     }
 
     public void checkPromos(){
-        List<Promocode> promos = promoRepository.getFalsePromosToCheck().orElseThrow(()->
+        List<Promocode> promos = promoRepository.getPromos().orElseThrow(()->
                 new BadRequestException("There are no promo codes yes!"));
+        System.out.println("Promocode size: "+promos.size());
         for(Promocode i: promos){
-            if(Period.between(i.getBeginningDay(),i.getEndDay()).getDays()<0
-            || !i.getIsActive()){
+            if(Period.between(i.getBeginningDay(),i.getEndDay()).getDays()<0){
+                System.out.println(i);
                 System.out.println("Срок прошёл!");
+                i.setIsActive(false);
                 bookRepository.checkForPromos(i.getUser());
+            }
+            else{
+                if(Period.between(LocalDate.now(),i.getBeginningDay()).getDays()<=0){
+                    System.out.println("Hello world");
+                    i.setIsActive(true);
+                }
+                System.out.println("Срок ещё не прошёл!");
+                System.out.println(i);
+                if(i.getIsActive()){
+                    bookRepository.givePromo(i.getUser(), i.getDiscount());
+                }
             }
         }
     }

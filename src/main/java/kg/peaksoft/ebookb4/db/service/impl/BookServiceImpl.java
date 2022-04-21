@@ -90,15 +90,6 @@ public class BookServiceImpl implements BookService {
                 });
     }
 
-    @Override
-    public List<Book> findAll(int offset, int pageSize) {
-
-        PageRequest pageRequest = PageRequest.of(offset, pageSize, Sort.by("bookId"));
-
-        Page<Book> books = repository.findAll(pageRequest);
-
-        return new CustomPageRequest<>(books).getContent();
-    }
 
     public List<Book> findBooksOfVendor(int offset, int pageSize, String username){
         List<Book> books = repository.findBooksFromVendor(username);
