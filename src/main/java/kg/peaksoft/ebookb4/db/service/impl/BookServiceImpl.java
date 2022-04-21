@@ -19,9 +19,7 @@ import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -100,6 +98,15 @@ public class BookServiceImpl implements BookService {
         Page<Book> books = repository.findAll(pageRequest);
 
         return new CustomPageRequest<>(books).getContent();
+    }
+
+    public List<Book> findBooksOfVendor(int offset, int pageSize, String username){
+        List<Book> books = repository.findBooksFromVendor(username);
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), books.size());
+        int end = Math.min((start + paging.getPageSize()), books.size());
+        Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
+        return new CustomPageRequest<Book>(pages).getContent();
     }
 
     @Override
@@ -190,7 +197,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findBooksFromVendor(String username) {
+    public List<Book> findBooksFromVendor(Integer integer, int i, String username) {
         return repository.findBooksFromVendor(username);
     }
 

@@ -32,11 +32,6 @@ public class VendorApi {
         return promoService.createPromo(promoRequest,username);
     }
 
-    @Operation(summary = "Vendor books", description = "Find all vendor books")
-    @GetMapping("/books")
-    public List<Book> findAllBookFromVendor() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return bookService.findBooksFromVendor(username);
-    }
+
 
 }

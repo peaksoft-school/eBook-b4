@@ -39,7 +39,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("update Book b set b.discountFromPromo = null where b.user = ?1")
     void checkForPromos(User user);
 
-    @Query("select b from Book b where b.user = ?1")
+    @Query("select b from Book b where b.user.email = ?1")
     List<Book> findBooksFromVendor(String username);
 
 }

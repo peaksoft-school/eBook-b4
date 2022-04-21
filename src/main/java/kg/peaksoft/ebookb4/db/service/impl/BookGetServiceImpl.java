@@ -88,6 +88,7 @@ public class BookGetServiceImpl implements BookGetService {
         }
 
         //sorting if there are selected language
+        System.out.println(sortBook.getLanguage());
         if (sortBook.getLanguage() != null) {
             System.out.println("I am in sort by language!");
             if (sortBook.getLanguage().size() > 1) {
