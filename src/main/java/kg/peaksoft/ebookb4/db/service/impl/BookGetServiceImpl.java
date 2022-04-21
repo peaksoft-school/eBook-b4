@@ -23,7 +23,6 @@ public class BookGetServiceImpl implements BookGetService {
     private final BookRepository repository;
     private PromoService promoService;
 
-
     @Override
     public List<Book> findByGenre(Genre genre) {
         promoService.checkPromos();
