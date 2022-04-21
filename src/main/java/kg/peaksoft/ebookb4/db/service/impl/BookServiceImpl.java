@@ -3,25 +3,28 @@ package kg.peaksoft.ebookb4.db.service.impl;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
 import kg.peaksoft.ebookb4.db.service.BookService;
+import kg.peaksoft.ebookb4.dto.request.CustomPageRequest;
 import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
 import kg.peaksoft.ebookb4.dto.request.BookRequest;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
-import kg.peaksoft.ebookb4.db.models.bookClasses.AudioBook;
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
-import kg.peaksoft.ebookb4.db.models.bookClasses.ElectronicBook;
-import kg.peaksoft.ebookb4.db.models.bookClasses.PaperBook;
+import kg.peaksoft.ebookb4.db.models.books.AudioBook;
+import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.books.ElectronicBook;
+import kg.peaksoft.ebookb4.db.models.books.PaperBook;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -90,8 +93,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findAll() {
-        return repository.findAll();
+    public List<Book> findAll(int offset, int pageSize) {
+
+        PageRequest pageRequest = PageRequest.of(offset, pageSize, Sort.by("bookId"));
+
+        Page<Book> books = repository.findAll(pageRequest);
+
+        return new CustomPageRequest<>(books).getContent();
     }
 
     @Override
@@ -185,6 +193,8 @@ public class BookServiceImpl implements BookService {
     public List<Book> findBooksFromVendor(String username) {
         return repository.findBooksFromVendor(username);
     }
+
+
 
 
 }

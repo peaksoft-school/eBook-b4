@@ -1,9 +1,8 @@
-package kg.peaksoft.ebookb4.db.models.others;
+package kg.peaksoft.ebookb4.db.models.booksClasses;
 
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;

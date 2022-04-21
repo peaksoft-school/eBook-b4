@@ -1,19 +1,16 @@
-package kg.peaksoft.ebookb4.db.models.bookClasses;
+package kg.peaksoft.ebookb4.db.models.books;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
-import kg.peaksoft.ebookb4.db.models.others.Basket;
-import kg.peaksoft.ebookb4.db.models.others.ClientOperations;
-import kg.peaksoft.ebookb4.db.models.others.FileSources;
+import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
+import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity

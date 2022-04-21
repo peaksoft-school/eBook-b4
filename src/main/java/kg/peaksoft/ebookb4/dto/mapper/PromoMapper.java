@@ -1,6 +1,6 @@
 package kg.peaksoft.ebookb4.dto.mapper;
 
-import kg.peaksoft.ebookb4.db.models.others.Promocode;
+import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
 import kg.peaksoft.ebookb4.dto.request.PromoRequest;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.db.models.others;
+package kg.peaksoft.ebookb4.db.models.booksClasses;
 
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Getter @Setter @ToString

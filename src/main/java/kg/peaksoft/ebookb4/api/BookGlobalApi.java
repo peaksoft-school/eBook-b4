@@ -2,18 +2,11 @@ package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
-import kg.peaksoft.ebookb4.db.models.enums.BookType;
+import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
-import kg.peaksoft.ebookb4.db.models.enums.Language;
-import kg.peaksoft.ebookb4.db.models.others.SortBook;
-import kg.peaksoft.ebookb4.db.repository.BookRepository;
+import kg.peaksoft.ebookb4.db.models.booksClasses.SortBook;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
-import kg.peaksoft.ebookb4.db.service.PromoService;
-import kg.peaksoft.ebookb4.db.service.impl.BookGetServiceImpl;
-import kg.peaksoft.ebookb4.dto.PriseDto;
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/books")
 @AllArgsConstructor
 @Tag(name = "Books",description = "Sort operations")
-public class BookGetApi {
+public class BookGlobalApi {
 
     private final BookGetService bookGetService;
 
@@ -39,9 +32,9 @@ public class BookGetApi {
     }
 
     @Operation(summary = "Find active books" , description = "Sorted By Genre, BookType, Price, Language")
-    @PostMapping("/getBooks")
-    public List<Book> getBooks(@RequestBody SortBook sortBook) {
-        return bookGetService.getAllBooksOrSortedOnes(sortBook);
+    @PostMapping("/getBooks/{offset}")
+    public List<Book> getBooks(@RequestBody SortBook sortBook, @PathVariable Integer offset) {
+        return bookGetService.getAllBooksOrSortedOnes(sortBook, --offset, 12);
     }
 
     @Operation(summary = "find book by id", description = "Get a book by id")

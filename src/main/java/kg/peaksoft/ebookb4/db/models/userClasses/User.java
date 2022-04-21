@@ -1,17 +1,16 @@
 package kg.peaksoft.ebookb4.db.models.userClasses;
 
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
-import kg.peaksoft.ebookb4.db.models.others.Basket;
-import kg.peaksoft.ebookb4.db.models.others.ClientOperations;
-import kg.peaksoft.ebookb4.db.models.others.Favorites;
-import kg.peaksoft.ebookb4.db.models.others.Promocode;
+import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
+import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
+import kg.peaksoft.ebookb4.db.models.booksClasses.Favorites;
+import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity

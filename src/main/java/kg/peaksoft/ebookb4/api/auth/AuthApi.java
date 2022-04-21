@@ -69,6 +69,11 @@ public class AuthApi {
         return vendorService.register(vendor, 2L);
     }
 
+    @GetMapping("/welcomepage")
+    public String welcomePage(){
+        return "Hi it is welcome page of ebook 4!";
+    }
+
 
 
 

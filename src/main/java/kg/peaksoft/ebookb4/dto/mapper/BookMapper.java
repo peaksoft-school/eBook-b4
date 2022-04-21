@@ -1,7 +1,7 @@
 package kg.peaksoft.ebookb4.dto.mapper;
 
 import kg.peaksoft.ebookb4.dto.request.BookRequest;
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
+import kg.peaksoft.ebookb4.db.models.books.Book;
 import org.springframework.stereotype.Component;
 
 @Component

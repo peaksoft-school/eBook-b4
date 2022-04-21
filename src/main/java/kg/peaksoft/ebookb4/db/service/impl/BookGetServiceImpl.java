@@ -1,18 +1,18 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
-import kg.peaksoft.ebookb4.db.models.enums.BookType;
+import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
-import kg.peaksoft.ebookb4.db.models.others.SortBook;
+import kg.peaksoft.ebookb4.db.models.booksClasses.SortBook;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
+import kg.peaksoft.ebookb4.dto.request.CustomPageRequest;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,11 +36,13 @@ public class BookGetServiceImpl implements BookGetService {
     }
 
     @Override
-    public List<Book> getAllBooksOrSortedOnes(SortBook sortBook) {
+    public List<Book> getAllBooksOrSortedOnes(SortBook sortBook, int offset, int pageSize) {
         promoService.checkPromos();
         int counter = 0;
+
         List<Book> books = repository.findAllActive();
-        System.out.println(books);
+
+
         //if it is empty it returns empty list
         if(books.size()<1){
             return books;
@@ -110,8 +112,18 @@ public class BookGetServiceImpl implements BookGetService {
 //                }
 //            }
         }
+//        PageRequest pageRequest = PageRequest.of(offset, pageSize, Sort.by("bookId"));
+//
+//        Page<Book> books = repository.findAll(pageRequest);
+//
+//
+//        return new CustomPageRequest<Book>(books).getContent();
 
-        return books;
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), books.size());
+        int end = Math.min((start + paging.getPageSize()), books.size());
+        Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
+        return new CustomPageRequest<Book>(pages).getContent();
     }
 
     @Override

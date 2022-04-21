@@ -1,7 +1,7 @@
 package kg.peaksoft.ebookb4.db.service;
 
 import kg.peaksoft.ebookb4.dto.request.BookRequest;
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
+import kg.peaksoft.ebookb4.db.models.books.Book;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public interface BookService {
 
     Book findByBookId(Long bookId);
 
-    List<Book> findAll();
+    List<Book> findAll(int offset, int pageSize);
 
     ResponseEntity<?> delete(Long bookId);
 

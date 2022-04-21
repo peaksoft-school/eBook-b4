@@ -2,7 +2,7 @@ package kg.peaksoft.ebookb4.api.vendorApi;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
+import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.dto.request.BookRequest;
 import kg.peaksoft.ebookb4.db.service.BookService;
@@ -52,9 +52,9 @@ public class BookVendorApi {
     }
 
     @Operation(summary = "get all books for vendor/admin", description = "get all books by id for vendor/admin")
-    @GetMapping("/getBooks")
-    public List<Book> getBooks(){
-        return bookService.findAll();
+    @GetMapping("/getBooks/{offset}")
+    public List<Book> getBooks(@PathVariable Integer offset){
+        return bookService.findAll(--offset, 12);
     }
 
 }
