@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import java.util.Locale;
 
 @Service
@@ -22,7 +23,7 @@ public class ClientServiceImpl implements ClientService {
     private final RoleRepository roleRepository;
 
     @Override
-    public ResponseEntity<?> register(SignupRequestClient signupRequestClient, Long number) {
+    public ResponseEntity<?> register( SignupRequestClient signupRequestClient, Long number) {
 
         if (userRepository.existsByEmail(signupRequestClient.getEmail())) {
             return ResponseEntity

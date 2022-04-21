@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.logging.Filter;
 
 @Getter @Setter
 public class BookRequest {
@@ -21,8 +22,8 @@ public class BookRequest {
     private Integer discount;
     private Boolean isBestSeller;
     private LocalDate yearOfIssue;
-    private BigDecimal price;
-
+    private Double price;
+    private String publishingHouse;
     private Language language;
     private Genre genre;
     private BookType bookType;

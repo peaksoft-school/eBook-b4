@@ -13,6 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FileSources {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
     @SequenceGenerator(name = "hibernate_seq", sequenceName = "file_sources_seq", allocationSize = 1)

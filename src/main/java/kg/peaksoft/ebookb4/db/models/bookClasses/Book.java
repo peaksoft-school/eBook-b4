@@ -1,7 +1,10 @@
 package kg.peaksoft.ebookb4.db.models.bookClasses;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
+import kg.peaksoft.ebookb4.db.models.others.Basket;
+import kg.peaksoft.ebookb4.db.models.others.ClientOperations;
 import kg.peaksoft.ebookb4.db.models.others.FileSources;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
@@ -10,6 +13,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,12 +30,18 @@ public class Book {
     private String title;
     private String authorFullName;
     private String aboutBook;
+    private String publishingHouse;
 
     private LocalDate yearOfIssue;
 
-    private Integer discount;
-    private BigDecimal price;
+    private Double price;
     private Boolean isBestSeller;
+    private int baskets;
+    private int likes;
+    private Boolean isActive = false;
+    private Integer discount;
+    private Integer discountFromPromo;
+
     @Enumerated(value = EnumType.STRING)
     private Language language;
     @Enumerated(value = EnumType.STRING)
@@ -39,8 +49,18 @@ public class Book {
     @Enumerated(value = EnumType.STRING)
     private Genre genre;
 
-    private int baskets;
-    private int likes;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToMany
+    @JoinTable(
+            name = "books_basket"
+            ,joinColumns = @JoinColumn(name = "book_id")
+            ,inverseJoinColumns = @JoinColumn(name = "basket_id"))
+    private List<Basket> basket;
+
 
     @OneToMany(mappedBy = "book")
     private List<FileSources> images;

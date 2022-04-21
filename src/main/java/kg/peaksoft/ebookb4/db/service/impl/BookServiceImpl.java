@@ -1,9 +1,12 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
+import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
 import kg.peaksoft.ebookb4.dto.request.BookRequest;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
+import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import kg.peaksoft.ebookb4.db.models.bookClasses.AudioBook;
 import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
@@ -30,45 +33,44 @@ public class BookServiceImpl implements BookService {
     private final BookRepository repository;
     private final BookMapper mapper;
     private final UserRepository userRepository;
+    private final PromocodeRepository promoRepository;
+
 
     @Override
-    public ResponseEntity<?> register(BookRequest bookRequest, Long userId) {
+    public ResponseEntity<?> register(BookRequest bookRequest, String username) {
 
+        User user = userRepository.getUser(username).orElseThrow(()->
+                new BadRequestException(String.format("User with username %s doesn't exist!",username)));
         Book book = mapper.create(bookRequest);
-        try {
-            if (bookRequest.getBookType().name().equals(BookType.AudioBook.name())) {
-                System.out.println("Hello AudioBook");
+        if(promoRepository.ifVendorAlreadyCreatedPromo(user)){
+            if(book.getDiscount()==null){
+                book.setDiscountFromPromo(promoRepository.getActivePromo(user).getDiscount());
+            }
+        }
+
+        book.setUser(user);
+            if (bookRequest.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
                 AudioBook audio = new AudioBook();
                 audio.setDuration(bookRequest.getAudioBook().getDuration());
                 audio.setFragment(bookRequest.getAudioBook().getFragment());
                 audio.setUrlOfBookFromCloud(bookRequest.getAudioBook().getUrlOfBookFromCloud());
                 book.setAudioBook(audio);
 
-            } else if (bookRequest.getBookType().name().equals(BookType.Ebook.name())) {
-                System.out.println("Hello EBook");
+            } else if (bookRequest.getBookType().name().equals(BookType.EBOOK.name())) {
                 ElectronicBook ebook = new ElectronicBook();
-                ebook.setPublishingHouse(bookRequest.getElectronicBook().getPublishingHouse());
                 ebook.setFragmentOfBook(bookRequest.getElectronicBook().getFragmentOfBook());
                 ebook.setNumberOfPages(bookRequest.getElectronicBook().getNumberOfPages());
                 ebook.setUrlOfBookFromCloud(bookRequest.getElectronicBook().getUrlOfBookFromCloud());
                 book.setElectronicBook(ebook);
 
             } else {
-                System.out.println("Hello PaperBook");
                 PaperBook paperBook = new PaperBook();
-                paperBook.setPublishingHouse(bookRequest.getPaperBook().getPublishingHouse());
                 paperBook.setFragmentOfBook(bookRequest.getPaperBook().getFragmentOfBook());
                 paperBook.setNumberOfSelected(bookRequest.getPaperBook().getNumberOfSelected());
                 paperBook.setNumberOfPages(bookRequest.getPaperBook().getNumberOfPages());
                 book.setPaperBook(paperBook);
             }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse(String.format("User with id %s doesn't exist!", userId)));
-        }
+            user.getVendorAddedBooks().add(book);
 
         repository.save(book);
         return ResponseEntity.ok(new MessageResponse(
@@ -130,8 +132,8 @@ public class BookServiceImpl implements BookService {
         if (!Objects.equals(discount, newDiscount)) {
             book.setDiscount(newDiscount);
         }
-        BigDecimal price = book.getPrice();
-        BigDecimal newPrice = newBook.getPrice();
+        Double price = book.getPrice();
+        Double newPrice = newBook.getPrice();
         if (!Objects.equals(price, newPrice) && newPrice.intValue() > 0) {
             book.setPrice(newPrice);
         }
@@ -157,19 +159,17 @@ public class BookServiceImpl implements BookService {
         }
 
         switch (newBook.getBookType()) {
-            case PaperBook:
-                book.getPaperBook().setPublishingHouse(newBook.getPaperBook().getPublishingHouse());
+            case PAPERBOOK:
                 book.getPaperBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
                 book.getPaperBook().setNumberOfPages(newBook.getPaperBook().getNumberOfPages());
                 book.getPaperBook().setNumberOfSelected(newBook.getPaperBook().getNumberOfSelected());
                 break;
-            case Ebook:
-                book.getElectronicBook().setPublishingHouse(newBook.getElectronicBook().getPublishingHouse());
+            case EBOOK:
                 book.getElectronicBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
                 book.getElectronicBook().setNumberOfPages(newBook.getElectronicBook().getNumberOfPages());
                 book.getElectronicBook().setUrlOfBookFromCloud(newBook.getElectronicBook().getUrlOfBookFromCloud());
                 break;
-            case AudioBook:
+            case AUDIOBOOK:
                 book.getAudioBook().setDuration(newBook.getAudioBook().getDuration());
                 book.getAudioBook().setFragment(newBook.getAudioBook().getFragment());
                 book.getAudioBook().setUrlOfBookFromCloud(newBook.getAudioBook().getUrlOfBookFromCloud());
@@ -179,6 +179,11 @@ public class BookServiceImpl implements BookService {
         return ResponseEntity.ok(new MessageResponse(
                 String.format("%s with name %s Update successfully!", book.getBookType().name(),
                         book.getTitle())));
+    }
+
+    @Override
+    public List<Book> findBooksFromVendor(String username) {
+        return repository.findBooksFromVendor(username);
     }
 
 
