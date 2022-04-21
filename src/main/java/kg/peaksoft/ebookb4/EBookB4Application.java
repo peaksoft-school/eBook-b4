@@ -27,12 +27,17 @@ public class EBookB4Application {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
 
+    @GetMapping("/")
+    public String greetingPage(){
+        return "<h1>Welcome to eBook application!!!<h1/>";
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(EBookB4Application.class, args);
         System.out.println("Welcome colleagues, project name is eBook!");
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         Role client = new Role();
         client.setId(1L);
