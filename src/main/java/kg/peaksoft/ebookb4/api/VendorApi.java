@@ -14,27 +14,27 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
 @RestController
-@RequestMapping("/api/vendor")
 @AllArgsConstructor
+@RequestMapping("/api/vendors")
 @PreAuthorize("hasRole('ROLE_VENDOR')")
-@Tag(name = "Vendor",description = "Vendor accessible apis")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "Vendor API", description = "Vendor accessible apis")
 public class VendorApi {
 
     private PromoService promoService;
     private BookService bookService;
 
-    @Operation(summary = "promo", description = "Vendor creates a promo")
+    @Operation(summary = "Promo", description = "Vendor creates a promo")
     @PostMapping("/create-promo")
-    public ResponseEntity<?> createPromo(@RequestBody PromoRequest promoRequest){
+    public ResponseEntity<?> createPromo(@RequestBody PromoRequest promoRequest) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return promoService.createPromo(promoRequest,username);
+        return promoService.createPromo(promoRequest, username);
     }
 
-    @Operation(summary = "Find Books From Vendor")
-    @GetMapping("/findBooksFromVendor")
-    public List<Book> findAllBookFromVendor(){
+    @Operation(summary = "Vendor books", description = "Find all vendor books")
+    @GetMapping("/books")
+    public List<Book> findAllBookFromVendor() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return bookService.findBooksFromVendor(username);
     }

@@ -3,7 +3,8 @@ package kg.peaksoft.ebookb4.dto.response;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class MessageResponse {
 
     private String message;

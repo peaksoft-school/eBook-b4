@@ -23,11 +23,11 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
 @AllArgsConstructor
-@Tag(name = "AuthController", description = "jwt token,")
+@RequestMapping("/api/public")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "Authentication API", description = "Authorization with jwt token")
 public class AuthApi {
 
     AuthenticationManager authenticationManager;
@@ -57,13 +57,13 @@ public class AuthApi {
                 roles));
     }
 
-    @Operation(summary = "Sign Up ", description = "Register a Client")
+    @Operation(summary = "Sign Up client", description = "Register a Client")
     @PostMapping("/signup/client")
     public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequestClient client) {
         return clientService.register(client, 1L);
     }
 
-    @Operation(summary = "Sign Up", description = "Register a Vendor")
+    @Operation(summary = "Sign Up Vendor", description = "Register a Vendor")
     @PostMapping("/signup/vendor")
     public ResponseEntity<?> registerVendor(@Valid @RequestBody SignupRequestVendor vendor) {
         return vendorService.register(vendor, 2L);

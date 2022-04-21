@@ -13,7 +13,6 @@ import java.util.List;
 
 public interface BookGetService {
 
-
     List<Book> findByGenre(Genre genre);
 
     List<Book> findBooksByName(String name);

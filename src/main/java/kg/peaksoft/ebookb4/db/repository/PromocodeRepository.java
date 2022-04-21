@@ -4,6 +4,7 @@ import kg.peaksoft.ebookb4.db.models.others.Promocode;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
  * Author: Zhanarbek Abdurasulov
  * Date: 19/4/22
  */
+@Repository
 public interface PromocodeRepository extends JpaRepository<Promocode, Long> {
 
     @Query("select case when count(s) > 0 then true else false end " +

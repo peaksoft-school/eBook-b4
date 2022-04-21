@@ -21,7 +21,8 @@ import java.util.List;
         })
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
@@ -46,7 +47,7 @@ public class User {
 
     private String lastName;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Book> vendorAddedBooks;
 
     @OneToMany
@@ -88,6 +89,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                '}'+"\n";
+                '}' + "\n";
     }
 }

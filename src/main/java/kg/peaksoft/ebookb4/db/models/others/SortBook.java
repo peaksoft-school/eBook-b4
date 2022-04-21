@@ -10,7 +10,9 @@ import lombok.ToString;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Getter @Setter @ToString
+@Getter
+@Setter
+@ToString
 public class SortBook {
 
     private Double min;

@@ -13,7 +13,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.logging.Filter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class BookRequest {
 
     private String title;

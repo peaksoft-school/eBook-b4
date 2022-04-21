@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface BookService {
+
     ResponseEntity<?> register(BookRequest bookRequest, String username);
 
     Book findByBookId(Long bookId);

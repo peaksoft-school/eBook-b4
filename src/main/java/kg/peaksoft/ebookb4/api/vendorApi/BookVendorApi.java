@@ -10,33 +10,33 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @RestController
-@RequestMapping("/api/books")
 @AllArgsConstructor
+@RequestMapping("/api/books")
 @PreAuthorize("hasRole('ROLE_VENDOR')")
-@Tag(name = "Books",description = "crud operations")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "Books API", description = "Crud operations")
 public class BookVendorApi {
 
     private final BookService bookService;
 
-    @Operation(summary = "save book",description = "save a new book")
-    @PostMapping("/saveBook")
-    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest){
-        return  bookService.register(bookRequest, SecurityContextHolder.getContext().getAuthentication().getName());
+    @Operation(summary = "Add book", description = "This endpoint will save a new book")
+    @PostMapping("")
+    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest) {
+        return bookService.register(bookRequest, SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
-    @Operation(summary = "delete",description = "Delete a book")
-    @DeleteMapping("/deleteBook/{bookId}")
+    @Operation(summary = "Delete book", description = "This endpoint will delete existing book")
+    @DeleteMapping("/{bookId}")
     public ResponseEntity<?> delete(@PathVariable Long bookId) {
         return bookService.delete(bookId);
     }
 
-    @Operation(summary = "update",description = "Update a book")
-    @PatchMapping("/updateBook/{bookId}")
+    @Operation(summary = "Update book", description = "This endpoint will update existing book")
+    @PatchMapping("/{bookId}")
     public ResponseEntity<?> update(@RequestBody BookRequest request,
-                                    @PathVariable Long bookId){
-        return bookService.update(request,bookId);
+                                    @PathVariable Long bookId) {
+        return bookService.update(request, bookId);
     }
 
 }

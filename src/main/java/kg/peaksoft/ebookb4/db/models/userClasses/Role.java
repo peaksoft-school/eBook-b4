@@ -9,25 +9,26 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "roles")
-@Getter @Setter
+@Getter
+@Setter
 @Component
 public class Role {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
-  @SequenceGenerator(name = "hibernate_seq", sequenceName = "role_seq", allocationSize = 1)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
+    @SequenceGenerator(name = "hibernate_seq", sequenceName = "role_seq", allocationSize = 1)
+    private Long id;
 
-  @Enumerated(EnumType.STRING)
-  @Column(length = 20)
-  private ERole name;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private ERole name;
 
-  public Role() {
+    public Role() {
 
-  }
+    }
 
-  public Role(ERole name) {
-    this.name = name;
-  }
+    public Role(ERole name) {
+        this.name = name;
+    }
 
 
 }

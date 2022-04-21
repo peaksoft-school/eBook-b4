@@ -18,33 +18,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/books")
 @AllArgsConstructor
-@Tag(name = "Books",description = "Sort operations")
+@RequestMapping("/api/books")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "Books Sort API",description = "Sort operations")
 public class BookGetApi {
 
     private final BookGetService bookGetService;
 
-    @Operation(summary = "Find All By Genre")
-    @GetMapping("/findBooksByGenre/{genre}")
+    @Operation(summary = "Sort by genre", description = "Find All By Genre")
+    @GetMapping("/{genre}")
     public List<Book> findBooksByGenre(@PathVariable Genre genre) {
         return bookGetService.findByGenre(genre);
     }
 
-    @Operation(summary = "Find All By Title,or AuthorName,or PublishingHouse")
-    @GetMapping("/findBooksByName/{name}")
+    @Operation(summary = "Sort by name", description = "Find All By Title, or AuthorName, or PublishingHouse")
+    @GetMapping("/{name}")
     public List<Book> findBooksByName(@PathVariable String name) {
         return bookGetService.findBooksByName(name);
     }
 
     @Operation(summary = "Find All books if needs being sorted" , description = "Sorted By Genre, BookType, Price, Language")
-    @PostMapping("/getBooks")
-    public List<Book> getBooks(@RequestBody SortBook sortBook) {
+    @GetMapping("/getBooks")
+    public List<Book> getBooks(@RequestParam SortBook sortBook) {
         return bookGetService.getAllBooksOrSortedOnes(sortBook);
     }
 
     @Operation(summary = "Find book by id", description = "Get a book by id")
-    @GetMapping("/findBookById/{id}")
+    @GetMapping("/{id}")
     public Book getBookById(@PathVariable Long id){
         return bookGetService.getBookById(id);
     }
