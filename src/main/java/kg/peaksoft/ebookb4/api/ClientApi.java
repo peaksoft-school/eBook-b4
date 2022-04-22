@@ -5,6 +5,7 @@ import kg.peaksoft.ebookb4.db.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +20,8 @@ public class ClientApi {
     private ClientService clientService;
 
     @PostMapping("/like-book/{bookId}")
-    public ResponseEntity<?> likeBook(@PathVariable Long bookId){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return clientService.likeABook(bookId, username);
+    public ResponseEntity<?> likeBook(@PathVariable Long bookId, Authentication authentication){
+        return clientService.likeABook(bookId, authentication.getName());
     }
 
 }

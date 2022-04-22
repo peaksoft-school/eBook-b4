@@ -9,6 +9,7 @@ import kg.peaksoft.ebookb4.dto.request.PromoRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +28,8 @@ public class VendorApi {
 
     @Operation(summary = "promo", description = "Vendor creates a promo")
     @PostMapping("/create-promo")
-    public ResponseEntity<?> createPromo(@RequestBody PromoRequest promoRequest){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return promoService.createPromo(promoRequest,username);
+    public ResponseEntity<?> createPromo(@RequestBody PromoRequest promoRequest, Authentication authentication){
+        return promoService.createPromo(promoRequest, authentication.getName());
     }
 
 

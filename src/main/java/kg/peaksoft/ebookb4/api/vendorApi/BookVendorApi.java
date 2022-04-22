@@ -9,6 +9,7 @@ import kg.peaksoft.ebookb4.db.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +29,8 @@ public class BookVendorApi {
 
     @Operation(summary = "save book",description = "save a new book")
     @PostMapping("/saveBook")
-    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest){
-        return  bookService.register(bookRequest, SecurityContextHolder.getContext().getAuthentication().getName());
+    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest, Authentication authentication){
+        return  bookService.register(bookRequest, authentication.getName());
     }
 
     @Operation(summary = "delete book",description = "delete a book")
@@ -54,8 +55,8 @@ public class BookVendorApi {
 
     @Operation(summary = "get all books for vendor/admin", description = "get all books by id for vendor/admin")
     @GetMapping("/getBooks/{offset}")
-    public List<Book> getBooks(@PathVariable Integer offset){
-        return bookService.findBooksFromVendor(--offset, 12, SecurityContextHolder.getContext().getAuthentication().getName());
+    public List<Book> getBooks(@PathVariable Integer offset,Authentication authentication){
+        return bookService.findBooksFromVendor(--offset, 12, authentication.getName());
     }
 
 
