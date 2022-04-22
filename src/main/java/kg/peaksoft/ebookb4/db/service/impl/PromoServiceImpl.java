@@ -43,7 +43,7 @@ public class PromoServiceImpl implements PromoService {
 
         //If vendor already have active will be a bad request
         if(promoRepository.ifVendorAlreadyCreatedPromo(user, LocalDate.now())){
-            throw new BadRequestException("You already have an active promo!");
+            throw new BadRequestException("You already have a promo that is not expired yet!");
         }
 
         //creating promo
