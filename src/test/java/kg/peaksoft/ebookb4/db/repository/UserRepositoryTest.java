@@ -22,8 +22,6 @@ class UserRepositoryTest {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
-    @MockBean
-    private PasswordEncoder encoder;
 
     @BeforeEach
     void setUp() {
@@ -31,7 +29,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void existsByEmail() {
+    void existsByEmail_whenGiveRole() {
 
             Role client = new Role();
             client.setId(1L);
@@ -48,7 +46,7 @@ class UserRepositoryTest {
 
             User user = new User();
             user.setEmail("admin@gmail.com");
-            user.setPassword(encoder.encode("password"));
+            user.setPassword("password");
             user.setRole(roleRepository.getById(3L));
             Basket basket = new Basket();
             basket.setUser(user);
