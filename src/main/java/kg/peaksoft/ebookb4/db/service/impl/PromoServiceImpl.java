@@ -42,7 +42,7 @@ public class PromoServiceImpl implements PromoService {
                         username)));
 
         //If vendor already have active will be a bad request
-        if(promoRepository.ifVendorAlreadyCreatedPromo(user)){
+        if(promoRepository.ifVendorAlreadyCreatedPromo(user, LocalDate.now())){
             throw new BadRequestException("You already have an active promo!");
         }
 
@@ -60,13 +60,6 @@ public class PromoServiceImpl implements PromoService {
         else{
             promo.setIsActive(false);
         }
-        System.out.println(user);
-//        List<Book> vendorAddedBooks = user.getVendorAddedBooks();
-//        for (Book i: vendorAddedBooks) {
-//            if(i.getDiscount() == null & Period.between(promo.getBeginningDay(), promo.getEndDay()).getDays()>-1){
-//                i.setDiscountFromPromo(promo.getDiscount());
-//            }
-//        }
 
         promoRepository.save(promo);
 

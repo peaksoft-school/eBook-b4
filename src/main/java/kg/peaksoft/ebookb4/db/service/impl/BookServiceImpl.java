@@ -43,7 +43,7 @@ public class BookServiceImpl implements BookService {
         User user = userRepository.getUser(username).orElseThrow(()->
                 new BadRequestException(String.format("User with username %s doesn't exist!",username)));
         Book book = mapper.create(bookRequest);
-        if(promoRepository.ifVendorAlreadyCreatedPromo(user)){
+        if(promoRepository.ifVendorAlreadyCreatedPromo(user, LocalDate.now())){
             if(book.getDiscount()==null){
                 book.setDiscountFromPromo(promoRepository.getActivePromo(user).getDiscount());
             }
