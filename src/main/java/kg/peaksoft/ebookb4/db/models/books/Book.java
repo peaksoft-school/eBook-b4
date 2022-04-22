@@ -14,9 +14,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Getter @Setter
 @RequiredArgsConstructor
-@Getter
-@Setter
 public class Book {
 
     @Id
@@ -28,9 +27,7 @@ public class Book {
     private String authorFullName;
     private String aboutBook;
     private String publishingHouse;
-
     private LocalDate yearOfIssue;
-
     private Double price;
     private Boolean isBestSeller;
     @Enumerated(value = EnumType.STRING)
@@ -39,18 +36,16 @@ public class Book {
     private BookType bookType;
     @Enumerated(value = EnumType.STRING)
     private Genre genre;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinColumn(name = "user_id")
-    private User user;
-
-
     private int baskets;
     private int likes;
     private Boolean isActive = false;
     private Integer discount;
     private Integer discountFromPromo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "book")
     private List<FileSources> images;

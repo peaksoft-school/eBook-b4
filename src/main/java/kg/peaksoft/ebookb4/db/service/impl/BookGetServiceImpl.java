@@ -39,16 +39,13 @@ public class BookGetServiceImpl implements BookGetService {
     public List<Book> getAllBooksOrSortedOnes(SortBook sortBook, int offset, int pageSize) {
         promoService.checkPromos();
         int counter = 0;
-
         List<Book> books = repository.findAllActive();
-
         //if it is empty it returns empty list
         if(books.size()<1){
             return books;
         }
         //it should be deleted
         books.removeIf(book -> !book.getIsActive());
-
         //sorting if there are selected genres
         if (sortBook.getGenre() != null) {
             System.out.println("I am in sort by genre!");

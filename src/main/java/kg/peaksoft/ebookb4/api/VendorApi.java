@@ -3,9 +3,13 @@ package kg.peaksoft.ebookb4.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
+import kg.peaksoft.ebookb4.db.service.VendorService;
 import kg.peaksoft.ebookb4.dto.request.PromoRequest;
+import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +29,8 @@ public class VendorApi {
 
     private BookService bookService;
     private PromoService promoService;
+    private VendorService vendorService;
+    private UserRepository userRepository;
 
     @Operation(summary = "promo", description = "Vendor creates a promo")
     @PostMapping("/create-promo")
@@ -32,6 +38,19 @@ public class VendorApi {
         return promoService.createPromo(promoRequest, authentication.getName());
     }
 
+    @Operation(summary = "Find Books From Vendor")
+    @GetMapping("/findBooksFromVendor")
+    public List<Book> findAllBookFromVendor(Integer offset){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return bookService.findBooksFromVendor(offset,1, username);
+    }
+
+//    @Operation(summary = "Update Vendor By Id" ,description = "Update")
+//    @PatchMapping("/updateById")
+//    public ResponseEntity<?> updateVendorById( SignupRequestVendor signupRequestVendor){
+//        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+//        return vendorService.update(signupRequestVendor,user);
+//    }
 
 
 }

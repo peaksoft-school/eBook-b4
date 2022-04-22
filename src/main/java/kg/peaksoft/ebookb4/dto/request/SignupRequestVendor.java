@@ -19,9 +19,15 @@ public class SignupRequestVendor {
 
   private String lastName;
 
+  private String number;
+
   @NotBlank
   @Size(min = 6, max = 40)
   private String password;
 
-  private String number;
+  private String newPassword;
+
+  private String confirmPassword;
+
+
 }
