@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
@@ -8,16 +9,22 @@ import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Transactional
+@Slf4j
 public class VendorServiceImpl implements VendorService {
 
     private final UserRepository userRepository;
@@ -46,6 +53,22 @@ public class VendorServiceImpl implements VendorService {
 
         return ResponseEntity.ok(new MessageResponse(
                 String.format("User with email %s registered successfully!", user.getEmail().toUpperCase(Locale.ROOT))));
+    }
+
+    @Override
+    public List<User> findAllVendors() {
+        log.info("ClientController  - getClients -: {}");
+        return userRepository.findAllVendors(ERole.ROLE_VENDOR);
+
+    }
+
+    @Override
+    public void deleteVendor(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new BadRequestException(
+                    "Client with id " + id + " does not exists");
+        }
+        userRepository.deleteById(id);
     }
 
 //    @Override
