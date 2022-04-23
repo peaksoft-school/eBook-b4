@@ -30,25 +30,21 @@ public class VendorApi {
     private BookService bookService;
     private PromoService promoService;
     private VendorService vendorService;
+    private UserRepository userRepository;
 
     @Operation(summary = "promo", description = "Vendor creates a promo")
     @PostMapping("/create-promo")
-    public ResponseEntity<?> createPromo(@RequestBody PromoRequest promoRequest,
-                                         Authentication authentication){
+    public ResponseEntity<?> createPromo(@RequestBody PromoRequest promoRequest, Authentication authentication){
         return promoService.createPromo(promoRequest, authentication.getName());
     }
 
-    @Operation(summary = "Find Books From Vendor")
-    @GetMapping
-    public List<Book> findAllBookFromVendor(Integer offset){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return bookService.findBooksFromVendor(offset,1, username);
-    }
 
-    @Operation(summary = "Update Vendor By Id" ,description = "Update")
-    @PatchMapping("/{id}")
-    public SignupRequestVendor updateVendorById( SignupRequestVendor signupRequestVendor,
-                                                 @PathVariable Long id){
-        return vendorService.update(signupRequestVendor,id);
-    }
+//    @Operation(summary = "Update Vendor By Id" ,description = "Update")
+//    @PatchMapping("/updateById")
+//    public ResponseEntity<?> updateVendorById( SignupRequestVendor signupRequestVendor){
+//        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+//        return vendorService.update(signupRequestVendor,user);
+//    }
+
+
 }
