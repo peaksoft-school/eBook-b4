@@ -48,6 +48,22 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.user.email = ?1")
     List<Book> findBooksFromVendor(String username);
 
+    @Query("select b from Book b where b.likes>0 and b.user.email = ?1")
+    List<Book> findLikedBooksFromVendor(String username);
+
+
+    @Query("select b from Book b where b.baskets>0 and b.user.email = ?1")
+    List<Book> findBooksFromVendorAddedToBasket(String username);
+
+    @Query("select b from Book b where b.discount is not null and b.user.email = ?1")
+    List<Book> findBooksFromVendorWithDiscount(String username);
+
+    @Query("select b from Book b where b.isActive = false and b.user.email = ?1")
+    List<Book> findBooksFromVendorWithCancel(String username);
+
+    @Query("select b from Book b where b.isActive is null and b.user.email = ?1")
+    List<Book> findBooksFromVendorInProgress(String username);
+
 //    @Query(value = "select count(case when book_id = ?1 and user_id = ?2 then true else false end) from liked_books", nativeQuery = true)
     @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
             "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
@@ -58,6 +74,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("update Book b set b.likes = b.likes+1 where b.bookId = ?1")
     void incrementLikesOfBook(Long bookId);
 
+    @Transactional
+    @Modifying
+    @Query("update Book b set b.baskets = b.baskets+1 where b.bookId = ?1")
+    void incrementBasketsOfBooks(Long bookId);
 
 
 

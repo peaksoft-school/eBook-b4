@@ -13,4 +13,6 @@ public interface ClientService {
 
     ResponseEntity<?> likeABook(Long bookId, String username);
 
+    ResponseEntity<?> addBookToBasket(Long bookId, String username);
+
 }

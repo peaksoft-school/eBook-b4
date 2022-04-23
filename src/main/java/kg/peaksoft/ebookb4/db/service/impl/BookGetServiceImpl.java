@@ -3,7 +3,7 @@ package kg.peaksoft.ebookb4.db.service.impl;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
-import kg.peaksoft.ebookb4.db.models.booksClasses.SortBook;
+import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
@@ -36,7 +36,7 @@ public class BookGetServiceImpl implements BookGetService {
     }
 
     @Override
-    public List<Book> getAllBooksOrSortedOnes(SortBook sortBook, int offset, int pageSize) {
+    public List<Book> getAllBooksOrSortedOnes(SortBooksGlobal sortBook, int offset, int pageSize) {
         promoService.checkPromos();
         List<Book> books = repository.findAllActive();
         //if it is empty it returns empty list
@@ -63,6 +63,7 @@ public class BookGetServiceImpl implements BookGetService {
                     counter=0;
                 }
             } else {
+                System.out.println("In else of sort by genre");
                 books.removeIf(book -> book.getGenre().equals(sortBook.getGenre().get(0)));
             }
         }
@@ -76,9 +77,9 @@ public class BookGetServiceImpl implements BookGetService {
         //sorting if there are selected bookType
         if (sortBook.getBookType() != null) {
             System.out.println("I am sort by BookType");
-            books.removeIf(book -> book.getBookType() != sortBook.getBookType());
+            books.removeIf(i -> !i.getBookType().equals(sortBook.getBookType()));
         }
-
+        System.out.println(books.size());
         //sorting if there are selected language
         if (sortBook.getLanguage() != null) {
             if (sortBook.getLanguage().size() > 1) {

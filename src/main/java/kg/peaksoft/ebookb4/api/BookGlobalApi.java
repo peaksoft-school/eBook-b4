@@ -3,7 +3,7 @@ package kg.peaksoft.ebookb4.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.db.models.booksClasses.SortBook;
+import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import lombok.AllArgsConstructor;
@@ -31,8 +31,8 @@ public class BookGlobalApi {
     }
 
     @Operation(summary = "Find Activ books if needs being sorted", description = "Sorted By Genre, BookType, Price, Language")
-    @PostMapping("/getBooks/{offset}")
-    public List<Book> getBooks(@RequestBody SortBook sortBook, @PathVariable Integer offset) {
+    @GetMapping("/getBooks/{offset}")
+    public List<Book> getBooks(@RequestBody SortBooksGlobal sortBook, @PathVariable Integer offset) {
         return bookGetService.getAllBooksOrSortedOnes(sortBook, --offset, 12);
     }
 

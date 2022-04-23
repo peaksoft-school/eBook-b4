@@ -20,12 +20,10 @@ import java.util.List;
 @RequestMapping("/api/books/vendor")
 @AllArgsConstructor
 @PreAuthorize("hasRole('ROLE_VENDOR')")
-@Tag(name = "Books",description = "crud operations")
+@Tag(name = "Books vendor",description = "crud operations ...")
 public class BookVendorApi {
 
     private final BookService bookService;
-    private PromoService promoService;
-
 
     @Operation(summary = "save book",description = "save a new book")
     @PostMapping("/saveBook")
@@ -55,10 +53,34 @@ public class BookVendorApi {
 
     @Operation(summary = "get all books for vendor/admin", description = "get all books by id for vendor/admin")
     @GetMapping("/getBooks/{offset}")
-    public List<Book> getBooks(@PathVariable Integer offset,Authentication authentication){
+    public List<Book> getBooksOfVendor(@PathVariable Integer offset,Authentication authentication){
         return bookService.findBooksFromVendor(--offset, 12, authentication.getName());
     }
 
+    @GetMapping("/getLikedBooks/{offset}")
+    public List<Book> getLikedBooks(@PathVariable Integer offset, Authentication authentication){
+        return bookService.findBooksFromVendorInFavorites(--offset, 12, authentication.getName());
+    }
+
+    @GetMapping("/getBooksAddedToBasket/{offset}")
+    public List<Book> getBooksAddedToBasket(@PathVariable Integer offset, Authentication authentication){
+        return bookService.findBooksFromVendorAddedToBasket(--offset, 12, authentication.getName());
+    }
+
+    @GetMapping("/getBooksWithDiscount/{offset}")
+    public List<Book> getBooksWithDiscount(@PathVariable Integer offset, Authentication authentication){
+        return bookService.findBooksFromVendorWithDiscount(--offset, 12, authentication.getName());
+    }
+
+    @GetMapping("/getBooksInCancel/{offset}")
+    public List<Book> getBooksInCancel(@PathVariable Integer offset, Authentication authentication){
+        return bookService.findBooksFromVendorCancelled(--offset, 12, authentication.getName());
+    }
+
+    @GetMapping("/getBooksInProgress/{offset}")
+    public List<Book> getBooksInProgress(@PathVariable Integer offset, Authentication authentication){
+        return bookService.findBooksFromVendorInProgress(--offset, 12, authentication.getName());
+    }
 
 
 

@@ -90,16 +90,6 @@ public class BookServiceImpl implements BookService {
                 });
     }
 
-
-    public List<Book> findBooksOfVendor(int offset, int pageSize, String username){
-        List<Book> books = repository.findBooksFromVendor(username);
-        Pageable paging = PageRequest.of(offset, pageSize);
-        int start = Math.min((int)paging.getOffset(), books.size());
-        int end = Math.min((start + paging.getPageSize()), books.size());
-        Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
-        return new CustomPageRequest<Book>(pages).getContent();
-    }
-
     @Override
     public ResponseEntity<?> delete(Long bookId) {
         repository.deleteById(bookId);
@@ -188,34 +178,64 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findBooksFromVendor(Integer integer, int i, String username) {
-        return repository.findBooksFromVendor(username);
+    public List<Book> findBooksFromVendor(Integer offset, int pageSize, String username) {
+        List<Book> books = repository.findBooksFromVendor(username);
+        System.out.println(books.size());
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), books.size());
+        int end = Math.min((start + paging.getPageSize()), books.size());
+        Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
+        return new CustomPageRequest<>(pages).getContent();
     }
 
     @Override
-    public List<Book> findBooksFromVendorInFavorites(Integer integer, int i, String username) {
-        return null;
+    public List<Book> findBooksFromVendorInFavorites(Integer offset, int pageSize, String username) {
+        List<Book> likedBooksFromVendor = repository.findLikedBooksFromVendor(username);
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), likedBooksFromVendor.size());
+        int end = Math.min((start + paging.getPageSize()), likedBooksFromVendor.size());
+        Page<Book> pages = new PageImpl<>(likedBooksFromVendor.subList(start, end), paging, likedBooksFromVendor.size());
+        return new CustomPageRequest<>(pages).getContent();
     }
 
     @Override
-    public List<Book> findBooksFromVendorInBasket(Integer integer, int i, String username) {
-        return null;
+    public List<Book> findBooksFromVendorAddedToBasket(Integer offset, int pageSize, String username) {
+        List<Book> booksWithBasket = repository.findBooksFromVendorAddedToBasket(username);
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), booksWithBasket.size());
+        int end = Math.min((start + paging.getPageSize()), booksWithBasket.size());
+        Page<Book> pages = new PageImpl<>(booksWithBasket.subList(start, end), paging, booksWithBasket.size());
+        return new CustomPageRequest<>(pages).getContent();
     }
 
     @Override
-    public List<Book> findBooksFromVendorWithDiscount(Integer integer, int i, String username) {
-        return null;
+    public List<Book> findBooksFromVendorWithDiscount(Integer offset, int pageSize, String username) {
+        List<Book> booksWithDiscount = repository.findBooksFromVendorWithDiscount(username);
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), booksWithDiscount.size());
+        int end = Math.min((start + paging.getPageSize()), booksWithDiscount.size());
+        Page<Book> pages = new PageImpl<>(booksWithDiscount.subList(start, end), paging, booksWithDiscount.size());
+        return new CustomPageRequest<>(pages).getContent();
     }
 
     @Override
-    public List<Book> findBooksFromVendorInProcess(Integer integer, int i, String username) {
-        return null;
+    public List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username) {
+        List<Book> booksWithCancel = repository.findBooksFromVendorWithCancel(username);
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), booksWithCancel.size());
+        int end = Math.min((start + paging.getPageSize()), booksWithCancel.size());
+        Page<Book> pages = new PageImpl<>(booksWithCancel.subList(start, end), paging, booksWithCancel.size());
+        return new CustomPageRequest<>(pages).getContent();
     }
 
     @Override
-    public List<Book> findBooksFromVendorInCancelled(Integer integer, int i, String username) {
-        return null;
+    public List<Book> findBooksFromVendorInProgress(Integer offset, int pageSize, String username) {
+        List<Book> booksInProgress = repository.findBooksFromVendorInProgress(username);
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), booksInProgress.size());
+        int end = Math.min((start + paging.getPageSize()), booksInProgress.size());
+        Page<Book> pages = new PageImpl<>(booksInProgress.subList(start, end), paging, booksInProgress.size());
+        return new CustomPageRequest<>(pages).getContent();
     }
-
 
 }

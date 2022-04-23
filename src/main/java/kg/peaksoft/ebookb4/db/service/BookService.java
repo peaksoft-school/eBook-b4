@@ -15,18 +15,16 @@ public interface BookService {
 
     ResponseEntity<?> update(BookRequest bookRequest, Long userId);
 
-    List<Book> findBooksFromVendor(Integer integer, int i, String username);
+    List<Book> findBooksFromVendor(Integer offset, int pageSize, String username);
 
-    List<Book> findBooksFromVendorInFavorites(Integer integer, int i, String username);
+    List<Book> findBooksFromVendorInFavorites(Integer offset, int pageSize, String username);
 
-    List<Book> findBooksFromVendorInBasket(Integer integer, int i, String username);
+    List<Book> findBooksFromVendorAddedToBasket(Integer offset, int pageSize, String username);
 
-    List<Book> findBooksFromVendorWithDiscount(Integer integer, int i, String username);
+    List<Book> findBooksFromVendorWithDiscount(Integer offset, int pageSize, String username);
 
-    List<Book> findBooksFromVendorInProcess(Integer integer, int i, String username);
+    List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username);
 
-    List<Book> findBooksFromVendorInCancelled(Integer integer, int i, String username);
-
-
+    List<Book> findBooksFromVendorInProgress(Integer offset, int pageSize, String username);
 
 }
