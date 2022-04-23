@@ -4,10 +4,7 @@ import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
 import kg.peaksoft.ebookb4.dto.request.PromoRequest;
 import org.springframework.stereotype.Component;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 19/4/22
- */
+
 @Component
 public class PromoMapper {
 

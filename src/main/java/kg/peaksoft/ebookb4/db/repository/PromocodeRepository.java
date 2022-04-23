@@ -8,10 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 19/4/22
- */
+
 public interface PromocodeRepository extends JpaRepository<Promocode, Long> {
 
     @Query("select case when count(s) > 0 then true else false end " +

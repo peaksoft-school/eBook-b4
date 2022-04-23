@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.models.userClasses;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
@@ -59,6 +60,7 @@ public class User {
                     referencedColumnName = "book_id"))
     private List<Book> likedBooks;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JoinColumn(name = "basket_id")
     private Basket basket;

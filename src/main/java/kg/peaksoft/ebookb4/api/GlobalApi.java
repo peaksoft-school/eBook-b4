@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 21/4/22
- */
+
 @RestController
 @RequestMapping("/api/books")
 @AllArgsConstructor
