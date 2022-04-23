@@ -38,13 +38,6 @@ public class VendorApi {
         return promoService.createPromo(promoRequest, authentication.getName());
     }
 
-    @Operation(summary = "Find Books From Vendor")
-    @GetMapping("/findBooksFromVendor")
-    public List<Book> findAllBookFromVendor(Integer offset){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return bookService.findBooksFromVendor(offset,1, username);
-    }
-
 //    @Operation(summary = "Update Vendor By Id" ,description = "Update")
 //    @PatchMapping("/updateById")
 //    public ResponseEntity<?> updateVendorById( SignupRequestVendor signupRequestVendor){
