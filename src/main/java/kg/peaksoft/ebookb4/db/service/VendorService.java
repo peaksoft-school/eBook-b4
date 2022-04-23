@@ -11,6 +11,6 @@ import org.springframework.http.ResponseEntity;
 public interface VendorService {
 
     ResponseEntity<?> register(SignupRequestVendor signupRequestVendor, Long number);
-//    ResponseEntity<?> update(SignupRequestVendor signupRequestVendor, String user);
+    SignupRequestVendor update(SignupRequestVendor signupRequestVendor,Long id);
 
 }

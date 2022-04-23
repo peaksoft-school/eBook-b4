@@ -37,61 +37,57 @@ public class PromoServiceImpl implements PromoService {
     @Transactional
     public ResponseEntity<?> createPromo(PromoRequest promoRequest, String username) {
         //Getting authenticated vendor from db if exists
-        User user = userRepository.getUser(username).orElseThrow(()->
+        User user = userRepository.getUser(username).orElseThrow(() ->
                 new NotFoundException(String.format("User with username: %s doesn't exist!",
                         username)));
 
         //If vendor already have active will be a bad request
-        if(promoRepository.ifVendorAlreadyCreatedPromo(user, LocalDate.now())){
+        if (promoRepository.ifVendorAlreadyCreatedPromo(user, LocalDate.now())) {
             throw new BadRequestException("You already have a promo that is not expired yet!");
         }
 
         //creating promo
         Promocode promo = promoMapper.create(promoRequest);
-        if(Period.between(promo.getBeginningDay(),promo.getEndDay()).getDays()<0){
+        if (Period.between(promo.getBeginningDay(), promo.getEndDay()).getDays() < 0) {
             throw new BadRequestException("You entered invalid date!");
         }
 
         promo.setUser(user);
-        if(Period.between(LocalDate.now(),promo.getBeginningDay()).getDays()<=0){
+        if (Period.between(LocalDate.now(), promo.getBeginningDay()).getDays() <= 0) {
             System.out.println("Hello world");
             promo.setIsActive(true);
-        }
-        else{
+        } else {
             promo.setIsActive(false);
         }
 
         promoRepository.save(promo);
 
         return ResponseEntity.ok(new MessageResponse(
-                String.format("Promo with promo_name %s has been saved",promoRequest.getPromoName())
+                String.format("Promo with promo_name %s has been saved", promoRequest.getPromoName())
         ));
     }
 
-    public void checkPromos(){
-        List<Promocode> promos = promoRepository.getPromos().orElseThrow(()->
+    public void checkPromos() {
+        List<Promocode> promos = promoRepository.getPromos().orElseThrow(() ->
                 new BadRequestException("There are no promo codes yes!"));
-        System.out.println("Promocode size: "+promos.size());
-        for(Promocode i: promos){
-            if(Period.between(i.getBeginningDay(),i.getEndDay()).getDays()<0){
+        System.out.println("Promocode size: " + promos.size());
+        for (Promocode i : promos) {
+            if (Period.between(i.getBeginningDay(), i.getEndDay()).getDays() < 0) {
                 System.out.println(i);
                 System.out.println("Срок прошёл!");
                 i.setIsActive(false);
                 bookRepository.checkForPromos(i.getUser());
-            }
-            else{
-                if(Period.between(LocalDate.now(),i.getBeginningDay()).getDays()<=0){
+            } else {
+                if (Period.between(LocalDate.now(), i.getBeginningDay()).getDays() <= 0) {
                     System.out.println("Hello world");
                     i.setIsActive(true);
                 }
                 System.out.println("Срок ещё не прошёл!");
                 System.out.println(i);
-                if(i.getIsActive()){
+                if (i.getIsActive()) {
                     bookRepository.givePromo(i.getUser(), i.getDiscount());
                 }
             }
         }
     }
-
-
 }

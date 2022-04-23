@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,11 +22,8 @@ public class SignupRequestVendor {
 
   private String number;
 
-  @NotBlank
-  @Size(min = 6, max = 40)
+  @JsonIgnore
   private String password;
-
-  private String newPassword;
 
   private String confirmPassword;
 

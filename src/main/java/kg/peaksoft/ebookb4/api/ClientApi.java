@@ -1,12 +1,15 @@
 package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
+import kg.peaksoft.ebookb4.db.models.userClasses.Role;
+import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.service.ClientService;
+import kg.peaksoft.ebookb4.db.service.impl.ClientServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin

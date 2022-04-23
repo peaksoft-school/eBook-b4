@@ -99,6 +99,7 @@ public class BookGetServiceImpl implements BookGetService {
                 books.removeIf(book -> !book.getLanguage().equals(sortBook.getLanguage().get(0)));
             }
         }
+
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int)paging.getOffset(), books.size());
         int end = Math.min((start + paging.getPageSize()), books.size());

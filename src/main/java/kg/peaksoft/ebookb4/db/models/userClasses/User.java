@@ -37,15 +37,12 @@ public class User {
     @NotBlank
     @Size(min = 8, max = 64, message = "Password must be 8-64 char long")
     private String password;
-
-
     private String number;
-
     private String firstName;
-
     private String lastName;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "user")
     private List<Book> vendorAddedBooks;
 
     @ManyToMany

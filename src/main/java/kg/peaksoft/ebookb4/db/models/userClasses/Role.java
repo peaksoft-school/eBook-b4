@@ -2,6 +2,7 @@ package kg.peaksoft.ebookb4.db.models.userClasses;
 
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,9 @@ import javax.persistence.*;
 @Table(name = "roles")
 @Getter @Setter
 @Component
+@NoArgsConstructor
 public class Role {
+
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
   @SequenceGenerator(name = "hibernate_seq", sequenceName = "role_seq", allocationSize = 1)
@@ -20,12 +23,6 @@ public class Role {
   @Enumerated(EnumType.STRING)
   @Column(length = 20)
   private ERole name;
-
-  public Role() {
-
-  }
-
-
 
   public Role(ERole name) {
     this.name = name;

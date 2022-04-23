@@ -1,8 +1,10 @@
 package kg.peaksoft.ebookb4.db.repository;
 
 import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.dto.GenreDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,9 +16,7 @@ import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-    //find books by genre
-    @Query("select b from Book b where b.genre = ?1 and b.isActive=true")
-    List<Book> findAllByGenre(Genre genre);
+
 
     //find books by title, author, publishingHouse
     @Query("select b from Book b where b.title like %?1% " +
@@ -58,7 +58,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("update Book b set b.likes = b.likes+1 where b.bookId = ?1")
     void incrementLikesOfBook(Long bookId);
 
+    //find books by genre
+    @Query("select b from Book b where b.genre = ?1")
+    List<Book> findAllByGenre(Genre genre);
 
+    //find books by BookType
+    @Query("select b from Book b where b.bookType = ?1")
+    List<Book> findAllByBookType(BookType bookType);
 
-
+    @Query("select b from Book b where b.genre =?1 or b.bookType= ?2")
+    List<Book> getBooks(Genre genre, BookType bookType);
 }

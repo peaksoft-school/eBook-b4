@@ -48,53 +48,43 @@ public class VendorServiceImpl implements VendorService {
                 String.format("User with email %s registered successfully!", user.getEmail().toUpperCase(Locale.ROOT))));
     }
 
-//    @Override
-//    @Transactional
-//    public ResponseEntity<?> update(SignupRequestVendor newUser, String name,Long id) {
-//        User user = userRepository.findById(id)
-//                .orElseThrow(() -> new BadRequestException(
-//                    "vendor with id = " + id + " does not exists"
-//            ));
-//
-//        Optional<User> user2 = userRepository.getUser(name);
-//        if (user.isPresent()) {
-//            throw new BadRequestException(
-//                    "vendor with email = " + newUser.getEmail() + " has already exists"
-//            );
-//        user.setFirstName(newUser.getFirstName());
-//        user.setLastName(newUser.getLastName());
-//        user.setEmail(newUser.getEmail());
-//        user.setNumber(newUser.getNumber());
-//
-//        String password = user.getPassword();
-//        String newUserOldPassword = newUser.getPassword();
-//
-//        if (password.equals(newUserOldPassword)) {
-//            String newPass = newUser.getNewPassword();
-//            String newPassConfirm = newUser.getConfirmPassword();
-//            if (newPass.equals(newPassConfirm)) {
-//                user.setPassword(newPass);
-//            }
-//        }
-//        return ResponseEntity.ok(new MessageResponse(
-//                "Vendor with email  Update successfully! "));
-//    }
-//
-//    public ResponseEntity<?> update(SignupRequestVendor newUser, Long id){
-//    Vendor vendorFromDataBase = vendorRepository.findById(id)
-//            .orElseThrow(() -> new DoesNotExistsException(
-//                    "vendor with id = " + id + " does not exists"
-//            ));
-//    Optional<Vendor> optionalVendor = vendorRepository.findUserByEmail(vendorDto.getEmail());
-//        if (optionalVendor.isPresent()) {
-//        throw new AlreadyExistsException(
-//                "vendor with email = " + vendorDto.getEmail() + " has already exists"
-//        );
-//    }
-//        vendorFromDataBase.setFirstName(vendorDto.getFirstName());
-//        vendorFromDataBase.setLastName(vendorDto.getLastName());
-//        vendorFromDataBase.setPhoneNumber(vendorDto.getPhoneNumber());
-//        vendorFromDataBase.setEmail(vendorDto.getEmail());
-//        vendorFromDataBase.getAuthenticationInfo().setPassword((vendorDto.getPassword()));
+    @Override
+    @Transactional
+    public SignupRequestVendor update(SignupRequestVendor newUser, Long id) {
 
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException(
+                        "vendor with id = " + id + " does not exists"));
+
+        if (!newUser.getEmail().equals(user.getEmail())) {
+            Optional<User> clientOptional = userRepository.getUser(newUser.getEmail());
+
+            if (clientOptional.isPresent()) {
+                throw new BadRequestException(
+                        "client with email = " + newUser.getEmail() + " has already exists"
+                );
+            }
+        }
+
+        String currentPassword = user.getPassword();
+        String currentPassword2 = encoder.encode(newUser.getPassword());
+        System.out.println(currentPassword);
+        System.out.println(currentPassword2);
+
+        boolean matches = encoder.matches(newUser.getPassword(), user.getPassword());
+
+        if (!matches) {
+            throw new BadRequestException(
+                    "invalid current password "
+            );
+        }
+
+        user.setFirstName(newUser.getFirstName());
+        user.setLastName(newUser.getLastName());
+        user.setEmail(newUser.getEmail());
+        user.setNumber(newUser.getNumber());
+        user.setPassword(encoder.encode(newUser.getConfirmPassword()));
+
+        return newUser;
+    }
 }
