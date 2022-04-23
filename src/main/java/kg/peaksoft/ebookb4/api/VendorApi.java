@@ -38,6 +38,7 @@ public class VendorApi {
         return promoService.createPromo(promoRequest, authentication.getName());
     }
 
+
 //    @Operation(summary = "Update Vendor By Id" ,description = "Update")
 //    @PatchMapping("/updateById")
 //    public ResponseEntity<?> updateVendorById( SignupRequestVendor signupRequestVendor){
