@@ -5,13 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
-import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.AdminService;
-import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.db.service.VendorService;
-import kg.peaksoft.ebookb4.db.service.impl.AdminServiceImpl;
+import kg.peaksoft.ebookb4.dto.response.ClientResponse;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/admin")
 @AllArgsConstructor
@@ -65,11 +59,17 @@ public class AdminApi {
        return service.findAllVendors();
     }
 
-    @Operation(summary = "Delete vendor",
-            description = "Delete vendor by id ")
+    @Operation(summary = "Delete client/vendor ",
+            description = "Delete user by id ")
     @DeleteMapping({"/deleteById/{id}"})
-    public ResponseEntity<Void> deleteVendorById(@PathVariable("id") Long id) {
-        service.deleteVendor(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> deleteVendorById(@PathVariable("id") Long id) {
+       return service.deleteById(id);
+    }
+
+    @Operation(summary = "Get all client",
+            description = "Get all client ")
+    @GetMapping("/getClients")
+    public List<ClientResponse> getAllClient (){
+        return service.findAllClient();
     }
 }

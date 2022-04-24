@@ -23,4 +23,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
   //fin all vendors / admin panel
   @Query("select u from User u where u.role.name=?1")
   List<User> findAllVendors(ERole role);
+
+  //fin all clients / admin panel
+  @Query("select u from User u where u.role.name=?1")
+  List<User> findAllClients(ERole role);
 }

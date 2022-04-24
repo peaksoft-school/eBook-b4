@@ -1,13 +1,13 @@
-package kg.peaksoft.ebookb4.dto;
+package kg.peaksoft.ebookb4.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ResponseClient {
+public class ClientResponse {
+
     private Long id;
     private String name;
     public String email;
-
 }

@@ -3,7 +3,9 @@ package kg.peaksoft.ebookb4.db.service;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.dto.response.ClientResponse;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -19,6 +21,9 @@ public interface AdminService {
 
     List<VendorResponse> findAllVendors();
 
-    void deleteVendor(Long id);
+    ResponseEntity<?> deleteById(Long id);
+
+    List<ClientResponse> findAllClient();
+
 
 }
