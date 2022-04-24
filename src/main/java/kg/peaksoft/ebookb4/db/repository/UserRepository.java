@@ -1,7 +1,8 @@
 package kg.peaksoft.ebookb4.db.repository;
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   @Query("select s from User s where s.email = ?1")
   Optional<User> getUser(String username);
+
+  //fin all vendors / admin panel
+  @Query("select u from User u where u.role.name=?1")
+  List<User> findAllVendors(ERole role);
+
+  //fin all clients / admin panel
+  @Query("select u from User u where u.role.name=?1")
+  List<User> findAllClients(ERole role);
 
 
 }

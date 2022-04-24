@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.dto.dto.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,8 +22,6 @@ public class VendorRegisterDTO {
 
   private String number;
 
-  @NotBlank
-  @Size(min = 6, max = 40)
   private String password;
 
   private String confirmPassword;

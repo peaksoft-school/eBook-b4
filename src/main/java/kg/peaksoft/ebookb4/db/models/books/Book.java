@@ -36,6 +36,7 @@ public class Book {
     private BookType bookType;
     @Enumerated(value = EnumType.STRING)
     private Genre genre;
+
     private int baskets;
     private int likes;
     private Boolean isActive;

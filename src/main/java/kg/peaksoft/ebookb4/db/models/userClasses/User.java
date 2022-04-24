@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.models.userClasses;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -37,15 +39,14 @@ public class User {
     @NotBlank
     @Size(min = 8, max = 64, message = "Password must be 8-64 char long")
     private String password;
-
-
     private String number;
-
     private String firstName;
-
     private String lastName;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    private LocalDate dateOfRegistration;
+
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "user")
     private List<Book> vendorAddedBooks;
 
     @ManyToMany
@@ -59,6 +60,7 @@ public class User {
                     referencedColumnName = "book_id"))
     private List<Book> likedBooks;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JoinColumn(name = "basket_id")
     private Basket basket;

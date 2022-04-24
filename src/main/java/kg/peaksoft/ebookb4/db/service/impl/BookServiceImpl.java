@@ -97,7 +97,6 @@ public class BookServiceImpl implements BookService {
                 String.format("Book with id = %s successfully delete!", bookId)));
     }
 
-
     @Override
     @Transactional
     public ResponseEntity<?> update(BookDTO newBook, Long bookId) {

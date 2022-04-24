@@ -2,6 +2,8 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.repository.BasketRepository;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
+import kg.peaksoft.ebookb4.db.models.userClasses.Role;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientUpdateDTO;
@@ -13,17 +15,21 @@ import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Locale;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
@@ -33,7 +39,6 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number) {
-
         //checking if passwords are the same or not
         if(!clientRegisterDTO.getPassword().equals(clientRegisterDTO.getConfirmPassword())){
             throw new BadRequestException("Passwords are not the same!");
@@ -51,7 +56,8 @@ public class ClientServiceImpl implements ClientService {
         user.setRole(roleRepository.getById(number));
         user.setLastName("");
         user.setNumber("");
-            userRepository.save(user);
+        user.setDateOfRegistration(LocalDate.now());
+        userRepository.save(user);
 
 
         return ResponseEntity.ok(new MessageResponse(
