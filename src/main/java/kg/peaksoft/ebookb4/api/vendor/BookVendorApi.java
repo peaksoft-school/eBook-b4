@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
 import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.dto.request.BookRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,9 +26,6 @@ public class BookVendorApi {
     @PostMapping("/saveBook")
     public ResponseEntity<?> saveBook(@RequestBody BookDTO bookDTO, Authentication authentication){
         return  bookService.register(bookDTO, authentication.getName());
-    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest,
-                                      Authentication authentication){
-        return  bookService.register(bookRequest, authentication.getName());
     }
 
     @Operation(summary = "delete book",description = "delete a book")
