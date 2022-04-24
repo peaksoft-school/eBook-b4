@@ -1,18 +1,24 @@
 package kg.peaksoft.ebookb4.dto.mapper;
 
 
-import lombok.*;
+import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.dto.response.VendorResponse;
+import org.springframework.stereotype.Component;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Component
 public class VendorMapper {
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String email;
-    private String password;
+
+
+
+    public VendorResponse createVendorDto(User user) {
+        VendorResponse vendorResponse = new VendorResponse();
+        vendorResponse.setVendorId(user.getId());
+        vendorResponse.setFirstName(user.getFirstName());
+        vendorResponse.setLastName(user.getLastName());
+        vendorResponse.setPhoneNumber(user.getNumber());
+        vendorResponse.setEmail(user.getEmail());
+        vendorResponse.setAmountOfBooks(user.getVendorAddedBooks().size());
+
+        return vendorResponse;
+    }
 }

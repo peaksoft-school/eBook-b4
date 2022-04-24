@@ -5,8 +5,10 @@ import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.VendorService;
+import kg.peaksoft.ebookb4.dto.mapper.VendorMapper;
 import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
+import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -30,6 +33,7 @@ public class VendorServiceImpl implements VendorService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
+    private final VendorMapper vendorMapper;
 
     @Override
     public ResponseEntity<?> register(SignupRequestVendor signupRequestVendor, Long number) {
@@ -56,9 +60,13 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Override
-    public List<User> findAllVendors() {
-        log.info("ClientController  - getClients -: {}");
-        return userRepository.findAllVendors(ERole.ROLE_VENDOR);
+    public List<VendorResponse> findAllVendors() {
+        List<User> users  = userRepository.findAllVendors(ERole.ROLE_VENDOR);
+        List<VendorResponse> vendorResponses = new ArrayList<>();
+        for(User i : users){
+            vendorResponses.add(vendorMapper.createVendorDto(i));
+        }
+        return vendorResponses;
 
     }
 
