@@ -12,5 +12,6 @@ public class ClientMapper {
         responseClient.setId(user.getId());
         responseClient.setName(user.getFirstName());
         responseClient.setEmail(user.getEmail());
+        responseClient.setDateOfRegistration(user.getDateOfRegistration());
     return responseClient;
 }}

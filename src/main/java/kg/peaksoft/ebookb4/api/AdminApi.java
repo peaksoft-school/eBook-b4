@@ -78,5 +78,9 @@ public class AdminApi {
     public VendorResponse getByVendorId(@PathVariable Long id){
         return service.getVendor(id);
     }
+    @GetMapping("/getClientById/{id}")
+    public ClientResponse getClientById(@PathVariable Long id){
+        return service.getClientById(id);
+    }
 
 }

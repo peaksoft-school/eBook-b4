@@ -28,4 +28,5 @@ public interface AdminService {
 
     VendorResponse getVendor(Long id);
 
+    ClientResponse getClientById(Long id);
 }
