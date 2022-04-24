@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Getter @Setter @ToString
@@ -18,7 +19,7 @@ public class SortBook {
 
     private List<Genre> genre;
 
-    private BookType bookType;
+    private BookType bookType  = BookType.PAPERBOOK;
 
-    private List<Language> language;
+    private List<Language> language = List.of(Language.KYRGYZ);
 }

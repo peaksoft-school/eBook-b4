@@ -63,4 +63,11 @@ public class Book {
     @JoinColumn(name = "paperbook_id")
     private PaperBook paperBook;
 
+    @Override
+    public String toString() {
+        return "Book{" +
+                "bookId=" + bookId +
+                ", title='" + title
+                +", price="+price+"}";
+    }
 }
