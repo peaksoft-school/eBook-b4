@@ -27,11 +27,13 @@ public class ClientApi {
 
     private ClientService clientService;
 
+    @Operation(summary = "Client profile", description = "All accessible data of client")
     @GetMapping("/getDetails")
     public ClientRegisterDTO getClientDetails(Authentication authentication){
         return clientService.getClientDetails(authentication.getName());
     }
 
+    @Operation(summary = "Update", description = "Updating client")
     @PatchMapping("/update")
     public ResponseEntity<?> updateClient(@RequestBody ClientUpdateDTO newClientDTO, Authentication authentication){
         return clientService.update(newClientDTO, authentication.getName());

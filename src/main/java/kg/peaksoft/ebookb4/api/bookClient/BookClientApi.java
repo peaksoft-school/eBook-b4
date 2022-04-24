@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/books/client")
 @AllArgsConstructor
 @PreAuthorize("hasRole('ROLE_CLIENT')")
-@Tag(name = "Books vendor",description = "crud operations ...")
+@Tag(name = "Books client",description = "client manipulations ...")
 public class BookClientApi {
 
     private ClientService clientService;

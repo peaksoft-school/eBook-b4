@@ -30,11 +30,13 @@ public class VendorApi {
         return promoService.createPromo(promoRequest, authentication.getName());
     }
 
+    @Operation(summary = "Vendor profile", description = "All accessible data of client")
     @GetMapping("/getDetails")
     public VendorRegisterDTO getVendorDetails(Authentication authentication){
         return vendorService.getVendorDetails(authentication.getName());
     }
 
+    @Operation(summary = "Update", description = "Updating vendor")
     @PatchMapping("/update")
     public ResponseEntity<?> updateVendor(@RequestBody VendorUpdateDTO newVendorDTO, Authentication authentication){
         return vendorService.update(newVendorDTO, authentication.getName());
