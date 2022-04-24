@@ -25,7 +25,7 @@ public class AdminApi {
     private ClientMapper clientMapper;
 
 
-    @GetMapping("/getclients")
+    @GetMapping("/getClients")
     public List<ResponseClient> getAllClient (){
     return adminService.findALlClients(ERole.ROLE_CLIENT);
     }
