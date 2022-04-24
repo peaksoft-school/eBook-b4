@@ -4,7 +4,6 @@ import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
-import kg.peaksoft.ebookb4.dto.GenreDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -68,4 +67,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("select b from Book b where b.genre =?1 or b.bookType= ?2")
     List<Book> getBooks(Genre genre, BookType bookType);
+
+//    @Query(value = "select count(*) from Book  where  genre = ?1", nativeQuery = true)
+//    List<Book> getBooksCount(Genre genre);
+
+    @Query(value = "select count(*) from Book gd", nativeQuery = true)
+    List<Book> getBooksCount();
+
 }

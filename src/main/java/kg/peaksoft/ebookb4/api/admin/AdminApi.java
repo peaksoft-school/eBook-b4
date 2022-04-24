@@ -24,25 +24,33 @@ public class AdminApi {
     private BookRepository repository;
 
     @GetMapping("/getBooks/")
-    public List<Book> getAllBook(){
+    public List<Book> getAllBook() {
         return service.getBooks();
     }
 
     @GetMapping("/getBooksByBoth/{genre}/{bookType}")
     public List<Book> getBooksBy(@PathVariable Genre genre,
-                                 @PathVariable BookType bookType){
-        return service.getBooksBy(genre,bookType);
+                                 @PathVariable BookType bookType) {
+        return service.getBooksBy(genre, bookType);
     }
 
     @GetMapping("/getBooksByGenre/{genre}")
-    public List<Book> getBooksByGenre(@PathVariable Genre genre){
+    public List<Book> getBooksByGenre(@PathVariable Genre genre) {
         return service.getBooksByGenre(genre);
     }
 
-        @GetMapping("/getBooksByType/{bookType}")
-    public List<Book> getBooksByBookType( @PathVariable BookType bookType){
+    @GetMapping("/getBooksByType/{bookType}")
+    public List<Book> getBooksByBookType(@PathVariable BookType bookType) {
         return service.getBooksByBookType(bookType);
     }
 
+//    @GetMapping("/getGenreCount/{genre}")
+//    public List<Book> getBooksCount(@PathVariable Genre genre){
+//        return repository.getBooksCount(genre);
+//    }
+    @GetMapping("/getGenreCount")
+    public List<Book> getBooksCount(){
+        return repository.getBooksCount();
+    }
 
 }
