@@ -5,6 +5,8 @@ import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 public class VendorMapper {
 
@@ -18,7 +20,8 @@ public class VendorMapper {
         vendorResponse.setPhoneNumber(user.getNumber());
         vendorResponse.setEmail(user.getEmail());
         vendorResponse.setAmountOfBooks(user.getVendorAddedBooks().size());
-
+        vendorResponse.setDateOfRegistration(user.getDateOfRegistration());
         return vendorResponse;
     }
+
 }

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
@@ -72,4 +73,10 @@ public class AdminApi {
     public List<ClientResponse> getAllClient (){
         return service.findAllClient();
     }
+
+    @GetMapping("/getVendorById/{id}")
+    public VendorResponse getByVendorId(@PathVariable Long id){
+        return service.getVendor(id);
+    }
+
 }

@@ -17,6 +17,5 @@ public class VendorResponse {
     private String phoneNumber;
     private String email;
     private int amountOfBooks;
-
-//    private LocalDate dateOfRegistration;
+    private LocalDate dateOfRegistration;
 }

@@ -26,6 +26,6 @@ public interface AdminService {
 
     List<ClientResponse> findAllClient();
 
-//    User getVendor(Long id);
+    VendorResponse getVendor(Long id);
 
 }

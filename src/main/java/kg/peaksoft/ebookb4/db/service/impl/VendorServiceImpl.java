@@ -52,12 +52,14 @@ public class VendorServiceImpl implements VendorService {
         user.setLastName(signupRequestVendor.getLastName());
         user.setNumber(signupRequestVendor.getNumber());
         user.setRole(roleRepository.getById(number));
+
         user.setDateOfRegistration(LocalDate.now());
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse(
                 String.format("User with email %s registered successfully!", user.getEmail().toUpperCase(Locale.ROOT))));
     }
+
 
 
 }
