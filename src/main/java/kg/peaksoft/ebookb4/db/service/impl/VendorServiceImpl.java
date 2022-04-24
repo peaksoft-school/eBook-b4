@@ -4,7 +4,7 @@ import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.VendorService;
-import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
+import kg.peaksoft.ebookb4.dto.dto.VendorDTO;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
@@ -12,9 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Locale;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -25,21 +23,21 @@ public class VendorServiceImpl implements VendorService {
     private final RoleRepository roleRepository;
 
     @Override
-    public ResponseEntity<?> register(SignupRequestVendor signupRequestVendor, Long number) {
+    public ResponseEntity<?> register(VendorDTO vendorDTO, Long number) {
 
-        if (!signupRequestVendor.getPassword().equals(signupRequestVendor.getConfirmPassword())) {
+        if (!vendorDTO.getPassword().equals(vendorDTO.getConfirmPassword())) {
             throw new BadRequestException("Passwords are not the same !");
         }
-        if (userRepository.existsByEmail(signupRequestVendor.getEmail())) {
+        if (userRepository.existsByEmail(vendorDTO.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
-        User user = new User(signupRequestVendor.getEmail(),
-                encoder.encode(signupRequestVendor.getPassword()));
-        user.setFirstName(signupRequestVendor.getFirstName());
-        user.setLastName(signupRequestVendor.getLastName());
-        user.setNumber(signupRequestVendor.getNumber());
+        User user = new User(vendorDTO.getEmail(),
+                encoder.encode(vendorDTO.getPassword()));
+        user.setFirstName(vendorDTO.getFirstName());
+        user.setLastName(vendorDTO.getLastName());
+        user.setNumber(vendorDTO.getNumber());
         user.setRole(roleRepository.getById(number));
 
         userRepository.save(user);

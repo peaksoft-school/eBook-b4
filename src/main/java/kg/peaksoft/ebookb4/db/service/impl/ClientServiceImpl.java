@@ -3,7 +3,7 @@ package kg.peaksoft.ebookb4.db.service.impl;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.repository.BasketRepository;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import kg.peaksoft.ebookb4.dto.request.SignupRequestClient;
+import kg.peaksoft.ebookb4.dto.dto.ClientDTO;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
@@ -11,16 +11,12 @@ import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
 import java.util.Locale;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -32,22 +28,22 @@ public class ClientServiceImpl implements ClientService {
     private final BasketRepository basketRepository;
 
     @Override
-    public ResponseEntity<?> register( SignupRequestClient signupRequestClient, Long number) {
+    public ResponseEntity<?> register(ClientDTO clientDTO, Long number) {
 
         //checking if passwords are the same or not
-        if(!signupRequestClient.getPassword().equals(signupRequestClient.getConfirmPassword())){
+        if(!clientDTO.getPassword().equals(clientDTO.getConfirmPassword())){
             throw new BadRequestException("Passwords are not the same!");
         }
 
-        if (userRepository.existsByEmail(signupRequestClient.getEmail())) {
+        if (userRepository.existsByEmail(clientDTO.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
         User user = new User(
-                signupRequestClient.getEmail(),
-                encoder.encode(signupRequestClient.getPassword()));
-        user.setFirstName(signupRequestClient.getFirstName());
+                clientDTO.getEmail(),
+                encoder.encode(clientDTO.getPassword()));
+        user.setFirstName(clientDTO.getFirstName());
         user.setRole(roleRepository.getById(number));
         user.setLastName("");
         user.setNumber("");

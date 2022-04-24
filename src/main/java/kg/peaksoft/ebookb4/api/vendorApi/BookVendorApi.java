@@ -3,14 +3,12 @@ package kg.peaksoft.ebookb4.api.vendorApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.db.service.PromoService;
-import kg.peaksoft.ebookb4.dto.request.BookRequest;
+import kg.peaksoft.ebookb4.dto.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +25,8 @@ public class BookVendorApi {
 
     @Operation(summary = "save book",description = "save a new book")
     @PostMapping("/saveBook")
-    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest, Authentication authentication){
-        return  bookService.register(bookRequest, authentication.getName());
+    public ResponseEntity<?> saveBook(@RequestBody BookDTO bookDTO, Authentication authentication){
+        return  bookService.register(bookDTO, authentication.getName());
     }
 
     @Operation(summary = "delete book",description = "delete a book")
@@ -39,7 +37,7 @@ public class BookVendorApi {
 
     @Operation(summary = "update book",description = "update a book")
     @PatchMapping("/updateBook/{bookId}")
-    public ResponseEntity<?> update(@RequestBody BookRequest request,
+    public ResponseEntity<?> update(@RequestBody BookDTO request,
                                     @PathVariable Long bookId){
         return bookService.update(request,bookId);
     }

@@ -3,9 +3,9 @@ package kg.peaksoft.ebookb4.db.service.impl;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
 import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.dto.request.CustomPageRequest;
+import kg.peaksoft.ebookb4.dto.dto.CustomPageRequest;
 import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
-import kg.peaksoft.ebookb4.dto.request.BookRequest;
+import kg.peaksoft.ebookb4.dto.dto.BookDTO;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
@@ -38,11 +38,11 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public ResponseEntity<?> register(BookRequest bookRequest, String username) {
+    public ResponseEntity<?> register(BookDTO bookDTO, String username) {
 
         User user = userRepository.getUser(username).orElseThrow(()->
                 new BadRequestException(String.format("User with username %s doesn't exist!",username)));
-        Book book = mapper.create(bookRequest);
+        Book book = mapper.create(bookDTO);
         if(promoRepository.ifVendorAlreadyCreatedPromo(user, LocalDate.now())){
             if(book.getDiscount()==null){
                 book.setDiscountFromPromo(promoRepository.getActivePromo(user).getDiscount());
@@ -50,25 +50,25 @@ public class BookServiceImpl implements BookService {
         }
 
         book.setUser(user);
-            if (bookRequest.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
+            if (bookDTO.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
                 AudioBook audio = new AudioBook();
-                audio.setDuration(bookRequest.getAudioBook().getDuration());
-                audio.setFragment(bookRequest.getAudioBook().getFragment());
-                audio.setUrlOfBookFromCloud(bookRequest.getAudioBook().getUrlOfBookFromCloud());
+                audio.setDuration(bookDTO.getAudioBook().getDuration());
+                audio.setFragment(bookDTO.getAudioBook().getFragment());
+                audio.setUrlOfBookFromCloud(bookDTO.getAudioBook().getUrlOfBookFromCloud());
                 book.setAudioBook(audio);
 
-            } else if (bookRequest.getBookType().name().equals(BookType.EBOOK.name())) {
+            } else if (bookDTO.getBookType().name().equals(BookType.EBOOK.name())) {
                 ElectronicBook ebook = new ElectronicBook();
-                ebook.setFragmentOfBook(bookRequest.getElectronicBook().getFragmentOfBook());
-                ebook.setNumberOfPages(bookRequest.getElectronicBook().getNumberOfPages());
-                ebook.setUrlOfBookFromCloud(bookRequest.getElectronicBook().getUrlOfBookFromCloud());
+                ebook.setFragmentOfBook(bookDTO.getElectronicBook().getFragmentOfBook());
+                ebook.setNumberOfPages(bookDTO.getElectronicBook().getNumberOfPages());
+                ebook.setUrlOfBookFromCloud(bookDTO.getElectronicBook().getUrlOfBookFromCloud());
                 book.setElectronicBook(ebook);
 
             } else {
                 PaperBook paperBook = new PaperBook();
-                paperBook.setFragmentOfBook(bookRequest.getPaperBook().getFragmentOfBook());
-                paperBook.setNumberOfSelected(bookRequest.getPaperBook().getNumberOfSelected());
-                paperBook.setNumberOfPages(bookRequest.getPaperBook().getNumberOfPages());
+                paperBook.setFragmentOfBook(bookDTO.getPaperBook().getFragmentOfBook());
+                paperBook.setNumberOfSelected(bookDTO.getPaperBook().getNumberOfSelected());
+                paperBook.setNumberOfPages(bookDTO.getPaperBook().getNumberOfPages());
                 book.setPaperBook(paperBook);
             }
             user.getVendorAddedBooks().add(book);
@@ -100,7 +100,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> update(BookRequest newBook, Long bookId) {
+    public ResponseEntity<?> update(BookDTO newBook, Long bookId) {
         Book book = findByBookId(bookId);
 
         String bookName = book.getTitle();

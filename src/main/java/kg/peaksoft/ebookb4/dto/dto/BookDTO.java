@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.dto.request;
+package kg.peaksoft.ebookb4.dto.dto;
 
 import kg.peaksoft.ebookb4.db.models.books.AudioBook;
 import kg.peaksoft.ebookb4.db.models.books.ElectronicBook;
@@ -12,7 +12,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Getter @Setter
-public class BookRequest {
+public class BookDTO {
 
     private String title;
     private String authorFullName;

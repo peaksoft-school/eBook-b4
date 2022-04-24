@@ -2,9 +2,9 @@ package kg.peaksoft.ebookb4.api.auth;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.dto.request.LoginRequest;
-import kg.peaksoft.ebookb4.dto.request.SignupRequestClient;
-import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
+import kg.peaksoft.ebookb4.dto.dto.LoginRequest;
+import kg.peaksoft.ebookb4.dto.dto.ClientDTO;
+import kg.peaksoft.ebookb4.dto.dto.VendorDTO;
 import kg.peaksoft.ebookb4.dto.response.JwtResponse;
 import kg.peaksoft.ebookb4.config.jwt.JwtUtils;
 import kg.peaksoft.ebookb4.config.services.UserDetailsImpl;
@@ -59,13 +59,13 @@ public class AuthApi {
 
     @Operation(summary = "singup", description = "register a client")
     @PostMapping("/signup/client")
-    public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequestClient client) {
+    public ResponseEntity<?> registerClient(@Valid @RequestBody ClientDTO client) {
         return clientService.register(client, 1L);
     }
 
     @Operation(summary = "signup", description = "register a vendor")
     @PostMapping("/signup/vendor")
-    public ResponseEntity<?> registerVendor(@Valid @RequestBody SignupRequestVendor vendor) {
+    public ResponseEntity<?> registerVendor(@Valid @RequestBody VendorDTO vendor) {
         return vendorService.register(vendor, 2L);
     }
 
