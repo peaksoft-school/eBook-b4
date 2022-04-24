@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,10 +33,10 @@ public class ClientServiceImpl implements ClientService {
     private final BookRepository bookRepository;
 
     @Override
-    public ResponseEntity<?> register( SignupRequestClient signupRequestClient, Long number) {
+    public ResponseEntity<?> register(SignupRequestClient signupRequestClient, Long number) {
 
         //checking if passwords are the same or not
-        if(!signupRequestClient.getPassword().equals(signupRequestClient.getConfirmPassword())){
+        if (!signupRequestClient.getPassword().equals(signupRequestClient.getConfirmPassword())) {
             throw new BadRequestException("Passwords are not the same!");
         }
 
@@ -51,8 +52,8 @@ public class ClientServiceImpl implements ClientService {
         user.setRole(roleRepository.getById(number));
         user.setLastName("");
         user.setNumber("");
-            userRepository.save(user);
-
+        user.setDateOfRegistration(LocalDate.now());
+        userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse(
                 String.format("User with email %s registered successfully!", user.getEmail().toUpperCase(Locale.ROOT))));
@@ -61,18 +62,18 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ResponseEntity<?> likeABook(Long bookId, String username) {
 
-        User user = userRepository.getUser(username).orElseThrow(()->
+        User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException("User doesn't exist!"));
         Book book = bookRepository.getById(bookId);
-        if(!book.getIsActive()){
+        if (!book.getIsActive()) {
             throw new BadRequestException("This book has not been went through admin-check!");
         }
-        if(bookRepository.checkIfAlreadyPutLike(bookId, user.getId())>0){
+        if (bookRepository.checkIfAlreadyPutLike(bookId, user.getId()) > 0) {
             throw new BadRequestException("You already put like to this book!");
         }
         user.getLikedBooks().add(book);
         bookRepository.incrementLikesOfBook(bookId);
         return ResponseEntity.ok(new MessageResponse(String.format(
-                "Book with id %s successfully has been liked by user with name %s",bookId,username)));
+                "Book with id %s successfully has been liked by user with name %s", bookId, username)));
     }
 }

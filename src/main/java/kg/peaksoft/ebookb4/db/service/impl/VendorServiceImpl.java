@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -51,7 +52,7 @@ public class VendorServiceImpl implements VendorService {
         user.setLastName(signupRequestVendor.getLastName());
         user.setNumber(signupRequestVendor.getNumber());
         user.setRole(roleRepository.getById(number));
-
+        user.setDateOfRegistration(LocalDate.now());
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse(

@@ -22,7 +22,6 @@ public class SignupRequestVendor {
 
   private String number;
 
-  @JsonIgnore
   private String password;
 
   private String confirmPassword;

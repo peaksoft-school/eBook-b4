@@ -43,7 +43,7 @@ public class User {
     private String firstName;
     private String lastName;
 
-//    private LocalDate dateOfRegistration;
+    private LocalDate dateOfRegistration;
 
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "user")

@@ -82,4 +82,12 @@ public class AdminServiceImpl implements AdminService {
         return clientResponses;
     }
 
+//    @Override
+//    public User getVendor(Long id) {
+//        User user = userRepository.getById(id);
+//        vendorMapper.createVendorDto(user);
+//        return user;
+//    }
+
+
 }
