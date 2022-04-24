@@ -2,7 +2,11 @@ package kg.peaksoft.ebookb4.db.service;
 
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
+import kg.peaksoft.ebookb4.dto.request.VendorRequest;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Zhanarbek Abdurasulov
@@ -11,6 +15,10 @@ import org.springframework.http.ResponseEntity;
 public interface VendorService {
 
     ResponseEntity<?> register(SignupRequestVendor signupRequestVendor, Long number);
-    SignupRequestVendor update(SignupRequestVendor signupRequestVendor,Long id);
+
+    List<User> findAllVendors();
+
+    void deleteVendor(Long id);
+//    ResponseEntity<?> update(SignupRequestVendor signupRequestVendor, String user);
 
 }
