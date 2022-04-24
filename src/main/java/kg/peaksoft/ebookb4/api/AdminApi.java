@@ -32,6 +32,7 @@ public class AdminApi {
     public List<User> getAllVendors(){
        return vendorService.findAllVendors();
     }
+
     @DeleteMapping({"/deleteById/{id}"})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Delete vendor", description = "Delete vendor by id ")

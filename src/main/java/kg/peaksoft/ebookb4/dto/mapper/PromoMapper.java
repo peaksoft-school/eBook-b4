@@ -13,6 +13,7 @@ public class PromoMapper {
 
     public Promocode create(PromoRequest promoRequest){
         Promocode promocode = new Promocode();
+
         promocode.setPromocode(promoRequest.getPromoName());
         promocode.setBeginningDay(promoRequest.getBeginningDay());
         promocode.setEndDay(promoRequest.getEndDay());

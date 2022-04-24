@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -40,6 +41,8 @@ public class User {
     private String number;
     private String firstName;
     private String lastName;
+
+    private LocalDate dateOfRegistration;
 
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "user")
