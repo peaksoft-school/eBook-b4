@@ -15,9 +15,5 @@ public interface VendorService {
 
     ResponseEntity<?> register(SignupRequestVendor signupRequestVendor, Long number);
 
-    List<VendorResponse> findAllVendors();
-
-    void deleteVendor(Long id);
-//    ResponseEntity<?> update(SignupRequestVendor signupRequestVendor, String user);
 
 }

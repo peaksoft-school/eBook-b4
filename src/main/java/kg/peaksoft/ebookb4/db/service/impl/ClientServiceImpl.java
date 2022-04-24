@@ -75,41 +75,4 @@ public class ClientServiceImpl implements ClientService {
         return ResponseEntity.ok(new MessageResponse(String.format(
                 "Book with id %s successfully has been liked by user with name %s",bookId,username)));
     }
-
-//
-//    public SignupRequestClient  updateClient(Long id, SignupRequestClient clientDto) {
-//
-//        User clientFromDatabase = userRepository.findById(id)
-//                .orElseThrow(() -> new BadRequestException(
-//                        "client with id = " + id + " does not exists"
-//                ));
-//        if (!clientDto.getEmail().equals(clientFromDatabase.getEmail())) {
-//            Optional<User> clientOptional = userRepository.getUser(clientDto.getEmail());
-//
-//            if (clientOptional.isPresent()) {
-//                throw new BadRequestException(
-//                        "client with email = " + clientDto.getEmail() + " has already exists"
-//                );
-//            }
-//        }
-//        String currentPassword = clientFromDatabase.getPassword();
-//        String currentPassword2 = encoder.encode(clientDto.getPassword());
-//        System.out.println(currentPassword);
-//        System.out.println(currentPassword2);
-//
-//        boolean matches = encoder.matches(clientDto.getConfirmPassword(), clientFromDatabase.getPassword());
-//
-//        if (!matches) {
-//            throw new BadRequestException(
-//                    "invalid current password "
-//            );
-//        }
-//
-//        clientFromDatabase.setFirstName(clientDto.getFirstName());
-//        clientFromDatabase.setEmail(clientDto.getEmail());
-//        clientFromDatabase.setPassword(encoder.encode(clientDto.getPassword()));
-//
-//        return map.map(clientFromDatabase, ClientDto.class);
-//    }
-
 }
