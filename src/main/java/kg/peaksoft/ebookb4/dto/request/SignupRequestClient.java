@@ -15,6 +15,7 @@ public class SignupRequestClient {
     private String firstName;
     @NotBlank
     private String password;
+
     @NotBlank
     private String confirmPassword;
 }

@@ -36,6 +36,7 @@ public class Book {
     private BookType bookType;
     @Enumerated(value = EnumType.STRING)
     private Genre genre;
+
     private int baskets;
     private int likes;
     private Boolean isActive;
@@ -63,4 +64,11 @@ public class Book {
     @JoinColumn(name = "paperbook_id")
     private PaperBook paperBook;
 
+    @Override
+    public String toString() {
+        return "Book{" +
+                "bookId=" + bookId +
+                ", title='" + title
+                +", price="+price+"}";
+    }
 }

@@ -1,6 +1,8 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
+import kg.peaksoft.ebookb4.db.models.userClasses.Role;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.dto.request.SignupRequestClient;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
@@ -9,19 +11,21 @@ import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
+import java.util.List;
 import java.util.Locale;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional
 public class ClientServiceImpl implements ClientService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
@@ -55,7 +59,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    @Transactional
     public ResponseEntity<?> likeABook(Long bookId, String username) {
 
         User user = userRepository.getUser(username).orElseThrow(()->
@@ -72,6 +75,4 @@ public class ClientServiceImpl implements ClientService {
         return ResponseEntity.ok(new MessageResponse(String.format(
                 "Book with id %s successfully has been liked by user with name %s",bookId,username)));
     }
-
-
 }

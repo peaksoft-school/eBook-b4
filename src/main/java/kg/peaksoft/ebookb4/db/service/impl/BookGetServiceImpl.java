@@ -38,7 +38,6 @@ public class BookGetServiceImpl implements BookGetService {
     @Override
     public List<Book> getAllBooksOrSortedOnes(SortBook sortBook, int offset, int pageSize) {
         promoService.checkPromos();
-        int counter = 0;
         List<Book> books = repository.findAllActive();
         //if it is empty it returns empty list
         if(books.size()<1){
@@ -50,17 +49,19 @@ public class BookGetServiceImpl implements BookGetService {
         if (sortBook.getGenre() != null) {
             System.out.println("I am in sort by genre!");
             if (sortBook.getGenre().size() > 1) {
+                int counter = 0;
                 for(Iterator<Book> iterator = books.iterator(); iterator.hasNext();) {
-                    for (Genre j: sortBook.getGenre()){
-                        if(iterator.next().getGenre().equals(j)){
+                    Book book = iterator.next();
+                    for (Genre g: sortBook.getGenre()){
+                        if(book.getGenre().equals(g)){
                             counter++;
                         }
                     }
                     if(counter==0){
                         iterator.remove();
                     }
+                    counter=0;
                 }
-                counter = 0;
             } else {
                 books.removeIf(book -> book.getGenre().equals(sortBook.getGenre().get(0)));
             }
@@ -68,13 +69,8 @@ public class BookGetServiceImpl implements BookGetService {
 
         //sorting if selected min price and max price
         if (sortBook.getMin() != null && sortBook.getMax() != null) {
-            System.out.println("I am sort by price");
-            for(Iterator<Book> iterator = books.iterator(); iterator.hasNext();){
-                if(iterator.next().getPrice()<sortBook.getMin()||
-                iterator.next().getPrice()>sortBook.getMax()){
-                    iterator.remove();
-                }
-            }
+            System.out.println("I am  in sort by price");
+            books.removeIf(i -> i.getPrice() < sortBook.getMin() || i.getPrice() > sortBook.getMax());
         }
 
         //sorting if there are selected bookType
@@ -84,30 +80,24 @@ public class BookGetServiceImpl implements BookGetService {
         }
 
         //sorting if there are selected language
-        System.out.println(sortBook.getLanguage());
         if (sortBook.getLanguage() != null) {
-            System.out.println("I am in sort by language!");
             if (sortBook.getLanguage().size() > 1) {
-                for(Iterator<Book> iterator = books.iterator(); iterator.hasNext();){
-                    for(Language l : sortBook.getLanguage()){
-                        if(iterator.next().getLanguage().equals(l)){
+                int counter = 0;
+                for(Iterator<Book> iterator = books.iterator(); iterator.hasNext();) {
+                    Book book = iterator.next();
+                    for (Language l: sortBook.getLanguage()){
+                        if(book.getLanguage().equals(l)){
                             counter++;
                         }
                     }
                     if(counter==0){
                         iterator.remove();
                     }
+                    counter=0;
                 }
-                counter = 0;
+            } else {
+                books.removeIf(book -> !book.getLanguage().equals(sortBook.getLanguage().get(0)));
             }
-            //following code could be deleted
-//            else {
-//                for(Iterator<Book> iterator = books.iterator(); iterator.hasNext(); iterator.next()){
-//                    if(iterator.next().getLanguage().equals(sortBook.getLanguage().get(0))){
-//                        iterator.remove();
-//                    }
-//                }
-//            }
         }
 
         Pageable paging = PageRequest.of(offset, pageSize);

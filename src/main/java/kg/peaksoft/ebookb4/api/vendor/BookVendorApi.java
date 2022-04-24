@@ -1,18 +1,15 @@
-package kg.peaksoft.ebookb4.api.vendorApi;
+package kg.peaksoft.ebookb4.api.vendor;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.db.service.PromoService;
-import kg.peaksoft.ebookb4.dto.request.BookRequest;
 import kg.peaksoft.ebookb4.db.service.BookService;
+import kg.peaksoft.ebookb4.dto.request.BookRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @CrossOrigin
@@ -24,44 +21,39 @@ import java.util.List;
 public class BookVendorApi {
 
     private final BookService bookService;
-    private PromoService promoService;
 
-
-    @Operation(summary = "save book",description = "save a new book")
+    @Operation(summary = "Save book",description = "Add a new book")
     @PostMapping("/saveBook")
-    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest, Authentication authentication){
+    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest,
+                                      Authentication authentication){
         return  bookService.register(bookRequest, authentication.getName());
     }
 
-    @Operation(summary = "delete book",description = "delete a book")
+    @Operation(summary = "Delete book",description = "delete a book")
     @DeleteMapping("/deleteBook/{bookId}")
     public ResponseEntity<?> delete(@PathVariable Long bookId) {
         return bookService.delete(bookId);
     }
 
-    @Operation(summary = "update book",description = "update a book")
+    @Operation(summary = "Update book",description = "update a book")
     @PatchMapping("/updateBook/{bookId}")
     public ResponseEntity<?> update(@RequestBody BookRequest request,
                                     @PathVariable Long bookId){
         return bookService.update(request,bookId);
     }
 
-    @Operation(summary = "get book for vendor/admin", description = "get book by id for vendor/admin")
+    @Operation(summary = "Get book for vendor/admin",
+            description = "Get book by id for vendor")
     @GetMapping("/getBookById{id}")
     public Book getBookById(@PathVariable Long id){
         return bookService.findByBookId(id);
     }
 
-
-    @Operation(summary = "get all books for vendor/admin", description = "get all books by id for vendor/admin")
+    @Operation(summary = "Get all books for vendor/admin",
+            description = "Get all books by id for vendor")
     @GetMapping("/getBooks/{offset}")
     public List<Book> getBooks(@PathVariable Integer offset,Authentication authentication){
         return bookService.findBooksFromVendor(--offset, 12, authentication.getName());
     }
-
-
-
-
-
 
 }
