@@ -5,11 +5,9 @@ import lombok.*;
 
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Getter
 @Setter
-@ToString
 public class VendorResponse {
 
     private Long vendorId;
@@ -17,6 +15,6 @@ public class VendorResponse {
     private String lastName;
     private String phoneNumber;
     private String email;
-    private List<Book> vendorAddedBooks;
+    private int amountOfBooks;
 
 }
