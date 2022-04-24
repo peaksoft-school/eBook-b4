@@ -34,7 +34,7 @@ public class AdminApi {
     }
     @DeleteMapping({"/deleteById/{id}"})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = "Удаление продавца", description = "Позволяет удалить продавца по 'id' самого себя ")
+    @Operation(summary = "Delete vendor", description = "Delete vendor by id ")
     public ResponseEntity<Void> deleteVendorById(@PathVariable("id") Long id) {
         vendorService.deleteVendor(id);
         return ResponseEntity.ok().build();
