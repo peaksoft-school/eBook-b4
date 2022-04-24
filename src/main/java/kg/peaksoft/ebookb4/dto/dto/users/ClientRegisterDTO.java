@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.dto.dto;
+package kg.peaksoft.ebookb4.dto.dto.users;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 
 @Getter @Setter
-public class ClientDTO {
+public class ClientRegisterDTO {
 
     private String email;
 

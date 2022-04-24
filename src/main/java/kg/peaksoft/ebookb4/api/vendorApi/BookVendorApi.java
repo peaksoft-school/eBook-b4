@@ -3,7 +3,7 @@ package kg.peaksoft.ebookb4.api.vendorApi;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.dto.dto.BookDTO;
+import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

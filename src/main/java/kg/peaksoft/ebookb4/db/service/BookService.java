@@ -1,6 +1,6 @@
 package kg.peaksoft.ebookb4.db.service;
 
-import kg.peaksoft.ebookb4.dto.dto.BookDTO;
+import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import org.springframework.http.ResponseEntity;
 

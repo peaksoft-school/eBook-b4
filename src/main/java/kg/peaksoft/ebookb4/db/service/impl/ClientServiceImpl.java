@@ -3,7 +3,10 @@ package kg.peaksoft.ebookb4.db.service.impl;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.repository.BasketRepository;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import kg.peaksoft.ebookb4.dto.dto.ClientDTO;
+import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
+import kg.peaksoft.ebookb4.dto.dto.users.ClientUpdateDTO;
+import kg.peaksoft.ebookb4.dto.dto.users.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.dto.mapper.ClientRegisterMapper;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
@@ -26,24 +29,25 @@ public class ClientServiceImpl implements ClientService {
     private final RoleRepository roleRepository;
     private final BookRepository bookRepository;
     private final BasketRepository basketRepository;
+    ClientRegisterMapper clientRegisterMapper;
 
     @Override
-    public ResponseEntity<?> register(ClientDTO clientDTO, Long number) {
+    public ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number) {
 
         //checking if passwords are the same or not
-        if(!clientDTO.getPassword().equals(clientDTO.getConfirmPassword())){
+        if(!clientRegisterDTO.getPassword().equals(clientRegisterDTO.getConfirmPassword())){
             throw new BadRequestException("Passwords are not the same!");
         }
 
-        if (userRepository.existsByEmail(clientDTO.getEmail())) {
+        if (userRepository.existsByEmail(clientRegisterDTO.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
         User user = new User(
-                clientDTO.getEmail(),
-                encoder.encode(clientDTO.getPassword()));
-        user.setFirstName(clientDTO.getFirstName());
+                clientRegisterDTO.getEmail(),
+                encoder.encode(clientRegisterDTO.getPassword()));
+        user.setFirstName(clientRegisterDTO.getFirstName());
         user.setRole(roleRepository.getById(number));
         user.setLastName("");
         user.setNumber("");
@@ -91,6 +95,51 @@ public class ClientServiceImpl implements ClientService {
         return ResponseEntity.ok(new MessageResponse(String.format("Book with id %s has been added to basket of user" +
                 "with username %s",bookId,username)));
 
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> update(ClientUpdateDTO newClientDTO, String username) {
+        User user = userRepository.getUser(username).orElseThrow(()->
+                new BadRequestException(String.format("User with username %s has not been found", username)));
+
+        if (userRepository.existsByEmail(newClientDTO.getEmail())){
+            throw new BadRequestException(String.format("Please choose another email, %s email is not available", newClientDTO.getEmail()));
+        }
+        String oldEmail = user.getEmail();
+        String newEmail = newClientDTO.getEmail();
+        if(!oldEmail.equals(newEmail)){
+            user.setEmail(newEmail);
+        }
+        String oldFirstName = user.getFirstName();
+        String newFirstName = newClientDTO.getFirstName();
+        if(!oldFirstName.equals(newFirstName)){
+            user.setFirstName(newFirstName);
+        }
+        String oldPasswordOldUser = user.getPassword();
+
+        String oldPasswordNewUser = newClientDTO.getOldPassword();
+        String newPasswordNewUser = newClientDTO.getNewPassword();
+        String newPasswordConfirmNewUser = newClientDTO.getConfirmNewPassword();
+        if(encoder.matches(oldPasswordNewUser, oldPasswordOldUser)){
+            if(newPasswordNewUser.equals(newPasswordConfirmNewUser)){
+                user.setPassword(encoder.encode(newPasswordNewUser));
+            }
+            else{
+                throw new BadRequestException("Your new password didn't match!");
+            }
+        }
+        else{
+            throw new BadRequestException("You wrote wrong old password!");
+        }
+
+        return ResponseEntity.ok("User have changed details");
+    }
+
+    @Override
+    public ClientRegisterDTO getClientDetails(String username) {
+        return clientRegisterMapper.createDTO(userRepository.getUser(username).orElseThrow(()->
+                new BadRequestException(String.format("User with username %s has not been found!", username))));
     }
 
     public Long getUsersBasketId(String username){

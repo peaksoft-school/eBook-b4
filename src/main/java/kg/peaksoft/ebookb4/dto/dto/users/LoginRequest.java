@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.dto.dto;
+package kg.peaksoft.ebookb4.dto.dto.users;
 
 import lombok.Getter;
 import lombok.Setter;

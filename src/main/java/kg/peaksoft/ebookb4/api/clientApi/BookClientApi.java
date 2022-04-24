@@ -22,12 +22,16 @@ import org.springframework.web.bind.annotation.*;
 public class BookClientApi {
 
     private ClientService clientService;
-
     @Operation(summary = "add to basket",description = "add a book to basket")
     @PostMapping("/addToBasket/{bookId}")
     public ResponseEntity<?> addToBasket(@PathVariable Long bookId, Authentication authentication){
         return clientService.addBookToBasket(bookId, authentication.getName());
 
+    }
+
+    @PostMapping("/like-book/{bookId}")
+    public ResponseEntity<?> likeBook(@PathVariable Long bookId, Authentication authentication){
+        return clientService.likeABook(bookId, authentication.getName());
     }
 
 

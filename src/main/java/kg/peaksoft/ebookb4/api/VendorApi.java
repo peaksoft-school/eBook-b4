@@ -2,12 +2,11 @@ package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.db.repository.UserRepository;
-import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.db.service.VendorService;
-import kg.peaksoft.ebookb4.dto.dto.PromoRequest;
-import kg.peaksoft.ebookb4.dto.dto.VendorDTO;
+import kg.peaksoft.ebookb4.dto.dto.others.PromoRequest;
+import kg.peaksoft.ebookb4.dto.dto.users.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.dto.dto.users.VendorUpdateDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,10 +21,8 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Vendor",description = "Vendor accessible apis")
 public class VendorApi {
 
-    private BookService bookService;
     private PromoService promoService;
     private VendorService vendorService;
-    private UserRepository userRepository;
 
     @Operation(summary = "promo", description = "Vendor creates a promo")
     @PostMapping("/create-promo")
@@ -33,21 +30,16 @@ public class VendorApi {
         return promoService.createPromo(promoRequest, authentication.getName());
     }
 
+    @GetMapping("/getDetails")
+    public VendorRegisterDTO getVendorDetails(Authentication authentication){
+        return vendorService.getVendorDetails(authentication.getName());
+    }
 
-//    public ResponseEntity<?> getVendorDetails(Authentication authentication){
-//
-//    }
-//
-//    public ResponseEntity<?> updateVendor(@RequestBody VendorDTO vendor){
-//
-//    }
+    @PatchMapping("/update")
+    public ResponseEntity<?> updateVendor(@RequestBody VendorUpdateDTO newVendorDTO, Authentication authentication){
+        return vendorService.update(newVendorDTO, authentication.getName());
+    }
 
-//    @Operation(summary = "Update Vendor By Id" ,description = "Update")
-//    @PatchMapping("/updateById")
-//    public ResponseEntity<?> updateVendorById( SignupRequestVendor signupRequestVendor){
-//        String user = SecurityContextHolder.getContext().getAuthentication().getName();
-//        return vendorService.update(signupRequestVendor,user);
-//    }
 
 
 }

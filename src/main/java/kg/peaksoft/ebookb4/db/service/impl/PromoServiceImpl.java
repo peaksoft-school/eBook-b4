@@ -7,7 +7,7 @@ import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.dto.mapper.PromoMapper;
-import kg.peaksoft.ebookb4.dto.dto.PromoRequest;
+import kg.peaksoft.ebookb4.dto.dto.others.PromoRequest;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;

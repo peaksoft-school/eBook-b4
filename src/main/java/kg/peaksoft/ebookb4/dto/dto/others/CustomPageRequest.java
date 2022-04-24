@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.dto.dto;
+package kg.peaksoft.ebookb4.dto.dto.others;
 
 import kg.peaksoft.ebookb4.db.models.others.CustomPage;
 import lombok.AllArgsConstructor;

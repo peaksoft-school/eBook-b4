@@ -1,6 +1,6 @@
 package kg.peaksoft.ebookb4.db.service;
 
-import kg.peaksoft.ebookb4.dto.dto.PromoRequest;
+import kg.peaksoft.ebookb4.dto.dto.others.PromoRequest;
 import org.springframework.http.ResponseEntity;
 
 /**
