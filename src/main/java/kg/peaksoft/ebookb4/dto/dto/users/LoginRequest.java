@@ -3,14 +3,16 @@ package kg.peaksoft.ebookb4.dto.dto.users;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@Getter @Setter
+@Getter
+@Setter
 public class LoginRequest {
-	@NotBlank
-  	private String email;
 
-	@NotBlank
-	private String password;
+    @Email
+    private String email;
+    @NotBlank
+    private String password;
 
 }

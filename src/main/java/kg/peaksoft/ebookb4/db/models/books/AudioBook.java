@@ -9,7 +9,8 @@ import javax.persistence.*;
 import java.time.LocalTime;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @RequiredArgsConstructor
 public class AudioBook {
 

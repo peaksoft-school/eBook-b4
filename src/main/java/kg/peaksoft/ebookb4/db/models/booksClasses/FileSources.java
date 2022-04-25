@@ -10,7 +10,8 @@ import javax.persistence.*;
 import java.io.File;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class FileSources {

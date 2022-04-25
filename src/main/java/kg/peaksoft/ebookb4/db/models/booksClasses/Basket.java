@@ -10,7 +10,8 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @RequiredArgsConstructor
 public class Basket {
 
@@ -22,13 +23,9 @@ public class Basket {
 
     @ManyToMany
     @JoinTable(
-            name = "basket_books",
-            joinColumns = @JoinColumn(
-                    name = "basket_id",
-                    referencedColumnName = "basket_id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "book_id",
-                    referencedColumnName = "book_id"))
+            name = "books_basket"
+            , joinColumns = @JoinColumn(name = "basket_id")
+            , inverseJoinColumns = @JoinColumn(name = "book_id"))
     private List<Book> books;
 
     @OneToOne

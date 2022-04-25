@@ -1,7 +1,5 @@
 package kg.peaksoft.ebookb4.db.models.enums;
 
-import org.springframework.security.core.GrantedAuthority;
-
 /**
  * Author: Zhanarbek Abdurasulov
  * Date: 12/4/22
