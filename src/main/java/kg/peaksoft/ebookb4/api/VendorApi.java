@@ -25,7 +25,7 @@ public class VendorApi {
     private VendorService vendorService;
 
     @Operation(summary = "Promo", description = "Vendor creates a promo")
-    @PostMapping("/create-promo")
+    @PostMapping("/promo")
     public ResponseEntity<?> createPromo(@RequestBody PromoRequest promoRequest, Authentication authentication){
         return promoService.createPromo(promoRequest, authentication.getName());
     }
