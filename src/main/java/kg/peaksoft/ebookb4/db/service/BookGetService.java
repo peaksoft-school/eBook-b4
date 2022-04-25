@@ -1,14 +1,9 @@
 package kg.peaksoft.ebookb4.db.service;
 
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
-import kg.peaksoft.ebookb4.db.models.enums.BookType;
+import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
-import kg.peaksoft.ebookb4.db.models.enums.Language;
-import kg.peaksoft.ebookb4.db.models.others.SortBook;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface BookGetService {
@@ -17,7 +12,7 @@ public interface BookGetService {
 
     List<Book> findBooksByName(String name);
 
-    List<Book> getAllBooksOrSortedOnes(SortBook sortBook);
+    List<Book> getAllBooksOrSortedOnes(SortBooksGlobal sortBook, int offset, int pageSize);
 
     Book getBookById(Long id);
 

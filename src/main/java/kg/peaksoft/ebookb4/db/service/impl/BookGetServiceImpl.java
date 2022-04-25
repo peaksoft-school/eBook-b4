@@ -1,17 +1,19 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
-import kg.peaksoft.ebookb4.db.models.enums.BookType;
+import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
-import kg.peaksoft.ebookb4.db.models.others.SortBook;
+import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
+import kg.peaksoft.ebookb4.db.service.PromoService;
+import kg.peaksoft.ebookb4.dto.dto.others.CustomPageRequest;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -19,101 +21,97 @@ import java.util.List;
 public class BookGetServiceImpl implements BookGetService {
 
     private final BookRepository repository;
+    private PromoService promoService;
 
     @Override
     public List<Book> findByGenre(Genre genre) {
+        promoService.checkPromos();
         return repository.findAllByGenre(genre);
     }
 
     @Override
     public List<Book> findBooksByName(String name) {
+        promoService.checkPromos();
         return repository.findByName(name);
     }
 
     @Override
-    public List<Book> getAllBooksOrSortedOnes(SortBook sortBook) {
-        int counter = 0;
+    public List<Book> getAllBooksOrSortedOnes(SortBooksGlobal sortBook, int offset, int pageSize) {
+        promoService.checkPromos();
         List<Book> books = repository.findAllActive();
         //if it is empty it returns empty list
         if(books.size()<1){
             return books;
         }
-        //show only active ones
-        for(int i = 0; i<books.size();i++){
-            if(!books.get(i).getIsActive()){
-                books.remove(i);
-            }
-        }
+        //it should be deleted
+        books.removeIf(book -> !book.getIsActive());
         //sorting if there are selected genres
         if (sortBook.getGenre() != null) {
             System.out.println("I am in sort by genre!");
             if (sortBook.getGenre().size() > 1) {
-                for (int k = 0; k < books.size(); k++) {
-                    for (Genre j : sortBook.getGenre()) {
-                        if (books.get(k).getGenre().equals(j)) {
+                int counter = 0;
+                for(Iterator<Book> iterator = books.iterator(); iterator.hasNext();) {
+                    Book book = iterator.next();
+                    for (Genre g: sortBook.getGenre()){
+                        if(book.getGenre().equals(g)){
                             counter++;
                         }
                     }
-                    if (counter == 0) {
-                        books.remove(k);
+                    if(counter==0){
+                        iterator.remove();
                     }
+                    counter=0;
                 }
-                counter = 0;
             } else {
-                for (int j = 0; j < books.size(); j++) {
-                    if (!books.get(j).getGenre().equals(sortBook.getGenre().get(0))) {
-                        books.remove(j);
-                    }
-                }
+                System.out.println("In else of sort by genre");
+                books.removeIf(book -> book.getGenre().equals(sortBook.getGenre().get(0)));
             }
         }
+
         //sorting if selected min price and max price
         if (sortBook.getMin() != null && sortBook.getMax() != null) {
-            System.out.println("I am sort by price");
-            for (int i = 0; i < books.size(); i++) {
-                if (books.get(i).getPrice() < sortBook.getMin() || books.get(i).getPrice() > sortBook.getMax()) {
-                    books.remove(i);
-                }
-            }
+            System.out.println("I am  in sort by price");
+            books.removeIf(i -> i.getPrice() < sortBook.getMin() || i.getPrice() > sortBook.getMax());
         }
+
         //sorting if there are selected bookType
         if (sortBook.getBookType() != null) {
             System.out.println("I am sort by BookType");
-            for (int i = 0; i < books.size(); i++) {
-                if (books.get(i).getBookType() != sortBook.getBookType()) {
-                    books.remove(i);
-                }
-            }
+            books.removeIf(i -> !i.getBookType().equals(sortBook.getBookType()));
         }
+        System.out.println(books.size());
         //sorting if there are selected language
         if (sortBook.getLanguage() != null) {
-            System.out.println("I am in sort by language!");
             if (sortBook.getLanguage().size() > 1) {
-                for (int k = 0; k < books.size(); k++) {
-                    for (Language l : sortBook.getLanguage()) {
-                        if (books.get(k).getLanguage().equals(l)) {
+                int counter = 0;
+                for(Iterator<Book> iterator = books.iterator(); iterator.hasNext();) {
+                    Book book = iterator.next();
+                    for (Language l: sortBook.getLanguage()){
+                        if(book.getLanguage().equals(l)){
                             counter++;
                         }
                     }
-                    if (counter == 0) {
-                        books.remove(k);
+                    if(counter==0){
+                        iterator.remove();
                     }
+                    counter=0;
                 }
-                counter = 0;
             } else {
-                for (int j = 0; j < books.size(); j++) {
-                    if (!books.get(j).getLanguage().equals(sortBook.getLanguage().get(0))) {
-                        books.remove(j);
-                    }
-                }
+                books.removeIf(book -> !book.getLanguage().equals(sortBook.getLanguage().get(0)));
             }
         }
-        return books;
+
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), books.size());
+        int end = Math.min((start + paging.getPageSize()), books.size());
+        Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
+        return new CustomPageRequest<Book>(pages).getContent();
     }
 
     @Override
     public Book getBookById(Long id) {
-        return repository.findBookById(id).orElseThrow(()->
+        promoService.checkPromos();
+        return repository.findBookByIdAndActive(id).orElseThrow(()->
                 new BadRequestException("This book is not went through admin-check yet!"));
     }
 

@@ -3,25 +3,26 @@ package kg.peaksoft.ebookb4.db.service.impl;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
 import kg.peaksoft.ebookb4.db.service.BookService;
+import kg.peaksoft.ebookb4.dto.dto.others.CustomPageRequest;
 import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
-import kg.peaksoft.ebookb4.dto.request.BookRequest;
+import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
-import kg.peaksoft.ebookb4.db.models.bookClasses.AudioBook;
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
-import kg.peaksoft.ebookb4.db.models.bookClasses.ElectronicBook;
-import kg.peaksoft.ebookb4.db.models.bookClasses.PaperBook;
+import kg.peaksoft.ebookb4.db.models.books.AudioBook;
+import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.books.ElectronicBook;
+import kg.peaksoft.ebookb4.db.models.books.PaperBook;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -37,37 +38,37 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public ResponseEntity<?> register(BookRequest bookRequest, String username) {
+    public ResponseEntity<?> register(BookDTO bookDTO, String username) {
 
         User user = userRepository.getUser(username).orElseThrow(()->
                 new BadRequestException(String.format("User with username %s doesn't exist!",username)));
-        Book book = mapper.create(bookRequest);
-        if(promoRepository.ifVendorAlreadyCreatedPromo(user)){
+        Book book = mapper.create(bookDTO);
+        if(promoRepository.ifVendorAlreadyCreatedPromo(user, LocalDate.now())){
             if(book.getDiscount()==null){
                 book.setDiscountFromPromo(promoRepository.getActivePromo(user).getDiscount());
             }
         }
 
         book.setUser(user);
-            if (bookRequest.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
+            if (bookDTO.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
                 AudioBook audio = new AudioBook();
-                audio.setDuration(bookRequest.getAudioBook().getDuration());
-                audio.setFragment(bookRequest.getAudioBook().getFragment());
-                audio.setUrlOfBookFromCloud(bookRequest.getAudioBook().getUrlOfBookFromCloud());
+                audio.setDuration(bookDTO.getAudioBook().getDuration());
+                audio.setFragment(bookDTO.getAudioBook().getFragment());
+                audio.setUrlOfBookFromCloud(bookDTO.getAudioBook().getUrlOfBookFromCloud());
                 book.setAudioBook(audio);
 
-            } else if (bookRequest.getBookType().name().equals(BookType.EBOOK.name())) {
+            } else if (bookDTO.getBookType().name().equals(BookType.EBOOK.name())) {
                 ElectronicBook ebook = new ElectronicBook();
-                ebook.setFragmentOfBook(bookRequest.getElectronicBook().getFragmentOfBook());
-                ebook.setNumberOfPages(bookRequest.getElectronicBook().getNumberOfPages());
-                ebook.setUrlOfBookFromCloud(bookRequest.getElectronicBook().getUrlOfBookFromCloud());
+                ebook.setFragmentOfBook(bookDTO.getElectronicBook().getFragmentOfBook());
+                ebook.setNumberOfPages(bookDTO.getElectronicBook().getNumberOfPages());
+                ebook.setUrlOfBookFromCloud(bookDTO.getElectronicBook().getUrlOfBookFromCloud());
                 book.setElectronicBook(ebook);
 
             } else {
                 PaperBook paperBook = new PaperBook();
-                paperBook.setFragmentOfBook(bookRequest.getPaperBook().getFragmentOfBook());
-                paperBook.setNumberOfSelected(bookRequest.getPaperBook().getNumberOfSelected());
-                paperBook.setNumberOfPages(bookRequest.getPaperBook().getNumberOfPages());
+                paperBook.setFragmentOfBook(bookDTO.getPaperBook().getFragmentOfBook());
+                paperBook.setNumberOfSelected(bookDTO.getPaperBook().getNumberOfSelected());
+                paperBook.setNumberOfPages(bookDTO.getPaperBook().getNumberOfPages());
                 book.setPaperBook(paperBook);
             }
             user.getVendorAddedBooks().add(book);
@@ -90,21 +91,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findAll() {
-        return repository.findAll();
-    }
-
-    @Override
     public ResponseEntity<?> delete(Long bookId) {
         repository.deleteById(bookId);
         return ResponseEntity.ok(new MessageResponse(
                 String.format("Book with id = %s successfully delete!", bookId)));
     }
 
-
     @Override
     @Transactional
-    public ResponseEntity<?> update(BookRequest newBook, Long bookId) {
+    public ResponseEntity<?> update(BookDTO newBook, Long bookId) {
         Book book = findByBookId(bookId);
 
         String bookName = book.getTitle();
@@ -182,9 +177,64 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findBooksFromVendor(String username) {
-        return repository.findBooksFromVendor(username);
+    public List<Book> findBooksFromVendor(Integer offset, int pageSize, String username) {
+        List<Book> books = repository.findBooksFromVendor(username);
+        System.out.println(books.size());
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), books.size());
+        int end = Math.min((start + paging.getPageSize()), books.size());
+        Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
+        return new CustomPageRequest<>(pages).getContent();
     }
 
+    @Override
+    public List<Book> findBooksFromVendorInFavorites(Integer offset, int pageSize, String username) {
+        List<Book> likedBooksFromVendor = repository.findLikedBooksFromVendor(username);
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), likedBooksFromVendor.size());
+        int end = Math.min((start + paging.getPageSize()), likedBooksFromVendor.size());
+        Page<Book> pages = new PageImpl<>(likedBooksFromVendor.subList(start, end), paging, likedBooksFromVendor.size());
+        return new CustomPageRequest<>(pages).getContent();
+    }
+
+    @Override
+    public List<Book> findBooksFromVendorAddedToBasket(Integer offset, int pageSize, String username) {
+        List<Book> booksWithBasket = repository.findBooksFromVendorAddedToBasket(username);
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), booksWithBasket.size());
+        int end = Math.min((start + paging.getPageSize()), booksWithBasket.size());
+        Page<Book> pages = new PageImpl<>(booksWithBasket.subList(start, end), paging, booksWithBasket.size());
+        return new CustomPageRequest<>(pages).getContent();
+    }
+
+    @Override
+    public List<Book> findBooksFromVendorWithDiscount(Integer offset, int pageSize, String username) {
+        List<Book> booksWithDiscount = repository.findBooksFromVendorWithDiscount(username);
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), booksWithDiscount.size());
+        int end = Math.min((start + paging.getPageSize()), booksWithDiscount.size());
+        Page<Book> pages = new PageImpl<>(booksWithDiscount.subList(start, end), paging, booksWithDiscount.size());
+        return new CustomPageRequest<>(pages).getContent();
+    }
+
+    @Override
+    public List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username) {
+        List<Book> booksWithCancel = repository.findBooksFromVendorWithCancel(username);
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), booksWithCancel.size());
+        int end = Math.min((start + paging.getPageSize()), booksWithCancel.size());
+        Page<Book> pages = new PageImpl<>(booksWithCancel.subList(start, end), paging, booksWithCancel.size());
+        return new CustomPageRequest<>(pages).getContent();
+    }
+
+    @Override
+    public List<Book> findBooksFromVendorInProgress(Integer offset, int pageSize, String username) {
+        List<Book> booksInProgress = repository.findBooksFromVendorInProgress(username);
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int)paging.getOffset(), booksInProgress.size());
+        int end = Math.min((start + paging.getPageSize()), booksInProgress.size());
+        Page<Book> pages = new PageImpl<>(booksInProgress.subList(start, end), paging, booksInProgress.size());
+        return new CustomPageRequest<>(pages).getContent();
+    }
 
 }

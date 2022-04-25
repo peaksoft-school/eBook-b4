@@ -1,6 +1,7 @@
-package kg.peaksoft.ebookb4.db.models.others;
+package kg.peaksoft.ebookb4.db.models.booksClasses;
 
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import lombok.*;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class Basket {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
 

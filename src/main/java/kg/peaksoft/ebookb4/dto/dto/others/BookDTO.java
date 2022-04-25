@@ -1,21 +1,18 @@
-package kg.peaksoft.ebookb4.dto.request;
+package kg.peaksoft.ebookb4.dto.dto.others;
 
-import kg.peaksoft.ebookb4.db.models.bookClasses.AudioBook;
-import kg.peaksoft.ebookb4.db.models.bookClasses.ElectronicBook;
-import kg.peaksoft.ebookb4.db.models.bookClasses.PaperBook;
+import kg.peaksoft.ebookb4.db.models.books.AudioBook;
+import kg.peaksoft.ebookb4.db.models.books.ElectronicBook;
+import kg.peaksoft.ebookb4.db.models.books.PaperBook;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.logging.Filter;
 
-@Getter
-@Setter
-public class BookRequest {
+@Getter @Setter
+public class BookDTO {
 
     private String title;
     private String authorFullName;

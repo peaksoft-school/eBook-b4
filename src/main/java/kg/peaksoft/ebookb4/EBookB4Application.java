@@ -1,21 +1,20 @@
 package kg.peaksoft.ebookb4;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
-import kg.peaksoft.ebookb4.db.models.others.Basket;
 import kg.peaksoft.ebookb4.db.models.userClasses.Role;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
-import kg.peaksoft.ebookb4.db.repository.BasketRepository;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
 
 @RestController
 @SpringBootApplication
@@ -27,17 +26,12 @@ public class EBookB4Application {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
 
-    @GetMapping("/")
-    public String greetingPage(){
-        return "<h1>Welcome to eBook application!!!<h1/>";
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(EBookB4Application.class, args);
         System.out.println("Welcome colleagues, project name is eBook!");
     }
 
-//    @PostConstruct
+    @PostConstruct
     public void init() {
         Role client = new Role();
         client.setId(1L);
@@ -59,6 +53,7 @@ public class EBookB4Application {
         Basket basket1 = new Basket();
         basket1.setUser(c);
         c.setBasket(basket1);
+        c.setDateOfRegistration(LocalDate.now());
         userRepository.save(c);
 
 
@@ -69,6 +64,7 @@ public class EBookB4Application {
         Basket basket2 = new Basket();
         basket2.setUser(v);
         v.setBasket(basket2);
+        v.setDateOfRegistration(LocalDate.now());
         userRepository.save(v);
 
         User a = new User();
@@ -78,6 +74,7 @@ public class EBookB4Application {
         Basket basket = new Basket();
         basket.setUser(a);
         a.setBasket(basket);
+        a.setDateOfRegistration(LocalDate.now());
         userRepository.save(a);
 
     }

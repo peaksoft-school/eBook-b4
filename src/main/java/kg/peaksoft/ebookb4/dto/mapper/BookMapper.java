@@ -1,13 +1,13 @@
 package kg.peaksoft.ebookb4.dto.mapper;
 
-import kg.peaksoft.ebookb4.dto.request.BookRequest;
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
+import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
+import kg.peaksoft.ebookb4.db.models.books.Book;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BookMapper {
 
-    public Book create(BookRequest dto) {
+    public Book create(BookDTO dto) {
 
         Book book = new Book();
         book.setTitle(dto.getTitle());

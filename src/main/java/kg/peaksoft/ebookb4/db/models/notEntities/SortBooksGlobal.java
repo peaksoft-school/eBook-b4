@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.db.models.others;
+package kg.peaksoft.ebookb4.db.models.notEntities;
 
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
@@ -7,13 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-@Getter
-@Setter
-@ToString
-public class SortBook {
+@Getter @Setter @ToString
+public class SortBooksGlobal {
 
     private Double min;
 
@@ -21,7 +18,7 @@ public class SortBook {
 
     private List<Genre> genre;
 
-    private BookType bookType;
+    private BookType bookType  = BookType.PAPERBOOK;
 
-    private List<Language> language;
+    private List<Language> language = List.of(Language.KYRGYZ);
 }

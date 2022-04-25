@@ -1,17 +1,18 @@
 package kg.peaksoft.ebookb4.db.models.userClasses;
 
-import kg.peaksoft.ebookb4.db.models.bookClasses.Book;
-import kg.peaksoft.ebookb4.db.models.others.Basket;
-import kg.peaksoft.ebookb4.db.models.others.ClientOperations;
-import kg.peaksoft.ebookb4.db.models.others.Favorites;
-import kg.peaksoft.ebookb4.db.models.others.Promocode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
+import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
+//import kg.peaksoft.ebookb4.db.models.booksClasses.Favorites;
+import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -21,8 +22,7 @@ import java.util.List;
         })
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Getter @Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
@@ -39,32 +39,28 @@ public class User {
     @NotBlank
     @Size(min = 8, max = 64, message = "Password must be 8-64 char long")
     private String password;
-
-
     private String number;
-
     private String firstName;
-
     private String lastName;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private LocalDate dateOfRegistration;
+
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "user")
     private List<Book> vendorAddedBooks;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(
-            name = "user_liked_books",
+            name = "liked_books",
             joinColumns = @JoinColumn(
                     name = "user_id",
-                    referencedColumnName = "user_id"
-
-            ),
+                    referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(
-                    name = "favorite_id",
-                    referencedColumnName = "favorite_id"
-            )
-    )
-    private List<Favorites> likedBooks;
+                    name = "book_id",
+                    referencedColumnName = "book_id"))
+    private List<Book> likedBooks;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JoinColumn(name = "basket_id")
     private Basket basket;
@@ -89,6 +85,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                '}' + "\n";
+                '}'+"\n";
     }
 }
