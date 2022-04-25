@@ -19,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin")
 @AllArgsConstructor
+@CrossOrigin(origins = "*", maxAge = 3600)
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @Tag(name = "Admin",description = "Admin accessible apis")
 public class AdminApi {
@@ -26,7 +27,7 @@ public class AdminApi {
     private AdminService service;
 
     @Operation(summary = "Get all books" )
-    @GetMapping("/getBooks/")
+    @GetMapping("/books")
     public List<Book> getAllBook() {
         return service.getBooks();
     }
