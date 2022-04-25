@@ -23,6 +23,7 @@ public interface AdminService {
     List<VendorResponse> findAllVendors();
 
     ResponseEntity<?> deleteById(Long id);
+    ResponseEntity<?> deleteBookById(Long id);
 
     List<ClientResponse> findAllClient();
 

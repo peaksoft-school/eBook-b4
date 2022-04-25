@@ -73,6 +73,16 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public ResponseEntity<?> deleteBookById(Long id) {
+        if (!bookRepository.existsById(id)) {
+            throw new BadRequestException(
+                    "Vendor with id " + id + " does not exists");
+        }
+        bookRepository.deleteById(id);
+        return ResponseEntity.ok("Successfully deleter");
+    }
+
+    @Override
     public List<ClientResponse> findAllClient() {
         List<User> users = userRepository.findAllClients(ERole.ROLE_CLIENT);
         List<ClientResponse> clientResponses = new ArrayList<>();
@@ -85,7 +95,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public VendorResponse getVendor(Long id) {
         User user = userRepository.getById(id);
-      return   vendorMapper.createVendorDto(user);
+        return vendorMapper.createVendorDto(user);
     }
 
     @Override

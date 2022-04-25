@@ -61,13 +61,6 @@ public class AdminApi {
        return service.findAllVendors();
     }
 
-    @Operation(summary = "Delete client/vendor ",
-            description = "Delete user by id ")
-    @DeleteMapping({"/deleteById/{id}"})
-    public ResponseEntity<?> deleteVendorById(@PathVariable("id") Long id) {
-       return service.deleteById(id);
-    }
-
     @Operation(summary = "Get all client",
             description = "Get all client ")
     @GetMapping("/getClients")
@@ -75,13 +68,27 @@ public class AdminApi {
         return service.findAllClient();
     }
 
+    @Operation(summary = "Get vendor by id")
     @GetMapping("/getVendorById/{id}")
     public VendorResponse getByVendorId(@PathVariable Long id){
         return service.getVendor(id);
     }
+    @Operation(summary = "Get client by id")
     @GetMapping("/getClientById/{id}")
     public ClientResponse getClientById(@PathVariable Long id){
         return service.getClientById(id);
     }
 
+    @Operation(summary = "Delete client/vendor ",
+            description = "Delete user by id ")
+    @DeleteMapping({"/deleteUser/{id}"})
+    public ResponseEntity<?> deleteVendorById(@PathVariable("id") Long id) {
+       return service.deleteById(id);
+    }
+
+    @Operation(summary = "Delete Book By id")
+    @DeleteMapping("/deleteBook/{id}")
+    public ResponseEntity<?> deleteBookById(@PathVariable Long id){
+        return service.deleteBookById(id);
+    }
 }
