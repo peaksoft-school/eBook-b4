@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
+import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
 import kg.peaksoft.ebookb4.db.service.BookService;
@@ -218,8 +219,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username) {
-        List<Book> booksWithCancel = repository.findBooksFromVendorWithCancel(username);
+    public List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username,
+                                                   RequestStatus requestStatus) {
+        List<Book> booksWithCancel = repository.findBooksFromVendorWithCancel(username, requestStatus);
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int)paging.getOffset(), booksWithCancel.size());
         int end = Math.min((start + paging.getPageSize()), booksWithCancel.size());
@@ -228,8 +230,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findBooksFromVendorInProgress(Integer offset, int pageSize, String username) {
-        List<Book> booksInProgress = repository.findBooksFromVendorInProgress(username);
+    public List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, String username,
+                                                   RequestStatus requestStatus) {
+        List<Book> booksInProgress = repository.findBooksFromVendorInProgress(username, requestStatus);
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int)paging.getOffset(), booksInProgress.size());
         int end = Math.min((start + paging.getPageSize()), booksInProgress.size());

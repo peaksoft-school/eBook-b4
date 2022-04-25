@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,13 +14,14 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/books")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RequestMapping("/api/")
 @AllArgsConstructor
 @Tag(name = "Books",description = "Sort operations")
 public class GlobalApi {
 
-    @GetMapping("/become-vendor")
-    @Operation(summary = "Intro to become vendor", description = "This page to intro-e client or gues " +
+    @GetMapping("/vendor-sell")
+    @Operation(summary = "Intro to become vendor", description = "This page to intro-e client or guest " +
             "to become vendor!")
     public List<FileSources> becomeVendor(){
         List<FileSources> files = new ArrayList<>();

@@ -3,7 +3,9 @@ package kg.peaksoft.ebookb4.db.repository;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,16 +21,16 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     //find books by title, author, publishingHouse
     @Query("select b from Book b where b.title like %?1% " +
             "or b.authorFullName like %?1%" +
-            "or b.publishingHouse like %?1% and b.isActive=true")
-    List<Book> findByName(String keyword);
+            "or b.publishingHouse like %?1% and b.requestStatus=?2")
+    List<Book> findByName(String keyword, RequestStatus requestStatus);
 
     //find all active books
-    @Query("select b from Book b where b.isActive = true")
-    List<Book> findAllActive();
+    @Query("select b from Book b where b.requestStatus = ?1")
+    List<Book> findAllActive(RequestStatus requestStatus);
 
     //find book by id and active one
-    @Query("select b from Book b where b.bookId = ?1 and b.isActive = true")
-    Optional<Book> findBookByIdAndActive(Long id);
+    @Query("select b from Book b where b.bookId = ?1 and b.requestStatus = ?2")
+    Optional<Book> findBookByIdAndActive(Long id, RequestStatus requestStatus);
 
     //change discountPromo to null if it is expired
     @Transactional
@@ -56,13 +58,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.discount is not null and b.user.email = ?1")
     List<Book> findBooksFromVendorWithDiscount(String username);
 
-    @Query("select b from Book b where b.isActive = false and b.user.email = ?1")
-    List<Book> findBooksFromVendorWithCancel(String username);
+    @Query("select b from Book b where b.requestStatus = ?2 and b.user.email = ?1")
+    List<Book> findBooksFromVendorWithCancel(String username, RequestStatus requestStatus);
 
-    @Query("select b from Book b where b.isActive is null and b.user.email = ?1")
-    List<Book> findBooksFromVendorInProgress(String username);
+    @Query("select b from Book b where b.requestStatus = ?2 and b.user.email = ?1")
+    List<Book> findBooksFromVendorInProgress(String username, RequestStatus requestStatus);
 
-//    @Query(value = "select count(case when book_id = ?1 and user_id = ?2 then true else false end) from liked_books", nativeQuery = true)
     @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
             "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyPutLike(Long bookId, Long userId);
@@ -77,15 +78,25 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("update Book b set b.baskets = b.baskets+1 where b.bookId = ?1")
     void incrementBasketsOfBooks(Long bookId);
     //find books by genre / admin panel
-    @Query("select b from Book b where b.genre = ?1 and b.isActive = true")
-    List<Book> findAllByGenre(Genre genre);
+    @Query("select b from Book b where b.genre = ?1 and b.requestStatus = ?2")
+    List<Book> findAllByGenre(Genre genre, RequestStatus requestStatus);
 
     //find books by BookType / admin panes
-    @Query("select b from Book b where b.bookType = ?1 and b.isActive = true")
-    List<Book> findAllByBookType(BookType bookType);
+    @Query("select b from Book b where b.bookType = ?1 and b.requestStatus = ?2")
+    List<Book> findAllByBookType(BookType bookType, RequestStatus requestStatus);
 
     //fin books by genre and book type /admin panel
-    @Query("select b from Book b where b.genre =?1 or b.bookType= ?2 and b.isActive = true")
-    List<Book> getBooks(Genre genre, BookType bookType);
+    @Query("select b from Book b where b.genre =?1 or b.bookType= ?2 and b.requestStatus = ?2")
+    List<Book> getBooks(Genre genre, BookType bookType, RequestStatus requestStatus);
 
+    @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
+            "b.yearOfIssue, b.price) from Book b where b.requestStatus = ?1")
+    List<BookResponse> findBooksInProgress(RequestStatus requestStatus);
+
+    @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
+            "b.yearOfIssue, b.price) from Book b where b.requestStatus = ?1")
+    List<BookResponse> findBooksAccepted(RequestStatus requestStatus);
+
+    @Query("select b from Book b where b.requestStatus = ?2 and b.bookId = ?1")
+    Optional<Book> findBookInProgress(Long bookId, RequestStatus requestStatus);
 }

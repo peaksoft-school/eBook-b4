@@ -13,8 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/vendor")
 @AllArgsConstructor
 @PreAuthorize("hasRole('ROLE_VENDOR')")
@@ -31,13 +31,13 @@ public class VendorApi {
     }
 
     @Operation(summary = "Vendor profile", description = "All accessible data of client")
-    @GetMapping("/getDetails")
+    @GetMapping("/profile")
     public VendorRegisterDTO getVendorDetails(Authentication authentication){
         return vendorService.getVendorDetails(authentication.getName());
     }
 
-    @Operation(summary = "Update", description = "Updating vendor")
-    @PatchMapping("/update")
+    @Operation(summary = "Update vendor", description = "Updating vendor profile")
+    @PatchMapping("/profile/settings")
     public ResponseEntity<?> updateVendor(@RequestBody VendorUpdateDTO newVendorDTO, Authentication authentication){
         return vendorService.update(newVendorDTO, authentication.getName());
     }

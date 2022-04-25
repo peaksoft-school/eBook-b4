@@ -3,11 +3,13 @@ package kg.peaksoft.ebookb4.db.service.impl;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
+import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.dto.dto.others.CustomPageRequest;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
 import java.util.List;
+
+import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.*;
 
 @Service
 @AllArgsConstructor
@@ -24,27 +28,25 @@ public class BookGetServiceImpl implements BookGetService {
     private PromoService promoService;
 
     @Override
-    public List<Book> findByGenre(Genre genre) {
+    public List<Book> findByGenre(Genre genre, RequestStatus requestStatus) {
         promoService.checkPromos();
-        return repository.findAllByGenre(genre);
+        return repository.findAllByGenre(genre, requestStatus);
     }
 
     @Override
-    public List<Book> findBooksByName(String name) {
+    public List<Book> findBooksByName(String name, RequestStatus requestStatus) {
         promoService.checkPromos();
-        return repository.findByName(name);
+        return repository.findByName(name, requestStatus);
     }
 
     @Override
     public List<Book> getAllBooksOrSortedOnes(SortBooksGlobal sortBook, int offset, int pageSize) {
         promoService.checkPromos();
-        List<Book> books = repository.findAllActive();
+        List<Book> books = repository.findAllActive(ACCEPTED);
         //if it is empty it returns empty list
         if(books.size()<1){
             return books;
         }
-        //it should be deleted
-        books.removeIf(book -> !book.getIsActive());
         //sorting if there are selected genres
         if (sortBook.getGenre() != null) {
             System.out.println("I am in sort by genre!");
@@ -111,8 +113,19 @@ public class BookGetServiceImpl implements BookGetService {
     @Override
     public Book getBookById(Long id) {
         promoService.checkPromos();
-        return repository.findBookByIdAndActive(id).orElseThrow(()->
+        return repository.findBookByIdAndActive(id, ACCEPTED).orElseThrow(()->
                 new BadRequestException("This book is not went through admin-check yet!"));
+    }
+
+    @Override
+    public List<BookResponse> getAllBooksRequests() {
+        return repository.findBooksInProgress(INPROGRESS);
+    }
+
+    @Override
+    public List<BookResponse> getAllAcceptedBooks() {
+        System.out.println(repository.findBooksAccepted(ACCEPTED).size());
+        return repository.findBooksAccepted(ACCEPTED);
     }
 
 }

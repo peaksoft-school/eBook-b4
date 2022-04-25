@@ -4,6 +4,7 @@ import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface AdminService {
-
-    List<Book> getBooks();
 
     List<Book> getBooksBy(Genre genre, BookType bookType);
 
@@ -23,6 +22,7 @@ public interface AdminService {
     List<VendorResponse> findAllVendors();
 
     ResponseEntity<?> deleteById(Long id);
+
     ResponseEntity<?> deleteBookById(Long id);
 
     List<ClientResponse> findAllClient();
@@ -30,4 +30,12 @@ public interface AdminService {
     VendorResponse getVendor(Long id);
 
     ClientResponse getClientById(Long id);
+
+
+    void acceptBookRequest(Long bookId);
+
+    void refuseBookRequest(RefuseBookRequest refuseBookRequest, Long id);
+
+    ResponseEntity<?> getBookById(Long bookId);
+
 }

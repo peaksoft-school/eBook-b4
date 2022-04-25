@@ -6,6 +6,7 @@ import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
+import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import lombok.*;
 
@@ -39,8 +40,9 @@ public class Book {
 
     private int baskets;
     private int likes;
-    private Boolean isActive;
-    private Boolean adminWatch;
+    @Enumerated(value = EnumType.STRING)
+    private RequestStatus requestStatus = RequestStatus.INPROGRESS;
+    private Boolean adminWatch = false;
     private Integer discount;
     private Integer discountFromPromo;
 

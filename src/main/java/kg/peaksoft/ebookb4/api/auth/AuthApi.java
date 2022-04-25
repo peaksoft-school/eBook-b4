@@ -23,8 +23,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/auth")
 @AllArgsConstructor
 @Tag(name = "AuthController", description = "jwt token,")
@@ -35,8 +35,8 @@ public class AuthApi {
     VendorService vendorService;
     ClientService clientService;
 
-    @Operation(summary = "Sign in", description = "Signing in users")
-    @PostMapping("/signin")
+    @Operation(summary = "Sign in", description = "Signing in for all users: admin, client, vendor")
+    @PostMapping("/sign-in")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -57,24 +57,16 @@ public class AuthApi {
                 roles));
     }
 
-    @Operation(summary = "Sign up", description = "Register a client")
+    @Operation(summary = "Sign up", description = "Register only for client")
     @PostMapping("/signup/client")
     public ResponseEntity<?> registerClient(@Valid @RequestBody ClientRegisterDTO client) {
         return clientService.register(client, 1L);
     }
 
-    @Operation(summary = "Sign up", description = "Register a vendor")
+    @Operation(summary = "Sign up", description = "Register only for vendor")
     @PostMapping("/signup/vendor")
     public ResponseEntity<?> registerVendor(@Valid @RequestBody VendorRegisterDTO vendor) {
         return vendorService.register(vendor, 2L);
     }
-
-    @GetMapping("/welcomepage")
-    public String welcomePage(){
-        return "Hi it is welcome page of ebook 4!";
-    }
-
-
-
 
 }

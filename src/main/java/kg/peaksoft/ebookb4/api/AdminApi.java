@@ -5,11 +5,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.service.AdminService;
+import kg.peaksoft.ebookb4.db.service.BookGetService;
+import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,78 +20,109 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/admin")
 @AllArgsConstructor
-@CrossOrigin(origins = "*", maxAge = 3600)
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @Tag(name = "Admin",description = "Admin accessible apis")
 public class AdminApi {
 
     private AdminService service;
 
-    @Operation(summary = "Get all books" )
-    @GetMapping("/books")
-    public List<Book> getAllBook() {
-        return service.getBooks();
-    }
+    private BookGetService bookGetService;
 
     @Operation(summary = "Get all by genre and book type",
             description = "Filter all books by genre and book type ")
-    @GetMapping("/getBooksByBoth/{genre}/{bookType}")
+    @GetMapping("/booksByBoth/{genre}/{bookType}")
     public List<Book> getBooksBy(@PathVariable Genre genre,
                                  @PathVariable BookType bookType) {
         return service.getBooksBy(genre, bookType);
     }
 
-    @Operation(summary = "Get all by genre",
+    @Operation(summary = "Get books by genre",
             description = "Filter all books only by genre ")
-    @GetMapping("/getBooksByGenre/{genre}")
+    @GetMapping("/booksByGenre/{genre}")
     public List<Book> getBooksByGenre(@PathVariable Genre genre) {
         return service.getBooksByGenre(genre);
     }
 
     @Operation(summary = "Get all by book type",
             description = "Filter all books only by book type ")
-    @GetMapping("/getBooksByType/{bookType}")
+    @GetMapping("/booksByType/{bookType}")
     public List<Book> getBooksByBookType(@PathVariable BookType bookType) {
         return service.getBooksByBookType(bookType);
     }
 
+    @Operation(summary = "Get all accepted books", description = "All accepted books")
+    @GetMapping("/books-accepted")
+    public List<BookResponse> getAllAcceptedBooks(){
+        return   bookGetService.getAllAcceptedBooks();
+    }
+
     @Operation(summary = "Get all Vendors",
             description = "Get all vendors with amount of books")
-    @GetMapping("/getVendors")
+    @GetMapping("/vendors")
     public List<VendorResponse> getAllVendors(){
        return service.findAllVendors();
     }
 
     @Operation(summary = "Get all client",
             description = "Get all client ")
-    @GetMapping("/getClients")
+    @GetMapping("/clients")
     public List<ClientResponse> getAllClient (){
         return service.findAllClient();
     }
 
     @Operation(summary = "Get vendor by id")
-    @GetMapping("/getVendorById/{id}")
+    @GetMapping("/vendorById/{id}")
     public VendorResponse getByVendorId(@PathVariable Long id){
         return service.getVendor(id);
     }
     @Operation(summary = "Get client by id")
-    @GetMapping("/getClientById/{id}")
+    @GetMapping("/clientById/{id}")
     public ClientResponse getClientById(@PathVariable Long id){
         return service.getClientById(id);
     }
 
     @Operation(summary = "Delete client/vendor ",
-            description = "Delete user by id ")
-    @DeleteMapping({"/deleteUser/{id}"})
-    public ResponseEntity<?> deleteVendorById(@PathVariable("id") Long id) {
+            description = "Admin can delete client and vendor!")
+    @DeleteMapping({"/removeUser/{id}"})
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
        return service.deleteById(id);
     }
 
-    @Operation(summary = "Delete Book By id")
-    @DeleteMapping("/deleteBook/{id}")
+    @Operation(summary = "Delete book", description = "Delete books by id")
+    @DeleteMapping("/removeBook/{id}")
     public ResponseEntity<?> deleteBookById(@PathVariable Long id){
         return service.deleteBookById(id);
     }
+
+    @Operation(summary = "Get all books in process", description = "Get books in process")
+    @GetMapping("/books-in-process")
+    public List<BookResponse> getAllBookRequest(){
+        return  bookGetService.getAllBooksRequests();
+    }
+
+    @Operation(summary = "Accept a book by id", description = "Admin accepts book by Id")
+    @PostMapping("/book-accept/{id}")
+    public ResponseEntity<String> acceptBookRequest(@PathVariable Long id){
+        service.acceptBookRequest(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Accepted successfully"+id);
+    }
+
+    @Operation(summary = "Refuse a book by id", description = "Admin refuses a book by id")
+    @PostMapping("/book-refuse/{id}")
+    public ResponseEntity<String> refuseBookRequest(@RequestBody RefuseBookRequest refuseBookRequest,
+                                                    @PathVariable Long id){
+        service.refuseBookRequest(refuseBookRequest, id);
+        return ResponseEntity.ok().body(
+                refuseBookRequest.getReason());
+    }
+
+    @Operation(summary = "Get book by id", description = "Change color of book when admin watch is true")
+    @GetMapping("/book/{id}")
+    public ResponseEntity<?> getBookById(@PathVariable Long id){
+        return service.getBookById(id);
+    }
+
 }

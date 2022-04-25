@@ -26,6 +26,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 
+import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
+
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
@@ -71,7 +73,7 @@ public class ClientServiceImpl implements ClientService {
         User user = userRepository.getUser(username).orElseThrow(()->
                 new BadRequestException("User doesn't exist!"));
         Book book = bookRepository.getById(bookId);
-        if(!book.getIsActive()){
+        if(book.getRequestStatus()!=ACCEPTED){
             throw new BadRequestException("This book has not been went through admin-check!");
         }
         if(bookRepository.checkIfAlreadyPutLike(bookId, user.getId())>0){

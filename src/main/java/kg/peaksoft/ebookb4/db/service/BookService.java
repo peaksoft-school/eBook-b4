@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.service;
 
+import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,10 @@ public interface BookService {
 
     List<Book> findBooksFromVendorWithDiscount(Integer offset, int pageSize, String username);
 
-    List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username);
+    List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username,
+                                            RequestStatus requestStatus);
 
-    List<Book> findBooksFromVendorInProgress(Integer offset, int pageSize, String username);
 
+    List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, String username,
+                                            RequestStatus requestStatus);
 }

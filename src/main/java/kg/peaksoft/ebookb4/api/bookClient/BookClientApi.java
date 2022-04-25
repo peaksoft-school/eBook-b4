@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
  * Author: Zhanarbek Abdurasulov
  * Date: 23/4/22
  */
-@CrossOrigin
 @RestController
-@RequestMapping("/api/books/client")
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RequestMapping("/api/client/books")
 @AllArgsConstructor
 @PreAuthorize("hasRole('ROLE_CLIENT')")
 @Tag(name = "Books client",description = "client manipulations ...")
@@ -23,16 +23,14 @@ public class BookClientApi {
 
     private ClientService clientService;
     @Operation(summary = "add to basket",description = "add a book to basket")
-    @PostMapping("/addToBasket/{bookId}")
+    @PostMapping("/basket/{bookId}")
     public ResponseEntity<?> addToBasket(@PathVariable Long bookId, Authentication authentication){
         return clientService.addBookToBasket(bookId, authentication.getName());
 
     }
 
-    @PostMapping("/like-book/{bookId}")
+    @PostMapping("/like/{bookId}")
     public ResponseEntity<?> likeBook(@PathVariable Long bookId, Authentication authentication){
         return clientService.likeABook(bookId, authentication.getName());
     }
-
-
 }
