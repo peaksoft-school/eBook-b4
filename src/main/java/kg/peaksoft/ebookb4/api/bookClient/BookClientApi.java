@@ -29,6 +29,7 @@ public class BookClientApi {
 
     }
 
+    @Operation(summary = "Like a book",description = "Like a book with id")
     @PostMapping("/like/{bookId}")
     public ResponseEntity<?> likeBook(@PathVariable Long bookId, Authentication authentication){
         return clientService.likeABook(bookId, authentication.getName());
