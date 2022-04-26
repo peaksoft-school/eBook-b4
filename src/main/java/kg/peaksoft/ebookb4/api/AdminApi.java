@@ -6,6 +6,7 @@ import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
+import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.dto.request.Request;
@@ -14,7 +15,6 @@ import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -101,18 +101,15 @@ public class AdminApi {
 
     @Operation(summary = "Accept a book by id", description = "Admin accepts book by Id")
     @PostMapping("/book-accept")
-    public ResponseEntity<String> acceptBookRequest(@RequestBody Request request){
-        service.acceptBookRequest(request.getId());
-        return ResponseEntity.status(HttpStatus.OK).body("Accepted successfully"+request);
+    public ResponseEntity<?> acceptBookRequest(@RequestBody Request request){
+        return service.acceptBookRequest(request.getId());
     }
 
     @Operation(summary = "Refuse a book by id", description = "Admin refuses a book by id")
     @PostMapping("/book-refuse/{id}")
-    public ResponseEntity<String> refuseBookRequest(@RequestBody RefuseBookRequest refuseBookRequest,
-                                                    @PathVariable Long id){
-        service.refuseBookRequest(refuseBookRequest, id);
-        return ResponseEntity.ok().body(
-                refuseBookRequest.getReason());
+    public ResponseEntity<?> refuseBookRequest(@RequestBody RefuseBookRequest refuseBookRequest,
+                                               @PathVariable Long id){
+        return service.refuseBookRequest(refuseBookRequest, id);
     }
 
     @Operation(summary = "Get book by id", description = "Change color of book when admin watch is true")
@@ -126,5 +123,55 @@ public class AdminApi {
     public List<Book> getBooksByGenre(@PathVariable Genre genre) {
         return service.getBooksByGenre(genre);
     }
+
+    @Operation(summary = "Get all books of vendor in admin panel",
+            description = "Get all books by vendor id")
+    @GetMapping("/vendor/{vendorId}/books/{offset}")
+    public List<Book> getBooksOfVendor(@PathVariable Long vendorId,
+            @PathVariable Integer offset){
+        return service.findBooksFromVendor(--offset, 12, vendorId);
+    }
+
+    @Operation(summary = "Get books with likes in admin panel",
+            description = "Get books with at least one like")
+    @GetMapping("/vendor/{vendorId}/favorite-books/{offset}")
+    public List<Book> getLikedBooks(@PathVariable Long vendorId,@PathVariable Integer offset){
+        return service.findBooksFromVendorInFavorites(--offset, 12, vendorId);
+    }
+
+    @Operation(summary = "Get books in basket in admin panel",
+            description = "Get books added to basket at least once")
+    @GetMapping("/vendor/{vendorId}/basket-books/{offset}")
+    public List<Book> getBooksAddedToBasket(@PathVariable Long vendorId,
+            @PathVariable Integer offset){
+        return service.findBooksFromVendorAddedToBasket(--offset, 12, vendorId);
+    }
+
+    @Operation(summary = "Get books with discount in admin panel",
+            description = "Get books with discount")
+    @GetMapping("/vendor/{vendorId}/books-discount/{offset}")
+    public List<Book> getBooksWithDiscount(@PathVariable Long vendorId
+            ,@PathVariable Integer offset){
+        return service.findBooksFromVendorWithDiscount(--offset, 12, vendorId);
+    }
+
+    @Operation(summary = "Get refused books in admin panel",
+            description = "Get refused books")
+    @GetMapping("/vendor/{vendorId}/books-refused/{offset}")
+    public List<Book> getBooksInCancel(@PathVariable Long vendorId
+            ,@PathVariable Integer offset){
+        return service.findBooksFromVendorCancelled(--offset, 12, vendorId,
+                RequestStatus.REFUSED);
+    }
+
+    @Operation(summary = "Get books in progress in admin panel",
+            description = "Get a books in progress")
+    @GetMapping("vendor/{vendorId}/books-in-process/{offset}")
+    public List<Book> getBooksInProcess(@PathVariable Long vendorId
+            ,@PathVariable Integer offset){
+        return service.findBooksFromVendorInProcess(--offset, 12, vendorId,
+                RequestStatus.INPROGRESS);
+    }
+}
 
 }
