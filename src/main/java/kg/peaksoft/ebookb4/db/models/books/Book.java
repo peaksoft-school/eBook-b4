@@ -46,6 +46,20 @@ public class Book {
     private Integer discount;
     private Integer discountFromPromo;
 
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "books_basket"
+            , joinColumns = @JoinColumn(name = "book_id")
+            , inverseJoinColumns = @JoinColumn(name = "basket_id"))
+    private List<Basket> basket;
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "liked_books"
+            , joinColumns = @JoinColumn(name = "book_id")
+            , inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> likedBooks;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "user_id")

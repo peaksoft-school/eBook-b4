@@ -8,8 +8,10 @@ import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,51 +39,49 @@ public class EBookB4Application {
         return "<h1>Welcome to eBook application!!!<h1/>";
     }
 
-//    @PostConstruct
-//    public void init() {
-//        Role client = new Role();
-//        client.setId(1L);
-//        client.setName(ERole.ROLE_CLIENT);
-//        Role vendor = new Role();
-//        vendor.setId(2L);
-//        vendor.setName(ERole.ROLE_VENDOR);
-//        Role admin = new Role();
-//        admin.setId(3L);
-//        admin.setName(ERole.ROLE_ADMIN);
-//        roleRepository.save(client);
-//        roleRepository.save(vendor);
-//        roleRepository.save(admin);
-//
-//        User c = new User();
-//        c.setEmail("client@gmail.com");
-//        c.setPassword(encoder.encode("client"));
-//        c.setRole(roleRepository.getById(1L));
-//        Basket basket1 = new Basket();
-//        basket1.setUser(c);
-//        c.setBasket(basket1);
-//        c.setDateOfRegistration(LocalDate.now());
-//        userRepository.save(c);
-//
-//
-//        User v = new User();
-//        v.setEmail("vendor@gmail.com");
-//        v.setPassword(encoder.encode("vendor"));
-//        v.setRole(roleRepository.getById(2L));
-//        Basket basket2 = new Basket();
-//        basket2.setUser(v);
-//        v.setBasket(basket2);
-//        v.setDateOfRegistration(LocalDate.now());
-//        userRepository.save(v);
-//
-//        User a = new User();
-//        a.setEmail("admin@gmail.com");
-//        a.setPassword(encoder.encode("password"));
-//        a.setRole(roleRepository.getById(3L));
-//        Basket basket = new Basket();
-//        basket.setUser(a);
-//        a.setBasket(basket);
-//        a.setDateOfRegistration(LocalDate.now());
-//        userRepository.save(a);
-//
-//    }
+    @PostConstruct
+    public void init() {
+        Role client = new Role();
+        client.setId(1L);
+        client.setName(ERole.ROLE_CLIENT);
+        Role vendor = new Role();
+        vendor.setId(2L);
+        vendor.setName(ERole.ROLE_VENDOR);
+        Role admin = new Role();
+        admin.setId(3L);
+        admin.setName(ERole.ROLE_ADMIN);
+        roleRepository.save(client);
+        roleRepository.save(vendor);
+        roleRepository.save(admin);
+
+        User c = new User();
+        c.setEmail("client@gmail.com");
+        c.setPassword(encoder.encode("client"));
+        c.setRole(roleRepository.getById(1L));
+        Basket basket1 = new Basket();
+        basket1.setUser(c);
+        c.setBasket(basket1);
+        c.setDateOfRegistration(LocalDate.now());
+        userRepository.save(c);
+
+        User v = new User();
+        v.setEmail("vendor@gmail.com");
+        v.setPassword(encoder.encode("vendor"));
+        v.setRole(roleRepository.getById(2L));
+        Basket basket2 = new Basket();
+        basket2.setUser(v);
+        v.setBasket(basket2);
+        v.setDateOfRegistration(LocalDate.now());
+        userRepository.save(v);
+
+        User a = new User();
+        a.setEmail("admin@gmail.com");
+        a.setPassword(encoder.encode("password"));
+        a.setRole(roleRepository.getById(3L));
+        Basket basket = new Basket();
+        basket.setUser(a);
+        a.setBasket(basket);
+        a.setDateOfRegistration(LocalDate.now());
+        userRepository.save(a);
+    }
 }

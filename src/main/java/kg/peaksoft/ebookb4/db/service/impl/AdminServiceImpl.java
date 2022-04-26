@@ -36,17 +36,9 @@ public class AdminServiceImpl implements AdminService {
     private VendorMapper vendorMapper;
     private ClientMapper clientMapper;
 
-
-
     @Override
     public List<Book> getBooksBy(Genre genre, BookType bookType) {
         return bookRepository.getBooks(genre, bookType, ACCEPTED);
-    }
-
-    @Override
-    public List<Book> getBooksByGenre(Genre genre) {
-        return bookRepository.findAllByGenre(genre,
-                ACCEPTED);
     }
 
     @Override
@@ -136,6 +128,11 @@ public class AdminServiceImpl implements AdminService {
                 new BadRequestException(String.format("Book with id %s has not been found it is already went through admin-check", bookId)));
         book.setAdminWatch(true);
         return ResponseEntity.ok(String.format("Book with id %s has been watched by admin!", bookId));
+    }
+
+    @Override
+    public List<Book> getBooksByGenre(Genre genre) {
+        return bookRepository.findAllByGenre(genre, ACCEPTED);
     }
 
 }

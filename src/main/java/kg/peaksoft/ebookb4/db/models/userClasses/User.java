@@ -49,15 +49,12 @@ public class User {
             mappedBy = "user")
     private List<Book> vendorAddedBooks;
 
+
     @ManyToMany
     @JoinTable(
-            name = "liked_books",
-            joinColumns = @JoinColumn(
-                    name = "user_id",
-                    referencedColumnName = "user_id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "book_id",
-                    referencedColumnName = "book_id"))
+            name = "liked_books"
+            , joinColumns = @JoinColumn(name = "user_id")
+            , inverseJoinColumns = @JoinColumn(name = "book_id"))
     private List<Book> likedBooks;
 
     @JsonIgnore

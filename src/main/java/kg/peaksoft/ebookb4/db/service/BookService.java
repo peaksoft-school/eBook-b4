@@ -3,6 +3,7 @@ package kg.peaksoft.ebookb4.db.service;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
 import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.dto.request.BookRequestDto;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

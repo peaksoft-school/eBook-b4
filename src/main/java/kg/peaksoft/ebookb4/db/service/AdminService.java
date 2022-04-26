@@ -37,5 +37,4 @@ public interface AdminService {
     void refuseBookRequest(RefuseBookRequest refuseBookRequest, Long id);
 
     ResponseEntity<?> getBookById(Long bookId);
-
 }

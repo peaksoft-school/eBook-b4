@@ -9,6 +9,7 @@ import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientUpdateDTO;
 import kg.peaksoft.ebookb4.dto.dto.users.VendorRegisterDTO;
 import kg.peaksoft.ebookb4.dto.mapper.ClientRegisterMapper;
+import kg.peaksoft.ebookb4.dto.request.BookRequestDto;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
@@ -17,6 +18,7 @@ import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,7 +44,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number) {
         //checking if passwords are the same or not
-        if(!clientRegisterDTO.getPassword().equals(clientRegisterDTO.getConfirmPassword())){
+        if (!clientRegisterDTO.getPassword().equals(clientRegisterDTO.getConfirmPassword())) {
             throw new BadRequestException("Passwords are not the same!");
         }
 
@@ -70,38 +72,38 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     public ResponseEntity<?> likeABook(Long bookId, String username) {
 
-        User user = userRepository.getUser(username).orElseThrow(()->
+        User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException("User doesn't exist!"));
         Book book = bookRepository.getById(bookId);
-        if(book.getRequestStatus()!=ACCEPTED){
+        if (book.getRequestStatus() != ACCEPTED) {
             throw new BadRequestException("This book has not been went through admin-check!");
         }
-        if(bookRepository.checkIfAlreadyPutLike(bookId, user.getId())>0){
+        if (bookRepository.checkIfAlreadyPutLike(bookId, user.getId()) > 0) {
             throw new BadRequestException("You already put like to this book!");
         }
         user.getLikedBooks().add(book);
         bookRepository.incrementLikesOfBook(bookId);
         return ResponseEntity.ok(new MessageResponse(String.format(
-                "Book with id %s successfully has been liked by user with name %s",bookId,username)));
+                "Book with id %s successfully has been liked by user with name %s", bookId, username)));
     }
 
     @Override
     @Transactional
     public ResponseEntity<?> addBookToBasket(Long bookId, String username) {
 
-        if(basketRepository.checkIfAlreadyClientPutInBasket(
-                getUsersBasketId(username),bookId)>0){
+        if (basketRepository.checkIfAlreadyClientPutInBasket(
+                getUsersBasketId(username), bookId) > 0) {
             System.out.println("It has been checked!");
             throw new BadRequestException("You already put this book in your basket");
         }
 
-        User user = userRepository.getUser(username).orElseThrow(()->
+        User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s not found", username)));
 
         user.getBasket().getBooks().add(bookRepository.getById(bookId));
         bookRepository.incrementBasketsOfBooks(bookId);
         return ResponseEntity.ok(new MessageResponse(String.format("Book with id %s has been added to basket of user" +
-                "with username %s",bookId,username)));
+                "with username %s", bookId, username)));
 
     }
 
@@ -111,17 +113,17 @@ public class ClientServiceImpl implements ClientService {
         User user = userRepository.getUser(username).orElseThrow(()->
                 new BadRequestException(String.format("User with username %s has not been found", username)));
 
-        if (userRepository.existsByEmail(newClientDTO.getEmail())){
+        if (userRepository.existsByEmail(newClientDTO.getEmail())) {
             throw new BadRequestException(String.format("Please choose another email, %s email is not available", newClientDTO.getEmail()));
         }
         String oldEmail = user.getEmail();
         String newEmail = newClientDTO.getEmail();
-        if(!oldEmail.equals(newEmail)){
+        if (!oldEmail.equals(newEmail)) {
             user.setEmail(newEmail);
         }
         String oldFirstName = user.getFirstName();
         String newFirstName = newClientDTO.getFirstName();
-        if(!oldFirstName.equals(newFirstName)){
+        if (!oldFirstName.equals(newFirstName)) {
             user.setFirstName(newFirstName);
         }
         String oldPasswordOldUser = user.getPassword();
@@ -129,15 +131,13 @@ public class ClientServiceImpl implements ClientService {
         String oldPasswordNewUser = newClientDTO.getOldPassword();
         String newPasswordNewUser = newClientDTO.getNewPassword();
         String newPasswordConfirmNewUser = newClientDTO.getConfirmNewPassword();
-        if(encoder.matches(oldPasswordNewUser, oldPasswordOldUser)){
-            if(newPasswordNewUser.equals(newPasswordConfirmNewUser)){
+        if (encoder.matches(oldPasswordNewUser, oldPasswordOldUser)) {
+            if (newPasswordNewUser.equals(newPasswordConfirmNewUser)) {
                 user.setPassword(encoder.encode(newPasswordNewUser));
-            }
-            else{
+            } else {
                 throw new BadRequestException("Your new password didn't match!");
             }
-        }
-        else{
+        } else {
             throw new BadRequestException("You wrote wrong old password!");
         }
 
@@ -146,15 +146,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientRegisterDTO getClientDetails(String username) {
-        return clientRegisterMapper.createDTO(userRepository.getUser(username).orElseThrow(()->
+        return clientRegisterMapper.createDTO(userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found!", username))));
     }
 
-    public Long getUsersBasketId(String username){
+    public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);
     }
-
-
-
 
 }

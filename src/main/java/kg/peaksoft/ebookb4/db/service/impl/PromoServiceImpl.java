@@ -20,10 +20,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 19/4/22
- */
 @Service
 @AllArgsConstructor
 public class PromoServiceImpl implements PromoService {

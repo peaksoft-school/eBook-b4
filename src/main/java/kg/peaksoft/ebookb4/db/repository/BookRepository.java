@@ -5,10 +5,12 @@ import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.dto.request.BookRequestDto;
 import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -77,18 +79,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Modifying
     @Query("update Book b set b.baskets = b.baskets+1 where b.bookId = ?1")
     void incrementBasketsOfBooks(Long bookId);
-    //find books by genre / admin panel
-    @Query("select b from Book b where b.genre = ?1 and b.requestStatus = ?2")
-    List<Book> findAllByGenre(Genre genre, RequestStatus requestStatus);
 
     //find books by BookType / admin panes
     @Query("select b from Book b where b.bookType = ?1 and b.requestStatus = ?2")
     List<Book> findAllByBookType(BookType bookType, RequestStatus requestStatus);
-
     //fin books by genre and book type /admin panel
+
     @Query("select b from Book b where b.genre =?1 or b.bookType= ?2 and b.requestStatus = ?2")
     List<Book> getBooks(Genre genre, BookType bookType, RequestStatus requestStatus);
-
     @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
             "b.yearOfIssue, b.price) from Book b where b.requestStatus = ?1")
     List<BookResponse> findBooksInProgress(RequestStatus requestStatus);
@@ -99,4 +97,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("select b from Book b where b.requestStatus = ?2 and b.bookId = ?1")
     Optional<Book> findBookInProgress(Long bookId, RequestStatus requestStatus);
+
+    //find books by genre / admin panel
+    @Query(value = "select b  from Book b where b.genre = ?1 and b.requestStatus = ?2 ")
+    List<Book> findAllByGenre(Genre genre, RequestStatus requestStatus);
+
 }

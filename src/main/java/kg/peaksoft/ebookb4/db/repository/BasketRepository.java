@@ -12,7 +12,7 @@ public interface BasketRepository extends JpaRepository<Basket, Long> {
     Long getUsersBasketId(String username);
 
     @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
-            "from basket_books where basket_id = ?1 and book_id = ?2", nativeQuery = true)
+            "from books_basket where basket_id = ?1 and book_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyClientPutInBasket(Long basketId, Long bookId);
 
 }

@@ -6,6 +6,7 @@ import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
 import kg.peaksoft.ebookb4.db.service.BookService;
+import kg.peaksoft.ebookb4.dto.request.BookRequestDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,10 +37,10 @@ public class BookVendorApi {
     }
 
     @Operation(summary = "Update book",description = "update a book")
-    @PatchMapping("/editing/{bookId}")
+    @PatchMapping("/editing")
     public ResponseEntity<?> update(@RequestBody BookDTO request,
-                                    @PathVariable Long bookId){
-        return bookService.update(request,bookId);
+                                    @RequestBody BookRequestDto bookId){
+        return bookService.update(request,bookId.getId());
     }
 
     @Operation(summary = "Get book",

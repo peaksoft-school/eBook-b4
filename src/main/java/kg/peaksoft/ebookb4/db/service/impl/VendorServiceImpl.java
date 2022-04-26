@@ -1,6 +1,5 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
@@ -9,10 +8,8 @@ import kg.peaksoft.ebookb4.dto.dto.users.VendorRegisterDTO;
 import kg.peaksoft.ebookb4.dto.dto.users.VendorUpdateDTO;
 import kg.peaksoft.ebookb4.dto.mapper.VendorRegisterMapper;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
-import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,8 +17,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -63,30 +58,30 @@ public class VendorServiceImpl implements VendorService {
     @Override
     @Transactional
     public ResponseEntity<?> update(VendorUpdateDTO newVendorDTO, String username) {
-        User user = userRepository.getUser(username).orElseThrow(()->
+        User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found", username)));
 
-        if (userRepository.existsByEmail(newVendorDTO.getEmail())){
+        if (userRepository.existsByEmail(newVendorDTO.getEmail())) {
             throw new BadRequestException(String.format("Please choose another email, %s email is not available", newVendorDTO.getEmail()));
         }
         String oldEmail = user.getEmail();
         String newEmail = newVendorDTO.getEmail();
-        if(!oldEmail.equals(newEmail)){
+        if (!oldEmail.equals(newEmail)) {
             user.setEmail(newEmail);
         }
         String oldFirstName = user.getFirstName();
         String newFirstName = newVendorDTO.getFirstName();
-        if(!oldFirstName.equals(newFirstName)){
+        if (!oldFirstName.equals(newFirstName)) {
             user.setFirstName(newFirstName);
         }
         String oldLastName = user.getLastName();
         String newLastName = newVendorDTO.getLastName();
-        if(oldLastName.equals(newLastName)){
+        if (oldLastName.equals(newLastName)) {
             user.setLastName(newLastName);
         }
         String oldNumber = user.getNumber();
         String newNumber = newVendorDTO.getNumber();
-        if(!oldNumber.equals(newNumber)){
+        if (!oldNumber.equals(newNumber)) {
             user.setNumber(newNumber);
         }
         String oldPasswordOldUser = user.getPassword();
@@ -94,24 +89,20 @@ public class VendorServiceImpl implements VendorService {
         String oldPasswordNewUser = newVendorDTO.getOldPassword();
         String newPasswordNewUser = newVendorDTO.getNewPassword();
         String newPasswordConfirmNewUser = newVendorDTO.getConfirmNewPassword();
-        if(encoder.matches(oldPasswordNewUser, oldPasswordOldUser)){
-            if(newPasswordNewUser.equals(newPasswordConfirmNewUser)){
+        if (encoder.matches(oldPasswordNewUser, oldPasswordOldUser)) {
+            if (newPasswordNewUser.equals(newPasswordConfirmNewUser)) {
                 user.setPassword(encoder.encode(newPasswordNewUser));
-            }
-            else{
+            } else {
                 throw new BadRequestException("Your new password didn't match!");
             }
-        }
-        else{
+        } else {
             throw new BadRequestException("You wrote wrong old password!");
         }
-
         return ResponseEntity.ok("User have changed details");
     }
 
-    public VendorRegisterDTO getVendorDetails(String username){
-        return vendorRegisterMapper.createDTO(userRepository.getUser(username).orElseThrow(()->
+    public VendorRegisterDTO getVendorDetails(String username) {
+        return vendorRegisterMapper.createDTO(userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found!", username))));
     }
-
 }

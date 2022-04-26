@@ -5,8 +5,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
+import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
+import kg.peaksoft.ebookb4.dto.request.BookRequestDto;
 import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
@@ -28,8 +32,8 @@ import java.util.List;
 public class AdminApi {
 
     private AdminService service;
-
     private BookGetService bookGetService;
+    private BookRepository repository;
 
     @Operation(summary = "Get all by genre and book type",
             description = "Filter all books by genre and book type ")
@@ -37,13 +41,6 @@ public class AdminApi {
     public List<Book> getBooksBy(@PathVariable Genre genre,
                                  @PathVariable BookType bookType) {
         return service.getBooksBy(genre, bookType);
-    }
-
-    @Operation(summary = "Get books by genre",
-            description = "Filter all books only by genre ")
-    @GetMapping("/booksByGenre/{genre}")
-    public List<Book> getBooksByGenre(@PathVariable Genre genre) {
-        return service.getBooksByGenre(genre);
     }
 
     @Operation(summary = "Get all by book type",
@@ -78,6 +75,7 @@ public class AdminApi {
     public VendorResponse getByVendorId(@PathVariable Long id){
         return service.getVendor(id);
     }
+
     @Operation(summary = "Get client by id")
     @GetMapping("/clientById/{id}")
     public ClientResponse getClientById(@PathVariable Long id){
@@ -104,10 +102,10 @@ public class AdminApi {
     }
 
     @Operation(summary = "Accept a book by id", description = "Admin accepts book by Id")
-    @PostMapping("/book-accept/{id}")
-    public ResponseEntity<String> acceptBookRequest(@PathVariable Long id){
-        service.acceptBookRequest(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Accepted successfully"+id);
+    @PostMapping("/book-accept")
+    public ResponseEntity<String> acceptBookRequest(@RequestBody BookRequestDto request){
+        service.acceptBookRequest(request.getId());
+        return ResponseEntity.status(HttpStatus.OK).body("Accepted successfully"+request);
     }
 
     @Operation(summary = "Refuse a book by id", description = "Admin refuses a book by id")
@@ -125,4 +123,9 @@ public class AdminApi {
         return service.getBookById(id);
     }
 
+    @Operation(summary = "Get books by genre", description = "Filter all books only by genre ")
+    @GetMapping("/booksByGenre/{genre}")
+    public List<Book> getBooksByGenre(@PathVariable Genre genre) {
+        return service.getBooksByGenre(genre);
+    }
 }
