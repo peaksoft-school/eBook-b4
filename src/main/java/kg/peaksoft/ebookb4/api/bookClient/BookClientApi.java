@@ -8,9 +8,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Author: Zhanarbek Abdurasulov
+ * Date: 23/4/22
+ */
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/client/books")
@@ -27,6 +30,7 @@ public class BookClientApi {
         return clientService.addBookToBasket(request.getId(), authentication.getName());
     }
 
+    @Operation(summary = "Like a book",description = "Like a book with id")
     @PostMapping("/like")
     public ResponseEntity<?> likeBook(@RequestBody BookRequestDto request, Authentication authentication){
         return clientService.likeABook(request.getId(), authentication.getName());
