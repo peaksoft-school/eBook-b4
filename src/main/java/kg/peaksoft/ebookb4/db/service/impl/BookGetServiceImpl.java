@@ -9,15 +9,19 @@ import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.dto.dto.others.CustomPageRequest;
+import kg.peaksoft.ebookb4.dto.request.GenreRequest;
 import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static kg.peaksoft.ebookb4.db.models.enums.Genre.*;
+import static kg.peaksoft.ebookb4.db.models.enums.Genre.JOURNAL;
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.*;
 
 @Service
@@ -126,6 +130,30 @@ public class BookGetServiceImpl implements BookGetService {
     public List<BookResponse> getAllAcceptedBooks() {
         System.out.println(repository.findBooksAccepted(ACCEPTED).size());
         return repository.findBooksAccepted(ACCEPTED);
+    }
+
+    @Override
+    public List<GenreRequest> getCountGenre() {
+
+        List<GenreRequest> genreRequest = new ArrayList<>();
+        genreRequest.add(new GenreRequest(LITERATURE));
+        genreRequest.add(new GenreRequest(ROMANCE));
+        genreRequest.add(new GenreRequest(FANTASY));
+        genreRequest.add(new GenreRequest(DETECTIVE));
+        genreRequest.add(new GenreRequest(SCIENTIFIC));
+        genreRequest.add(new GenreRequest(ADVENTURE));
+        genreRequest.add(new GenreRequest(INTERNATIONAL_LITERATURE));
+        genreRequest.add(new GenreRequest(BIOGRAPHY));
+        genreRequest.add(new GenreRequest(DETECTIVE));
+        genreRequest.add(new GenreRequest(POETRY));
+        genreRequest.add(new GenreRequest(HORROR));
+        genreRequest.add(new GenreRequest(JOURNAL));
+
+        for (GenreRequest request: genreRequest) {
+            request.setCount(repository.getCountGenre(request.getGenre(),ACCEPTED));
+        }
+        genreRequest.forEach(System.out::println);
+        return genreRequest;
     }
 
 }

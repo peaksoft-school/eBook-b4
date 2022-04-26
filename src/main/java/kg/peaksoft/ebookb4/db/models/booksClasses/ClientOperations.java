@@ -15,8 +15,7 @@ import java.util.List;
  * Date: 19/4/22
  */
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientOperations {
@@ -40,4 +39,6 @@ public class ClientOperations {
                     name = "book_id",
                     referencedColumnName = "book_id"))
     private List<Book> boughtBooks;
+
+
 }

@@ -1,6 +1,7 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.repository.BasketRepository;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
@@ -55,6 +56,9 @@ public class ClientServiceImpl implements ClientService {
         user.setLastName("");
         user.setNumber("");
         user.setDateOfRegistration(LocalDate.now());
+        Basket basket1 = new Basket();
+        basket1.setUser(user);
+        user.setBasket(basket1);
         userRepository.save(user);
 
 
@@ -173,8 +177,7 @@ public class ClientServiceImpl implements ClientService {
                 .orElseThrow(() -> new BadRequestException(
                         "Client with email = " + email + " does not exists"
                 ));
-
-        user.getBasket().getBooks().clear();
+        user.getBasket().clear();
         return  ResponseEntity.ok("Clean books from basket of "+email);
     }
 

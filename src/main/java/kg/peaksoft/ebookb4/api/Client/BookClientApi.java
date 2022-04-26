@@ -40,10 +40,10 @@ public class BookClientApi {
     public ResponseEntity<?> deleteBookFromBasket(@PathVariable Long id, Authentication authentication) {
         return clientService.deleteBookFromBasket(id,authentication.getName());
     }
+
     @Operation(summary = "clean basket ",description = "Delete all books from basket when we click clean all")
     @DeleteMapping("/clean")
     public void cleanBasket(Authentication authentication) {
-        Authentication authentication1 = (Authentication) authentication.getPrincipal();
-        clientService.cleanBasketOfClientByEmail(authentication1.getName());
+        clientService.cleanBasketOfClientByEmail(authentication.getName());
     }
 }

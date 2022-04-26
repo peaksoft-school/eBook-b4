@@ -16,7 +16,6 @@ import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
-import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -36,8 +35,8 @@ import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.REFUSED;
 @Service
 @AllArgsConstructor
 public class AdminServiceImpl implements AdminService {
-
     private BookRepository bookRepository;
+
     private UserRepository userRepository;
     private VendorMapper vendorMapper;
     private ClientMapper clientMapper;
@@ -50,6 +49,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<Book> getBooksByBookType(BookType bookType) {
         return bookRepository.findAllByBookType(bookType, ACCEPTED);
+    }
+
+    @Override
+    public List<Book> getBooksByGenre(Genre genre) {
+        return bookRepository.findAllByGenre(genre, ACCEPTED);
     }
 
     @Override
@@ -137,12 +141,6 @@ public class AdminServiceImpl implements AdminService {
                 new BadRequestException(String.format("Book with id %s has not been found it is already went through admin-check", bookId)));
         book.setAdminWatch(true);
         return ResponseEntity.ok(String.format("Book with id %s has been watched by admin!", bookId));
-    }
-
-    @Override
-    public List<Book> getBooksByGenre(Genre genre) {
-
-        return bookRepository.findAllByGenre(genre, ACCEPTED);
     }
 
     @Override

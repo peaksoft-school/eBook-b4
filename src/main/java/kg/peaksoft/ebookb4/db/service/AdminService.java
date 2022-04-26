@@ -5,6 +5,7 @@ import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.service.impl.BookServiceImpl;
 import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
@@ -32,7 +33,6 @@ public interface AdminService {
 
     ClientResponse getClientById(Long id);
 
-
     ResponseEntity<?> acceptBookRequest(Long bookId);
 
     ResponseEntity<?> refuseBookRequest(RefuseBookRequest refuseBookRequest, Long id);
@@ -49,7 +49,6 @@ public interface AdminService {
 
     List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, Long vendorId,
                                             RequestStatus requestStatus);
-
 
     List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, Long vendorId,
                                             RequestStatus requestStatus);

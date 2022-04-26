@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -101,12 +100,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(value = "select b  from Book b where b.genre = ?1 and b.requestStatus = ?2 ")
     List<Book> findAllByGenre(Genre genre, RequestStatus requestStatus);
 
-
-//    @Query(value = "SELECT COUNT(*) FROM Author a WHERE a.genre = ?1",nativeQuery = true)
-//    Book getGenre();
-//
-//    @Query(value = "SELECT * FROM Book WHERE genre = ?1",
-//            countQuery = "SELECT COUNT(*) FROM Book WHERE genre = ?1",
-//            nativeQuery = true)
-//    List<Book> findAllByGenre2(String genre, RequestStatus requestStatus);
+    @Query("select count (b) from Book b where b.genre =?1 and b.requestStatus = ?2" )
+    Integer getCountGenre(Genre genre, RequestStatus requestStatus);
 }
