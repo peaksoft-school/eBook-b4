@@ -6,7 +6,7 @@ import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
 import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.dto.request.BookRequestDto;
+import kg.peaksoft.ebookb4.dto.request.Request;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,7 +39,7 @@ public class BookVendorApi {
     @Operation(summary = "Update book",description = "update a book")
     @PatchMapping("/editing")
     public ResponseEntity<?> update(@RequestBody BookDTO request,
-                                    @RequestBody BookRequestDto bookId){
+                                    @RequestBody Request bookId){
         return bookService.update(request,bookId.getId());
     }
 
@@ -51,7 +51,7 @@ public class BookVendorApi {
     }
 
     @Operation(summary = "Get all books for vendor",
-            description = "Get all books by id for vendor")
+            description = "Get all books by token")
     @GetMapping("/books/{offset}")
     public List<Book> getBooksOfVendor(@PathVariable Integer offset,Authentication authentication){
         return bookService.findBooksFromVendor(--offset, 12, authentication.getName());

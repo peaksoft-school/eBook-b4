@@ -2,14 +2,10 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.repository.BasketRepository;
-import kg.peaksoft.ebookb4.db.models.enums.ERole;
-import kg.peaksoft.ebookb4.db.models.userClasses.Role;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientUpdateDTO;
-import kg.peaksoft.ebookb4.dto.dto.users.VendorRegisterDTO;
 import kg.peaksoft.ebookb4.dto.mapper.ClientRegisterMapper;
-import kg.peaksoft.ebookb4.dto.request.BookRequestDto;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
@@ -17,15 +13,12 @@ import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Locale;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;

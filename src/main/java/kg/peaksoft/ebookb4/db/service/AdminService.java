@@ -3,6 +3,7 @@ package kg.peaksoft.ebookb4.db.service;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
@@ -32,9 +33,25 @@ public interface AdminService {
     ClientResponse getClientById(Long id);
 
 
-    void acceptBookRequest(Long bookId);
+    ResponseEntity<?> acceptBookRequest(Long bookId);
 
-    void refuseBookRequest(RefuseBookRequest refuseBookRequest, Long id);
+    ResponseEntity<?> refuseBookRequest(RefuseBookRequest refuseBookRequest, Long id);
 
     ResponseEntity<?> getBookById(Long bookId);
+
+    List<Book> findBooksFromVendor(Integer offset, int pageSize, Long vendorId);
+
+    List<Book> findBooksFromVendorInFavorites(Integer offset, int pageSize, Long vendorId);
+
+    List<Book> findBooksFromVendorAddedToBasket(Integer offset, int pageSize, Long vendorId);
+
+    List<Book> findBooksFromVendorWithDiscount(Integer offset, int pageSize, Long vendorId);
+
+    List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, Long vendorId,
+                                            RequestStatus requestStatus);
+
+
+    List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, Long vendorId,
+                                            RequestStatus requestStatus);
+
 }
