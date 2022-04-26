@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Locale;
+import java.util.Optional;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
 
@@ -115,7 +116,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @Transactional
     public ResponseEntity<?> update(ClientUpdateDTO newClientDTO, String username) {
-        User user = userRepository.getUser(username).orElseThrow(()->
+        User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found", username)));
 
         if (userRepository.existsByEmail(newClientDTO.getEmail())) {
@@ -155,8 +156,17 @@ public class ClientServiceImpl implements ClientService {
                 new BadRequestException(String.format("User with username %s has not been found!", username))));
     }
 
+    @Override
+    @Transactional
+        public ResponseEntity<?> deleteBookFromBasket(Long id,String email) {
+        User user = userRepository.getUser(email).orElseThrow(()->
+                new BadRequestException(String.format("User with id %s has not been found!",email)));
+        Book book = bookRepository.getById(id);
+        user.getBasket().getBooks().remove(book);
+        return ResponseEntity.ok("Delete book from basket of "+email);
+    }
+
     public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);
     }
-
 }

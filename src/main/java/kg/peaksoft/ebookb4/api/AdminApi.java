@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
@@ -30,6 +31,7 @@ public class AdminApi {
 
     private AdminService service;
     private BookGetService bookGetService;
+    private BookRepository repository;
 
     @Operation(summary = "Get all by genre and book type",
             description = "Filter all books by genre and book type ")
