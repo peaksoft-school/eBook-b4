@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.api.bookClient;
+package kg.peaksoft.ebookb4.api.Client;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,4 +35,7 @@ public class BookClientApi {
     public ResponseEntity<?> likeBook(@RequestBody BookRequestDto request, Authentication authentication){
         return clientService.likeABook(request.getId(), authentication.getName());
     }
+
+
+
 }
