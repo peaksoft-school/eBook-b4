@@ -154,6 +154,18 @@ public class ClientServiceImpl implements ClientService {
         return ResponseEntity.ok("Delete book from basket of "+email);
     }
 
+    @Override
+    @Transactional
+    public ResponseEntity<?> cleanBasketOfClientByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new BadRequestException(
+                        "Client with email = " + email + " does not exists"
+                ));
+
+        user.getBasket().getBooks().clear();
+        return  ResponseEntity.ok("Clean books from basket of "+email);
+    }
+
     public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);
     }

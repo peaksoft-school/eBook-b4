@@ -23,5 +23,5 @@ public interface ClientService {
 
     ResponseEntity<?> deleteBookFromBasket(Long id, String authentication);
 
-
+    ResponseEntity<?> cleanBasketOfClientByEmail(String clientEmail);
 }

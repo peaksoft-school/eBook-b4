@@ -2,7 +2,6 @@ package kg.peaksoft.ebookb4.api.Client;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.dto.request.Request;
 import lombok.AllArgsConstructor;
@@ -41,6 +40,10 @@ public class BookClientApi {
     public ResponseEntity<?> deleteBookFromBasket(@PathVariable Long id, Authentication authentication) {
         return clientService.deleteBookFromBasket(id,authentication.getName());
     }
-
-
+    @Operation(summary = "clean basket ",description = "Delete all books from basket when we click clean all")
+    @DeleteMapping("/clean")
+    public void cleanBasket(Authentication authentication) {
+        Authentication authentication1 = (Authentication) authentication.getPrincipal();
+        clientService.cleanBasketOfClientByEmail(authentication1.getName());
+    }
 }
