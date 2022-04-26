@@ -51,7 +51,7 @@ public class BookVendorApi {
     }
 
     @Operation(summary = "Get all books for vendor",
-            description = "Get all books by id for vendor")
+            description = "Get all books by token")
     @GetMapping("/books/{offset}")
     public List<Book> getBooksOfVendor(@PathVariable Integer offset,Authentication authentication){
         return bookService.findBooksFromVendor(--offset, 12, authentication.getName());
@@ -93,9 +93,4 @@ public class BookVendorApi {
         return bookService.findBooksFromVendorInProcess(--offset, 12, authentication.getName(),
                 RequestStatus.INPROGRESS);
     }
-
-
-
-
-
 }
