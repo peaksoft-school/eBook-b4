@@ -153,6 +153,7 @@ public class AdminServiceImpl implements AdminService {
         int start = Math.min((int)paging.getOffset(), books.size());
         int end = Math.min((start + paging.getPageSize()), books.size());
         Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
+        System.out.println(new CustomPageRequest<>(pages).getContent().size());
         return new CustomPageRequest<>(pages).getContent();
     }
 

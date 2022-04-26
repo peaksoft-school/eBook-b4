@@ -164,7 +164,7 @@ public class AdminApi {
 
     @Operation(summary = "Get books in progress in admin panel",
             description = "Get a books in progress")
-    @GetMapping("/books-in-process/{offset}")
+    @GetMapping("vendor/{vendorId}/books-in-process/{offset}")
     public List<Book> getBooksInProcess(@PathVariable Long vendorId
             ,@PathVariable Integer offset){
         return service.findBooksFromVendorInProcess(--offset, 12, vendorId,

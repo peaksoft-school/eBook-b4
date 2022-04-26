@@ -74,8 +74,14 @@ public class ClientServiceImpl implements ClientService {
         if (bookRepository.checkIfAlreadyPutLike(bookId, user.getId()) > 0) {
             throw new BadRequestException("You already put like to this book!");
         }
-        user.getLikedBooks().add(book);
-        bookRepository.incrementLikesOfBook(bookId);
+        if(bookRepository.getById(bookId).getRequestStatus()==ACCEPTED){
+            user.getLikedBooks().add(book);
+            bookRepository.incrementLikesOfBook(bookId);
+        }
+        else{
+            throw new BadRequestException("This book has not went through admin-check yet!");
+        }
+
         return ResponseEntity.ok(new MessageResponse(String.format(
                 "Book with id %s successfully has been liked by user with name %s", bookId, username)));
     }
@@ -93,8 +99,14 @@ public class ClientServiceImpl implements ClientService {
         User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s not found", username)));
 
-        user.getBasket().getBooks().add(bookRepository.getById(bookId));
-        bookRepository.incrementBasketsOfBooks(bookId);
+        if(bookRepository.getById(bookId).getRequestStatus()==ACCEPTED){
+            user.getBasket().getBooks().add(bookRepository.getById(bookId));
+            bookRepository.incrementBasketsOfBooks(bookId);
+        }
+        else{
+            throw new BadRequestException("This book has not went through admin-check yet!");
+        }
+
         return ResponseEntity.ok(new MessageResponse(String.format("Book with id %s has been added to basket of user" +
                 "with username %s", bookId, username)));
 
