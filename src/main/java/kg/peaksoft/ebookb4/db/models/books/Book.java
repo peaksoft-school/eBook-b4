@@ -47,6 +47,7 @@ public class Book {
     private Integer discountFromPromo;
 
     @ManyToMany(cascade = CascadeType.REMOVE)
+    @JsonIgnore
     @JoinTable(
             name = "books_basket"
             , joinColumns = @JoinColumn(name = "book_id")
@@ -54,6 +55,7 @@ public class Book {
     private List<Basket> basket;
 
     @ManyToMany(cascade = CascadeType.REMOVE)
+    @JsonIgnore
     @JoinTable(
             name = "liked_books"
             , joinColumns = @JoinColumn(name = "book_id")

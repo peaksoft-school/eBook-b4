@@ -132,7 +132,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Book> getBooksByGenre(Genre genre) {
-        return bookRepository.findAllByGenre(genre, ACCEPTED);
-    }
 
+        return bookRepository.findAllByGenre(genre, ACCEPTED);
+
+    }
 }

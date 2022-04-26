@@ -5,12 +5,10 @@ import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
-import kg.peaksoft.ebookb4.dto.request.BookRequestDto;
 import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -85,8 +83,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByBookType(BookType bookType, RequestStatus requestStatus);
     //fin books by genre and book type /admin panel
 
-    @Query("select b from Book b where b.genre =?1 or b.bookType= ?2 and b.requestStatus = ?2")
+    @Query("select b from Book b where b.genre =?1 or b.bookType= ?2 and b.requestStatus = ?3")
     List<Book> getBooks(Genre genre, BookType bookType, RequestStatus requestStatus);
+
     @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
             "b.yearOfIssue, b.price) from Book b where b.requestStatus = ?1")
     List<BookResponse> findBooksInProgress(RequestStatus requestStatus);
@@ -102,4 +101,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(value = "select b  from Book b where b.genre = ?1 and b.requestStatus = ?2 ")
     List<Book> findAllByGenre(Genre genre, RequestStatus requestStatus);
 
+
+    @Query(value = "SELECT COUNT(*) FROM Author a WHERE a.genre = ?1",nativeQuery = true)
+    Book getGenre();
+
+    @Query(value = "SELECT * FROM Book WHERE genre = ?1",
+            countQuery = "SELECT COUNT(*) FROM Book WHERE genre = ?1",
+            nativeQuery = true)
+    List<Book> findAllByGenre2(String genre, RequestStatus requestStatus);
 }
