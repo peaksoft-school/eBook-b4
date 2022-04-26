@@ -102,11 +102,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByGenre(Genre genre, RequestStatus requestStatus);
 
 
-    @Query(value = "SELECT COUNT(*) FROM Author a WHERE a.genre = ?1",nativeQuery = true)
-    Book getGenre();
-
-    @Query(value = "SELECT * FROM Book WHERE genre = ?1",
-            countQuery = "SELECT COUNT(*) FROM Book WHERE genre = ?1",
-            nativeQuery = true)
-    List<Book> findAllByGenre2(String genre, RequestStatus requestStatus);
+//    @Query(value = "SELECT COUNT(*) FROM Author a WHERE a.genre = ?1",nativeQuery = true)
+//    Book getGenre();
+//
+//    @Query(value = "SELECT * FROM Book WHERE genre = ?1",
+//            countQuery = "SELECT COUNT(*) FROM Book WHERE genre = ?1",
+//            nativeQuery = true)
+//    List<Book> findAllByGenre2(String genre, RequestStatus requestStatus);
 }
