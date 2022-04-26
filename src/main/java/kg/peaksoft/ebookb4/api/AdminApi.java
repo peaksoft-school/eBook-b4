@@ -5,12 +5,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
-import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
-import kg.peaksoft.ebookb4.dto.request.BookRequestDto;
+import kg.peaksoft.ebookb4.dto.request.Request;
 import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
@@ -103,7 +101,7 @@ public class AdminApi {
 
     @Operation(summary = "Accept a book by id", description = "Admin accepts book by Id")
     @PostMapping("/book-accept")
-    public ResponseEntity<String> acceptBookRequest(@RequestBody BookRequestDto request){
+    public ResponseEntity<String> acceptBookRequest(@RequestBody Request request){
         service.acceptBookRequest(request.getId());
         return ResponseEntity.status(HttpStatus.OK).body("Accepted successfully"+request);
     }

@@ -2,14 +2,10 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.repository.BasketRepository;
-import kg.peaksoft.ebookb4.db.models.enums.ERole;
-import kg.peaksoft.ebookb4.db.models.userClasses.Role;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientUpdateDTO;
-import kg.peaksoft.ebookb4.dto.dto.users.VendorRegisterDTO;
 import kg.peaksoft.ebookb4.dto.mapper.ClientRegisterMapper;
-import kg.peaksoft.ebookb4.dto.request.BookRequestDto;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
@@ -17,16 +13,14 @@ import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
 
@@ -110,7 +104,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @Transactional
     public ResponseEntity<?> update(ClientUpdateDTO newClientDTO, String username) {
-        User user = userRepository.getUser(username).orElseThrow(()->
+        User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found", username)));
 
         if (userRepository.existsByEmail(newClientDTO.getEmail())) {
@@ -150,8 +144,17 @@ public class ClientServiceImpl implements ClientService {
                 new BadRequestException(String.format("User with username %s has not been found!", username))));
     }
 
+    @Override
+    @Transactional
+        public ResponseEntity<?> deleteBookFromBasket(Long id,String email) {
+        User user = userRepository.getUser(email).orElseThrow(()->
+                new BadRequestException(String.format("User with id %s has not been found!",email)));
+        Book book = bookRepository.getById(id);
+        user.getBasket().getBooks().remove(book);
+        return ResponseEntity.ok("Delete book from basket of "+email);
+    }
+
     public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);
     }
-
 }
