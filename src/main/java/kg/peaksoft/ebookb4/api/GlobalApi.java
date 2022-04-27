@@ -17,13 +17,13 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/")
 @AllArgsConstructor
-@Tag(name = "Books",description = "Sort operations")
+@Tag(name = "Books", description = "Sort operations")
 public class GlobalApi {
 
     @GetMapping("/vendor-sell")
     @Operation(summary = "Intro to become vendor", description = "This page to intro-e client or guest " +
             "to become vendor!")
-    public List<FileSources> becomeVendor(){
+    public List<FileSources> becomeVendor() {
         List<FileSources> files = new ArrayList<>();
         FileSources file = new FileSources();
         file.setLine1("В целом, конечно, экономическая повестка");
@@ -36,7 +36,7 @@ public class GlobalApi {
         files.add(file);
         files.add(file);
         files.add(file);
-        return  files;
+        return files;
     }
 
 }

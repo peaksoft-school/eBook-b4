@@ -11,6 +11,7 @@ import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.dto.request.GenreRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -46,9 +47,9 @@ public class BookGlobalApi {
         return bookGetService.getBookById(id);
     }
 
-    @Operation(summary = "Get all genre count books",description = "get genres countBooks")
+    @Operation(summary = "Get all genre count books", description = "get genres countBooks")
     @GetMapping("/genre_count/")
-    List<GenreRequest> getCountGenre(){
+    List<GenreRequest> getCountGenre() {
         return bookGetService.getCountGenre();
     }
 }
