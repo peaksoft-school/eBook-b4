@@ -2,9 +2,9 @@ package kg.peaksoft.ebookb4.api.auth;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.dto.request.LoginRequest;
-import kg.peaksoft.ebookb4.dto.request.SignupRequestClient;
-import kg.peaksoft.ebookb4.dto.request.SignupRequestVendor;
+import kg.peaksoft.ebookb4.dto.dto.users.LoginRequest;
+import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
+import kg.peaksoft.ebookb4.dto.dto.users.VendorRegisterDTO;
 import kg.peaksoft.ebookb4.dto.response.JwtResponse;
 import kg.peaksoft.ebookb4.config.jwt.JwtUtils;
 import kg.peaksoft.ebookb4.config.services.UserDetailsImpl;
@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@AllArgsConstructor
-@RequestMapping("/api/public")
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Tag(name = "Authentication API", description = "Authorization with jwt token")
+@RequestMapping("/api/auth")
+@AllArgsConstructor
+@Tag(name = "AuthController", description = "jwt token,")
 public class AuthApi {
 
     AuthenticationManager authenticationManager;
@@ -35,8 +35,8 @@ public class AuthApi {
     VendorService vendorService;
     ClientService clientService;
 
-    @Operation(summary = "Sign In", description = "Sign In Users")
-    @PostMapping("/signin")
+    @Operation(summary = "Sign in", description = "Signing in for all users: admin, client, vendor")
+    @PostMapping("/sign-in")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -57,19 +57,16 @@ public class AuthApi {
                 roles));
     }
 
-    @Operation(summary = "Sign Up client", description = "Register a Client")
+    @Operation(summary = "Sign up", description = "Register only for client")
     @PostMapping("/signup/client")
-    public ResponseEntity<?> registerClient(@Valid @RequestBody SignupRequestClient client) {
+    public ResponseEntity<?> registerClient(@Valid @RequestBody ClientRegisterDTO client) {
         return clientService.register(client, 1L);
     }
 
-    @Operation(summary = "Sign Up Vendor", description = "Register a Vendor")
+    @Operation(summary = "Sign up", description = "Register only for vendor")
     @PostMapping("/signup/vendor")
-    public ResponseEntity<?> registerVendor(@Valid @RequestBody SignupRequestVendor vendor) {
+    public ResponseEntity<?> registerVendor(@Valid @RequestBody VendorRegisterDTO vendor) {
         return vendorService.register(vendor, 2L);
     }
-
-
-
 
 }
