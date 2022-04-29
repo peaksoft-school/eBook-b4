@@ -25,8 +25,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "or b.publishingHouse like %?1% and b.requestStatus=?2")
     List<Book> findByName(String name, RequestStatus requestStatus);
 
-
-
     //find all active books
     @Query("select b from Book b where b.requestStatus = ?1")
     List<Book> findAllActive(RequestStatus requestStatus);
