@@ -13,11 +13,13 @@ import kg.peaksoft.ebookb4.dto.dto.others.CustomPageRequest;
 import kg.peaksoft.ebookb4.dto.mapper.ClientMapper;
 import kg.peaksoft.ebookb4.dto.mapper.VendorMapper;
 import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -25,11 +27,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.REFUSED;
 
@@ -42,11 +43,18 @@ public class AdminServiceImpl implements AdminService {
     private UserRepository userRepository;
     private VendorMapper vendorMapper;
     private ClientMapper clientMapper;
-
+    private ModelMapper modelMapper;
     @Override
     public List<Book> getBooksBy(Genre genre, BookType bookType) {
         log.info("getBooks By genre and book type works");
         return bookRepository.getBooks(genre, bookType, ACCEPTED);
+    }
+
+    @Override
+    public List<BookResponse> getBooksFromBasket(Long clientId) {
+        return bookRepository.findBasketByClientId(clientId)
+                .stream().map(book -> modelMapper.map(
+                        book, BookResponse.class)).collect(Collectors.toList());
     }
 
     @Override

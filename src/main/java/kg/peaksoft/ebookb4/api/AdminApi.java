@@ -15,8 +15,10 @@ import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,6 +40,12 @@ public class AdminApi {
     public List<Book> getBooksBy(@PathVariable Genre genre,
                                  @PathVariable BookType bookType) {
         return service.getBooksBy(genre, bookType);
+    }
+
+    @Operation(summary = "Get books by genre", description = "Filter all books only by genre ")
+    @GetMapping("/booksByGenre/{genre}")
+    public List<Book> getBooksByGenre(@PathVariable Genre genre) {
+        return service.getBooksByGenre(genre);
     }
 
     @Operation(summary = "Get all by book type",
@@ -74,7 +82,7 @@ public class AdminApi {
     }
 
     @Operation(summary = "Get client by id")
-    @GetMapping("/clientById/{id}")
+    @GetMapping("/client/{id}")
     public ClientResponse getClientById(@PathVariable Long id) {
         return service.getClientById(id);
     }
@@ -115,12 +123,6 @@ public class AdminApi {
     @GetMapping("/book/{id}")
     public ResponseEntity<?> getBookById(@PathVariable Long id) {
         return service.getBookById(id);
-    }
-
-    @Operation(summary = "Get books by genre", description = "Filter all books only by genre ")
-    @GetMapping("/booksByGenre/{genre}")
-    public List<Book> getBooksByGenre(@PathVariable Genre genre) {
-        return service.getBooksByGenre(genre);
     }
 
     @Operation(summary = "Get all books of vendor in admin panel",
@@ -170,5 +172,10 @@ public class AdminApi {
             , @PathVariable Integer offset) {
         return service.findBooksFromVendorInProcess(--offset, 12, vendorId,
                 RequestStatus.INPROGRESS);
+    }
+
+    @GetMapping("/client/{clientId}/basket")
+    public List<BookResponse> getBooksClientFromBasket(@PathVariable Long clientId) {
+        return service.getBooksFromBasket(clientId);
     }
 }

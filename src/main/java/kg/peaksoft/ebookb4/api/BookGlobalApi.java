@@ -36,7 +36,7 @@ public class BookGlobalApi {
     }
 
     @Operation(summary = "Find all active books if needs being sorted", description = "Sorted By Genre, BookType, Price, Language")
-    @GetMapping("/{offset}")
+    @GetMapping("/sort/{offset}")
     public List<Book> getBooks(@RequestBody SortBooksGlobal sortBook, @PathVariable Integer offset) {
         return bookGetService.getAllBooksOrSortedOnes(sortBook, --offset, 12);
     }

@@ -1,6 +1,7 @@
 package kg.peaksoft.ebookb4.db.models.books;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
@@ -20,6 +21,7 @@ import java.util.List;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Book {
 
     @Id

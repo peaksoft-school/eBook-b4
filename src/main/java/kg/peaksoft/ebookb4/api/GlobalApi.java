@@ -42,5 +42,4 @@ public class GlobalApi {
         files.add(file);
         return files;
     }
-
 }
