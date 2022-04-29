@@ -19,12 +19,13 @@ import java.util.Optional;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-//            "or b.genre like ?1" +
     //find books by title, author, publishingHouse
     @Query("select b from Book b where b.title like %?1% " +
             "or b.authorFullName like %?1%" +
             "or b.publishingHouse like %?1% and b.requestStatus=?2")
     List<Book> findByName(String name, RequestStatus requestStatus);
+
+
 
     //find all active books
     @Query("select b from Book b where b.requestStatus = ?1")
