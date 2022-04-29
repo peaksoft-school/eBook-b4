@@ -31,7 +31,6 @@ public class AdminApi {
 
     private AdminService service;
     private BookGetService bookGetService;
-    private BookRepository repository;
 
     @Operation(summary = "Get all by genre and book type",
             description = "Filter all books by genre and book type ")

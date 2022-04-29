@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -17,11 +18,12 @@ import java.util.Optional;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
+//            "or b.genre like ?1" +
     //find books by title, author, publishingHouse
     @Query("select b from Book b where b.title like %?1% " +
             "or b.authorFullName like %?1%" +
             "or b.publishingHouse like %?1% and b.requestStatus=?2")
-    List<Book> findByName(String keyword, RequestStatus requestStatus);
+    List<Book> findByName(String name, RequestStatus requestStatus);
 
     //find all active books
     @Query("select b from Book b where b.requestStatus = ?1")
@@ -100,6 +102,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(value = "select b  from Book b where b.genre = ?1 and b.requestStatus = ?2 ")
     List<Book> findAllByGenre(Genre genre, RequestStatus requestStatus);
 
-    @Query("select count (b) from Book b where b.genre =?1 and b.requestStatus = ?2" )
+    @Query("select count (b) from Book b where b.genre =?1 and b.requestStatus = ?2")
     Integer getCountGenre(Genre genre, RequestStatus requestStatus);
 }

@@ -8,7 +8,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface BookService {
-    ResponseEntity<?> register(BookDTO bookDTO, String username);
+
+    ResponseEntity<?> saveBook(BookDTO bookDTO, String username);
 
     Book findByBookId(Long bookId);
 

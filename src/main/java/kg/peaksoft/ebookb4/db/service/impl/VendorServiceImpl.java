@@ -19,10 +19,10 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Locale;
 
-@Service
-@AllArgsConstructor
-@Transactional
 @Slf4j
+@Service
+@Transactional
+@AllArgsConstructor
 public class VendorServiceImpl implements VendorService {
 
     private final UserRepository userRepository;
@@ -50,7 +50,7 @@ public class VendorServiceImpl implements VendorService {
 
         user.setDateOfRegistration(LocalDate.now());
         userRepository.save(user);
-
+        log.info("Method save vendor works");
         return ResponseEntity.ok(new MessageResponse(
                 String.format("User with email %s registered successfully!", user.getEmail().toUpperCase(Locale.ROOT))));
     }
@@ -98,10 +98,12 @@ public class VendorServiceImpl implements VendorService {
         } else {
             throw new BadRequestException("You wrote wrong old password!");
         }
+        log.info("Update vendor works");
         return ResponseEntity.ok("User have changed details");
     }
 
     public VendorRegisterDTO getVendorDetails(String username) {
+        log.info("Get vendor details");
         return vendorRegisterMapper.createDTO(userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found!", username))));
     }

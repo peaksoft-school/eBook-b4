@@ -14,17 +14,16 @@ import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Locale;
-import java.util.Optional;
-
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
@@ -34,20 +33,23 @@ public class ClientServiceImpl implements ClientService {
     private final RoleRepository roleRepository;
     private final BookRepository bookRepository;
     private final BasketRepository basketRepository;
-    ClientRegisterMapper clientRegisterMapper;
+    private final ClientRegisterMapper clientRegisterMapper;
 
     @Override
     public ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number) {
         //checking if passwords are the same or not
         if (!clientRegisterDTO.getPassword().equals(clientRegisterDTO.getConfirmPassword())) {
+            log.error("password are not the same ");
             throw new BadRequestException("Passwords are not the same!");
         }
 
         if (userRepository.existsByEmail(clientRegisterDTO.getEmail())) {
+            log.error("Client with email = {} already in use",clientRegisterDTO.getEmail());
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
+        log.info("Saving new client {} to the database", clientRegisterDTO.getEmail());
         User user = new User(
                 clientRegisterDTO.getEmail(),
                 encoder.encode(clientRegisterDTO.getPassword()));
@@ -60,8 +62,6 @@ public class ClientServiceImpl implements ClientService {
         basket1.setUser(user);
         user.setBasket(basket1);
         userRepository.save(user);
-
-
         return ResponseEntity.ok(new MessageResponse(
                 String.format("User with email %s registered successfully!", user.getEmail().toUpperCase(Locale.ROOT))));
     }
@@ -86,7 +86,7 @@ public class ClientServiceImpl implements ClientService {
         else{
             throw new BadRequestException("This book has not went through admin-check yet!");
         }
-
+        log.info("{} like to {}",user.getEmail(),book.getTitle());
         return ResponseEntity.ok(new MessageResponse(String.format(
                 "Book with id %s successfully has been liked by user with name %s", bookId, username)));
     }
@@ -97,7 +97,7 @@ public class ClientServiceImpl implements ClientService {
 
         if (basketRepository.checkIfAlreadyClientPutInBasket(
                 getUsersBasketId(username), bookId) > 0) {
-            System.out.println("It has been checked!");
+            log.error("with book already to basket!");
             throw new BadRequestException("You already put this book in your basket");
         }
 
@@ -111,10 +111,9 @@ public class ClientServiceImpl implements ClientService {
         else{
             throw new BadRequestException("This book has not went through admin-check yet!");
         }
-
+        log.info("Edd book to basket works");
         return ResponseEntity.ok(new MessageResponse(String.format("Book with id %s has been added to basket of user" +
                 "with username %s", bookId, username)));
-
     }
 
     @Override
@@ -150,7 +149,7 @@ public class ClientServiceImpl implements ClientService {
         } else {
             throw new BadRequestException("You wrote wrong old password!");
         }
-
+        log.info("Update Client works");
         return ResponseEntity.ok("User have changed details");
     }
 
@@ -167,6 +166,7 @@ public class ClientServiceImpl implements ClientService {
                 new BadRequestException(String.format("User with id %s has not been found!",email)));
         Book book = bookRepository.getById(id);
         user.getBasket().getBooks().remove(book);
+        log.info("delete book from basket works");
         return ResponseEntity.ok("Delete book from basket of "+email);
     }
 
@@ -178,6 +178,7 @@ public class ClientServiceImpl implements ClientService {
                         "Client with email = " + email + " does not exists"
                 ));
         user.getBasket().clear();
+        log.info("Clean Basket of Client by email works");
         return  ResponseEntity.ok("Clean books from basket of "+email);
     }
 

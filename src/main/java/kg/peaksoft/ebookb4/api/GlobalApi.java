@@ -1,9 +1,12 @@
 package kg.peaksoft.ebookb4.api;
 
+import ch.qos.logback.core.LogbackException;
+import ch.qos.logback.core.spi.LogbackLock;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +20,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/")
 @AllArgsConstructor
+@Slf4j
 @Tag(name = "Books", description = "Sort operations")
 public class GlobalApi {
 

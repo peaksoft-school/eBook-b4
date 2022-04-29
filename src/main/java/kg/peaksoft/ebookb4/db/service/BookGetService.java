@@ -14,6 +14,7 @@ public interface BookGetService {
 
     List<Book> findByGenre(Genre genre, RequestStatus requestStatus);
 
+
     List<Book> findBooksByName(String name, RequestStatus requestStatus);
 
     List<Book> getAllBooksOrSortedOnes(SortBooksGlobal sortBook, int offset, int pageSize);

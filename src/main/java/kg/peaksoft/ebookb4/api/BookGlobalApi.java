@@ -24,13 +24,13 @@ public class BookGlobalApi {
     private final BookGetService bookGetService;
 
     @Operation(summary = "Find all books by genre", description = "Sorting books by genre")
-    @GetMapping("/{genre}")
+    @GetMapping("/genre/{genre}")
     public List<Book> findBooksByGenre(@PathVariable Genre genre) {
         return bookGetService.findByGenre(genre, RequestStatus.ACCEPTED);
     }
 
     @Operation(summary = "Find books by name", description = "Using linear search while finding, name, title, authorName or publishing house")
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public List<Book> findBooksByName(@PathVariable String name) {
         return bookGetService.findBooksByName(name, RequestStatus.ACCEPTED);
     }

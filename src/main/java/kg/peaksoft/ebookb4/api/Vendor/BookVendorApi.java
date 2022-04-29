@@ -27,7 +27,7 @@ public class BookVendorApi {
     @Operation(summary = "Save book",description = "Adding a new book")
     @PostMapping("/new-book")
     public ResponseEntity<?> saveBook(@RequestBody BookDTO bookDTO, Authentication authentication){
-        return  bookService.register(bookDTO, authentication.getName());
+        return  bookService.saveBook(bookDTO, authentication.getName());
     }
 
     @Operation(summary = "Delete book",description = "Deleting a book by id")

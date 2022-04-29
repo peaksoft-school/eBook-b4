@@ -35,6 +35,7 @@ public class BookClientApi {
     public ResponseEntity<?> likeBook(@RequestBody Request request, Authentication authentication){
         return clientService.likeABook(request.getId(), authentication.getName());
     }
+
     @Operation(summary = "Delete Book from basket by id",description = "Delete one book from basket when we click cross")
     @DeleteMapping("/remove-book-basket/{id}")
     public ResponseEntity<?> deleteBookFromBasket(@PathVariable Long id, Authentication authentication) {
