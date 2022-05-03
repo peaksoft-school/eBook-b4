@@ -6,7 +6,6 @@ import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
@@ -15,12 +14,9 @@ import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -53,12 +49,6 @@ public class AdminApi {
     @GetMapping("/booksByType/{bookType}")
     public List<Book> getBooksByBookType(@PathVariable BookType bookType) {
         return service.getBooksByBookType(bookType);
-    }
-
-    @Operation(summary = "Get all accepted books", description = "All accepted books")
-    @GetMapping("/books-accepted")
-    public List<BookResponse> getAllAcceptedBooks() {
-        return bookGetService.getAllAcceptedBooks();
     }
 
     @Operation(summary = "Get all Vendors",
@@ -110,6 +100,12 @@ public class AdminApi {
     @PostMapping("/book-accept")
     public ResponseEntity<?> acceptBookRequest(@RequestBody Request request) {
         return service.acceptBookRequest(request.getId());
+    }
+
+    @Operation(summary = "Get all accepted books", description = "All accepted books")
+    @GetMapping("/books-accepted")
+    public List<BookResponse> getAllAcceptedBooks() {
+        return bookGetService.getAllAcceptedBooks();
     }
 
     @Operation(summary = "Refuse a book by id", description = "Admin refuses a book by id")

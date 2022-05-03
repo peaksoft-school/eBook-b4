@@ -3,17 +3,17 @@ package kg.peaksoft.ebookb4.api.Client;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.service.ClientService;
+import kg.peaksoft.ebookb4.dto.dto.users.ClientOperationDTO;
 import kg.peaksoft.ebookb4.dto.request.Request;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 23/4/22
- */
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/client/books")
@@ -28,6 +28,11 @@ public class BookClientApi {
     @PostMapping("/basket")
     public ResponseEntity<?> addToBasket(@RequestBody Request request, Authentication authentication){
         return clientService.addBookToBasket(request.getId(), authentication.getName());
+    }
+
+    @GetMapping("/clientBasket/{clientId}")
+    public List<BookResponse> getBooksClientFromBasket(@PathVariable Long clientId) {
+        return clientService.getBooksFromBasket(clientId);
     }
 
     @Operation(summary = "Like a book",description = "Like a book with id")
@@ -46,5 +51,10 @@ public class BookClientApi {
     @DeleteMapping("/clean")
     public void cleanBasket(Authentication authentication) {
         clientService.cleanBasketOfClientByEmail(authentication.getName());
+    }
+
+    @GetMapping("/gets")
+    public ClientOperationDTO gets(ClientOperationDTO dto){
+        return clientService.operationClient(dto);
     }
 }

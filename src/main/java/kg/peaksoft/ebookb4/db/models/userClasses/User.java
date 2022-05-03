@@ -65,9 +65,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Promocode> promocodes;
 
-    @OneToOne
+    @OneToMany
     @JoinColumn(name = "operation_id")
-    private ClientOperations clientOperation;
+    private List<ClientOperations> clientOperation;
 
     @OneToOne
     private Role role;

@@ -32,7 +32,7 @@ public interface AdminService {
 
     VendorResponse getVendor(Long id);
 
-    ClientResponse getClientById(Long id);
+    ClientResponse  getClientById(Long id);
 
     ResponseEntity<?> acceptBookRequest(Long bookId);
 

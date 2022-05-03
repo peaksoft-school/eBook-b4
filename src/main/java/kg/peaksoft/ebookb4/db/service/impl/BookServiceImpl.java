@@ -258,5 +258,4 @@ public class BookServiceImpl implements BookService {
         log.info("Vendor book = {} in process",booksInProgress.size());
         return new CustomPageRequest<>(pages).getContent();
     }
-
 }

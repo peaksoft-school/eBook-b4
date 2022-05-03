@@ -1,10 +1,10 @@
 package kg.peaksoft.ebookb4.api;
 
-import ch.qos.logback.core.LogbackException;
-import ch.qos.logback.core.spi.LogbackLock;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,6 +23,13 @@ import java.util.List;
 @Slf4j
 @Tag(name = "Books", description = "Sort operations")
 public class GlobalApi {
+
+    private final BookRepository repository;
+
+    @GetMapping("/get")
+    public List<Book> get(){
+        return repository.clientLikeBooks();
+    }
 
     @GetMapping("/vendor-sell")
     @Operation(summary = "Intro to become vendor", description = "This page to intro-e client or guest " +

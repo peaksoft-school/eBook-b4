@@ -5,11 +5,13 @@ import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.dto.dto.users.ClientOperationDTO;
 import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -56,6 +58,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.baskets>0 and b.user.email = ?1")
     List<Book> findBooksFromVendorAddedToBasket(String username);
 
+    @Query("select u.basket.books from User u where u.id = :clientId")
+    List<Book> findBasketByClientId(@Param("clientId") Long clientId);
+
+
     @Query("select b from Book b where b.discount is not null and b.user.email = ?1")
     List<Book> findBooksFromVendorWithDiscount(String username);
 
@@ -64,10 +70,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("select b from Book b where b.requestStatus = ?2 and b.user.email = ?1")
     List<Book> findBooksFromVendorInProgress(String username, RequestStatus requestStatus);
-
-    @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
-            "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
-    Integer checkIfAlreadyPutLike(Long bookId, Long userId);
 
     @Transactional
     @Modifying
@@ -105,8 +107,15 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select count (b) from Book b where b.genre =?1 and b.requestStatus = ?2")
     Integer getCountGenre(Genre genre, RequestStatus requestStatus);
 
-    @Query("select u.basket.books from User u where u.id = :clientId")
-    List<Book> findBasketByClientId(@Param("clientId") Long clientId);
+    @Query("select b.likedBooks from Book b")
+    List<Book> clientLikeBooks();
+    @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
+            "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
+    Integer checkIfAlreadyPutLike(Long bookId, Long userId);
 
+
+    @Query(value = "select count (*) from books_basket where books.prise =?1 " +
+            "and books.id= ?1 and books.discount = ?1 ",nativeQuery = true)
+    ClientOperationDTO getBooksCount(ClientOperationDTO clientOperationDTO);
 
 }

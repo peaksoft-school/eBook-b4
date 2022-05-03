@@ -12,7 +12,6 @@ import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,8 +24,10 @@ import java.util.List;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
-    @SequenceGenerator(name = "hibernate_seq", sequenceName = "book_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "hibernate_seq")
+    @SequenceGenerator(name = "hibernate_seq",
+            sequenceName = "book_seq", allocationSize = 1)
     @Column(name = "book_id")
     private Long bookId;
     private String title;
@@ -42,12 +43,12 @@ public class Book {
     private BookType bookType;
     @Enumerated(value = EnumType.STRING)
     private Genre genre;
-
-    private int baskets;
-    private int likes;
     @Enumerated(value = EnumType.STRING)
     private RequestStatus requestStatus = RequestStatus.INPROGRESS;
+
     private Boolean adminWatch = false;
+    private int baskets;
+    private int likes;
     private Integer discount;
     private Integer discountFromPromo;
 

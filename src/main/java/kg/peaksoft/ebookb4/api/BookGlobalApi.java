@@ -6,12 +6,10 @@ import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
-import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.dto.request.GenreRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -30,7 +28,7 @@ public class BookGlobalApi {
     }
 
     @Operation(summary = "Find books by name", description = "Using linear search while finding, name, title, authorName or publishing house")
-    @GetMapping("/name/{name}")
+    @GetMapping("/{name}")
     public List<Book> findBooksByName(@PathVariable String name) {
         return bookGetService.findBooksByName(name, RequestStatus.ACCEPTED);
     }
