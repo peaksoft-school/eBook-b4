@@ -10,16 +10,12 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 19/4/22
- */
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientOperations {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
     @SequenceGenerator(name = "hibernate_seq", sequenceName = "operation_seq", allocationSize = 1)
@@ -40,4 +36,5 @@ public class ClientOperations {
                     name = "book_id",
                     referencedColumnName = "book_id"))
     private List<Book> boughtBooks;
+
 }

@@ -20,14 +20,17 @@ import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class BookServiceImpl implements BookService {
@@ -37,44 +40,50 @@ public class BookServiceImpl implements BookService {
     private final UserRepository userRepository;
     private final PromocodeRepository promoRepository;
 
-
     @Override
-    public ResponseEntity<?> register(BookDTO bookDTO, String username) {
-
-        User user = userRepository.getUser(username).orElseThrow(()->
-                new BadRequestException(String.format("User with username %s doesn't exist!",username)));
+    public ResponseEntity<?> saveBook(BookDTO bookDTO, String username) {
+        User user = userRepository.getUser(username)
+                .orElseThrow(() -> {
+                    log.error("Vendor with name ={} does not exists", username);
+                    throw new BadRequestException(
+                            String.format("User with username %s doesn't exist!", username)
+                    );
+                });
         Book book = mapper.create(bookDTO);
-        if(promoRepository.ifVendorAlreadyCreatedPromo(user, LocalDate.now())){
-            if(book.getDiscount()==null){
+        if (promoRepository.ifVendorAlreadyCreatedPromo(user, LocalDate.now())) {
+            log.info("check promo book");
+            if (book.getDiscount() == null) {
                 book.setDiscountFromPromo(promoRepository.getActivePromo(user).getDiscount());
             }
         }
 
         book.setUser(user);
-            if (bookDTO.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
-                AudioBook audio = new AudioBook();
-                audio.setDuration(bookDTO.getAudioBook().getDuration());
-                audio.setFragment(bookDTO.getAudioBook().getFragment());
-                audio.setUrlOfBookFromCloud(bookDTO.getAudioBook().getUrlOfBookFromCloud());
-                book.setAudioBook(audio);
+        if (bookDTO.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
+            AudioBook audio = new AudioBook();
+            audio.setDuration(bookDTO.getAudioBook().getDuration());
+            audio.setFragment(bookDTO.getAudioBook().getFragment());
+            audio.setUrlOfBookFromCloud(bookDTO.getAudioBook().getUrlOfBookFromCloud());
+            book.setAudioBook(audio);
+            log.info("Save audio book");
 
-            } else if (bookDTO.getBookType().name().equals(BookType.EBOOK.name())) {
-                ElectronicBook ebook = new ElectronicBook();
-                ebook.setFragmentOfBook(bookDTO.getElectronicBook().getFragmentOfBook());
-                ebook.setNumberOfPages(bookDTO.getElectronicBook().getNumberOfPages());
-                ebook.setUrlOfBookFromCloud(bookDTO.getElectronicBook().getUrlOfBookFromCloud());
-                book.setElectronicBook(ebook);
-
-            } else {
-                PaperBook paperBook = new PaperBook();
-                paperBook.setFragmentOfBook(bookDTO.getPaperBook().getFragmentOfBook());
-                paperBook.setNumberOfSelected(bookDTO.getPaperBook().getNumberOfSelected());
-                paperBook.setNumberOfPages(bookDTO.getPaperBook().getNumberOfPages());
-                book.setPaperBook(paperBook);
-            }
-            user.getVendorAddedBooks().add(book);
-
+        } else if (bookDTO.getBookType().name().equals(BookType.EBOOK.name())) {
+            ElectronicBook ebook = new ElectronicBook();
+            ebook.setFragmentOfBook(bookDTO.getElectronicBook().getFragmentOfBook());
+            ebook.setNumberOfPages(bookDTO.getElectronicBook().getNumberOfPages());
+            ebook.setUrlOfBookFromCloud(bookDTO.getElectronicBook().getUrlOfBookFromCloud());
+            book.setElectronicBook(ebook);
+            log.info("Save electronic book");
+        } else {
+            PaperBook paperBook = new PaperBook();
+            paperBook.setFragmentOfBook(bookDTO.getPaperBook().getFragmentOfBook());
+            paperBook.setNumberOfSelected(bookDTO.getPaperBook().getNumberOfSelected());
+            paperBook.setNumberOfPages(bookDTO.getPaperBook().getNumberOfPages());
+            book.setPaperBook(paperBook);
+            log.info("Save paper book ");
+        }
+        user.getVendorAddedBooks().add(book);
         repository.save(book);
+        log.info("Save book works");
         return ResponseEntity.ok(new MessageResponse(
                 String.format("%s with name %s registered successfully!", book.getBookType().name(),
                         book.getTitle())));
@@ -85,6 +94,7 @@ public class BookServiceImpl implements BookService {
     public Book findByBookId(Long bookId) {
         return repository.findById(bookId)
                 .orElseThrow(() -> {
+                    log.error("Book with id = {} does not exists",bookId);
                     throw new NotFoundException(
                             String.format("Book with id = %s does not exists", bookId)
                     );
@@ -94,6 +104,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public ResponseEntity<?> delete(Long bookId) {
         repository.deleteById(bookId);
+        log.info("delete book works");
         return ResponseEntity.ok(new MessageResponse(
                 String.format("Book with id = %s successfully delete!", bookId)));
     }
@@ -159,19 +170,22 @@ public class BookServiceImpl implements BookService {
                 book.getPaperBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
                 book.getPaperBook().setNumberOfPages(newBook.getPaperBook().getNumberOfPages());
                 book.getPaperBook().setNumberOfSelected(newBook.getPaperBook().getNumberOfSelected());
+                log.info("Update paper book");
                 break;
             case EBOOK:
                 book.getElectronicBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
                 book.getElectronicBook().setNumberOfPages(newBook.getElectronicBook().getNumberOfPages());
                 book.getElectronicBook().setUrlOfBookFromCloud(newBook.getElectronicBook().getUrlOfBookFromCloud());
+                log.info("Update ebook");
                 break;
             case AUDIOBOOK:
                 book.getAudioBook().setDuration(newBook.getAudioBook().getDuration());
                 book.getAudioBook().setFragment(newBook.getAudioBook().getFragment());
                 book.getAudioBook().setUrlOfBookFromCloud(newBook.getAudioBook().getUrlOfBookFromCloud());
+                log.info("Update audio book");
                 break;
         }
-
+        log.info("Update book works");
         return ResponseEntity.ok(new MessageResponse(
                 String.format("%s with name %s Update successfully!", book.getBookType().name(),
                         book.getTitle())));
@@ -180,9 +194,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> findBooksFromVendor(Integer offset, int pageSize, String username) {
         List<Book> books = repository.findBooksFromVendor(username);
-        System.out.println(books.size());
+        log.info("founded {} accepted books", books.size());
         Pageable paging = PageRequest.of(offset, pageSize);
-        int start = Math.min((int)paging.getOffset(), books.size());
+        int start = Math.min((int) paging.getOffset(), books.size());
         int end = Math.min((start + paging.getPageSize()), books.size());
         Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
         return new CustomPageRequest<>(pages).getContent();
@@ -192,9 +206,10 @@ public class BookServiceImpl implements BookService {
     public List<Book> findBooksFromVendorInFavorites(Integer offset, int pageSize, String username) {
         List<Book> likedBooksFromVendor = repository.findLikedBooksFromVendor(username);
         Pageable paging = PageRequest.of(offset, pageSize);
-        int start = Math.min((int)paging.getOffset(), likedBooksFromVendor.size());
+        int start = Math.min((int) paging.getOffset(), likedBooksFromVendor.size());
         int end = Math.min((start + paging.getPageSize()), likedBooksFromVendor.size());
         Page<Book> pages = new PageImpl<>(likedBooksFromVendor.subList(start, end), paging, likedBooksFromVendor.size());
+        log.info("likes book = {}",likedBooksFromVendor.size());
         return new CustomPageRequest<>(pages).getContent();
     }
 
@@ -202,9 +217,10 @@ public class BookServiceImpl implements BookService {
     public List<Book> findBooksFromVendorAddedToBasket(Integer offset, int pageSize, String username) {
         List<Book> booksWithBasket = repository.findBooksFromVendorAddedToBasket(username);
         Pageable paging = PageRequest.of(offset, pageSize);
-        int start = Math.min((int)paging.getOffset(), booksWithBasket.size());
+        int start = Math.min((int) paging.getOffset(), booksWithBasket.size());
         int end = Math.min((start + paging.getPageSize()), booksWithBasket.size());
         Page<Book> pages = new PageImpl<>(booksWithBasket.subList(start, end), paging, booksWithBasket.size());
+        log.info("{} Books from vendor added to basket ",booksWithBasket.size());
         return new CustomPageRequest<>(pages).getContent();
     }
 
@@ -212,9 +228,10 @@ public class BookServiceImpl implements BookService {
     public List<Book> findBooksFromVendorWithDiscount(Integer offset, int pageSize, String username) {
         List<Book> booksWithDiscount = repository.findBooksFromVendorWithDiscount(username);
         Pageable paging = PageRequest.of(offset, pageSize);
-        int start = Math.min((int)paging.getOffset(), booksWithDiscount.size());
+        int start = Math.min((int) paging.getOffset(), booksWithDiscount.size());
         int end = Math.min((start + paging.getPageSize()), booksWithDiscount.size());
         Page<Book> pages = new PageImpl<>(booksWithDiscount.subList(start, end), paging, booksWithDiscount.size());
+        log.info("find books from discount");
         return new CustomPageRequest<>(pages).getContent();
     }
 
@@ -223,9 +240,10 @@ public class BookServiceImpl implements BookService {
                                                    RequestStatus requestStatus) {
         List<Book> booksWithCancel = repository.findBooksFromVendorWithCancel(username, requestStatus);
         Pageable paging = PageRequest.of(offset, pageSize);
-        int start = Math.min((int)paging.getOffset(), booksWithCancel.size());
+        int start = Math.min((int) paging.getOffset(), booksWithCancel.size());
         int end = Math.min((start + paging.getPageSize()), booksWithCancel.size());
         Page<Book> pages = new PageImpl<>(booksWithCancel.subList(start, end), paging, booksWithCancel.size());
+        log.info("vendor books {} cancelled",booksWithCancel.size());
         return new CustomPageRequest<>(pages).getContent();
     }
 
@@ -234,10 +252,10 @@ public class BookServiceImpl implements BookService {
                                                    RequestStatus requestStatus) {
         List<Book> booksInProgress = repository.findBooksFromVendorInProgress(username, requestStatus);
         Pageable paging = PageRequest.of(offset, pageSize);
-        int start = Math.min((int)paging.getOffset(), booksInProgress.size());
+        int start = Math.min((int) paging.getOffset(), booksInProgress.size());
         int end = Math.min((start + paging.getPageSize()), booksInProgress.size());
         Page<Book> pages = new PageImpl<>(booksInProgress.subList(start, end), paging, booksInProgress.size());
+        log.info("Vendor book = {} in process",booksInProgress.size());
         return new CustomPageRequest<>(pages).getContent();
     }
-
 }

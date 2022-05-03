@@ -7,6 +7,7 @@ import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
+import kg.peaksoft.ebookb4.dto.request.GenreRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -21,7 +22,7 @@ public class BookGlobalApi {
     private final BookGetService bookGetService;
 
     @Operation(summary = "Find all books by genre", description = "Sorting books by genre")
-    @GetMapping("/{genre}")
+    @GetMapping("/genre/{genre}")
     public List<Book> findBooksByGenre(@PathVariable Genre genre) {
         return bookGetService.findByGenre(genre, RequestStatus.ACCEPTED);
     }
@@ -33,7 +34,7 @@ public class BookGlobalApi {
     }
 
     @Operation(summary = "Find all active books if needs being sorted", description = "Sorted By Genre, BookType, Price, Language")
-    @GetMapping("/{offset}")
+    @GetMapping("/sort/{offset}")
     public List<Book> getBooks(@RequestBody SortBooksGlobal sortBook, @PathVariable Integer offset) {
         return bookGetService.getAllBooksOrSortedOnes(sortBook, --offset, 12);
     }
@@ -42,5 +43,11 @@ public class BookGlobalApi {
     @GetMapping("/{id}")
     public Book getBookById(@PathVariable Long id) {
         return bookGetService.getBookById(id);
+    }
+
+    @Operation(summary = "Get all genre count books", description = "get genres countBooks")
+    @GetMapping("/genre_count/")
+    List<GenreRequest> getCountGenre() {
+        return bookGetService.getCountGenre();
     }
 }

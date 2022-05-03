@@ -41,7 +41,4 @@ public class VendorApi {
     public ResponseEntity<?> updateVendor(@RequestBody VendorUpdateDTO newVendorDTO, Authentication authentication){
         return vendorService.update(newVendorDTO, authentication.getName());
     }
-
-
-
 }

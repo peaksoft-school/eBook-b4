@@ -12,6 +12,7 @@ import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class PromoServiceImpl implements PromoService {
@@ -50,14 +52,13 @@ public class PromoServiceImpl implements PromoService {
 
         promo.setUser(user);
         if (Period.between(LocalDate.now(), promo.getBeginningDay()).getDays() <= 0) {
-            System.out.println("Hello world");
+            log.info("Hello world");
             promo.setIsActive(true);
         } else {
             promo.setIsActive(false);
         }
-
         promoRepository.save(promo);
-
+        log.info("Create promo works");
         return ResponseEntity.ok(new MessageResponse(
                 String.format("Promo with promo_name %s has been saved", promoRequest.getPromoName())
         ));
@@ -66,20 +67,17 @@ public class PromoServiceImpl implements PromoService {
     public void checkPromos() {
         List<Promocode> promos = promoRepository.getPromos().orElseThrow(() ->
                 new BadRequestException("There are no promo codes yes!"));
-        System.out.println("Promocode size: " + promos.size());
+        log.info("Promocode size: " + promos.size());
         for (Promocode i : promos) {
             if (Period.between(i.getBeginningDay(), i.getEndDay()).getDays() < 0) {
-                System.out.println(i);
-                System.out.println("Срок прошёл!");
+                log.info("Срок прошёл!");
                 i.setIsActive(false);
                 bookRepository.checkForPromos(i.getUser());
             } else {
                 if (Period.between(LocalDate.now(), i.getBeginningDay()).getDays() <= 0) {
-                    System.out.println("Hello world");
                     i.setIsActive(true);
                 }
-                System.out.println("Срок ещё не прошёл!");
-                System.out.println(i);
+                log.info("Срок ещё не прошёл!");
                 if (i.getIsActive()) {
                     bookRepository.givePromo(i.getUser(), i.getDiscount());
                 }

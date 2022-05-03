@@ -33,5 +33,7 @@ public class Basket {
     @JsonIgnore
     private User user;
 
-
+    public void clear() {
+        books.removeIf(books -> true);
+    }
 }

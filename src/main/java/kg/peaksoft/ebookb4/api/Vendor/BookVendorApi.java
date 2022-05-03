@@ -4,9 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
 import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.dto.request.Request;
+import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +26,7 @@ public class BookVendorApi {
     @Operation(summary = "Save book",description = "Adding a new book")
     @PostMapping("/new-book")
     public ResponseEntity<?> saveBook(@RequestBody BookDTO bookDTO, Authentication authentication){
-        return  bookService.register(bookDTO, authentication.getName());
+        return  bookService.saveBook(bookDTO, authentication.getName());
     }
 
     @Operation(summary = "Delete book",description = "Deleting a book by id")
@@ -37,10 +36,10 @@ public class BookVendorApi {
     }
 
     @Operation(summary = "Update book",description = "update a book")
-    @PatchMapping("/editing")
+    @PatchMapping("/editing/{id}")
     public ResponseEntity<?> update(@RequestBody BookDTO request,
-                                    @RequestBody Request bookId){
-        return bookService.update(request,bookId.getId());
+                                    @PathVariable Long id){
+        return bookService.update(request,id);
     }
 
     @Operation(summary = "Get book",

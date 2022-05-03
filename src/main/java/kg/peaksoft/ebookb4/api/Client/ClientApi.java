@@ -37,7 +37,10 @@ public class ClientApi {
     @PatchMapping("/profile/settings")
     public ResponseEntity<?> updateClient(@RequestBody ClientUpdateDTO newClientDTO, Authentication authentication){
         return clientService.update(newClientDTO, authentication.getName());
+
+
     }
+
 
 
 

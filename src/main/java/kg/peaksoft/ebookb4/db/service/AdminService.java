@@ -4,8 +4,8 @@ import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.dto.response.ClientResponse;
 import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +17,8 @@ public interface AdminService {
     List<Book> getBooksBy(Genre genre, BookType bookType);
 
     List<Book> getBooksByGenre(Genre genre);
+
+    List<BookResponse> getBooksFromBasket(Long id);
 
     List<Book> getBooksByBookType(BookType bookType);
 
@@ -30,8 +32,7 @@ public interface AdminService {
 
     VendorResponse getVendor(Long id);
 
-    ClientResponse getClientById(Long id);
-
+    ClientResponse  getClientById(Long id);
 
     ResponseEntity<?> acceptBookRequest(Long bookId);
 
@@ -49,7 +50,6 @@ public interface AdminService {
 
     List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, Long vendorId,
                                             RequestStatus requestStatus);
-
 
     List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, Long vendorId,
                                             RequestStatus requestStatus);

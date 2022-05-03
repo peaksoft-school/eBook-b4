@@ -1,27 +1,33 @@
 package kg.peaksoft.ebookb4.db.models.books;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
-import kg.peaksoft.ebookb4.db.models.enums.Language;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
+import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
-import lombok.*;
-
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @RequiredArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
-    @SequenceGenerator(name = "hibernate_seq", sequenceName = "book_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "hibernate_seq")
+    @SequenceGenerator(name = "hibernate_seq",
+            sequenceName = "book_seq", allocationSize = 1)
     @Column(name = "book_id")
     private Long bookId;
     private String title;
@@ -37,12 +43,12 @@ public class Book {
     private BookType bookType;
     @Enumerated(value = EnumType.STRING)
     private Genre genre;
-
-    private int baskets;
-    private int likes;
     @Enumerated(value = EnumType.STRING)
     private RequestStatus requestStatus = RequestStatus.INPROGRESS;
+
     private Boolean adminWatch = false;
+    private int baskets;
+    private int likes;
     private Integer discount;
     private Integer discountFromPromo;
 
@@ -87,6 +93,6 @@ public class Book {
         return "Book{" +
                 "bookId=" + bookId +
                 ", title='" + title
-                +", price="+price+"}";
+                + ", price=" + price + "}";
     }
 }
