@@ -73,7 +73,7 @@ public class EBookB4Application {
 
         User a = new User();
         a.setEmail("admin@gmail.com");
-        a.setPassword(encoder.encode("password"));
+        a.setPassword(encoder.encode("admin"));
         a.setRole(roleRepository.getById(3L));
         a.setDateOfRegistration(LocalDate.now());
         userRepository.save(a);
