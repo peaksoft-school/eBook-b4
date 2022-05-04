@@ -32,6 +32,7 @@ public class EBookB4Application {
     public static void main(String[] args) {
         SpringApplication.run(EBookB4Application.class, args);
         System.out.println("Welcome colleagues, project name is eBook!");
+
     }
 
     @GetMapping("/")

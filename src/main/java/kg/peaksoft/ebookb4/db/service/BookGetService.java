@@ -30,6 +30,6 @@ public interface BookGetService {
 
     List<Book> booksIsBestseller();
 
-    List<Book> BooksNovelties(LocalDate localDate);
+    List<Book> BooksNovelties();
 
 }

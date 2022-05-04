@@ -18,9 +18,11 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import static kg.peaksoft.ebookb4.db.models.enums.Genre.*;
 import static kg.peaksoft.ebookb4.db.models.enums.Genre.JOURNAL;
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.*;
@@ -36,6 +38,7 @@ public class BookGetServiceImpl implements BookGetService {
     @Override
     public List<Book> findByGenre(Genre genre, RequestStatus requestStatus) {
         promoService.checkPromos();
+
         log.info("Find By Genre works");
         return repository.findAllByGenre(genre, requestStatus);
     }
@@ -51,7 +54,7 @@ public class BookGetServiceImpl implements BookGetService {
         promoService.checkPromos();
         List<Book> books = repository.findAllActive(ACCEPTED);
         //if it is empty it returns empty list
-        if(books.size()<1){
+        if (books.size() < 1) {
             log.info("if it is empty it returns empty list");
             return books;
         }
@@ -60,17 +63,17 @@ public class BookGetServiceImpl implements BookGetService {
             log.info("I am in sort by genre");
             if (sortBook.getGenre().size() > 1) {
                 int counter = 0;
-                for(Iterator<Book> iterator = books.iterator(); iterator.hasNext();) {
+                for (Iterator<Book> iterator = books.iterator(); iterator.hasNext(); ) {
                     Book book = iterator.next();
-                    for (Genre g: sortBook.getGenre()){
-                        if(book.getGenre().equals(g)){
+                    for (Genre g : sortBook.getGenre()) {
+                        if (book.getGenre().equals(g)) {
                             counter++;
                         }
                     }
-                    if(counter==0){
+                    if (counter == 0) {
                         iterator.remove();
                     }
-                    counter=0;
+                    counter = 0;
                 }
             } else {
                 log.info("In else of sort by genre");
@@ -95,17 +98,17 @@ public class BookGetServiceImpl implements BookGetService {
             log.info("I am sort by language");
             if (sortBook.getLanguage().size() > 1) {
                 int counter = 0;
-                for(Iterator<Book> iterator = books.iterator(); iterator.hasNext();) {
+                for (Iterator<Book> iterator = books.iterator(); iterator.hasNext(); ) {
                     Book book = iterator.next();
-                    for (Language l: sortBook.getLanguage()){
-                        if(book.getLanguage().equals(l)){
+                    for (Language l : sortBook.getLanguage()) {
+                        if (book.getLanguage().equals(l)) {
                             counter++;
                         }
                     }
-                    if(counter==0){
+                    if (counter == 0) {
                         iterator.remove();
                     }
-                    counter=0;
+                    counter = 0;
                 }
             } else {
                 log.info("In else of sort by language");
@@ -114,7 +117,7 @@ public class BookGetServiceImpl implements BookGetService {
         }
 
         Pageable paging = PageRequest.of(offset, pageSize);
-        int start = Math.min((int)paging.getOffset(), books.size());
+        int start = Math.min((int) paging.getOffset(), books.size());
         int end = Math.min((start + paging.getPageSize()), books.size());
         Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
         log.info("Sort book works");
@@ -125,7 +128,7 @@ public class BookGetServiceImpl implements BookGetService {
     public Book getBookById(Long id) {
         promoService.checkPromos();
         log.info("Get book by id works");
-        return repository.findBookByIdAndActive(id, ACCEPTED).orElseThrow(()->
+        return repository.findBookByIdAndActive(id, ACCEPTED).orElseThrow(() ->
                 new BadRequestException("This book is not went through admin-check yet!"));
     }
 
@@ -137,7 +140,7 @@ public class BookGetServiceImpl implements BookGetService {
 
     @Override
     public List<BookResponse> getAllAcceptedBooks() {
-        log.info("accepted books size =s%"+repository.findBooksAccepted(ACCEPTED).size());
+        log.info("accepted books size =s%" + repository.findBooksAccepted(ACCEPTED).size());
         return repository.findBooksAccepted(ACCEPTED);
     }
 
@@ -158,8 +161,8 @@ public class BookGetServiceImpl implements BookGetService {
         genreRequest.add(new GenreRequest(HORROR));
         genreRequest.add(new GenreRequest(JOURNAL));
 
-        for (GenreRequest request: genreRequest) {
-            request.setCount(repository.getCountGenre(request.getGenre(),ACCEPTED));
+        for (GenreRequest request : genreRequest) {
+            request.setCount(repository.getCountGenre(request.getGenre(), ACCEPTED));
         }
         genreRequest.forEach(System.out::println);
         log.info("Get count Genre works");
@@ -172,15 +175,15 @@ public class BookGetServiceImpl implements BookGetService {
     }
 
     @Override
-    public List<Book> BooksNovelties(LocalDate localDate) {
+    public List<Book> BooksNovelties() {
 
-        List<Book> books = repository.booksNovelties(localDate);
+        List<Book> books = repository.findAll();
+        for (Book book : books) {
 
-        for (Book book: books) {
-            if (book.getDateOfRegister().getDayOfMonth() < localDate.getDayOfMonth()) {
-                return books;
-            }
+            book.getDateOfRegister().minus(30, ChronoUnit.DAYS);
+
         }
-        return null;
+        return books;
+
     }
 }

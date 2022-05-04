@@ -121,6 +121,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByIsBestSeller();
 
 
-    @Query("select b from Book b where b.dateOfRegister = ?1")
-    List<Book> booksNovelties(LocalDate localDate);
+    @Query("select b from Book b where b.dateOfRegister between ?1 and ?2")
+    List<Book> booksNovelties(LocalDate localDate1,LocalDate localDate2);
 }

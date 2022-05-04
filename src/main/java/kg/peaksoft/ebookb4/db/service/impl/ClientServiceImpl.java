@@ -134,14 +134,6 @@ public class ClientServiceImpl implements ClientService {
         User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found", username)));
 
-        if (userRepository.existsByEmail(newClientDTO.getEmail())) {
-            throw new BadRequestException(String.format("Please choose another email, %s email is not available", newClientDTO.getEmail()));
-        }
-        String oldEmail = user.getEmail();
-        String newEmail = newClientDTO.getEmail();
-        if (!oldEmail.equals(newEmail)) {
-            user.setEmail(newEmail);
-        }
         String oldFirstName = user.getFirstName();
         String newFirstName = newClientDTO.getFirstName();
         if (!oldFirstName.equals(newFirstName)) {
@@ -245,7 +237,6 @@ public class ClientServiceImpl implements ClientService {
 //
 //        return ResponseEntity.ok("Your order has been successfully placed!");
 //    }
-
 
     public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);

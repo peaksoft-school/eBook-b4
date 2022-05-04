@@ -64,6 +64,7 @@ public class PromoServiceImpl implements PromoService {
         ));
     }
 
+
     public void checkPromos() {
         List<Promocode> promos = promoRepository.getPromos().orElseThrow(() ->
                 new BadRequestException("There are no promo codes yes!"));

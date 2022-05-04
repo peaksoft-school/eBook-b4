@@ -61,6 +61,7 @@ public class Book {
     @OneToMany(cascade = {MERGE,REFRESH})
     private List<FileInfo> bookImage;
 
+
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JsonIgnore
     @JoinTable(

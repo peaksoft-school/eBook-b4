@@ -9,7 +9,10 @@ import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.dto.request.GenreRequest;
 import lombok.AllArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -55,5 +58,10 @@ public class BookGlobalApi {
     @GetMapping("/bestSeller")
     public List<Book> isBestSeller(){
         return bookGetService.booksIsBestseller();
+    }
+
+    @GetMapping("/gets")
+    public List<Book> gets(){
+        return bookGetService.BooksNovelties();
     }
 }
