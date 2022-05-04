@@ -215,7 +215,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findBooksFromVendorAddedToBasket(Integer offset, int pageSize, String username) {
+
         List<Book> booksWithBasket = repository.findBooksFromVendorAddedToBasket(username);
+
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksWithBasket.size());
         int end = Math.min((start + paging.getPageSize()), booksWithBasket.size());

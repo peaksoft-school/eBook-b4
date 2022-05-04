@@ -2,10 +2,12 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
+import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
 import kg.peaksoft.ebookb4.db.repository.*;
-import kg.peaksoft.ebookb4.dto.dto.users.ClientOperationDTO;
+import kg.peaksoft.ebookb4.dto.ClientOperationDTO;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientUpdateDTO;
+import kg.peaksoft.ebookb4.dto.mapper.ClientOperationMapper;
 import kg.peaksoft.ebookb4.dto.mapper.ClientRegisterMapper;
 import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
@@ -23,6 +25,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
@@ -39,6 +42,8 @@ public class ClientServiceImpl implements ClientService {
     private final UserRepository userRepository;
     private final BasketRepository basketRepository;
     private final ClientRegisterMapper mapper;
+    private final PromoRepo repo;
+    private final ClientOperationMapper clientOperationMapper;
 
     @Override
     public ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number) {
@@ -186,6 +191,21 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public Double sumAfterPromo(String promo, Long id) {
+        List<Book> books = bookRepository.findBasketByClientId(id);
+        Double sum = 0.0;
+        for (Book book : books) {
+            if (book.getDiscountFromPromo() != null) {
+                if (checkProp(promo)) {
+                    sum += (book.getPrice() * book.getDiscountFromPromo()) / 100;
+                }
+            }
+            continue;
+        }
+        return clientOperationMapper.total(books) - sum;
+    }
+
+    @Override
     public List<BookResponse> getBooksFromBasket(Long clientId) {
         return bookRepository.findBasketByClientId(clientId)
                 .stream().map(book -> modelMapper.map(
@@ -193,14 +213,46 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientOperationDTO operationClient(ClientOperationDTO operation) {
-
-       return bookRepository.getBooksCount(operation);
+    public ClientOperationDTO getBooksInBasket(Long id) {
+        return clientOperationMapper.create(id);
     }
+
+    public ResponseEntity<?> oformit(String name){
+
+        List<Book> all = bookRepository.findAll();
+
+        User user = userRepository.getUser(name).orElseThrow(()-> new BadRequestException(
+                String.format("")
+        ));
+
+//        user.setClientOperation(all);
+
+
+
+        return ResponseEntity.ok("Your order has been successfully placed!");
+    }
+
+
+
 
 
 
     public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);
     }
+
+    public Boolean checkProp(String promo) {
+        List<Promocode> promocode = repo.findAll();
+        for (Promocode promocode1:promocode) {
+            if (promocode1.getPromocode().equals(promo)) {
+                if (promocode1.getIsActive().equals(true)) {
+                    return true;
+                }
+                log.error("this promo {} not found", promo);
+            }
+            log.error("this {} promo is not active", promocode);
+        }
+        return false;
+    }
+
 }

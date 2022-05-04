@@ -28,7 +28,7 @@ public class BookGlobalApi {
     }
 
     @Operation(summary = "Find books by name", description = "Using linear search while finding, name, title, authorName or publishing house")
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public List<Book> findBooksByName(@PathVariable String name) {
         return bookGetService.findBooksByName(name, RequestStatus.ACCEPTED);
     }
@@ -46,7 +46,7 @@ public class BookGlobalApi {
     }
 
     @Operation(summary = "Get all genre count books", description = "get genres countBooks")
-    @GetMapping("/genre_count/")
+    @GetMapping("/genre_count")
     List<GenreRequest> getCountGenre() {
         return bookGetService.getCountGenre();
     }

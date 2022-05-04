@@ -2,8 +2,10 @@ package kg.peaksoft.ebookb4.api.Client;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
+import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.service.ClientService;
-import kg.peaksoft.ebookb4.dto.dto.users.ClientOperationDTO;
+import kg.peaksoft.ebookb4.dto.ClientOperationDTO;
 import kg.peaksoft.ebookb4.dto.request.Request;
 import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import lombok.AllArgsConstructor;
@@ -30,11 +32,6 @@ public class BookClientApi {
         return clientService.addBookToBasket(request.getId(), authentication.getName());
     }
 
-    @GetMapping("/clientBasket/{clientId}")
-    public List<BookResponse> getBooksClientFromBasket(@PathVariable Long clientId) {
-        return clientService.getBooksFromBasket(clientId);
-    }
-
     @Operation(summary = "Like a book",description = "Like a book with id")
     @PostMapping("/like")
     public ResponseEntity<?> likeBook(@RequestBody Request request, Authentication authentication){
@@ -53,8 +50,18 @@ public class BookClientApi {
         clientService.cleanBasketOfClientByEmail(authentication.getName());
     }
 
-    @GetMapping("/gets")
-    public ClientOperationDTO gets(ClientOperationDTO dto){
-        return clientService.operationClient(dto);
+    @GetMapping("/clientBasket/{clientId}")
+    public List<BookResponse> getBooksClientFromBasket(@PathVariable Long clientId) {
+        return clientService.getBooksFromBasket(clientId);
+    }
+
+    @GetMapping("/count/{id}")
+    public ClientOperationDTO count(@PathVariable Long id){
+        return clientService.getBooksInBasket(id);
+    }
+
+    @PostMapping("/{name}/{id}")
+    public Double save(@PathVariable String name,@PathVariable Long id){
+        return clientService.sumAfterPromo(name,id);
     }
 }

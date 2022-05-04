@@ -13,10 +13,13 @@ public class VendorRegisterMapper {
 
     public VendorRegisterDTO createDTO(User user){
         VendorRegisterDTO dto = new VendorRegisterDTO();
+
         dto.setEmail(user.getEmail());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setNumber(user.getNumber());
+        dto.setPassword(user.getPassword());
+        dto.setConfirmPassword(user.getPassword());
         return dto;
     }
 }

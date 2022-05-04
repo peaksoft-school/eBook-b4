@@ -1,6 +1,6 @@
 package kg.peaksoft.ebookb4.db.service;
 
-import kg.peaksoft.ebookb4.dto.dto.users.ClientOperationDTO;
+import kg.peaksoft.ebookb4.dto.ClientOperationDTO;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientUpdateDTO;
 import kg.peaksoft.ebookb4.dto.response.BookResponse;
@@ -19,6 +19,8 @@ public interface ClientService {
 
     List<BookResponse> getBooksFromBasket(Long id);
 
+    ClientOperationDTO getBooksInBasket(Long name);
+
     @Transactional
     ResponseEntity<?> update(ClientUpdateDTO newClientDTO, String username);
 
@@ -28,5 +30,5 @@ public interface ClientService {
 
     ResponseEntity<?> cleanBasketOfClientByEmail(String clientEmail);
 
-     ClientOperationDTO operationClient(ClientOperationDTO operation);
+     Double sumAfterPromo(String promo,Long id);
 }

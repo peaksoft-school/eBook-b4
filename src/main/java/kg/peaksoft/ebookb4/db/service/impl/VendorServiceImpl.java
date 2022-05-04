@@ -61,14 +61,14 @@ public class VendorServiceImpl implements VendorService {
         User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found", username)));
 
-        if (userRepository.existsByEmail(newVendorDTO.getEmail())) {
-            throw new BadRequestException(String.format("Please choose another email, %s email is not available", newVendorDTO.getEmail()));
-        }
-        String oldEmail = user.getEmail();
-        String newEmail = newVendorDTO.getEmail();
-        if (!oldEmail.equals(newEmail)) {
-            user.setEmail(newEmail);
-        }
+//        if (userRepository.existsByEmail(newVendorDTO.getEmail())) {
+//            throw new BadRequestException(String.format("Please choose another email, %s email is not available", newVendorDTO.getEmail()));
+//        }
+//        String oldEmail = user.getEmail();
+//        String newEmail = newVendorDTO.getEmail();
+//        if (!oldEmail.equals(newEmail)) {
+//            user.setEmail(newEmail);
+//        }
         String oldFirstName = user.getFirstName();
         String newFirstName = newVendorDTO.getFirstName();
         if (!oldFirstName.equals(newFirstName)) {
@@ -84,6 +84,7 @@ public class VendorServiceImpl implements VendorService {
         if (!oldNumber.equals(newNumber)) {
             user.setNumber(newNumber);
         }
+
         String oldPasswordOldUser = user.getPassword();
 
         String oldPasswordNewUser = newVendorDTO.getOldPassword();

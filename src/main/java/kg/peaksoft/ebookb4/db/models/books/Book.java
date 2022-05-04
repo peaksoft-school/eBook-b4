@@ -50,6 +50,7 @@ public class Book {
     private int baskets;
     private int likes;
     private Integer discount;
+
     private Integer discountFromPromo;
 
     @ManyToMany(cascade = CascadeType.REMOVE)

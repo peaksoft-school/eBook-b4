@@ -24,7 +24,9 @@ public class PaperBook {
     private Long paperBookId;
 
     private String fragmentOfBook;
+
     private Integer numberOfPages;
+
     private Integer numberOfSelected;
 
 }
