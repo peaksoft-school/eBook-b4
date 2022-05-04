@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
+import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
@@ -41,8 +41,6 @@ public class Book {
     private Language language;
     @Enumerated(value = EnumType.STRING)
     private BookType bookType;
-    @Enumerated(value = EnumType.STRING)
-    private Genre genre;
     @Enumerated(value = EnumType.STRING)
     private RequestStatus requestStatus = RequestStatus.INPROGRESS;
 
@@ -87,6 +85,9 @@ public class Book {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "paperbook_id")
     private PaperBook paperBook;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Genre genre;
 
     @Override
     public String toString() {
