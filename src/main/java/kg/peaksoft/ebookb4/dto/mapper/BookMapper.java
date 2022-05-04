@@ -1,11 +1,19 @@
 package kg.peaksoft.ebookb4.dto.mapper;
 
+
+import kg.peaksoft.ebookb4.db.repository.GenreRepository;
 import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
 import kg.peaksoft.ebookb4.db.models.books.Book;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+
+
 @Component
+@AllArgsConstructor
 public class BookMapper {
+
+private final GenreRepository repository;
 
     public Book create(BookDTO dto) {
 
@@ -14,7 +22,6 @@ public class BookMapper {
         book.setAuthorFullName(dto.getAuthorFullName());
         book.setPublishingHouse(dto.getPublishingHouse());
         book.setAboutBook(dto.getAboutBook());
-        book.setGenre(dto.getGenre());
         book.setLanguage(dto.getLanguage());
         book.setYearOfIssue(dto.getYearOfIssue());
         book.setPublishingHouse(dto.getPublishingHouse());
@@ -26,7 +33,9 @@ public class BookMapper {
         book.setAudioBook(dto.getAudioBook());
         book.setPaperBook(dto.getPaperBook());
         book.setElectronicBook(dto.getElectronicBook());
+        book.setGenre(repository.getById(dto.getGenreId()));
 
         return book;
     }
+
 }

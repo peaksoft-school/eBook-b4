@@ -3,6 +3,7 @@ package kg.peaksoft.ebookb4.api.Vendor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -26,7 +28,7 @@ public class BookVendorApi {
     @Operation(summary = "Save book",description = "Adding a new book")
     @PostMapping("/new-book")
     public ResponseEntity<?> saveBook(@RequestBody BookDTO bookDTO, Authentication authentication){
-        return  bookService.saveBook(bookDTO, authentication.getName());
+        return bookService.saveBook(bookDTO, authentication.getName());
     }
 
     @Operation(summary = "Delete book",description = "Deleting a book by id")
@@ -39,7 +41,8 @@ public class BookVendorApi {
     @PatchMapping("/editing/{id}")
     public ResponseEntity<?> update(@RequestBody BookDTO request,
                                     @PathVariable Long id){
-        return bookService.update(request,id);
+        Long genreId = request.getGenreId();
+        return bookService.update(request, id ,genreId);
     }
 
     @Operation(summary = "Get book",

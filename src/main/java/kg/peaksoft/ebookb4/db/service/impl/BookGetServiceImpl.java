@@ -1,11 +1,12 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
+import kg.peaksoft.ebookb4.db.repository.GenreRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.dto.dto.others.CustomPageRequest;
@@ -16,11 +17,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import static kg.peaksoft.ebookb4.db.models.enums.Genre.*;
-import static kg.peaksoft.ebookb4.db.models.enums.Genre.JOURNAL;
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.*;
 
 @Slf4j
@@ -28,26 +28,28 @@ import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.*;
 @AllArgsConstructor
 public class BookGetServiceImpl implements BookGetService {
 
-    private final BookRepository repository;
-    private PromoService promoService;
+    private final BookRepository bookRepository;
+    private final PromoService promoService;
+
+    private final GenreRepository genreRepository;
 
     @Override
-    public List<Book> findByGenre(Genre genre, RequestStatus requestStatus) {
+    public List<Book> findByGenre(String genreName, RequestStatus requestStatus) {
         promoService.checkPromos();
         log.info("Find By Genre works");
-        return repository.findAllByGenre(genre, requestStatus);
+        return bookRepository.findAllByGenre(genreName, requestStatus);
     }
 
     @Override
     public List<Book> findBooksByName(String name, RequestStatus requestStatus) {
         log.info("Find boos by name works");
-        return repository.findByName(name, requestStatus);
+        return bookRepository.findByName(name, requestStatus);
     }
 
     @Override
     public List<Book> getAllBooksOrSortedOnes(SortBooksGlobal sortBook, int offset, int pageSize) {
         promoService.checkPromos();
-        List<Book> books = repository.findAllActive(ACCEPTED);
+        List<Book> books = bookRepository.findAllActive(ACCEPTED);
         //if it is empty it returns empty list
         if(books.size()<1){
             log.info("if it is empty it returns empty list");
@@ -123,41 +125,39 @@ public class BookGetServiceImpl implements BookGetService {
     public Book getBookById(Long id) {
         promoService.checkPromos();
         log.info("Get book by id works");
-        return repository.findBookByIdAndActive(id, ACCEPTED).orElseThrow(()->
+        return bookRepository.findBookByIdAndActive(id, ACCEPTED).orElseThrow(()->
                 new BadRequestException("This book is not went through admin-check yet!"));
     }
 
     @Override
     public List<BookResponse> getAllBooksRequests() {
         log.info("Get all books request works");
-        return repository.findBooksInProgress(INPROGRESS);
+        return bookRepository.findBooksInProgress(INPROGRESS);
     }
 
     @Override
     public List<BookResponse> getAllAcceptedBooks() {
-        log.info("accepted books size =s%"+repository.findBooksAccepted(ACCEPTED).size());
-        return repository.findBooksAccepted(ACCEPTED);
+        log.info("accepted books size =s%"+ bookRepository.findBooksAccepted(ACCEPTED).size());
+        return bookRepository.findBooksAccepted(ACCEPTED);
     }
 
     @Override
     public List<GenreRequest> getCountGenre() {
 
         List<GenreRequest> genreRequest = new ArrayList<>();
-        genreRequest.add(new GenreRequest(LITERATURE));
-        genreRequest.add(new GenreRequest(ROMANCE));
-        genreRequest.add(new GenreRequest(FANTASY));
-        genreRequest.add(new GenreRequest(DETECTIVE));
-        genreRequest.add(new GenreRequest(SCIENTIFIC));
-        genreRequest.add(new GenreRequest(ADVENTURE));
-        genreRequest.add(new GenreRequest(INTERNATIONAL_LITERATURE));
-        genreRequest.add(new GenreRequest(BIOGRAPHY));
-        genreRequest.add(new GenreRequest(DETECTIVE));
-        genreRequest.add(new GenreRequest(POETRY));
-        genreRequest.add(new GenreRequest(HORROR));
-        genreRequest.add(new GenreRequest(JOURNAL));
+        genreRequest.add(new GenreRequest(genreRepository.getById(1L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(2L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(3L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(4L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(5L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(6L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(7L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(8L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(9L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(10L).getName()));
 
         for (GenreRequest request: genreRequest) {
-            request.setCount(repository.getCountGenre(request.getGenre(),ACCEPTED));
+            request.setCount(bookRepository.getCountGenre(request.getGenreName(), ACCEPTED));
         }
         genreRequest.forEach(System.out::println);
         log.info("Get count Genre works");

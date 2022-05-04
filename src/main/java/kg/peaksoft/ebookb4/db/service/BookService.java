@@ -1,11 +1,13 @@
 package kg.peaksoft.ebookb4.db.service;
 
+import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Set;
 
 public interface BookService {
 
@@ -15,7 +17,7 @@ public interface BookService {
 
     ResponseEntity<?> delete(Long bookId);
 
-    ResponseEntity<?> update(BookDTO bookDTO, Long userId);
+    ResponseEntity<?> update(BookDTO bookDTO, Long userId, Long genreId);
 
     List<Book> findBooksFromVendor(Integer offset, int pageSize, String username);
 
@@ -28,7 +30,9 @@ public interface BookService {
     List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username,
                                             RequestStatus requestStatus);
 
-
     List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, String username,
                                             RequestStatus requestStatus);
+
+
+
 }

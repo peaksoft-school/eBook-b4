@@ -3,8 +3,8 @@ package kg.peaksoft.ebookb4.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
@@ -33,14 +33,14 @@ public class AdminApi {
     @Operation(summary = "Get all by genre and book type",
             description = "Filter all books by genre and book type ")
     @GetMapping("/booksByBoth/{genre}/{bookType}")
-    public List<Book> getBooksBy(@PathVariable Genre genre,
+    public List<Book> getBooksBy(@PathVariable String genre,
                                  @PathVariable BookType bookType) {
         return service.getBooksBy(genre, bookType);
     }
 
     @Operation(summary = "Get books by genre", description = "Filter all books only by genre ")
     @GetMapping("/booksByGenre/{genre}")
-    public List<Book> getBooksByGenre(@PathVariable Genre genre) {
+    public List<Book> getBooksByGenre(@PathVariable String genre) {
         return service.getBooksByGenre(genre);
     }
 

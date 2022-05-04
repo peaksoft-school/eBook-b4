@@ -1,8 +1,8 @@
 package kg.peaksoft.ebookb4.db.repository;
 
 import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientOperationDTO;
@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -23,6 +22,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     //find books by title, author, publishingHouse
     @Query("select b from Book b where b.title like %?1% " +
+            "or b.genre.name like %?1%" +
             "or b.authorFullName like %?1%" +
             "or b.publishingHouse like %?1% and b.requestStatus=?2")
     List<Book> findByName(String name, RequestStatus requestStatus);
@@ -86,8 +86,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByBookType(BookType bookType, RequestStatus requestStatus);
     //fin books by genre and book type /admin panel
 
-    @Query("select b from Book b where b.genre =?1 or b.bookType= ?2 and b.requestStatus = ?3")
-    List<Book> getBooks(Genre genre, BookType bookType, RequestStatus requestStatus);
+    @Query("select b from Book b where b.genre.name like %?1% " +
+            "or b.bookType = ?2 and b.requestStatus = ?3")
+    List<Book> getBooks(String genre, BookType bookType, RequestStatus requestStatus);
 
     @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
             "b.yearOfIssue, b.price) from Book b where b.requestStatus = ?1")
@@ -101,18 +102,17 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Optional<Book> findBookInProgress(Long bookId, RequestStatus requestStatus);
 
     //find books by genre / admin panel
-    @Query(value = "select b  from Book b where b.genre = ?1 and b.requestStatus = ?2 ")
-    List<Book> findAllByGenre(Genre genre, RequestStatus requestStatus);
+    @Query(value = "select b from Book b where b.genre.name like %?1% and b.requestStatus = ?2 ")
+    List<Book> findAllByGenre(String genreName, RequestStatus requestStatus);
 
-    @Query("select count (b) from Book b where b.genre =?1 and b.requestStatus = ?2")
-    Integer getCountGenre(Genre genre, RequestStatus requestStatus);
+    @Query("select count (b) from Book b where b.genre.name like %?1% and b.requestStatus = ?2")
+    Integer getCountGenre(String genre, RequestStatus requestStatus);
 
     @Query("select b.likedBooks from Book b")
     List<Book> clientLikeBooks();
     @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
             "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyPutLike(Long bookId, Long userId);
-
 
     @Query(value = "select count (*) from books_basket where books.prise =?1 " +
             "and books.id= ?1 and books.discount = ?1 ",nativeQuery = true)

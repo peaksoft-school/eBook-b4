@@ -1,9 +1,9 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.userClasses.User;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
@@ -47,7 +47,7 @@ public class AdminServiceImpl implements AdminService {
     private ClientMapper clientMapper;
     private ModelMapper modelMapper;
     @Override
-    public List<Book> getBooksBy(Genre genre, BookType bookType) {
+    public List<Book> getBooksBy(String genre, BookType bookType) {
         log.info("getBooks By genre and book type works");
         return bookRepository.getBooks(genre, bookType, ACCEPTED);
     }
@@ -66,7 +66,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Book> getBooksByGenre(Genre genre) {
+    public List<Book> getBooksByGenre(String genre) {
         log.info("get books by genre works");
         return bookRepository.findAllByGenre(genre, ACCEPTED);
     }

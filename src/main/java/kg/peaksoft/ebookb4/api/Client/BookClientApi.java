@@ -53,6 +53,8 @@ public class BookClientApi {
         clientService.cleanBasketOfClientByEmail(authentication.getName());
     }
 
+
+
     @GetMapping("/gets")
     public ClientOperationDTO gets(ClientOperationDTO dto){
         return clientService.operationClient(dto);

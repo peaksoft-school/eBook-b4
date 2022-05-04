@@ -1,23 +1,22 @@
 package kg.peaksoft.ebookb4.dto.request;
 
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
 public class GenreRequest {
 
-    private Genre genre;
+    private String genreName;
     private int count;
 
-    public GenreRequest(Genre genre) {
-        this.genre = genre;
+    public GenreRequest(String genreName) {
+        this.genreName = genreName;
     }
 
     @Override
     public String toString() {
         return "GenreRequest{" +
-                "genre=" + genre +
+                "genre=" + genreName +
                 ", count=" + count +
                 '}';
     }
