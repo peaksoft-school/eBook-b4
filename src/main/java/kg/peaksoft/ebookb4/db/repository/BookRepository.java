@@ -14,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,8 +65,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findBooksFromVendorAddedToBasket(String username);
 
 
-    @Query("select u.basket.books from User u where u.id = :clientId")
-    List<Book> findBasketByClientId(@Param("clientId") Long clientId);
+    @Query("select u.basket.books from User u where u.email = :clientId")
+    List<Book> findBasketByClientId(@Param("clientId") String name);
 
 
     @Query("select b from Book b where b.discount is not null and b.user.email = ?1")
@@ -116,4 +117,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b.likedBooks from Book b")
     List<Book> clientLikeBooks();
 
+    @Query("select b from Book b where b.isBestSeller = true")
+    List<Book> findAllByIsBestSeller();
+
+
+    @Query("select b from Book b where b.dateOfRegister = ?1")
+    List<Book> booksNovelties(LocalDate localDate);
 }

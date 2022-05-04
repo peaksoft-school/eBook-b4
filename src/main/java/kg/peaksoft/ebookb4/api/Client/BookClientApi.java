@@ -50,18 +50,18 @@ public class BookClientApi {
         clientService.cleanBasketOfClientByEmail(authentication.getName());
     }
 
-    @GetMapping("/clientBasket/{clientId}")
-    public List<BookResponse> getBooksClientFromBasket(@PathVariable Long clientId) {
-        return clientService.getBooksFromBasket(clientId);
+    @GetMapping("/clientBasket")
+    public List<BookResponse> getBooksClientFromBasket(Authentication authentication) {
+        return clientService.getBooksFromBasket(authentication.getName());
     }
 
-    @GetMapping("/count/{id}")
-    public ClientOperationDTO count(@PathVariable Long id){
-        return clientService.getBooksInBasket(id);
+    @GetMapping("/count")
+    public ClientOperationDTO count(Authentication id){
+        return clientService.getBooksInBasket(id.getName());
     }
 
-    @PostMapping("/{name}/{id}")
-    public Double save(@PathVariable String name,@PathVariable Long id){
-        return clientService.sumAfterPromo(name,id);
+    @PostMapping("/{name}")
+    public ClientOperationDTO save(@PathVariable String name, Authentication authentication){
+        return clientService.sumAfterPromo(name,authentication.getName());
     }
 }

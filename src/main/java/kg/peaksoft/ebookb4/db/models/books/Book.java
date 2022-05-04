@@ -50,6 +50,7 @@ public class Book {
     private int baskets;
     private int likes;
     private Integer discount;
+    private LocalDate dateOfRegister;
 
     private Integer discountFromPromo;
 

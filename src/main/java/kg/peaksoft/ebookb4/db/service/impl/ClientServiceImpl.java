@@ -2,7 +2,9 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.books.Book;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
+import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
+import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.repository.*;
 import kg.peaksoft.ebookb4.dto.ClientOperationDTO;
 import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
@@ -68,9 +70,11 @@ public class ClientServiceImpl implements ClientService {
         user.setLastName("");
         user.setNumber("");
         user.setDateOfRegistration(LocalDate.now());
+
         Basket basket1 = new Basket();
         basket1.setUser(user);
         user.setBasket(basket1);
+
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse(
                 String.format("User with email %s registered successfully!", user.getEmail().toUpperCase(Locale.ROOT))));
@@ -191,8 +195,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Double sumAfterPromo(String promo, Long id) {
-        List<Book> books = bookRepository.findBasketByClientId(id);
+    public ClientOperationDTO sumAfterPromo(String promo, String name) {
+        List<Book> books = bookRepository.findBasketByClientId(name);
         Double sum = 0.0;
         for (Book book : books) {
             if (book.getDiscountFromPromo() != null) {
@@ -202,39 +206,45 @@ public class ClientServiceImpl implements ClientService {
             }
             continue;
         }
-        return clientOperationMapper.total(books) - sum;
+        ClientOperationDTO clientOperationDTO = clientOperationMapper.create(name);
+
+        Double total = clientOperationDTO.getTotal() - sum;
+        Double discountPromo = clientOperationDTO.getDiscount() + sum ;
+
+        clientOperationDTO.setTotal(total);
+        clientOperationDTO.setDiscount(discountPromo);
+
+        return  clientOperationDTO;
     }
 
     @Override
-    public List<BookResponse> getBooksFromBasket(Long clientId) {
+    public List<BookResponse> getBooksFromBasket(String clientId) {
         return bookRepository.findBasketByClientId(clientId)
                 .stream().map(book -> modelMapper.map(
                         book, BookResponse.class)).collect(Collectors.toList());
     }
 
     @Override
-    public ClientOperationDTO getBooksInBasket(Long id) {
+    public ClientOperationDTO getBooksInBasket(String id) {
         return clientOperationMapper.create(id);
     }
 
-    public ResponseEntity<?> oformit(String name){
-
-        List<Book> all = bookRepository.findAll();
-
-        User user = userRepository.getUser(name).orElseThrow(()-> new BadRequestException(
-                String.format("")
-        ));
-
-//        user.setClientOperation(all);
-
-
-
-        return ResponseEntity.ok("Your order has been successfully placed!");
-    }
-
-
-
-
+//    public ResponseEntity<?> oformitOrder(String name){
+//
+//        ClientOperations clientOperations = new ClientOperations();
+//
+//        Book all = (Book) bookRepository.findByName(name, ACCEPTED);
+//
+//        User user = userRepository.getUser(name)
+//                .orElseThrow(()-> new BadRequestException(
+//                "user with email ={} does not exists "
+//        ));
+//
+//        user.setClientOperation((List<ClientOperations>) clientOperations);
+////        clientOperations.setUser(all);
+//
+//        return ResponseEntity.ok("Your order has been successfully placed!");
+//    }
 
 
     public Long getUsersBasketId(String username) {

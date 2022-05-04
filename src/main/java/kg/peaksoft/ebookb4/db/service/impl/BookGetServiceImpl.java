@@ -16,6 +16,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -164,4 +166,21 @@ public class BookGetServiceImpl implements BookGetService {
         return genreRequest;
     }
 
+    @Override
+    public List<Book> booksIsBestseller() {
+        return repository.findAllByIsBestSeller();
+    }
+
+    @Override
+    public List<Book> BooksNovelties(LocalDate localDate) {
+
+        List<Book> books = repository.booksNovelties(localDate);
+
+        for (Book book: books) {
+            if (book.getDateOfRegister().getDayOfMonth() < localDate.getDayOfMonth()) {
+                return books;
+            }
+        }
+        return null;
+    }
 }

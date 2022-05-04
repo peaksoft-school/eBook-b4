@@ -49,6 +49,7 @@ public class VendorServiceImpl implements VendorService {
         user.setRole(roleRepository.getById(number));
 
         user.setDateOfRegistration(LocalDate.now());
+
         userRepository.save(user);
         log.info("Method save vendor works");
         return ResponseEntity.ok(new MessageResponse(

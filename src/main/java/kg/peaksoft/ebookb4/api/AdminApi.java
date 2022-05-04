@@ -16,6 +16,7 @@ import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -170,8 +171,8 @@ public class AdminApi {
                 RequestStatus.INPROGRESS);
     }
 
-    @GetMapping("/client/{clientId}/basket")
-    public List<BookResponse> getBooksClientFromBasket(@PathVariable Long clientId) {
-        return service.getBooksFromBasket(clientId);
+    @GetMapping("/client/basket")
+    public List<BookResponse> getBooksClientFromBasket(Authentication authentication) {
+        return service.getBooksFromBasket(authentication.getName());
     }
 }

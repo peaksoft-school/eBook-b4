@@ -57,6 +57,7 @@ public class BookServiceImpl implements BookService {
             }
         }
 
+        book.setDateOfRegister(LocalDate.now());
         book.setUser(user);
         if (bookDTO.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
             AudioBook audio = new AudioBook();
@@ -193,7 +194,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findBooksFromVendor(Integer offset, int pageSize, String username) {
+
         List<Book> books = repository.findBooksFromVendor(username);
+
         log.info("founded {} accepted books", books.size());
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), books.size());

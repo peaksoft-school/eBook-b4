@@ -14,9 +14,10 @@ public class ClientOperationMapper {
 
     private BookRepository repository;
 
-    public ClientOperationDTO create(Long id) {
+    public ClientOperationDTO create(String name) {
 
-        List<Book> all = repository.findBasketByClientId(id);
+        List<Book> all = repository.findBasketByClientId(name);
+
         ClientOperationDTO dto = new ClientOperationDTO();
 
         dto.setDiscount(discount(all));
@@ -32,6 +33,17 @@ public class ClientOperationMapper {
         for (Book book : list) {
             if (book.getDiscount() != null) {
                 sumAfterDiscount += (book.getPrice() * book.getDiscount()) / 100;
+            } else {
+                continue;
+            }
+        }
+        return sumAfterDiscount;
+    }
+    public static Double discountPromo(List<Book> list) {
+        double sumAfterDiscount = 0;
+        for (Book book : list) {
+            if (book.getDiscount() != null) {
+                sumAfterDiscount += (book.getPrice() * book.getDiscountFromPromo()) / 100;
             } else {
                 continue;
             }
