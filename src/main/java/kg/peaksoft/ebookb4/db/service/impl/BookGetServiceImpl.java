@@ -1,6 +1,6 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
@@ -9,9 +9,9 @@ import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.GenreRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
-import kg.peaksoft.ebookb4.dto.dto.others.CustomPageRequest;
-import kg.peaksoft.ebookb4.dto.request.GenreRequest;
-import kg.peaksoft.ebookb4.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.entity.dto.request.CustomPageRequest;
+import kg.peaksoft.ebookb4.db.models.entity.dto.request.GenreRequest;
+import kg.peaksoft.ebookb4.db.models.entity.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

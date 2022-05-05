@@ -1,12 +1,11 @@
 package kg.peaksoft.ebookb4.db.repository;
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.db.models.entity.Genre;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
-import kg.peaksoft.ebookb4.dto.dto.users.ClientOperationDTO;
-import kg.peaksoft.ebookb4.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.entity.User;
+import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientOperationDTO;
+import kg.peaksoft.ebookb4.db.models.entity.dto.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -88,7 +87,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("select b from Book b where b.genre.name like %?1% " +
             "or b.bookType = ?2 and b.requestStatus = ?3")
-    List<Book> getBooks(String genre, BookType bookType, RequestStatus requestStatus);
+    List<Book> getBooks(String genreName, BookType bookType, RequestStatus requestStatus);
 
     @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
             "b.yearOfIssue, b.price) from Book b where b.requestStatus = ?1")

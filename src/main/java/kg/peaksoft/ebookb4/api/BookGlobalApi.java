@@ -2,12 +2,11 @@ package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.db.models.entity.Genre;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
-import kg.peaksoft.ebookb4.dto.request.GenreRequest;
+import kg.peaksoft.ebookb4.db.models.entity.dto.request.GenreRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -24,7 +23,7 @@ public class BookGlobalApi {
     @Operation(summary = "Find all books by genre", description = "Sorting books by genre")
     @GetMapping("/genre/{genre}")
     public List<Book> findBooksByGenre(@PathVariable String genre) {
-        return bookGetService.findByGenre(genre, RequestStatus.ACCEPTED);
+        return bookGetService.findByGenre(genre.toUpperCase(), RequestStatus.ACCEPTED);
     }
 
     @Operation(summary = "Find books by name", description = "Using linear search while finding, name, title, authorName or publishing house")

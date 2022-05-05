@@ -1,17 +1,15 @@
 package kg.peaksoft.ebookb4.exceptions;
 
-import kg.peaksoft.ebookb4.exceptions.model.ExceptionResponse;
+import kg.peaksoft.ebookb4.db.models.entity.dto.response.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
 import javax.validation.ConstraintViolationException;
-import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

@@ -1,21 +1,20 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.db.models.entity.Genre;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.AdminService;
-import kg.peaksoft.ebookb4.dto.dto.others.CustomPageRequest;
-import kg.peaksoft.ebookb4.dto.mapper.ClientMapper;
-import kg.peaksoft.ebookb4.dto.mapper.VendorMapper;
-import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
-import kg.peaksoft.ebookb4.dto.response.BookResponse;
-import kg.peaksoft.ebookb4.dto.response.ClientResponse;
-import kg.peaksoft.ebookb4.dto.response.VendorResponse;
+import kg.peaksoft.ebookb4.db.models.entity.dto.request.CustomPageRequest;
+import kg.peaksoft.ebookb4.db.models.entity.dto.mapper.ClientMapper;
+import kg.peaksoft.ebookb4.db.models.entity.dto.mapper.VendorMapper;
+import kg.peaksoft.ebookb4.db.models.entity.dto.request.RefuseBookRequest;
+import kg.peaksoft.ebookb4.db.models.entity.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.entity.dto.response.ClientResponse;
+import kg.peaksoft.ebookb4.db.models.entity.dto.response.VendorResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,9 +46,9 @@ public class AdminServiceImpl implements AdminService {
     private ClientMapper clientMapper;
     private ModelMapper modelMapper;
     @Override
-    public List<Book> getBooksBy(String genre, BookType bookType) {
+    public List<Book> getBooksBy(String genreName, BookType bookType) {
         log.info("getBooks By genre and book type works");
-        return bookRepository.getBooks(genre, bookType, ACCEPTED);
+        return bookRepository.getBooks(genreName, bookType, ACCEPTED);
     }
 
     @Override
@@ -66,9 +65,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Book> getBooksByGenre(String genre) {
+    public List<Book> getBooksByGenre(String genreName) {
         log.info("get books by genre works");
-        return bookRepository.findAllByGenre(genre, ACCEPTED);
+        return bookRepository.findAllByGenre(genreName, ACCEPTED);
     }
 
     @Override

@@ -1,13 +1,13 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.VendorService;
-import kg.peaksoft.ebookb4.dto.dto.users.VendorRegisterDTO;
-import kg.peaksoft.ebookb4.dto.dto.users.VendorUpdateDTO;
-import kg.peaksoft.ebookb4.dto.mapper.VendorRegisterMapper;
-import kg.peaksoft.ebookb4.dto.response.MessageResponse;
+import kg.peaksoft.ebookb4.db.models.entity.dto.users.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.db.models.entity.dto.users.VendorUpdateDTO;
+import kg.peaksoft.ebookb4.db.models.entity.dto.mapper.VendorRegisterMapper;
+import kg.peaksoft.ebookb4.db.models.entity.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

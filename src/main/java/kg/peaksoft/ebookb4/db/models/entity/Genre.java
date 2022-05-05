@@ -5,7 +5,6 @@ package kg.peaksoft.ebookb4.db.models.entity;
  * Date: 04/5/22
  */
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,6 +28,9 @@ public class Genre {
 
     private String name;
 
+    @OneToMany()
+    private List<Book> books;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -41,17 +43,7 @@ public class Genre {
     public int hashCode() {
         return Objects.hash(id, name);
     }
-//    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,
-//    mappedBy = "genres")
-//    private List<Book> books;
-//    public void addBook(Book book){
-//        if(this.books == null){
-//            this.books = new ArrayList<>();
-//        }
-//        this.books.add(book);
-//    }
-    @OneToMany()
-    private List<Book> books;
+
     @Override
     public String toString() {
         return "Genre{" +

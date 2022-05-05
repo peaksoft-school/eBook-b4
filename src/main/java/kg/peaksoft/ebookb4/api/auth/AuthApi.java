@@ -2,10 +2,10 @@ package kg.peaksoft.ebookb4.api.auth;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.dto.dto.users.LoginRequest;
-import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
-import kg.peaksoft.ebookb4.dto.dto.users.VendorRegisterDTO;
-import kg.peaksoft.ebookb4.dto.response.JwtResponse;
+import kg.peaksoft.ebookb4.db.models.entity.dto.users.LoginRequest;
+import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientRegisterDTO;
+import kg.peaksoft.ebookb4.db.models.entity.dto.users.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.db.models.entity.dto.response.JwtResponse;
 import kg.peaksoft.ebookb4.config.jwt.JwtUtils;
 import kg.peaksoft.ebookb4.config.services.UserDetailsImpl;
 import kg.peaksoft.ebookb4.db.service.ClientService;

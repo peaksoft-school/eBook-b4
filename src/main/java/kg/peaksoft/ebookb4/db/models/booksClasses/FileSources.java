@@ -1,13 +1,12 @@
 package kg.peaksoft.ebookb4.db.models.booksClasses;
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.File;
 
 @Entity
 @Getter

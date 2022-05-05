@@ -1,15 +1,15 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.repository.*;
-import kg.peaksoft.ebookb4.dto.dto.users.ClientOperationDTO;
-import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
-import kg.peaksoft.ebookb4.dto.dto.users.ClientUpdateDTO;
-import kg.peaksoft.ebookb4.dto.mapper.ClientRegisterMapper;
-import kg.peaksoft.ebookb4.dto.response.BookResponse;
-import kg.peaksoft.ebookb4.dto.response.MessageResponse;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientOperationDTO;
+import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientRegisterDTO;
+import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientUpdateDTO;
+import kg.peaksoft.ebookb4.db.models.entity.dto.mapper.ClientRegisterMapper;
+import kg.peaksoft.ebookb4.db.models.entity.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.entity.dto.response.MessageResponse;
+import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
