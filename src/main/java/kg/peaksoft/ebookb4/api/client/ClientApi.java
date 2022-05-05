@@ -3,8 +3,8 @@ package kg.peaksoft.ebookb4.api.client;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.service.ClientService;
-import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientRegisterDTO;
-import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientUpdateDTO;
+import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
+import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,13 +31,6 @@ public class ClientApi {
     @PatchMapping("/profile/settings")
     public ResponseEntity<?> updateClient(@RequestBody ClientUpdateDTO newClientDTO, Authentication authentication){
         return clientService.update(newClientDTO, authentication.getName());
-
-
     }
-
-
-
-
-
 
 }

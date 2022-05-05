@@ -1,18 +1,18 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
-import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.repository.*;
-import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientOperationDTO;
-import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientRegisterDTO;
-import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientUpdateDTO;
-import kg.peaksoft.ebookb4.db.models.entity.dto.mapper.ClientRegisterMapper;
-import kg.peaksoft.ebookb4.db.models.entity.dto.response.BookResponse;
-import kg.peaksoft.ebookb4.db.models.entity.dto.response.MessageResponse;
+import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
+import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
+import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.User;
+import kg.peaksoft.ebookb4.db.models.mappers.ClientOperationMapper;
+import kg.peaksoft.ebookb4.db.models.mappers.ClientRegisterMapper;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
+import kg.peaksoft.ebookb4.db.repository.*;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
@@ -42,9 +41,11 @@ public class ClientServiceImpl implements ClientService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final BasketRepository basketRepository;
-    private final ClientRegisterMapper mapper;
+    private final ClientRegisterMapper clientRegisterMapper;
     private final PromoRepo repo;
     private final ClientOperationMapper clientOperationMapper;
+
+    private final ClientOperationRepository clientOperationRepository;
 
     @Override
     public ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number) {
@@ -127,6 +128,7 @@ public class ClientServiceImpl implements ClientService {
                 "with username %s", bookId, username)));
     }
 
+
     @Override
     @Transactional
     public ResponseEntity<?> update(ClientUpdateDTO newClientDTO, String username) {
@@ -158,7 +160,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientRegisterDTO getClientDetails(String username) {
-        return mapper.createDTO(userRepository.getUser(username).orElseThrow(() ->
+        return clientRegisterMapper.createDTO(userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found!", username))));
     }
 
@@ -191,7 +193,7 @@ public class ClientServiceImpl implements ClientService {
         Double sum = 0.0;
         for (Book book : books) {
             if (book.getDiscountFromPromo() != null) {
-                if (checkProp(promo)) {
+                if (checkPromo(promo)) {
                     sum += (book.getPrice() * book.getDiscountFromPromo()) / 100;
                 }
             }
@@ -220,39 +222,43 @@ public class ClientServiceImpl implements ClientService {
         return clientOperationMapper.create(id);
     }
 
-//    public ResponseEntity<?> oformitOrder(String name){
-//
-//        ClientOperations clientOperations = new ClientOperations();
-//
-//        Book all = (Book) bookRepository.findByName(name, ACCEPTED);
-//
-//        User user = userRepository.getUser(name)
-//                .orElseThrow(()-> new BadRequestException(
-//                "user with email ={} does not exists "
-//        ));
-//
-//        user.setClientOperation((List<ClientOperations>) clientOperations);
-////        clientOperations.setUser(all);
-//
-//        return ResponseEntity.ok("Your order has been successfully placed!");
-//    }
+
+    @Override
+    public ResponseEntity<?> pppppOrder(String name){
+
+        ClientOperations clientOperations = new ClientOperations();
+
+        List<Book> all =bookRepository.findBasketByClientId(name);
+
+        User user = userRepository.getUser(name)
+                .orElseThrow(()-> new BadRequestException(
+                "user with email ={} does not exists "
+        ));
+        clientOperations.setBoughtBooks(all);
+        clientOperations.setUser(user);
+        clientOperationRepository.save(clientOperations);
+
+        return ResponseEntity.ok("Your order has been successfully placed!");
+    }
 
     public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);
     }
 
-    public Boolean checkProp(String promo) {
+    public Boolean checkPromo(String promo) {
         List<Promocode> promocode = repo.findAll();
         for (Promocode promocode1:promocode) {
             if (promocode1.getPromocode().equals(promo)) {
                 if (promocode1.getIsActive().equals(true)) {
                     return true;
                 }
-                log.error("this promo {} not found", promo);
+                log.error("this {} promo not found", promo);
             }
             log.error("this {} promo is not active", promocode);
         }
         return false;
     }
+
+
 
 }

@@ -7,10 +7,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,10 +18,14 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class FileStoreImpl implements FileStore {
 
     private final AmazonS3 s3;
+
+    @Autowired
+    public FileStoreImpl(AmazonS3 s3) {
+        this.s3 = s3;
+    }
 
     @Override
     public void save(String path,
@@ -33,9 +35,9 @@ public class FileStoreImpl implements FileStore {
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
 
-        optionalMetadata.ifPresent(stringStringMap -> {
-            if (!stringStringMap.isEmpty()) {
-                stringStringMap.forEach(objectMetadata::addUserMetadata);
+        optionalMetadata.ifPresent(map -> {
+            if (!map.isEmpty()) {
+                map.forEach(objectMetadata::addUserMetadata);
             }
         });
 

@@ -2,11 +2,10 @@ package kg.peaksoft.ebookb4.db.repository;
 
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.entity.User;
-import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientOperationDTO;
-import kg.peaksoft.ebookb4.db.models.entity.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -58,8 +57,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.baskets>0 and b.user.email = ?1")
     List<Book> findBooksFromVendorAddedToBasket(String username);
 
-    @Query("select u.basket.books from User u where u.id = :clientId")
-    List<Book> findBasketByClientId(@Param("clientId") Long clientId);
+    @Query("select u.basket.books from User u where u.email = :clientId")
+    List<Book> findBasketByClientId(@Param("clientId") String name);
 
     @Query("select b from Book b where b.discount is not null and b.user.email = ?1")
     List<Book> findBooksFromVendorWithDiscount(String username);
@@ -89,11 +88,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "or b.bookType = ?2 and b.requestStatus = ?3")
     List<Book> getBooks(String genreName, BookType bookType, RequestStatus requestStatus);
 
-    @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
+    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
             "b.yearOfIssue, b.price) from Book b where b.requestStatus = ?1")
     List<BookResponse> findBooksInProgress(RequestStatus requestStatus);
 
-    @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
+    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
             "b.yearOfIssue, b.price) from Book b where b.requestStatus = ?1")
     List<BookResponse> findBooksAccepted(RequestStatus requestStatus);
 
@@ -112,11 +111,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
             "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyPutLike(Long bookId, Long userId);
-
-
-    @Query(value = "select count (*) from books_basket where books.prise =?1 " +
-            "and books.id= ?1 and books.discount = ?1 ",nativeQuery = true)
-    ClientOperationDTO getBooksCount(ClientOperationDTO clientOperationDTO);
 
     @Query("select b from Book b where b.isBestSeller = true")
     List<Book> findAllByIsBestSeller();

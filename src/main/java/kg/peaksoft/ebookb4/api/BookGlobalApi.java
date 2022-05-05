@@ -6,12 +6,10 @@ import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
-import kg.peaksoft.ebookb4.db.models.entity.dto.request.GenreRequest;
+import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
 import lombok.AllArgsConstructor;
-import org.apache.tomcat.jni.Local;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController

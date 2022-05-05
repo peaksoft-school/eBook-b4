@@ -1,16 +1,12 @@
 package kg.peaksoft.ebookb4.aws.service;
 
 import com.amazonaws.AmazonServiceException;
-import kg.peaksoft.ebookb4.aws.enums.BucketName;
 import kg.peaksoft.ebookb4.aws.enums.FolderName;
 import kg.peaksoft.ebookb4.aws.exception.DoesNotExistsException;
 import kg.peaksoft.ebookb4.aws.exception.InvalidFileException;
 import kg.peaksoft.ebookb4.aws.files.FileStore;
 import kg.peaksoft.ebookb4.aws.model.FileInfo;
 import kg.peaksoft.ebookb4.aws.repo.FileRepository;
-import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

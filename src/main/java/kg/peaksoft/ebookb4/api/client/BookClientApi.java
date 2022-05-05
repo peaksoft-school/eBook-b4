@@ -1,13 +1,11 @@
-package kg.peaksoft.ebookb4.api.Client;
+package kg.peaksoft.ebookb4.api.client;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.service.ClientService;
-import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientOperationDTO;
-import kg.peaksoft.ebookb4.db.models.entity.dto.request.Request;
-import kg.peaksoft.ebookb4.db.models.entity.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
+import kg.peaksoft.ebookb4.db.models.request.Request;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,15 +24,11 @@ public class BookClientApi {
 
     private ClientService clientService;
 
+
     @Operation(summary = "add to basket",description = "add a book to basket")
     @PostMapping("/basket")
     public ResponseEntity<?> addToBasket(@RequestBody Request request, Authentication authentication){
         return clientService.addBookToBasket(request.getId(), authentication.getName());
-    }
-
-    @GetMapping("/clientBasket/{clientId}")
-    public List<BookResponse> getBooksClientFromBasket(@PathVariable Long clientId) {
-        return clientService.getBooksFromBasket(clientId);
     }
 
     @Operation(summary = "Like a book",description = "Like a book with id")
@@ -55,23 +49,27 @@ public class BookClientApi {
         clientService.cleanBasketOfClientByEmail(authentication.getName());
     }
 
+    @Operation(summary = "Get books", description = "Get all books from clients Basket")
     @GetMapping("/clientBasket")
     public List<BookResponse> getBooksClientFromBasket(Authentication authentication) {
         return clientService.getBooksFromBasket(authentication.getName());
     }
 
+    @Operation(summary = "Get all counts", description = "Get count of books, discount, sum after we get total")
     @GetMapping("/count")
-    public ClientOperationDTO count(Authentication id){
+    public ClientOperationDTO getCountsAlsoTotal(Authentication id){
         return clientService.getBooksInBasket(id.getName());
     }
 
-    @PostMapping("/{name}")
-    public ClientOperationDTO save(@PathVariable String name, Authentication authentication){
-        return clientService.sumAfterPromo(name,authentication.getName());
-
-
-    @GetMapping("/gets")
-    public ClientOperationDTO gets(ClientOperationDTO dto){
-        return clientService.operationClient(dto);
+    @Operation(summary = "Compare the promo code", description = "Compare the promo code if it fits then the person gets a discount ")
+    @PostMapping("/{promoCode}")
+    public ClientOperationDTO comparePromoCode(@PathVariable String promoCode, Authentication authentication) {
+        return clientService.sumAfterPromo(promoCode, authentication.getName());
     }
+    
+    @PostMapping("/place-an-order")
+    public void placeAnOrder( Authentication authentication){
+        clientService.pppppOrder( authentication.getName());
+    }
+
 }

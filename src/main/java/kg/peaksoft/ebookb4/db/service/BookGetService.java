@@ -3,10 +3,9 @@ package kg.peaksoft.ebookb4.db.service;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
-import kg.peaksoft.ebookb4.db.models.entity.dto.request.GenreRequest;
-import kg.peaksoft.ebookb4.db.models.entity.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface BookGetService {

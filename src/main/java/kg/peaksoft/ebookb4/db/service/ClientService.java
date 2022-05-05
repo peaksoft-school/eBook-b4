@@ -1,9 +1,9 @@
 package kg.peaksoft.ebookb4.db.service;
 
-import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientOperationDTO;
-import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientRegisterDTO;
-import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientUpdateDTO;
-import kg.peaksoft.ebookb4.db.models.entity.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
+import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
+import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import org.springframework.http.ResponseEntity;
 
 import javax.transaction.Transactional;
@@ -11,13 +11,15 @@ import java.util.List;
 
 public interface ClientService {
 
+//    public void save(ClientOperations name);
+
     ResponseEntity<?> register (ClientRegisterDTO clientRegisterDTO, Long number);
 
     ResponseEntity<?> likeABook(Long bookId, String username);
 
     ResponseEntity<?> addBookToBasket(Long bookId, String username);
 
-    List<BookResponse> getBooksFromBasket(String id);
+    List<BookResponse> getBooksFromBasket(String name);
 
     ClientOperationDTO getBooksInBasket(String name);
 
@@ -30,5 +32,8 @@ public interface ClientService {
 
     ResponseEntity<?> cleanBasketOfClientByEmail(String clientEmail);
 
-     ClientOperationDTO sumAfterPromo(String promo,String id);
+     ClientOperationDTO sumAfterPromo(String promoCode,String id);
+
+//    List<Book> getBooksFromBasketForBuy(String name);
+    public ResponseEntity<?> pppppOrder( String name);
 }

@@ -1,7 +1,7 @@
 package kg.peaksoft.ebookb4.db.service;
 
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.entity.dto.users.BookDTO;
+import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import org.springframework.http.ResponseEntity;
 

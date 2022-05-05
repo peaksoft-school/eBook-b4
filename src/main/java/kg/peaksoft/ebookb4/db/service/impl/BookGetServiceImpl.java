@@ -9,15 +9,16 @@ import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.GenreRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
-import kg.peaksoft.ebookb4.db.models.entity.dto.request.CustomPageRequest;
-import kg.peaksoft.ebookb4.db.models.entity.dto.request.GenreRequest;
-import kg.peaksoft.ebookb4.db.models.entity.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
+import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -165,13 +166,13 @@ public class BookGetServiceImpl implements BookGetService {
 
     @Override
     public List<Book> booksIsBestseller() {
-        return repository.findAllByIsBestSeller();
+        return bookRepository.findAllByIsBestSeller();
     }
 
     @Override
     public List<Book> BooksNovelties() {
 
-        List<Book> books = repository.findAll();
+        List<Book> books = bookRepository.findAll();
         for (Book book : books) {
 
             book.getDateOfRegister().minus(30, ChronoUnit.DAYS);

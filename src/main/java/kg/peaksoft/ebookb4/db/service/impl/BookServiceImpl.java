@@ -6,10 +6,10 @@ import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.repository.GenreRepository;
 import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
 import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.db.models.entity.dto.request.CustomPageRequest;
-import kg.peaksoft.ebookb4.db.models.entity.dto.mapper.BookMapper;
-import kg.peaksoft.ebookb4.db.models.entity.dto.users.BookDTO;
-import kg.peaksoft.ebookb4.db.models.entity.dto.response.MessageResponse;
+import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
+import kg.peaksoft.ebookb4.db.models.mappers.BookMapper;
+import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
+import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import kg.peaksoft.ebookb4.db.models.entity.AudioBook;
@@ -61,6 +61,7 @@ public class BookServiceImpl implements BookService {
         }
 
         book.setDateOfRegister(LocalDate.now());
+
         book.setUser(user);
         if (bookDTO.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
             AudioBook audio = new AudioBook();
