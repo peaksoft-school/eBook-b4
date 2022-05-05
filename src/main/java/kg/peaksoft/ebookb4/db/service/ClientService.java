@@ -17,7 +17,9 @@ public interface ClientService {
 
     ResponseEntity<?> addBookToBasket(Long bookId, String username);
 
-    List<BookResponse> getBooksFromBasket(Long id);
+    List<BookResponse> getBooksFromBasket(String id);
+
+    ClientOperationDTO getBooksInBasket(String name);
 
     @Transactional
     ResponseEntity<?> update(ClientUpdateDTO newClientDTO, String username);
@@ -28,5 +30,5 @@ public interface ClientService {
 
     ResponseEntity<?> cleanBasketOfClientByEmail(String clientEmail);
 
-     ClientOperationDTO operationClient(ClientOperationDTO operation);
+     ClientOperationDTO sumAfterPromo(String promo,String id);
 }

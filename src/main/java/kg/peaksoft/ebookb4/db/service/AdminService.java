@@ -17,7 +17,7 @@ public interface AdminService {
 
     List<Book> getBooksByGenre(String genre);
 
-    List<BookResponse> getBooksFromBasket(Long id);
+    List<BookResponse> getBooksFromBasket(String name);
 
     List<Book> getBooksByBookType(BookType bookType);
 

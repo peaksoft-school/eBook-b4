@@ -7,10 +7,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 25/4/22
- */
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor

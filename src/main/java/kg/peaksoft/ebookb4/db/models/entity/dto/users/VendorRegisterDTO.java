@@ -25,6 +25,4 @@ public class VendorRegisterDTO {
   private String password;
 
   private String confirmPassword;
-
-
 }

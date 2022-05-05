@@ -13,7 +13,6 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class ClientUpdateDTO {
-    private String email;
 
     private String firstName;
     @NotBlank

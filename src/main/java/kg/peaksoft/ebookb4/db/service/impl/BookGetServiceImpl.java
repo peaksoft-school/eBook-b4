@@ -30,7 +30,6 @@ public class BookGetServiceImpl implements BookGetService {
 
     private final BookRepository bookRepository;
     private final PromoService promoService;
-
     private final GenreRepository genreRepository;
 
     @Override
@@ -51,7 +50,7 @@ public class BookGetServiceImpl implements BookGetService {
         promoService.checkPromos();
         List<Book> books = bookRepository.findAllActive(ACCEPTED);
         //if it is empty it returns empty list
-        if(books.size()<1){
+        if (books.size() < 1) {
             log.info("if it is empty it returns empty list");
             return books;
         }
@@ -60,17 +59,17 @@ public class BookGetServiceImpl implements BookGetService {
             log.info("I am in sort by genre");
             if (sortBook.getGenre().size() > 1) {
                 int counter = 0;
-                for(Iterator<Book> iterator = books.iterator(); iterator.hasNext();) {
+                for (Iterator<Book> iterator = books.iterator(); iterator.hasNext(); ) {
                     Book book = iterator.next();
-                    for (Genre g: sortBook.getGenre()){
-                        if(book.getGenre().equals(g)){
+                    for (Genre g : sortBook.getGenre()) {
+                        if (book.getGenre().equals(g)) {
                             counter++;
                         }
                     }
-                    if(counter==0){
+                    if (counter == 0) {
                         iterator.remove();
                     }
-                    counter=0;
+                    counter = 0;
                 }
             } else {
                 log.info("In else of sort by genre");
@@ -97,15 +96,15 @@ public class BookGetServiceImpl implements BookGetService {
                 int counter = 0;
                 for(Iterator<Book> iterator = books.iterator(); iterator.hasNext();) {
                     Book book = iterator.next();
-                    for (Language l: sortBook.getLanguage()){
-                        if(book.getLanguage().equals(l)){
+                    for (Language l : sortBook.getLanguage()) {
+                        if (book.getLanguage().equals(l)) {
                             counter++;
                         }
                     }
-                    if(counter==0){
+                    if (counter == 0) {
                         iterator.remove();
                     }
-                    counter=0;
+                    counter = 0;
                 }
             } else {
                 log.info("In else of sort by language");
@@ -114,7 +113,7 @@ public class BookGetServiceImpl implements BookGetService {
         }
 
         Pageable paging = PageRequest.of(offset, pageSize);
-        int start = Math.min((int)paging.getOffset(), books.size());
+        int start = Math.min((int) paging.getOffset(), books.size());
         int end = Math.min((start + paging.getPageSize()), books.size());
         Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
         log.info("Sort book works");
@@ -164,4 +163,21 @@ public class BookGetServiceImpl implements BookGetService {
         return genreRequest;
     }
 
+    @Override
+    public List<Book> booksIsBestseller() {
+        return repository.findAllByIsBestSeller();
+    }
+
+    @Override
+    public List<Book> BooksNovelties() {
+
+        List<Book> books = repository.findAll();
+        for (Book book : books) {
+
+            book.getDateOfRegister().minus(30, ChronoUnit.DAYS);
+
+        }
+        return books;
+
+    }
 }

@@ -18,8 +18,11 @@ public class ElectronicBook {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
     @SequenceGenerator(name = "hibernate_seq", sequenceName = "ebook_seq", allocationSize = 1)
     private Long ebookId;
+
     private String fragmentOfBook;
+
     private Integer numberOfPages;
+
     private String urlOfBookFromCloud;
 
 

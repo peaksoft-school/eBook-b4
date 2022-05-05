@@ -8,7 +8,10 @@ import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.models.entity.dto.request.GenreRequest;
 import lombok.AllArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -45,8 +48,19 @@ public class BookGlobalApi {
     }
 
     @Operation(summary = "Get all genre count books", description = "get genres countBooks")
-    @GetMapping("/genre_count/")
+    @GetMapping("/genre_count")
     List<GenreRequest> getCountGenre() {
         return bookGetService.getCountGenre();
+    }
+
+    @Operation(summary = "Get books with bestSeller = true")
+    @GetMapping("/bestSeller")
+    public List<Book> isBestSeller(){
+        return bookGetService.booksIsBestseller();
+    }
+
+    @GetMapping("/gets")
+    public List<Book> gets(){
+        return bookGetService.BooksNovelties();
     }
 }

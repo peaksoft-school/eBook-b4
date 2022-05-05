@@ -6,6 +6,7 @@ import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.models.entity.dto.request.GenreRequest;
 import kg.peaksoft.ebookb4.db.models.entity.dto.response.BookResponse;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface BookGetService {
@@ -25,5 +26,9 @@ public interface BookGetService {
     List<BookResponse> getAllAcceptedBooks();
 
     List<GenreRequest> getCountGenre();
+
+    List<Book> booksIsBestseller();
+
+    List<Book> BooksNovelties();
 
 }

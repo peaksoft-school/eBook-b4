@@ -52,7 +52,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<BookResponse> getBooksFromBasket(Long clientId) {
+    public List<BookResponse> getBooksFromBasket(String clientId) {
         return bookRepository.findBasketByClientId(clientId)
                 .stream().map(book -> modelMapper.map(
                         book, BookResponse.class)).collect(Collectors.toList());
@@ -186,12 +186,16 @@ public class AdminServiceImpl implements AdminService {
             );
         });
         List<Book> books = bookRepository.findBooksFromVendor(user.getEmail());
+
+
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), books.size());
         int end = Math.min((start + paging.getPageSize()), books.size());
         Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
         System.out.println(new CustomPageRequest<>(pages).getContent().size());
+
         log.info("Vendor books=s%"+new CustomPageRequest<>(pages).getContent().size());
+
         return new CustomPageRequest<>(pages).getContent();
     }
 

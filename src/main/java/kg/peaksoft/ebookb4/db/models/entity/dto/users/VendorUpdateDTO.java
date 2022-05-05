@@ -14,10 +14,11 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class VendorUpdateDTO {
-    @NotBlank
-    @Size(max = 50)
-    @Email
-    private String email;
+//    @NotBlank
+//    @Size(max = 50)
+//    @Email
+//    private String email;
+//    private Long id;
 
     private String firstName;
 
@@ -28,9 +29,11 @@ public class VendorUpdateDTO {
     @NotBlank
     @Size(min = 6, max = 40)
     private String oldPassword;
+
     @NotBlank
     @Size(min = 6, max = 40)
     private String newPassword;
+
     @NotBlank
     @Size(min = 6, max = 40)
     private String confirmNewPassword;

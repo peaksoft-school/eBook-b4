@@ -7,11 +7,6 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 20/4/22
- */
 @Data
 @AllArgsConstructor
 public class CustomPageRequest<B> {
@@ -20,7 +15,7 @@ public class CustomPageRequest<B> {
 
     CustomPage customPage;
 
-    public CustomPageRequest(Page<B> page) {
+    public  CustomPageRequest(Page<B> page) {
         this.content = page.getContent();
         this.customPage = new CustomPage(page.getTotalElements(),
                 page.getTotalPages(), page.getNumber(), page.getSize());

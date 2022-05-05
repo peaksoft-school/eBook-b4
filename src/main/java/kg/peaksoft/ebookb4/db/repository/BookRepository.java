@@ -2,6 +2,7 @@ package kg.peaksoft.ebookb4.db.repository;
 
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
+import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientOperationDTO;
@@ -13,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,13 +55,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.likes>0 and b.user.email = ?1")
     List<Book> findLikedBooksFromVendor(String username);
 
-
     @Query("select b from Book b where b.baskets>0 and b.user.email = ?1")
     List<Book> findBooksFromVendorAddedToBasket(String username);
 
     @Query("select u.basket.books from User u where u.id = :clientId")
     List<Book> findBasketByClientId(@Param("clientId") Long clientId);
-
 
     @Query("select b from Book b where b.discount is not null and b.user.email = ?1")
     List<Book> findBooksFromVendorWithDiscount(String username);
@@ -112,6 +112,17 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
             "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyPutLike(Long bookId, Long userId);
+
+
+    @Query(value = "select count (*) from books_basket where books.prise =?1 " +
+            "and books.id= ?1 and books.discount = ?1 ",nativeQuery = true)
+    ClientOperationDTO getBooksCount(ClientOperationDTO clientOperationDTO);
+
+    @Query("select b from Book b where b.isBestSeller = true")
+    List<Book> findAllByIsBestSeller();
+
+    @Query("select b from Book b where b.dateOfRegister between ?1 and ?2")
+    List<Book> booksNovelties(LocalDate localDate1,LocalDate localDate2);
 
     @Query(value = "select count (*) from books_basket where books.prise =?1 " +
             "and books.id= ?1 and books.discount = ?1 ",nativeQuery = true)

@@ -1,7 +1,9 @@
-package kg.peaksoft.ebookb4.api.client;
+package kg.peaksoft.ebookb4.api.Client;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
+import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientOperationDTO;
 import kg.peaksoft.ebookb4.db.models.entity.dto.request.Request;
@@ -53,6 +55,19 @@ public class BookClientApi {
         clientService.cleanBasketOfClientByEmail(authentication.getName());
     }
 
+    @GetMapping("/clientBasket")
+    public List<BookResponse> getBooksClientFromBasket(Authentication authentication) {
+        return clientService.getBooksFromBasket(authentication.getName());
+    }
+
+    @GetMapping("/count")
+    public ClientOperationDTO count(Authentication id){
+        return clientService.getBooksInBasket(id.getName());
+    }
+
+    @PostMapping("/{name}")
+    public ClientOperationDTO save(@PathVariable String name, Authentication authentication){
+        return clientService.sumAfterPromo(name,authentication.getName());
 
 
     @GetMapping("/gets")

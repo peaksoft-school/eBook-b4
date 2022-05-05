@@ -24,6 +24,5 @@ public class AudioBook {
 
     private String fragment;
 
-
     private String urlOfBookFromCloud;
 }

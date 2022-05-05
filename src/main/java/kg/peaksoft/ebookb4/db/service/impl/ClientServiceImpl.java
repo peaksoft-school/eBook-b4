@@ -2,6 +2,9 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
+import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
+import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
+import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.repository.*;
 import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientOperationDTO;
 import kg.peaksoft.ebookb4.db.models.entity.dto.users.ClientRegisterDTO;
@@ -23,6 +26,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
@@ -39,6 +43,8 @@ public class ClientServiceImpl implements ClientService {
     private final UserRepository userRepository;
     private final BasketRepository basketRepository;
     private final ClientRegisterMapper mapper;
+    private final PromoRepo repo;
+    private final ClientOperationMapper clientOperationMapper;
 
     @Override
     public ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number) {
@@ -63,9 +69,11 @@ public class ClientServiceImpl implements ClientService {
         user.setLastName("");
         user.setNumber("");
         user.setDateOfRegistration(LocalDate.now());
+
         Basket basket1 = new Basket();
         basket1.setUser(user);
         user.setBasket(basket1);
+
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse(
                 String.format("User with email %s registered successfully!", user.getEmail().toUpperCase(Locale.ROOT))));
@@ -125,14 +133,6 @@ public class ClientServiceImpl implements ClientService {
         User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found", username)));
 
-        if (userRepository.existsByEmail(newClientDTO.getEmail())) {
-            throw new BadRequestException(String.format("Please choose another email, %s email is not available", newClientDTO.getEmail()));
-        }
-        String oldEmail = user.getEmail();
-        String newEmail = newClientDTO.getEmail();
-        if (!oldEmail.equals(newEmail)) {
-            user.setEmail(newEmail);
-        }
         String oldFirstName = user.getFirstName();
         String newFirstName = newClientDTO.getFirstName();
         if (!oldFirstName.equals(newFirstName)) {
@@ -186,21 +186,73 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<BookResponse> getBooksFromBasket(Long clientId) {
+    public ClientOperationDTO sumAfterPromo(String promo, String name) {
+        List<Book> books = bookRepository.findBasketByClientId(name);
+        Double sum = 0.0;
+        for (Book book : books) {
+            if (book.getDiscountFromPromo() != null) {
+                if (checkProp(promo)) {
+                    sum += (book.getPrice() * book.getDiscountFromPromo()) / 100;
+                }
+            }
+            continue;
+        }
+        ClientOperationDTO clientOperationDTO = clientOperationMapper.create(name);
+
+        Double total = clientOperationDTO.getTotal() - sum;
+        Double discountPromo = clientOperationDTO.getDiscount() + sum ;
+
+        clientOperationDTO.setTotal(total);
+        clientOperationDTO.setDiscount(discountPromo);
+
+        return  clientOperationDTO;
+    }
+
+    @Override
+    public List<BookResponse> getBooksFromBasket(String clientId) {
         return bookRepository.findBasketByClientId(clientId)
                 .stream().map(book -> modelMapper.map(
                         book, BookResponse.class)).collect(Collectors.toList());
     }
 
     @Override
-    public ClientOperationDTO operationClient(ClientOperationDTO operation) {
-
-       return bookRepository.getBooksCount(operation);
+    public ClientOperationDTO getBooksInBasket(String id) {
+        return clientOperationMapper.create(id);
     }
 
-
+//    public ResponseEntity<?> oformitOrder(String name){
+//
+//        ClientOperations clientOperations = new ClientOperations();
+//
+//        Book all = (Book) bookRepository.findByName(name, ACCEPTED);
+//
+//        User user = userRepository.getUser(name)
+//                .orElseThrow(()-> new BadRequestException(
+//                "user with email ={} does not exists "
+//        ));
+//
+//        user.setClientOperation((List<ClientOperations>) clientOperations);
+////        clientOperations.setUser(all);
+//
+//        return ResponseEntity.ok("Your order has been successfully placed!");
+//    }
 
     public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);
     }
+
+    public Boolean checkProp(String promo) {
+        List<Promocode> promocode = repo.findAll();
+        for (Promocode promocode1:promocode) {
+            if (promocode1.getPromocode().equals(promo)) {
+                if (promocode1.getIsActive().equals(true)) {
+                    return true;
+                }
+                log.error("this promo {} not found", promo);
+            }
+            log.error("this {} promo is not active", promocode);
+        }
+        return false;
+    }
+
 }
