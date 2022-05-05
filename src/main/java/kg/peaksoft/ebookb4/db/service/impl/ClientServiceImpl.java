@@ -35,6 +35,7 @@ import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
+    private final PromoRepo repo;
     private final PasswordEncoder encoder;
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
@@ -42,9 +43,7 @@ public class ClientServiceImpl implements ClientService {
     private final UserRepository userRepository;
     private final BasketRepository basketRepository;
     private final ClientRegisterMapper clientRegisterMapper;
-    private final PromoRepo repo;
     private final ClientOperationMapper clientOperationMapper;
-
     private final ClientOperationRepository clientOperationRepository;
 
     @Override
@@ -127,7 +126,6 @@ public class ClientServiceImpl implements ClientService {
         return ResponseEntity.ok(new MessageResponse(String.format("Book with id %s has been added to basket of user" +
                 "with username %s", bookId, username)));
     }
-
 
     @Override
     @Transactional
@@ -258,7 +256,4 @@ public class ClientServiceImpl implements ClientService {
         }
         return false;
     }
-
-
-
 }

@@ -17,6 +17,7 @@ import java.util.Objects;
 @Table(name = "genres")
 @NoArgsConstructor
 public class Genre {
+
     public Genre(Long id, String name) {
         this.id = id;
         this.name = name;
@@ -28,7 +29,7 @@ public class Genre {
 
     private String name;
 
-    @OneToMany()
+    @OneToMany(mappedBy = "genre")
     private List<Book> books;
 
     @Override

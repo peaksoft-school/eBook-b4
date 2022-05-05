@@ -40,7 +40,7 @@ public class EBookB4Application {
         return "<h1>Welcome to eBook application!!!<h1/>";
     }
 
-//    @PostConstruct
+    @PostConstruct
     public void init() {
         Role client = new Role();
         client.setId(1L);
@@ -69,9 +69,6 @@ public class EBookB4Application {
         v.setEmail("vendor@gmail.com");
         v.setPassword(encoder.encode("vendor"));
         v.setRole(roleRepository.getById(2L));
-//        Basket basket2 = new Basket();
-//        basket2.setUser(v);
-//        v.setBasket(basket2);
         v.setDateOfRegistration(LocalDate.now());
         userRepository.save(v);
 
@@ -79,9 +76,6 @@ public class EBookB4Application {
         a.setEmail("admin@gmail.com");
         a.setPassword(encoder.encode("admin"));
         a.setRole(roleRepository.getById(3L));
-//        Basket basket = new Basket();
-//        basket.setUser(a);
-//        a.setBasket(basket);
         a.setDateOfRegistration(LocalDate.now());
         userRepository.save(a);
 
