@@ -2,6 +2,7 @@ package kg.peaksoft.ebookb4.db.models.books;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import kg.peaksoft.ebookb4.aws.model.FileInfo;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
@@ -15,6 +16,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.REFRESH;
 
 @Entity
 @Getter
@@ -51,6 +55,9 @@ public class Book {
     private int likes;
     private Integer discount;
     private Integer discountFromPromo;
+
+    @OneToMany(cascade = {MERGE,REFRESH})
+    private List<FileInfo> bookImage;
 
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JsonIgnore
