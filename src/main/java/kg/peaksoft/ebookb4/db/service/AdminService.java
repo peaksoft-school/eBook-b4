@@ -17,7 +17,7 @@ public interface AdminService {
 
     List<Book> getBooksByGenre(String genre);
 
-    List<BookResponse> getBooksFromBasket(String name);
+    List<BookResponse> getBooksFromBasket(Long id);
 
     List<Book> getBooksByBookType(BookType bookType);
 
@@ -53,4 +53,7 @@ public interface AdminService {
     List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, Long vendorId,
                                             RequestStatus requestStatus);
 
+    List<BookResponse> getBooksFavoriteClient(Long clientId);
+
+    List<BookResponse> getBooksInPurchased(Long clientId);
 }

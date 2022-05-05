@@ -26,15 +26,8 @@ public class ClientOperations {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany
-    @JoinTable(
-            name = "client_operation_books",
-            joinColumns = @JoinColumn(
-                    name = "operation_id",
-                    referencedColumnName = "operation_id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "book_id",
-                    referencedColumnName = "book_id"))
+    @OneToMany(mappedBy = "operations")
     private List<Book> boughtBooks;
+
 
 }

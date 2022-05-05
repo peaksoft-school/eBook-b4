@@ -5,24 +5,31 @@ import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
+import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
+import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.GenreRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
-import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
-import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
-import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.*;
+
+import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
+import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.INPROGRESS;
 
 @Slf4j
 @Service
@@ -95,7 +102,7 @@ public class BookGetServiceImpl implements BookGetService {
             log.info("I am sort by language");
             if (sortBook.getLanguage().size() > 1) {
                 int counter = 0;
-                for(Iterator<Book> iterator = books.iterator(); iterator.hasNext();) {
+                for (Iterator<Book> iterator = books.iterator(); iterator.hasNext(); ) {
                     Book book = iterator.next();
                     for (Language l : sortBook.getLanguage()) {
                         if (book.getLanguage().equals(l)) {
@@ -125,7 +132,7 @@ public class BookGetServiceImpl implements BookGetService {
     public Book getBookById(Long id) {
         promoService.checkPromos();
         log.info("Get book by id works");
-        return bookRepository.findBookByIdAndActive(id, ACCEPTED).orElseThrow(()->
+        return bookRepository.findBookByIdAndActive(id, ACCEPTED).orElseThrow(() ->
                 new BadRequestException("This book is not went through admin-check yet!"));
     }
 
@@ -137,7 +144,7 @@ public class BookGetServiceImpl implements BookGetService {
 
     @Override
     public List<BookResponse> getAllAcceptedBooks() {
-        log.info("accepted books size =s%"+ bookRepository.findBooksAccepted(ACCEPTED).size());
+        log.info("accepted books size =s%" + bookRepository.findBooksAccepted(ACCEPTED).size());
         return bookRepository.findBooksAccepted(ACCEPTED);
     }
 
@@ -156,7 +163,7 @@ public class BookGetServiceImpl implements BookGetService {
         genreRequest.add(new GenreRequest(genreRepository.getById(9L).getName()));
         genreRequest.add(new GenreRequest(genreRepository.getById(10L).getName()));
 
-        for (GenreRequest request: genreRequest) {
+        for (GenreRequest request : genreRequest) {
             request.setCount(bookRepository.getCountGenre(request.getGenreName(), ACCEPTED));
         }
         genreRequest.forEach(System.out::println);
@@ -172,13 +179,17 @@ public class BookGetServiceImpl implements BookGetService {
     @Override
     public List<Book> BooksNovelties() {
 
-        List<Book> books = bookRepository.findAll();
+        List<Book> books = bookRepository.findAllIsNewTrue();
+
         for (Book book : books) {
-
-            book.getDateOfRegister().minus(30, ChronoUnit.DAYS);
-
+            Period period = Period.between(book.getDateOfRegister(),LocalDate.now());
+            if (period.getDays()>30){
+                System.out.println("hello");
+                book.setIsNew(false);
+            }
         }
-        return books;
 
+        System.out.println("world");
+        return books;
     }
 }

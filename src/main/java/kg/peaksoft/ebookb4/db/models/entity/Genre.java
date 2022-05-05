@@ -5,6 +5,7 @@ package kg.peaksoft.ebookb4.db.models.entity;
  * Date: 04/5/22
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,6 +30,7 @@ public class Genre {
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "genre")
     private List<Book> books;
 

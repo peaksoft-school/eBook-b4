@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import kg.peaksoft.ebookb4.aws.model.FileInfo;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
+import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.MERGE;
@@ -47,6 +49,9 @@ public class Book {
     private RequestStatus requestStatus = RequestStatus.INPROGRESS;
 
     private Boolean adminWatch = false;
+
+    private Boolean isNew = true;
+
     private int baskets;
     private int likes;
     private Integer discount;
@@ -74,6 +79,12 @@ public class Book {
             , inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> likedBooks;
 
+    @ManyToOne()
+    @JsonIgnore
+    @JoinColumn(name = "operation_id")
+    private ClientOperations operations;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "user_id")
@@ -96,6 +107,7 @@ public class Book {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Genre genre;
+
 
     @Override
     public String toString() {

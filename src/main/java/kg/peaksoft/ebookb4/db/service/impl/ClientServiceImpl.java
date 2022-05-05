@@ -220,7 +220,6 @@ public class ClientServiceImpl implements ClientService {
         return clientOperationMapper.create(id);
     }
 
-
     @Override
     public ResponseEntity<?> pppppOrder(String name){
 
@@ -234,6 +233,11 @@ public class ClientServiceImpl implements ClientService {
         ));
         clientOperations.setBoughtBooks(all);
         clientOperations.setUser(user);
+
+        for (Book book: all) {
+            book.setOperations(clientOperations);
+        }
+
         clientOperationRepository.save(clientOperations);
 
         return ResponseEntity.ok("Your order has been successfully placed!");
@@ -256,4 +260,6 @@ public class ClientServiceImpl implements ClientService {
         }
         return false;
     }
+
+
 }
