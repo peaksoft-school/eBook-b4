@@ -13,7 +13,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -115,11 +114,16 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.isBestSeller = true")
     List<Book> findAllByIsBestSeller();
 
-    @Query("select b from Book b where b.dateOfRegister between ?1 and ?2")
-    List<Book> booksNovelties(LocalDate localDate1,LocalDate localDate2);
-
     @Query(value = "select count (*) from books_basket where books.prise =?1 " +
             "and books.id= ?1 and books.discount = ?1 ",nativeQuery = true)
     ClientOperationDTO getBooksCount(ClientOperationDTO clientOperationDTO);
+
+    @Query("select b from Book b where b.isNew = true")
+    List<Book> BooksNovelties(List<Book> books);
+
+    @Transactional
+    @Modifying
+    @Query("update Book b set b.isNew = false where b.bookId = ?1")
+    void updateBook(Long bookId);
 
 }

@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.time.temporal.ChronoUnit;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -171,14 +171,18 @@ public class BookGetServiceImpl implements BookGetService {
 
     @Override
     public List<Book> BooksNovelties() {
-
         List<Book> books = bookRepository.findAll();
         for (Book book : books) {
-
-            book.getDateOfRegister().minus(30, ChronoUnit.DAYS);
-
+            if (Period.between(book.getDateOfRegister(), book.getEndOfTheNewTerm()).getDays() > 0) {
+                log.info("the book titled {} will be shown for some time", book.getTitle());
+            } else if (Period.between(book.getDateOfRegister(), book.getEndOfTheNewTerm()).getDays() < 0) {
+                book.setIsNew(false);
+                bookRepository.updateBook(book.getBookId());
+            } else {
+                log.info("the deadline for showing the book titled {} ends today", book.getTitle());
+            }
         }
-        return books;
-
+        return bookRepository.BooksNovelties(books);
     }
 }
+

@@ -228,7 +228,7 @@ public class ClientServiceImpl implements ClientService {
 
         ClientOperations clientOperations = new ClientOperations();
 
-        List<Book> all =bookRepository.findBasketByClientId(name);
+        List<Book> all = bookRepository.findBasketByClientId(name);
 
         User user = userRepository.getUser(name)
                 .orElseThrow(()-> new BadRequestException(

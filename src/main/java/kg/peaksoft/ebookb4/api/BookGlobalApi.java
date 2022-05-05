@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
 import lombok.AllArgsConstructor;
@@ -57,8 +58,9 @@ public class BookGlobalApi {
         return bookGetService.booksIsBestseller();
     }
 
-    @GetMapping("/gets")
-    public List<Book> gets(){
+    @Operation(summary = "Get all new books")
+    @GetMapping("/get-all-new-book")
+    public List<Book> getAllNewBook(){
         return bookGetService.BooksNovelties();
     }
 }

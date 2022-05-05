@@ -61,6 +61,7 @@ public class BookServiceImpl implements BookService {
         }
 
         book.setDateOfRegister(LocalDate.now());
+        book.setEndOfTheNewTerm(LocalDate.now().plusDays(30));
 
         book.setUser(user);
         if (bookDTO.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
