@@ -59,6 +59,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select u.basket.books from User u where u.email = :clientId")
     List<Book> findBasketByClientId(@Param("clientId") String name);
 
+    @Query("select u.basket.books from User u where u.id = ?1")
+    List<Book> findBasketByClientIdAdmin(Long id);
+
     @Query("select b from Book b where b.discount is not null and b.user.email = ?1")
     List<Book> findBooksFromVendorWithDiscount(String username);
 
@@ -125,5 +128,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Modifying
     @Query("update Book b set b.isNew = false where b.bookId = ?1")
     void updateBook(Long bookId);
+
+    @Query("select b from Book b where b.likedBooks = ?1")
+    List<BookResponse> getBooksFavoritesClient(Long clientId);
+
+    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
+            "b.yearOfIssue, b.price) from Book b where b.operations.user.id = ?1")
+    List<BookResponse> getBooksInPurchased(Long clientId);
 
 }

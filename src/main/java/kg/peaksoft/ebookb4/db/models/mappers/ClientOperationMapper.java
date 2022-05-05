@@ -4,7 +4,6 @@ package kg.peaksoft.ebookb4.db.models.mappers;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
-import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +14,6 @@ import java.util.List;
 public class ClientOperationMapper {
 
     private BookRepository bookRepository;
-    private UserRepository userRepository;
 
     public ClientOperationDTO create(String name) {
 
@@ -31,30 +29,11 @@ public class ClientOperationMapper {
         return dto;
     }
 
-//    public void save(ClientOperations test){
-//        List<Book> allBookFrom= bookRepository.findBasketByClientId(test.getUser().getEmail());
-//        User user = userRepository.findByUserName(test.getUser().getEmail());
-//        ClientOperations clientOperationForBuy=new ClientOperations();
-//        clientOperationForBuy.setUser(user);
-//        clientOperationForBuy.setBoughtBooks(allBookFrom);
-//    }
-
     public Double discount(List<Book> list) {
         double sumAfterDiscount = 0;
         for (Book book : list) {
             if (book.getDiscount() != null) {
                 sumAfterDiscount += (book.getPrice() * book.getDiscount()) / 100;
-            } else {
-                continue;
-            }
-        }
-        return sumAfterDiscount;
-    }
-    public static Double discountPromo(List<Book> list) {
-        double sumAfterDiscount = 0;
-        for (Book book : list) {
-            if (book.getDiscount() != null) {
-                sumAfterDiscount += (book.getPrice() * book.getDiscountFromPromo()) / 100;
             } else {
                 continue;
             }

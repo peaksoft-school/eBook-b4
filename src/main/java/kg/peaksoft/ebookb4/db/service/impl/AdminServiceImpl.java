@@ -52,8 +52,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<BookResponse> getBooksFromBasket(String clientId) {
-        return bookRepository.findBasketByClientId(clientId)
+    public List<BookResponse> getBooksFromBasket(Long clientId) {
+        return bookRepository.findBasketByClientIdAdmin(clientId)
                 .stream().map(book -> modelMapper.map(
                         book, BookResponse.class)).collect(Collectors.toList());
     }
@@ -269,5 +269,15 @@ public class AdminServiceImpl implements AdminService {
         int end = Math.min((start + paging.getPageSize()), booksInProgress.size());
         Page<Book> pages = new PageImpl<>(booksInProgress.subList(start, end), paging, booksInProgress.size());
         return new CustomPageRequest<>(pages).getContent();
+    }
+
+    @Override
+    public List<BookResponse> getBooksFavoriteClient(Long clientId) {
+        return bookRepository.getBooksFavoritesClient(clientId);
+    }
+
+    @Override
+    public List<BookResponse> getBooksInPurchased(Long clientId) {
+        return bookRepository.getBooksInPurchased(clientId);
     }
 }

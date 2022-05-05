@@ -228,14 +228,19 @@ public class ClientServiceImpl implements ClientService {
 
         ClientOperations clientOperations = new ClientOperations();
 
-        List<Book> all = bookRepository.findBasketByClientId(name);
+        List<Book> all =bookRepository.findBasketByClientId(name);
 
         User user = userRepository.getUser(name)
                 .orElseThrow(()-> new BadRequestException(
-                "user with email ={} does not exists "
-        ));
+                        "user with email ={} does not exists "
+                ));
         clientOperations.setBoughtBooks(all);
         clientOperations.setUser(user);
+
+        for (Book book: all) {
+            book.setOperations(clientOperations);
+        }
+
         clientOperationRepository.save(clientOperations);
 
         return ResponseEntity.ok("Your order has been successfully placed!");

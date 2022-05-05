@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import kg.peaksoft.ebookb4.aws.model.FileInfo;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
+import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
@@ -99,6 +100,10 @@ public class Book {
     @ManyToOne(fetch = FetchType.EAGER)
     private Genre genre;
 
+    @ManyToOne()
+    @JsonIgnore
+    @JoinColumn(name = "operation_id")
+    private ClientOperations operations;
 
     @Override
     public boolean equals(Object o) {
