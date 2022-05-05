@@ -69,6 +69,7 @@ public class PromoServiceImpl implements PromoService {
         List<Promocode> promos = promoRepository.getPromos().orElseThrow(() ->
                 new BadRequestException("There are no promo codes yes!"));
         log.info("Promocode size: " + promos.size());
+
         for (Promocode i : promos) {
             if (Period.between(i.getBeginningDay(), i.getEndDay()).getDays() < 0) {
                 log.info("Срок прошёл!");

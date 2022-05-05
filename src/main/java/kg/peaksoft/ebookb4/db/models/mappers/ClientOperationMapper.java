@@ -21,8 +21,8 @@ public class ClientOperationMapper {
 
         ClientOperationDTO dto = new ClientOperationDTO();
 
-        dto.setDiscount(discount(all));
         dto.setCount(count(all));
+        dto.setDiscount(discount(all));
         dto.setSum(priseSum(all));
         dto.setTotal(total(all));
 

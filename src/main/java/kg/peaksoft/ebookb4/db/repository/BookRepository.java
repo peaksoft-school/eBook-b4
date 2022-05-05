@@ -56,8 +56,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.baskets>0 and b.user.email = ?1")
     List<Book> findBooksFromVendorAddedToBasket(String username);
 
-    @Query("select u.basket.books from User u where u.email = :clientId")
-    List<Book> findBasketByClientId(@Param("clientId") String name);
+    @Query("select u.basket.books from User u where u.email = :name")
+    List<Book> findBasketByClientId(@Param("name") String name);
 
     @Query("select u.basket.books from User u where u.id = ?1")
     List<Book> findBasketByClientIdAdmin(Long id);
@@ -117,9 +117,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.isBestSeller = true")
     List<Book> findAllByIsBestSeller();
 
-    @Query(value = "select count (*) from books_basket where books.prise =?1 " +
-            "and books.id= ?1 and books.discount = ?1 ",nativeQuery = true)
-    ClientOperationDTO getBooksCount(ClientOperationDTO clientOperationDTO);
+//    @Query("select b from Book b where b.dateOfRegister between ?1 and ?2")
+//    List<Book> booksNovelties(LocalDate localDate1,LocalDate localDate2);
+//
+//    @Query(value = "select count (*) from books_basket where books.prise =?1 " +
+//            "and books.id= ?1 and books.discount = ?1 ",nativeQuery = true)
+//    ClientOperationDTO getBooksCount(ClientOperationDTO clientOperationDTO);
 
     @Query("select b from Book b where b.isNew = true")
     List<Book> BooksNovelties(List<Book> books);

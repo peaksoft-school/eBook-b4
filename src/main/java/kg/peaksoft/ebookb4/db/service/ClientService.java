@@ -34,6 +34,5 @@ public interface ClientService {
 
      ClientOperationDTO sumAfterPromo(String promoCode,String id);
 
-//    List<Book> getBooksFromBasketForBuy(String name);
-    public ResponseEntity<?> pppppOrder( String name);
+    ResponseEntity<?> pppppOrder( String name);
 }

@@ -29,4 +29,5 @@ public class ClientOperations {
     @OneToMany(mappedBy = "operations")
     private List<Book> boughtBooks;
 
+
 }

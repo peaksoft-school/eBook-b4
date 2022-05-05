@@ -95,7 +95,7 @@ public class BookGetServiceImpl implements BookGetService {
             log.info("I am sort by language");
             if (sortBook.getLanguage().size() > 1) {
                 int counter = 0;
-                for(Iterator<Book> iterator = books.iterator(); iterator.hasNext();) {
+                for(Iterator<Book> iterator = books.iterator(); iterator.hasNext(); ) {
                     Book book = iterator.next();
                     for (Language l : sortBook.getLanguage()) {
                         if (book.getLanguage().equals(l)) {
@@ -125,7 +125,7 @@ public class BookGetServiceImpl implements BookGetService {
     public Book getBookById(Long id) {
         promoService.checkPromos();
         log.info("Get book by id works");
-        return bookRepository.findBookByIdAndActive(id, ACCEPTED).orElseThrow(()->
+        return bookRepository.findBookByIdAndActive(id, ACCEPTED).orElseThrow(() ->
                 new BadRequestException("This book is not went through admin-check yet!"));
     }
 
@@ -137,7 +137,7 @@ public class BookGetServiceImpl implements BookGetService {
 
     @Override
     public List<BookResponse> getAllAcceptedBooks() {
-        log.info("accepted books size =s%"+ bookRepository.findBooksAccepted(ACCEPTED).size());
+        log.info("accepted books size =s%" + bookRepository.findBooksAccepted(ACCEPTED).size());
         return bookRepository.findBooksAccepted(ACCEPTED);
     }
 
@@ -156,7 +156,7 @@ public class BookGetServiceImpl implements BookGetService {
         genreRequest.add(new GenreRequest(genreRepository.getById(9L).getName()));
         genreRequest.add(new GenreRequest(genreRepository.getById(10L).getName()));
 
-        for (GenreRequest request: genreRequest) {
+        for (GenreRequest request : genreRequest) {
             request.setCount(bookRepository.getCountGenre(request.getGenreName(), ACCEPTED));
         }
         genreRequest.forEach(System.out::println);

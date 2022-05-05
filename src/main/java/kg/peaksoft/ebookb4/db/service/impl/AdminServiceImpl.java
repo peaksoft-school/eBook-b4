@@ -45,6 +45,7 @@ public class AdminServiceImpl implements AdminService {
     private VendorMapper vendorMapper;
     private ClientMapper clientMapper;
     private ModelMapper modelMapper;
+
     @Override
     public List<Book> getBooksBy(String genreName, BookType bookType) {
         log.info("getBooks By genre and book type works");
