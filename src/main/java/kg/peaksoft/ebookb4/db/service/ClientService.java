@@ -35,4 +35,6 @@ public interface ClientService {
      ClientOperationDTO sumAfterPromo(String promoCode,String id);
 
     ResponseEntity<?> placeOrder(String name);
+
+//    ClientOperationDTO plusOrMinus(String znach);
 }
