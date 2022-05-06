@@ -37,6 +37,7 @@ public class ClientAdminApi {
     public List<BookResponse> getBooksClientFromBasket(@PathVariable Long clientId) {
         return service.getBooksFromBasket(clientId);
     }
+
     @GetMapping("/favorites/{clientId}")
     public List<BookResponse> booksClientFavorites(@PathVariable Long clientId){
         return service.getBooksFavoriteClient(clientId);

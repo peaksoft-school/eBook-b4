@@ -2,6 +2,7 @@ package kg.peaksoft.ebookb4.db.repository;
 
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
@@ -134,4 +135,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
             "b.yearOfIssue, b.price) from Book b where b.operations.user.id = ?1")
     List<BookResponse> getBooksInPurchased(Long clientId);
+
+
+
+  @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, " +
+          "b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price)" +
+          " from Book b where b.operations.id > 0 and b.user.email = ?1 and b.user.role.name = ?2")
+  List<BookResponse> getVendorBooksSold(String name, ERole role);
+
 }
