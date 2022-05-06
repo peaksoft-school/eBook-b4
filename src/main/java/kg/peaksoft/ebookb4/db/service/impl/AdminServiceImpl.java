@@ -274,12 +274,13 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<BookResponse> getBooksFavoriteClient(Long clientId) {
-        return userRepository.getBooksFavoritesClient(clientId);
+        return bookRepository.findBasketByClientIdAdmin(clientId)
+                .stream().map(book -> modelMapper.map(
+                        book, BookResponse.class)).collect(Collectors.toList());
     }
 
     @Override
     public List<BookResponse> getBooksInPurchased(Long clientId) {
-
         return bookRepository.getBooksInPurchased(clientId);
     }
 }

@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.repository;
 
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
@@ -30,10 +31,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("select u from User u where u.role.name=?1")
   List<User> findAllClients(ERole role);
 
-  @Query(value = "select b from Book b where b.likedBooks = ?1",nativeQuery = true)
+
+  @Query(value = "select b.likedBooks from User b where b.id = ?1")
   List<BookResponse> getBooksFavoritesClient(Long clientId);
 
-  @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
-          "b.yearOfIssue, b.price) from Book b where b.operations.user.email = ?1")
+
+
+  @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price) from Book b where b.operations.user.email = ?1")
   List<BookResponse> getBooksInPurchased(String name);
 }
