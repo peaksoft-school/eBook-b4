@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
+import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,14 +40,12 @@ public class ClientAdminApi {
     }
 
     @GetMapping("/favorites/{clientId}")
-    public List<BookResponse> booksClientFavorites(@PathVariable Long clientId){
-        return service.getBooksFavoriteClient(clientId);
+    public List<Book> booksClientFavorites(@PathVariable Long clientId){
+        return service.getAllLikedBooks(clientId);
     }
 
     @GetMapping("/operation/{clientId}")
     public List<BookResponse> getBook(@PathVariable Long clientId){
         return service.getBooksInPurchased(clientId);
     }
-
-
 }

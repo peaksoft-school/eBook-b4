@@ -56,4 +56,6 @@ public interface AdminService {
     List<BookResponse> getBooksFavoriteClient(Long clientId);
 
     List<BookResponse> getBooksInPurchased(Long clientId);
+
+    List<Book> getAllLikedBooks(Long clientId);
 }

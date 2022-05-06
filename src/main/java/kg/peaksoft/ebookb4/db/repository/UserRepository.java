@@ -1,7 +1,9 @@
 package kg.peaksoft.ebookb4.db.repository;
 
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.entity.User;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -29,5 +31,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("select u from User u where u.role.name=?1")
   List<User> findAllClients(ERole role);
 
-
+  @Query("select c.likedBooks from User c where c.id = ?1")
+  List<Book> getAllLikedBooks(Long id);
 }

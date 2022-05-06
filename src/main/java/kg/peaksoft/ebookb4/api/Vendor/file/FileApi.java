@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.api.file;
+package kg.peaksoft.ebookb4.api.Vendor.file;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.aws.enums.FolderName;

@@ -281,4 +281,9 @@ public class AdminServiceImpl implements AdminService {
     public List<BookResponse> getBooksInPurchased(Long clientId) {
         return bookRepository.getBooksInPurchased(clientId);
     }
+
+    @Override
+    public List<Book> getAllLikedBooks(Long clientId) {
+        return userRepository.getAllLikedBooks(clientId);
+    }
 }

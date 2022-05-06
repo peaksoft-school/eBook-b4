@@ -71,9 +71,4 @@ public class AdminApi {
         return service.findBooksFromVendorInProcess(--offset, 12, vendorId,
                 RequestStatus.INPROGRESS);
     }
-
-//    @GetMapping("/client/basket")
-//    public List<BookResponse> getBooksClientFromBasket(Authentication authentication) {
-//        return service.getBooksFromBasket(authentication.getName());
-//    }
 }

@@ -69,7 +69,7 @@ public class BookClientApi {
     
     @PostMapping("/place-an-order")
     public ResponseEntity<?> placeAnOrder( Authentication authentication){
-      return   clientService.pppppOrder( authentication.getName());
+      return clientService.placeOrder( authentication.getName());
     }
 
 }

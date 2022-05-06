@@ -221,7 +221,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ResponseEntity<?> pppppOrder(String name){
+    public ResponseEntity<?> placeOrder(String name){
 
         ClientOperations clientOperations = new ClientOperations();
 
