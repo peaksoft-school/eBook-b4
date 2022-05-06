@@ -61,8 +61,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select u.basket.books from User u where u.email = :name")
     List<Book> findBasketByClientId(@Param("name") String name);
 
-  @Query("select u.basket.books from User u where u.id = ?1")
+    @Query("select u.basket.books from User u where u.id = ?1")
     List<Book> findBasketByClientIdAdmin(Long id);
+
 
     @Query("select b from Book b where b.discount is not null and b.user.email = ?1")
     List<Book> findBooksFromVendorWithDiscount(String username);
@@ -134,10 +135,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<BookResponse> getBooksInPurchased(Long clientId);
 
 
-  @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, " +
-          "b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price)" +
-          " from Book b where b.operations.id > 0 and b.user.email = ?1 and b.user.role.name = ?2")
-  List<BookResponse> getVendorBooksSold(String name, ERole role);
+    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, " +
+            "b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price)" +
+            " from Book b where b.operations.id > 0 and b.user.email = ?1 and b.user.role.name = ?2")
+    List<BookResponse> getVendorBooksSold(String name, ERole role);
 
 }
 //    @Query("select b from Book b where b.dateOfRegister between ?1 and ?2")
