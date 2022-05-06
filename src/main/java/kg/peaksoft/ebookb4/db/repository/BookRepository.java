@@ -112,30 +112,26 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("select b.likedBooks from Book b")
     List<Book> clientLikeBooks();
+
     @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
             "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyPutLike(Long bookId, Long userId);
 
+
     @Query("select b from Book b where b.isBestSeller = true")
     List<Book> findAllByIsBestSeller();
-
-//    @Query("select b from Book b where b.dateOfRegister between ?1 and ?2")
-//    List<Book> booksNovelties(LocalDate localDate1,LocalDate localDate2);
-//
-//    @Query(value = "select count (*) from books_basket where books.prise =?1 " +
-//            "and books.id= ?1 and books.discount = ?1 ",nativeQuery = true)
-//    ClientOperationDTO getBooksCount(ClientOperationDTO clientOperationDTO);
 
     @Query("select b from Book b where b.isNew = true ")
     List<Book> findAllIsNewTrue();
 
-    @Query("select b from Book b where b.likedBooks = ?1")
+
+    @Query(value = "select b from User b where b.likedBooks = ?1")
     List<BookResponse> getBooksFavoritesClient(Long clientId);
+
 
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
             "b.yearOfIssue, b.price) from Book b where b.operations.user.id = ?1")
     List<BookResponse> getBooksInPurchased(Long clientId);
-
 
 
   @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, " +
@@ -144,3 +140,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
   List<BookResponse> getVendorBooksSold(String name, ERole role);
 
 }
+//    @Query("select b from Book b where b.dateOfRegister between ?1 and ?2")
+//    List<Book> booksNovelties(LocalDate localDate1,LocalDate localDate2);
+//
+//    @Query(value = "select count (*) from books_basket where books.prise =?1 " +
+//            "and books.id= ?1 and books.discount = ?1 ",nativeQuery = true)
+//    ClientOperationDTO getBooksCount(ClientOperationDTO clientOperationDTO);

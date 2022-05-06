@@ -243,6 +243,11 @@ public class ClientServiceImpl implements ClientService {
         return ResponseEntity.ok("Your order has been successfully placed!");
     }
 
+    @Override
+    public List<BookResponse> getBooksInPurchased(String name) {
+        return userRepository.getBooksInPurchased(name);
+    }
+
     public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);
     }

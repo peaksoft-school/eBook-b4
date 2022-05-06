@@ -33,20 +33,21 @@ public class ClientAdminApi {
         return service.getClientById(id);
     }
 
+    @Operation
     @GetMapping("/basket/{clientId}")
     public List<BookResponse> getBooksClientFromBasket(@PathVariable Long clientId) {
         return service.getBooksFromBasket(clientId);
     }
 
+    @Operation
     @GetMapping("/favorites/{clientId}")
     public List<BookResponse> booksClientFavorites(@PathVariable Long clientId){
         return service.getBooksFavoriteClient(clientId);
     }
 
+    @Operation
     @GetMapping("/operation/{clientId}")
     public List<BookResponse> getBook(@PathVariable Long clientId){
         return service.getBooksInPurchased(clientId);
     }
-
-
 }

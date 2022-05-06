@@ -274,7 +274,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<BookResponse> getBooksFavoriteClient(Long clientId) {
-        return bookRepository.getBooksFavoritesClient(clientId);
+        return userRepository.getBooksFavoritesClient(clientId);
     }
 
     @Override
