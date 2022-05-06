@@ -40,7 +40,7 @@ public class ClientAdminApi {
     }
 
     @GetMapping("/favorites/{clientId}")
-    public List<Book> booksClientFavorites(@PathVariable Long clientId){
+    public List<BookResponse> booksClientFavorites(@PathVariable Long clientId){
         return service.getAllLikedBooks(clientId);
     }
 

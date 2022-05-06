@@ -5,7 +5,6 @@ import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.entity.User;
-import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -135,8 +134,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
 
 
-    @Query("select b from Book b where b.likedBooks = ?1")
-    List<BookResponse> getBooksFavoritesClient(Long clientId);
+//    @Query("select b from Book b where b.likedBooks = ?1")
+//    List<BookResponse> getBooksFavoritesClient(Long clientId);
 
 
 

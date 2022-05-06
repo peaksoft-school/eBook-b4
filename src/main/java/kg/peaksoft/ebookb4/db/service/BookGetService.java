@@ -10,9 +10,7 @@ import java.util.List;
 
 public interface BookGetService {
 
-
     List<Book> findByGenre(String genreName, RequestStatus requestStatus);
-
 
     List<Book> findBooksByName(String name, RequestStatus requestStatus);
 

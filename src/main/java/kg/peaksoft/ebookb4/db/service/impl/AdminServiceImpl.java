@@ -272,10 +272,10 @@ public class AdminServiceImpl implements AdminService {
         return new CustomPageRequest<>(pages).getContent();
     }
 
-    @Override
-    public List<BookResponse> getBooksFavoriteClient(Long clientId) {
-        return bookRepository.getBooksFavoritesClient(clientId);
-    }
+//    @Override
+//    public List<BookResponse> getBooksFavoriteClient(Long clientId) {
+//        return bookRepository.getBooksFavoritesClient(clientId);
+//    }
 
     @Override
     public List<BookResponse> getBooksInPurchased(Long clientId) {
@@ -283,7 +283,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Book> getAllLikedBooks(Long clientId) {
-        return userRepository.getAllLikedBooks(clientId);
+    public List<BookResponse> getAllLikedBooks(Long clientId) {
+        return bookRepository.findBasketByClientIdAdmin(clientId)
+                .stream().map(book -> modelMapper.map(
+                        book, BookResponse.class)).collect(Collectors.toList());
     }
 }
