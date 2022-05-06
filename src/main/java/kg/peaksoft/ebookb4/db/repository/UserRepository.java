@@ -33,4 +33,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   @Query("select c.likedBooks from User c where c.id = ?1")
   List<Book> getAllLikedBooks(Long id);
+
+  @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price) from Book b where b.operations.user.email = ?1")
+  List<BookResponse> getBooksInPurchased(String name);
 }

@@ -118,7 +118,7 @@ public class BookGetServiceImpl implements BookGetService {
         int end = Math.min((start + paging.getPageSize()), books.size());
         Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
         log.info("Sort book works");
-        return new CustomPageRequest<Book>(pages).getContent();
+        return new CustomPageRequest<>(pages).getContent();
     }
 
     @Override

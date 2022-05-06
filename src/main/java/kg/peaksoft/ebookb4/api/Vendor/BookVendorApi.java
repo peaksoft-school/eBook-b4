@@ -73,19 +73,16 @@ public class BookVendorApi {
         return bookService.findBooksFromVendorAddedToBasket(--offset, 12, authentication.getName());
     }
 
-    @Operation(summary = "Get books with discount",
-            description = "Get books with discount")
+    @Operation(summary = "Get books with discount", description = "Get books with discount")
     @GetMapping("/books-discount/{offset}")
     public List<Book> getBooksWithDiscount(@PathVariable Integer offset, Authentication authentication){
         return bookService.findBooksFromVendorWithDiscount(--offset, 12, authentication.getName());
     }
 
-    @Operation(summary = "Get refused books",
-            description = "Get refused books")
-    @GetMapping("/books-refused/{offset}")
-    public List<Book> getBooksInCancel(@PathVariable Integer offset, Authentication authentication){
-        return bookService.findBooksFromVendorCancelled(--offset, 12, authentication.getName(),
-                RequestStatus.REFUSED);
+    @Operation(summary = "Get sold books",description = "Get All Books vendor solds")
+    @GetMapping("/sold")
+    public List<BookResponse> bookSold(Authentication authentication){
+        return bookService.getBooksSold(authentication.getName(), ERole.ROLE_VENDOR);
     }
 
     @Operation(summary = "Get books in progress",
@@ -96,9 +93,11 @@ public class BookVendorApi {
                 RequestStatus.INPROGRESS);
     }
 
-    @GetMapping("/sold")
-    public List<BookResponse> bookSold(Authentication authentication){
-        return bookService.getBooksSold(authentication.getName(), ERole.ROLE_VENDOR);
+    @Operation(summary = "Get refused books",
+            description = "Get refused books")
+    @GetMapping("/books-refused/{offset}")
+    public List<Book> getBooksInCancel(@PathVariable Integer offset, Authentication authentication){
+        return bookService.findBooksFromVendorCancelled(--offset, 12, authentication.getName(),
+                RequestStatus.REFUSED);
     }
-
 }

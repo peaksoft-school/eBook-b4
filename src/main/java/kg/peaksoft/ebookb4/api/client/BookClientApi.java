@@ -24,7 +24,6 @@ public class BookClientApi {
 
     private ClientService clientService;
 
-
     @Operation(summary = "add to basket",description = "add a book to basket")
     @PostMapping("/basket")
     public ResponseEntity<?> addToBasket(@RequestBody Request request, Authentication authentication){
@@ -66,7 +65,8 @@ public class BookClientApi {
     public ClientOperationDTO comparePromoCode(@PathVariable String promoCode, Authentication authentication) {
         return clientService.sumAfterPromo(promoCode, authentication.getName());
     }
-    
+
+    @Operation
     @PostMapping("/place-an-order")
     public ResponseEntity<?> placeAnOrder( Authentication authentication){
       return clientService.placeOrder( authentication.getName());
@@ -76,5 +76,11 @@ public class BookClientApi {
 //    public Integer plsOrMns(@PathVariable String name){
 //        return null;
 //    }
+
+    @Operation
+    @GetMapping("/operation")
+    public List<BookResponse> getBook(Authentication authentication){
+        return clientService.getBooksInPurchased(authentication.getName());
+    }
 
 }

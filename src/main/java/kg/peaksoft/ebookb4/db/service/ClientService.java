@@ -36,5 +36,7 @@ public interface ClientService {
 
     ResponseEntity<?> placeOrder(String name);
 
+    List<BookResponse> getBooksInPurchased(String name);
+
 //    ClientOperationDTO plusOrMinus(String znach);
 }

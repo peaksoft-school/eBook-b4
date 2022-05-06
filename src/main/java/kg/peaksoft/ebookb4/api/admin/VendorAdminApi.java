@@ -2,6 +2,7 @@ package kg.peaksoft.ebookb4.api.admin;
 
 import io.swagger.v3.oas.annotations.Operation;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
+import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import lombok.AllArgsConstructor;
@@ -66,12 +67,20 @@ public class VendorAdminApi {
         return service.findBooksFromVendorWithDiscount(--offset, 12, vendorId);
     }
 
-    @Operation(summary = "Delete client/vendor ",
-            description = "Admin can delete client and vendor!")
-    @DeleteMapping({"/removeUser/{id}"})
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
-        return service.deleteById(id);
+    @Operation(summary = "Get refused books in admin panel", description = "Get refused books")
+    @GetMapping("/vendor/{vendorId}/books-refused/{offset}")
+    public List<Book> getBooksInCancel(@PathVariable Long vendorId,
+                                       @PathVariable Integer offset) {
+        return service.findBooksFromVendorCancelled(--offset, 12, vendorId,
+                RequestStatus.REFUSED);
     }
 
-
+    @Operation(summary = "Get books in progress in admin panel",
+            description = "Get a books in progress")
+    @GetMapping("vendor/{vendorId}/books-in-process/{offset}")
+    public List<Book> getBooksInProcess(@PathVariable Long vendorId
+            , @PathVariable Integer offset) {
+        return service.findBooksFromVendorInProcess(--offset, 12, vendorId,
+                RequestStatus.INPROGRESS);
+    }
 }

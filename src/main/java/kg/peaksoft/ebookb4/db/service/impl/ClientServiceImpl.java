@@ -244,6 +244,11 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
+    @Override
+    public List<BookResponse> getBooksInPurchased(String name) {
+        return userRepository.getBooksInPurchased(name);
+    }
+
     public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);
     }
