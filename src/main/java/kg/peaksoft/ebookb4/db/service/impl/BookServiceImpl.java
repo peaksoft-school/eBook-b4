@@ -1,8 +1,10 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.entity.Genre;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.entity.User;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.repository.GenreRepository;
 import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
 import kg.peaksoft.ebookb4.db.service.BookService;
@@ -267,5 +269,10 @@ public class BookServiceImpl implements BookService {
         Page<Book> pages = new PageImpl<>(booksInProgress.subList(start, end), paging, booksInProgress.size());
         log.info("Vendor book = {} in process",booksInProgress.size());
         return new CustomPageRequest<>(pages).getContent();
+    }
+
+    @Override
+    public List<BookResponse> getBooksSold(String name , ERole role) {
+        return repository.getVendorBooksSold(name, role);
     }
 }

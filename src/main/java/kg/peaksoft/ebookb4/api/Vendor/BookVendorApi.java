@@ -3,7 +3,9 @@ package kg.peaksoft.ebookb4.api.Vendor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
 import lombok.AllArgsConstructor;
@@ -93,4 +95,10 @@ public class BookVendorApi {
         return bookService.findBooksFromVendorInProcess(--offset, 12, authentication.getName(),
                 RequestStatus.INPROGRESS);
     }
+
+    @GetMapping("/sold")
+    public List<BookResponse> bookSold(Authentication authentication){
+        return bookService.getBooksSold(authentication.getName(), ERole.ROLE_VENDOR);
+    }
+
 }

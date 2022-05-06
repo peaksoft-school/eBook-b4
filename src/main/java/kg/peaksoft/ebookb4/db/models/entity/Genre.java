@@ -19,10 +19,6 @@ import java.util.Objects;
 @NoArgsConstructor
 public class Genre {
 
-    public Genre(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +29,11 @@ public class Genre {
     @JsonIgnore
     @OneToMany(mappedBy = "genre")
     private List<Book> books;
+
+    public Genre(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     @Override
     public boolean equals(Object o) {
