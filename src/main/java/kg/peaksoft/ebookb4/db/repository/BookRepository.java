@@ -148,4 +148,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             " from Book b where b.operations.id > 0 and b.user.email = ?1 and b.user.role.name = ?2")
     List<BookResponse> getVendorBooksSold(String name, ERole role);
 
+//    @Transactional
+//    @Modifying
+//    @Query("update Book b set b.paperBook.numberOfSelected = b.paperBook.numberOfSelected-1 where b.paperBook.paperBookId = ?1")
+//    void bookPlus(Long bookId);
+
 }

@@ -50,7 +50,7 @@ public class AuthApi {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt, roles));
+        return ResponseEntity.ok(new JwtResponse(jwt, roles, userDetails.getFirstName()));
     }
 
     @Operation(summary = "Sign up", description = "Register only for client")

@@ -4,6 +4,7 @@ import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.response.CardResponse;
 import org.springframework.http.ResponseEntity;
 
 import javax.transaction.Transactional;
@@ -38,5 +39,7 @@ public interface ClientService {
 
     List<BookResponse> getBooksInPurchased(String name);
 
-//    ClientOperationDTO plusOrMinus(String znach);
+    List<CardResponse> getAllInCard(String name);
+
+    List<CardResponse> plusOrMinus(String name, String plusOrMinus);
 }

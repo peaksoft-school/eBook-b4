@@ -8,9 +8,12 @@ import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.User;
+
+import kg.peaksoft.ebookb4.db.models.mappers.CardOperationResponse;
 import kg.peaksoft.ebookb4.db.models.mappers.ClientOperationMapper;
 import kg.peaksoft.ebookb4.db.models.mappers.ClientRegisterMapper;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.response.CardResponse;
 import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.repository.*;
 import kg.peaksoft.ebookb4.db.service.ClientService;
@@ -45,6 +48,8 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRegisterMapper clientRegisterMapper;
     private final ClientOperationMapper clientOperationMapper;
     private final ClientOperationRepository clientOperationRepository;
+
+    private final CardOperationResponse cardOperationResponse;
 
     @Override
     public ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number) {
@@ -249,6 +254,7 @@ public class ClientServiceImpl implements ClientService {
         return userRepository.getBooksInPurchased(name);
     }
 
+
     public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);
     }
@@ -266,11 +272,24 @@ public class ClientServiceImpl implements ClientService {
         }
         return false;
     }
-//    @Override
-//    public ClientOperationDTO plusOrMinus(String znach) {
-//
-//
-//        return null;
-//    }
+    @Override
+    public List<CardResponse> getAllInCard(String name) {
+        List<CardResponse> cardResponses = bookRepository.findBasketByClientId(name)
+                .stream().map(book -> modelMapper.map(
+                        book, CardResponse.class))
+                .map(BookResponse -> modelMapper.map(BookResponse,
+                        CardResponse.class)).collect(Collectors.toList());
+        return cardOperationResponse.create(name,cardResponses,"");
 
+    }
+
+    @Override
+    public List<CardResponse> plusOrMinus(String name, String plusOrMinus) {
+        List<CardResponse> cardResponses = bookRepository.findBasketByClientId(name)
+                .stream().map(book -> modelMapper.map(
+                        book, CardResponse.class))
+                .map(BookResponse -> modelMapper.map(BookResponse,
+                        CardResponse.class)).collect(Collectors.toList());
+        return cardOperationResponse.create(name, cardResponses, plusOrMinus);
+    }
 }

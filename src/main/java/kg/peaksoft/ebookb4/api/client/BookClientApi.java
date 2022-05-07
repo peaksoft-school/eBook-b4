@@ -2,8 +2,9 @@ package kg.peaksoft.ebookb4.api.client;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
+import kg.peaksoft.ebookb4.db.models.response.CardResponse;
+import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.db.models.request.Request;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import lombok.AllArgsConstructor;
@@ -54,11 +55,11 @@ public class BookClientApi {
         return clientService.getBooksFromBasket(authentication.getName());
     }
 
-    @Operation(summary = "Get all counts", description = "Get count of books, discount, sum after we get total")
-    @GetMapping("/count")
-    public ClientOperationDTO getCountsAlsoTotal(Authentication id){
-        return clientService.getBooksInBasket(id.getName());
-    }
+//    @Operation(summary = "Get all counts", description = "Get count of books, discount, sum after we get total")
+//    @GetMapping("/count")
+//    public ClientOperationDTO getCountsAlsoTotal(Authentication id){
+//        return clientService.getBooksInBasket(id.getName());
+//    }
 
     @Operation(summary = "Compare the promo code", description = "Compare the promo code if it fits then the person gets a discount ")
     @PostMapping("/{promoCode}")
@@ -72,10 +73,10 @@ public class BookClientApi {
       return clientService.placeOrder( authentication.getName());
     }
 
-//    @GetMapping("/plus-or-minus/{plusMinus}")
-//    public Integer plsOrMns(@PathVariable String name){
-//        return null;
-//    }
+    @GetMapping("/get-all-card")
+    public List<CardResponse> getAllInCard(Authentication authentication){
+        return clientService.getAllInCard(authentication.getName());
+    }
 
     @Operation
     @GetMapping("/operation")
@@ -83,4 +84,8 @@ public class BookClientApi {
         return clientService.getBooksInPurchased(authentication.getName());
     }
 
+    @GetMapping("/plus/{plsOrMns}")
+    public List<CardResponse> plus(Authentication authentication, @PathVariable String plsOrMns){
+        return clientService.plusOrMinus(authentication.getName(), plsOrMns);
+    }
 }
