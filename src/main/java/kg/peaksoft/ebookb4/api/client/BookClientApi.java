@@ -85,7 +85,8 @@ public class BookClientApi {
     }
 
     @GetMapping("/plus/{plsOrMns}")
-    public List<CardResponse> plus(Authentication authentication, @PathVariable String plsOrMns){
+    public List<CardResponse> plus(Authentication authentication,
+                                   @PathVariable String plsOrMns){
         return clientService.plusOrMinus(authentication.getName(), plsOrMns);
     }
 }

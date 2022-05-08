@@ -29,4 +29,6 @@ public class PaperBook {
 
     private Integer numberOfSelected;
 
+    private Integer numberOfSelectedCopy;
+
 }

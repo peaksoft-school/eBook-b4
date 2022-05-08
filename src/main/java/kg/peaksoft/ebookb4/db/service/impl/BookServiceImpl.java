@@ -85,6 +85,7 @@ public class BookServiceImpl implements BookService {
             PaperBook paperBook = new PaperBook();
             paperBook.setFragmentOfBook(bookDTO.getPaperBook().getFragmentOfBook());
             paperBook.setNumberOfSelected(bookDTO.getPaperBook().getNumberOfSelected());
+            paperBook.setNumberOfSelectedCopy(bookDTO.getPaperBook().getNumberOfSelected());
             paperBook.setNumberOfPages(bookDTO.getPaperBook().getNumberOfPages());
             book.setPaperBook(paperBook);
             log.info("Save paper book ");
