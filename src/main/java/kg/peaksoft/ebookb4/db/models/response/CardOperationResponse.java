@@ -14,7 +14,7 @@ import java.util.List;
  * 2)Если дать ID PAPERBOOK он вычислит и выдаст всю сумму дополнительно с EBOOK,AUDIOBOOK
  * 3)сегодня поговорил с фронтендом они сказали что данные сами сохранят и смогут объеденить,
  * Если они скажут по другому сделать есть идея разделить все чтоб выдавал данные без участия 2-блок
- * Это остается до разговора с фронтендом E-Book
+ * Это остается до разговора с фронтендом E-Book. Версия вторая готова, если захотите перейти на версию 1 уберите коментарии в методе create
  **/
 
 @Slf4j
@@ -44,10 +44,10 @@ public class CardOperationResponse {
                             int minus = minus(bookId);
                             int i1 = numberOfSelectedCopy - minus;
                             cardResponseList.get(i).setCountOfPaperBook(i1);
-                            cardResponseList.get(i).setCountOfBooksInTotal(count + (i1));
-                            cardResponseList.get(i).setDiscount(discount(bookListFromBasketOfClient) + (discountForPaperBook(bookId) * i1));
-                            cardResponseList.get(i).setSum(priseSum(bookListFromBasketOfClient) + (priseSumForPaperBook(bookId) * i1));
-                            cardResponseList.get(i).setTotal(total(bookListFromBasketOfClient) + (totalForPaperBook(bookId) * i1));
+                            cardResponseList.get(i).setCountOfBooksInTotal(/*count + */  (i1));
+                            cardResponseList.get(i).setDiscount(/*discount(bookListFromBasketOfClient) +*/ (discountForPaperBook(bookId) * i1));
+                            cardResponseList.get(i).setSum(/*priseSum(bookListFromBasketOfClient) + */  (priseSumForPaperBook(bookId) * i1));
+                            cardResponseList.get(i).setTotal(/*total(bookListFromBasketOfClient) +*/ (totalForPaperBook(bookId) * i1));
                         } else {
                             log.info("the paper books under this id = {} are over", bookListFromBasketOfClient.get(i).getBookId());
                             continue;
@@ -58,11 +58,11 @@ public class CardOperationResponse {
                         Integer count = count(bookListFromBasketOfClient);
                         int plus = plus(bookId);
                         int abs = Math.abs(plus - numberOfSelectedCopy);
-                        cardResponseList.get(i).setCountOfPaperBook(Math.abs(plus - numberOfSelectedCopy));
-                        cardResponseList.get(i).setCountOfBooksInTotal(count + (abs));
-                        cardResponseList.get(i).setDiscount(discount(bookListFromBasketOfClient) + (discountForPaperBook(bookId) * abs));
-                        cardResponseList.get(i).setSum(priseSum(bookListFromBasketOfClient) + (priseSumForPaperBook(bookId) * abs));
-                        cardResponseList.get(i).setTotal(total(bookListFromBasketOfClient) + (totalForPaperBook(bookId) * abs));
+                        cardResponseList.get(i).setCountOfPaperBook(abs);
+                        cardResponseList.get(i).setCountOfBooksInTotal(/*count +*/ (abs));
+                        cardResponseList.get(i).setDiscount(/*discount(bookListFromBasketOfClient) +*/ (discountForPaperBook(bookId) * abs));
+                        cardResponseList.get(i).setSum(/*priseSum(bookListFromBasketOfClient) +*/ (priseSumForPaperBook(bookId) * abs));
+                        cardResponseList.get(i).setTotal(/*total(bookListFromBasketOfClient) +*/ (totalForPaperBook(bookId) * abs));
                     }
                 }
             } else {
