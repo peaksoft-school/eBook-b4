@@ -39,7 +39,7 @@ public interface ClientService {
 
     List<BookResponse> getBooksInPurchased(String name);
 
-    List<CardResponse> getAllInCard(String name);
+//    List<CardResponse> getAllInCard(String name);
 
-    List<CardResponse> plusOrMinus(String name, String plusOrMinus);
+    List<CardResponse> plusOrMinus(String name, String plusOrMinus, Long bookId);
 }

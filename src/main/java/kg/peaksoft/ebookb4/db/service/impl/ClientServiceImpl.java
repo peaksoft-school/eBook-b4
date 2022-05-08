@@ -8,8 +8,7 @@ import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.User;
-
-import kg.peaksoft.ebookb4.db.models.mappers.CardOperationResponse;
+import kg.peaksoft.ebookb4.db.models.response.CardOperationResponse;
 import kg.peaksoft.ebookb4.db.models.mappers.ClientOperationMapper;
 import kg.peaksoft.ebookb4.db.models.mappers.ClientRegisterMapper;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
@@ -205,12 +204,12 @@ public class ClientServiceImpl implements ClientService {
         ClientOperationDTO clientOperationDTO = clientOperationMapper.create(name);
 
         Double total = clientOperationDTO.getTotal() - sum;
-        Double discountPromo = clientOperationDTO.getDiscount() + sum ;
+        Double discountPromo = clientOperationDTO.getDiscount() + sum;
 
         clientOperationDTO.setTotal(total);
         clientOperationDTO.setDiscount(discountPromo);
 
-        return  clientOperationDTO;
+        return clientOperationDTO;
     }
 
     @Override
@@ -226,20 +225,20 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ResponseEntity<?> placeOrder(String name){
+    public ResponseEntity<?> placeOrder(String name) {
 
         ClientOperations clientOperations = new ClientOperations();
 
-        List<Book> all =bookRepository.findBasketByClientId(name);
+        List<Book> all = bookRepository.findBasketByClientId(name);
 
         User user = userRepository.getUser(name)
-                .orElseThrow(()-> new BadRequestException(
+                .orElseThrow(() -> new BadRequestException(
                         "user with email ={} does not exists "
                 ));
         clientOperations.setBoughtBooks(all);
         clientOperations.setUser(user);
 
-        for (Book book: all) {
+        for (Book book : all) {
             book.setOperations(clientOperations);
         }
 
@@ -261,7 +260,7 @@ public class ClientServiceImpl implements ClientService {
 
     public Boolean checkPromo(String promo) {
         List<Promocode> promocode = repo.findAll();
-        for (Promocode promocode1:promocode) {
+        for (Promocode promocode1 : promocode) {
             if (promocode1.getPromocode().equals(promo)) {
                 if (promocode1.getIsActive().equals(true)) {
                     return true;
@@ -272,24 +271,24 @@ public class ClientServiceImpl implements ClientService {
         }
         return false;
     }
+//    @Override
+//    public List<CardResponse> getAllInCard(String name) {
+//        List<CardResponse> cardResponses = bookRepository.findBasketByClientId(name)
+//                .stream().map(book -> modelMapper.map(
+//                        book, CardResponse.class))
+//                .map(BookResponse -> modelMapper.map(BookResponse,
+//                        CardResponse.class)).collect(Collectors.toList());
+//        return cardOperationResponse.create(name,cardResponses,"",null);
+//
+//    }
+
     @Override
-    public List<CardResponse> getAllInCard(String name) {
+    public List<CardResponse> plusOrMinus(String name, String plusOrMinus, Long bookId) {
         List<CardResponse> cardResponses = bookRepository.findBasketByClientId(name)
                 .stream().map(book -> modelMapper.map(
                         book, CardResponse.class))
                 .map(BookResponse -> modelMapper.map(BookResponse,
                         CardResponse.class)).collect(Collectors.toList());
-        return cardOperationResponse.create(name,cardResponses,"");
-
-    }
-
-    @Override
-    public List<CardResponse> plusOrMinus(String name, String plusOrMinus) {
-        List<CardResponse> cardResponses = bookRepository.findBasketByClientId(name)
-                .stream().map(book -> modelMapper.map(
-                        book, CardResponse.class))
-                .map(BookResponse -> modelMapper.map(BookResponse,
-                        CardResponse.class)).collect(Collectors.toList());
-        return cardOperationResponse.create(name, cardResponses, plusOrMinus);
+        return cardOperationResponse.create(name, cardResponses, plusOrMinus, bookId);
     }
 }
