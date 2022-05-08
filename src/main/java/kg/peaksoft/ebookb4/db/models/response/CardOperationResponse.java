@@ -39,8 +39,7 @@ public class CardOperationResponse {
                     if (plusOrMinus.equals("plus")) {
                         if (bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelected() > 1) {
                             Integer numberOfSelectedCopy = bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelectedCopy();
-                            System.out.println(numberOfSelectedCopy);
-                            Integer count = count(bookListFromBasketOfClient);
+                            /*Integer count = count(bookListFromBasketOfClient);*/
                             int minus = minus(bookId);
                             int i1 = numberOfSelectedCopy - minus;
                             cardResponseList.get(i).setCountOfPaperBook(i1);
@@ -55,7 +54,7 @@ public class CardOperationResponse {
                     } else if (plusOrMinus.equals("minus")) {
                         Integer numberOfSelectedCopy = bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelectedCopy();
                         System.out.println(numberOfSelectedCopy);
-                        Integer count = count(bookListFromBasketOfClient);
+                        /*Integer count = count(bookListFromBasketOfClient);*/
                         int plus = plus(bookId);
                         int abs = Math.abs(plus - numberOfSelectedCopy);
                         cardResponseList.get(i).setCountOfPaperBook(abs);

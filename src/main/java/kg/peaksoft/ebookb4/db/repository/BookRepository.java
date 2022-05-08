@@ -115,18 +115,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyPutLike(Long bookId, Long userId);
 
-
     @Query("select b from Book b where b.isBestSeller = true")
     List<Book> findAllByIsBestSeller();
 
-//    @Query("select b from Book b where b.dateOfRegister between ?1 and ?2")
-//    List<Book> booksNovelties(LocalDate localDate1,LocalDate localDate2);
-//
-//    @Query(value = "select count (*) from books_basket where books.prise =?1 " +
-//            "and books.id= ?1 and books.discount = ?1 ",nativeQuery = true)
-//    ClientOperationDTO getBooksCount(ClientOperationDTO clientOperationDTO);
-
-    @Query("select b from Book b where b.isNew = true")
+    @Query("select b from Book b where b.isNew = true order by b.dateOfRegister desc")
     List<Book> BooksNovelties(List<Book> books);
 
     @Transactional
@@ -148,9 +140,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             " from Book b where b.operations.id > 0 and b.user.email = ?1 and b.user.role.name = ?2")
     List<BookResponse> getVendorBooksSold(String name, ERole role);
 
-//    @Transactional
-//    @Modifying
-//    @Query("update Book b set b.paperBook.numberOfSelected = b.paperBook.numberOfSelected-1 where b.paperBook.paperBookId = ?1")
-//    void bookPlus(Long bookId);
 
 }
