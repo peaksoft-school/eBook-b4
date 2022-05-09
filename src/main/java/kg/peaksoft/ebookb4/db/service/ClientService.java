@@ -22,7 +22,7 @@ public interface ClientService {
 
     List<BookResponse> getBooksFromBasket(String name);
 
-    ClientOperationDTO getBooksInBasket(String name);
+//    ClientOperationDTO getBooksInBasket(String name);
 
     @Transactional
     ResponseEntity<?> update(ClientUpdateDTO newClientDTO, String username);

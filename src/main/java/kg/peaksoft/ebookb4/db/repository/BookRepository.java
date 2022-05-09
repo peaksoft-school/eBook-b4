@@ -126,14 +126,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("update Book b set b.isNew = false where b.bookId = ?1")
     void updateBook(Long bookId);
 
-    @Query("select b from Book b where b.likedBooks = ?1")
-    List<BookResponse> getBooksFavoritesClient(Long clientId);
-
-
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
             "b.yearOfIssue, b.price) from Book b where b.operations.user.id = ?1")
     List<BookResponse> getBooksInPurchased(Long clientId);
-
 
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, " +
             "b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price)" +

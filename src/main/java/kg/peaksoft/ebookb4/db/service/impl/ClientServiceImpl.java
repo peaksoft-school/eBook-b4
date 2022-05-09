@@ -8,6 +8,7 @@ import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.User;
+import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.response.CardOperationResponse;
 import kg.peaksoft.ebookb4.db.models.mappers.ClientOperationMapper;
 import kg.peaksoft.ebookb4.db.models.mappers.ClientRegisterMapper;
@@ -172,6 +173,10 @@ public class ClientServiceImpl implements ClientService {
         User user = userRepository.getUser(email).orElseThrow(() ->
                 new BadRequestException(String.format("User with id %s has not been found!", email)));
         Book book = bookRepository.getById(id);
+        if(book.getBookType().equals(BookType.PAPERBOOK)){
+            book.getPaperBook().setNumberOfSelected(book.getPaperBook().getNumberOfSelectedCopy());
+            bookRepository.save(book);
+        }
         user.getBasket().getBooks().remove(book);
         log.info("delete book from basket works");
         return ResponseEntity.ok("Delete book from basket of " + email);
@@ -184,6 +189,13 @@ public class ClientServiceImpl implements ClientService {
                 .orElseThrow(() -> new BadRequestException(
                         "Client with email = " + email + " does not exists"
                 ));
+        List<Book> basketByClientId = bookRepository.findBasketByClientId(email);
+        for (Book book : basketByClientId) {
+            if (book.getBookType().equals(BookType.PAPERBOOK)){
+                book.getPaperBook().setNumberOfSelected(book.getPaperBook().getNumberOfSelectedCopy());
+                bookRepository.save(book);
+            }
+        }
         user.getBasket().clear();
         log.info("Clean Basket of Client by email works");
         return ResponseEntity.ok("Clean books from basket of " + email);
@@ -197,7 +209,8 @@ public class ClientServiceImpl implements ClientService {
             if (book.getDiscountFromPromo() != null) {
                 if (checkPromo(promo)) {
                     sum += (book.getPrice() * book.getDiscountFromPromo()) / 100;
-                }
+                }else
+                    log.info("Your promo code is not suitable");
             }
             continue;
         }
@@ -219,10 +232,10 @@ public class ClientServiceImpl implements ClientService {
                         book, BookResponse.class)).collect(Collectors.toList());
     }
 
-    @Override
-    public ClientOperationDTO getBooksInBasket(String id) {
-        return clientOperationMapper.create(id);
-    }
+//    @Override
+//    public ClientOperationDTO getBooksInBasket(String id) {
+//        return clientOperationMapper.create(id);
+//    }
 
     @Override
     public ResponseEntity<?> placeOrder(String name) {
@@ -240,10 +253,14 @@ public class ClientServiceImpl implements ClientService {
 
         for (Book book : all) {
             book.setOperations(clientOperations);
+            if(book.getBookType().equals(BookType.PAPERBOOK)){
+                book.getPaperBook().setNumberOfSelectedCopy(book.getPaperBook().getNumberOfSelected());
+                bookRepository.save(book);
+            }
         }
-
         clientOperationRepository.save(clientOperations);
-
+        user.getBasket().clear();
+        userRepository.save(user);
         return ResponseEntity.ok("Your order has been successfully placed!");
     }
 

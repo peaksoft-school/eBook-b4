@@ -21,7 +21,6 @@ public class VendorAdminApi {
 
     private AdminService service;
 
-
     @Operation(summary = "Get all Vendors",
             description = "Get all vendors with amount of books")
     @GetMapping("/")

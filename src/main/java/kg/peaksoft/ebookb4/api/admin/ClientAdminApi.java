@@ -1,10 +1,8 @@
 package kg.peaksoft.ebookb4.api.admin;
 
 import io.swagger.v3.oas.annotations.Operation;
-import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
-import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,23 +32,21 @@ public class ClientAdminApi {
         return service.getClientById(id);
     }
 
-    @Operation
+    @Operation(summary = "Get books from client basket")
     @GetMapping("/basket/{clientId}")
     public List<BookResponse> getBooksClientFromBasket(@PathVariable Long clientId) {
         return service.getBooksFromBasket(clientId);
     }
 
-    @Operation
+    @Operation(summary = "Get client liked books")
     @GetMapping("/favorites/{clientId}")
     public List<BookResponse> booksClientFavorites(@PathVariable Long clientId){
         return service.getAllLikedBooks(clientId);
     }
 
-    @Operation
+    @Operation(summary = "Get all purchased book in client")
     @GetMapping("/operation/{clientId}")
     public List<BookResponse> getBook(@PathVariable Long clientId){
         return service.getBooksInPurchased(clientId);
     }
-
-
 }
