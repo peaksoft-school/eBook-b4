@@ -2,14 +2,15 @@ package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
-import kg.peaksoft.ebookb4.dto.request.GenreRequest;
+import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -23,12 +24,12 @@ public class BookGlobalApi {
 
     @Operation(summary = "Find all books by genre", description = "Sorting books by genre")
     @GetMapping("/genre/{genre}")
-    public List<Book> findBooksByGenre(@PathVariable Genre genre) {
-        return bookGetService.findByGenre(genre, RequestStatus.ACCEPTED);
+    public List<Book> findBooksByGenre(@PathVariable String genre) {
+        return bookGetService.findByGenre(genre.toUpperCase(), RequestStatus.ACCEPTED);
     }
 
     @Operation(summary = "Find books by name", description = "Using linear search while finding, name, title, authorName or publishing house")
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public List<Book> findBooksByName(@PathVariable String name) {
         return bookGetService.findBooksByName(name, RequestStatus.ACCEPTED);
     }
@@ -46,8 +47,20 @@ public class BookGlobalApi {
     }
 
     @Operation(summary = "Get all genre count books", description = "get genres countBooks")
-    @GetMapping("/genre_count/")
+    @GetMapping("/genre_count")
     List<GenreRequest> getCountGenre() {
         return bookGetService.getCountGenre();
+    }
+
+    @Operation(summary = "Get books with bestSeller = true")
+    @GetMapping("/bestSeller")
+    public List<Book> isBestSeller(){
+        return bookGetService.booksIsBestseller();
+    }
+
+    @Operation(summary = "Get all new books")
+    @GetMapping("/get-all-new-book")
+    public List<Book> getAllNewBook(){
+        return bookGetService.BooksNovelties();
     }
 }

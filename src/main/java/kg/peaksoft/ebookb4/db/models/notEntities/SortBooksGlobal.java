@@ -1,7 +1,7 @@
 package kg.peaksoft.ebookb4.db.models.notEntities;
 
+import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import lombok.Getter;
 import lombok.Setter;

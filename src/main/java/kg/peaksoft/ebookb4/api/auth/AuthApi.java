@@ -2,10 +2,10 @@ package kg.peaksoft.ebookb4.api.auth;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.dto.dto.users.LoginRequest;
-import kg.peaksoft.ebookb4.dto.dto.users.ClientRegisterDTO;
-import kg.peaksoft.ebookb4.dto.dto.users.VendorRegisterDTO;
-import kg.peaksoft.ebookb4.dto.response.JwtResponse;
+import kg.peaksoft.ebookb4.db.models.dto.LoginRequest;
+import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
+import kg.peaksoft.ebookb4.db.models.dto.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.db.models.response.JwtResponse;
 import kg.peaksoft.ebookb4.config.jwt.JwtUtils;
 import kg.peaksoft.ebookb4.config.services.UserDetailsImpl;
 import kg.peaksoft.ebookb4.db.service.ClientService;
@@ -50,7 +50,7 @@ public class AuthApi {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt, roles));
+        return ResponseEntity.ok(new JwtResponse(jwt, roles, userDetails.getFirstName()));
     }
 
     @Operation(summary = "Sign up", description = "Register only for client")

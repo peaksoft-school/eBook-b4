@@ -1,22 +1,21 @@
 package kg.peaksoft.ebookb4.db.service;
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
-import kg.peaksoft.ebookb4.dto.response.BookResponse;
-import kg.peaksoft.ebookb4.dto.response.ClientResponse;
-import kg.peaksoft.ebookb4.dto.response.VendorResponse;
+import kg.peaksoft.ebookb4.db.models.request.RefuseBookRequest;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
+import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface AdminService {
 
-    List<Book> getBooksBy(Genre genre, BookType bookType);
+    List<Book> getBooksBy(String genre, BookType bookType);
 
-    List<Book> getBooksByGenre(Genre genre);
+    List<Book> getBooksByGenre(String genre);
 
     List<BookResponse> getBooksFromBasket(Long id);
 
@@ -54,4 +53,7 @@ public interface AdminService {
     List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, Long vendorId,
                                             RequestStatus requestStatus);
 
+    List<BookResponse> getBooksInPurchased(Long clientId);
+
+    List<BookResponse> getAllLikedBooks(Long clientId);
 }

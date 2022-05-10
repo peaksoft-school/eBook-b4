@@ -1,19 +1,16 @@
 package kg.peaksoft.ebookb4.db.service;
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
-import kg.peaksoft.ebookb4.dto.request.GenreRequest;
-import kg.peaksoft.ebookb4.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 
 import java.util.List;
 
 public interface BookGetService {
 
-
-    List<Book> findByGenre(Genre genre, RequestStatus requestStatus);
-
+    List<Book> findByGenre(String genreName, RequestStatus requestStatus);
 
     List<Book> findBooksByName(String name, RequestStatus requestStatus);
 
@@ -26,5 +23,9 @@ public interface BookGetService {
     List<BookResponse> getAllAcceptedBooks();
 
     List<GenreRequest> getCountGenre();
+
+    List<Book> booksIsBestseller();
+
+    List<Book> BooksNovelties();
 
 }

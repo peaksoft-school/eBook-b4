@@ -1,21 +1,20 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.AdminService;
-import kg.peaksoft.ebookb4.dto.dto.others.CustomPageRequest;
-import kg.peaksoft.ebookb4.dto.mapper.ClientMapper;
-import kg.peaksoft.ebookb4.dto.mapper.VendorMapper;
-import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
-import kg.peaksoft.ebookb4.dto.response.BookResponse;
-import kg.peaksoft.ebookb4.dto.response.ClientResponse;
-import kg.peaksoft.ebookb4.dto.response.VendorResponse;
+import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
+import kg.peaksoft.ebookb4.db.models.mappers.ClientMapper;
+import kg.peaksoft.ebookb4.db.models.mappers.VendorMapper;
+import kg.peaksoft.ebookb4.db.models.request.RefuseBookRequest;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
+import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,15 +45,16 @@ public class AdminServiceImpl implements AdminService {
     private VendorMapper vendorMapper;
     private ClientMapper clientMapper;
     private ModelMapper modelMapper;
+
     @Override
-    public List<Book> getBooksBy(Genre genre, BookType bookType) {
+    public List<Book> getBooksBy(String genreName, BookType bookType) {
         log.info("getBooks By genre and book type works");
-        return bookRepository.getBooks(genre, bookType, ACCEPTED);
+        return bookRepository.getBooks(genreName, bookType, ACCEPTED);
     }
 
     @Override
     public List<BookResponse> getBooksFromBasket(Long clientId) {
-        return bookRepository.findBasketByClientId(clientId)
+        return bookRepository.findBasketByClientIdAdmin(clientId)
                 .stream().map(book -> modelMapper.map(
                         book, BookResponse.class)).collect(Collectors.toList());
     }
@@ -66,9 +66,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Book> getBooksByGenre(Genre genre) {
+    public List<Book> getBooksByGenre(String genreName) {
         log.info("get books by genre works");
-        return bookRepository.findAllByGenre(genre, ACCEPTED);
+        return bookRepository.findAllByGenre(genreName, ACCEPTED);
     }
 
     @Override
@@ -187,12 +187,16 @@ public class AdminServiceImpl implements AdminService {
             );
         });
         List<Book> books = bookRepository.findBooksFromVendor(user.getEmail());
+
+
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), books.size());
         int end = Math.min((start + paging.getPageSize()), books.size());
         Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
         System.out.println(new CustomPageRequest<>(pages).getContent().size());
+
         log.info("Vendor books=s%"+new CustomPageRequest<>(pages).getContent().size());
+
         return new CustomPageRequest<>(pages).getContent();
     }
 
@@ -266,5 +270,22 @@ public class AdminServiceImpl implements AdminService {
         int end = Math.min((start + paging.getPageSize()), booksInProgress.size());
         Page<Book> pages = new PageImpl<>(booksInProgress.subList(start, end), paging, booksInProgress.size());
         return new CustomPageRequest<>(pages).getContent();
+    }
+
+//    @Override
+//    public List<BookResponse> getBooksFavoriteClient(Long clientId) {
+//        return bookRepository.getBooksFavoritesClient(clientId);
+//    }
+
+    @Override
+    public List<BookResponse> getBooksInPurchased(Long clientId) {
+        return bookRepository.getBooksInPurchased(clientId);
+    }
+
+    @Override
+    public List<BookResponse> getAllLikedBooks(Long clientId) {
+        return userRepository.getAllLikedBooks(clientId)
+                .stream().map(book -> modelMapper.map(
+                        book, BookResponse.class)).collect(Collectors.toList());
     }
 }

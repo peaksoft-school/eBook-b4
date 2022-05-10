@@ -2,16 +2,16 @@ package kg.peaksoft.ebookb4;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
+import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
-import kg.peaksoft.ebookb4.db.models.userClasses.Role;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.models.entity.Role;
+import kg.peaksoft.ebookb4.db.models.entity.User;
+import kg.peaksoft.ebookb4.db.repository.GenreRepository;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,14 +24,15 @@ import java.time.LocalDate;
 @OpenAPIDefinition
 @AllArgsConstructor
 public class EBookB4Application {
-
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
+    private final GenreRepository genreRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(EBookB4Application.class, args);
         System.out.println("Welcome colleagues, project name is eBook!");
+
     }
 
     @GetMapping("/")
@@ -77,5 +78,30 @@ public class EBookB4Application {
         a.setRole(roleRepository.getById(3L));
         a.setDateOfRegistration(LocalDate.now());
         userRepository.save(a);
+
+        Genre journal=new Genre(null,"JOURNAL");
+        Genre romance=new Genre(null,"ROMANCE");
+        Genre fantasy=new Genre(null,"FANTASY");
+        Genre detective=new Genre(null,"DETECTIVE");
+        Genre scientific=new Genre(null,"SCIENTIFIC");
+        Genre adventure=new Genre(null,"ADVENTURE");
+        Genre internationalLiterature=new Genre(null,"INTERNATIONAL LITERATURE");
+        Genre biography=new Genre(null,"BIOGRAPHY");
+        Genre poetry =new Genre(null,"POETRY");
+        Genre horror=new Genre(null,"HORROR");
+
+        genreRepository.save(journal);
+        genreRepository.save(romance);
+        genreRepository.save(fantasy);
+        genreRepository.save(detective);
+        genreRepository.save(scientific);
+        genreRepository.save(adventure);
+        genreRepository.save(internationalLiterature);
+        genreRepository.save(biography);
+        genreRepository.save(poetry);
+        genreRepository.save(horror);
+
+        System.out.println(genreRepository.findAll());
     }
+
 }

@@ -1,21 +1,25 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
+import kg.peaksoft.ebookb4.db.models.entity.Genre;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.models.entity.User;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.db.repository.GenreRepository;
 import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
 import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.dto.dto.others.CustomPageRequest;
-import kg.peaksoft.ebookb4.dto.mapper.BookMapper;
-import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
-import kg.peaksoft.ebookb4.dto.response.MessageResponse;
+import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
+import kg.peaksoft.ebookb4.db.models.mappers.BookMapper;
+import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
+import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
-import kg.peaksoft.ebookb4.db.models.books.AudioBook;
-import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.db.models.books.ElectronicBook;
-import kg.peaksoft.ebookb4.db.models.books.PaperBook;
+import kg.peaksoft.ebookb4.db.models.entity.AudioBook;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
+import kg.peaksoft.ebookb4.db.models.entity.ElectronicBook;
+import kg.peaksoft.ebookb4.db.models.entity.PaperBook;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
+
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
@@ -39,6 +43,7 @@ public class BookServiceImpl implements BookService {
     private final BookMapper mapper;
     private final UserRepository userRepository;
     private final PromocodeRepository promoRepository;
+    private final GenreRepository genreRepository;
 
     @Override
     public ResponseEntity<?> saveBook(BookDTO bookDTO, String username) {
@@ -56,6 +61,9 @@ public class BookServiceImpl implements BookService {
                 book.setDiscountFromPromo(promoRepository.getActivePromo(user).getDiscount());
             }
         }
+
+        book.setDateOfRegister(LocalDate.now());
+        book.setEndOfTheNewTerm(LocalDate.now().plusDays(30));
 
         book.setUser(user);
         if (bookDTO.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
@@ -77,6 +85,7 @@ public class BookServiceImpl implements BookService {
             PaperBook paperBook = new PaperBook();
             paperBook.setFragmentOfBook(bookDTO.getPaperBook().getFragmentOfBook());
             paperBook.setNumberOfSelected(bookDTO.getPaperBook().getNumberOfSelected());
+            paperBook.setNumberOfSelectedCopy(bookDTO.getPaperBook().getNumberOfSelected());
             paperBook.setNumberOfPages(bookDTO.getPaperBook().getNumberOfPages());
             book.setPaperBook(paperBook);
             log.info("Save paper book ");
@@ -111,7 +120,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> update(BookDTO newBook, Long bookId) {
+    public ResponseEntity<?> update(BookDTO newBook, Long bookId, Long genreId) {
         Book book = findByBookId(bookId);
 
         String bookName = book.getTitle();
@@ -155,7 +164,7 @@ public class BookServiceImpl implements BookService {
             book.setLanguage(newLanguage);
         }
         Genre genre = book.getGenre();
-        Genre newGenre = newBook.getGenre();
+        Genre newGenre = genreRepository.getById(newBook.getGenreId());
         if (!Objects.equals(genre, newGenre)) {
             book.setGenre(newGenre);
         }
@@ -193,7 +202,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findBooksFromVendor(Integer offset, int pageSize, String username) {
+
         List<Book> books = repository.findBooksFromVendor(username);
+
         log.info("founded {} accepted books", books.size());
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), books.size());
@@ -215,7 +226,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findBooksFromVendorAddedToBasket(Integer offset, int pageSize, String username) {
+
         List<Book> booksWithBasket = repository.findBooksFromVendorAddedToBasket(username);
+
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksWithBasket.size());
         int end = Math.min((start + paging.getPageSize()), booksWithBasket.size());
@@ -257,5 +270,10 @@ public class BookServiceImpl implements BookService {
         Page<Book> pages = new PageImpl<>(booksInProgress.subList(start, end), paging, booksInProgress.size());
         log.info("Vendor book = {} in process",booksInProgress.size());
         return new CustomPageRequest<>(pages).getContent();
+    }
+
+    @Override
+    public List<BookResponse> getBooksSold(String name , ERole role) {
+        return repository.getVendorBooksSold(name, role);
     }
 }

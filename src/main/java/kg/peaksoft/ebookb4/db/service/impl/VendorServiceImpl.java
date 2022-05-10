@@ -1,13 +1,13 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.VendorService;
-import kg.peaksoft.ebookb4.dto.dto.users.VendorRegisterDTO;
-import kg.peaksoft.ebookb4.dto.dto.users.VendorUpdateDTO;
-import kg.peaksoft.ebookb4.dto.mapper.VendorRegisterMapper;
-import kg.peaksoft.ebookb4.dto.response.MessageResponse;
+import kg.peaksoft.ebookb4.db.models.dto.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.db.models.dto.VendorUpdateDTO;
+import kg.peaksoft.ebookb4.db.models.mappers.VendorRegisterMapper;
+import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +49,7 @@ public class VendorServiceImpl implements VendorService {
         user.setRole(roleRepository.getById(number));
 
         user.setDateOfRegistration(LocalDate.now());
+
         userRepository.save(user);
         log.info("Method save vendor works");
         return ResponseEntity.ok(new MessageResponse(
@@ -61,14 +62,6 @@ public class VendorServiceImpl implements VendorService {
         User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found", username)));
 
-        if (userRepository.existsByEmail(newVendorDTO.getEmail())) {
-            throw new BadRequestException(String.format("Please choose another email, %s email is not available", newVendorDTO.getEmail()));
-        }
-        String oldEmail = user.getEmail();
-        String newEmail = newVendorDTO.getEmail();
-        if (!oldEmail.equals(newEmail)) {
-            user.setEmail(newEmail);
-        }
         String oldFirstName = user.getFirstName();
         String newFirstName = newVendorDTO.getFirstName();
         if (!oldFirstName.equals(newFirstName)) {
@@ -84,6 +77,7 @@ public class VendorServiceImpl implements VendorService {
         if (!oldNumber.equals(newNumber)) {
             user.setNumber(newNumber);
         }
+
         String oldPasswordOldUser = user.getPassword();
 
         String oldPasswordNewUser = newVendorDTO.getOldPassword();

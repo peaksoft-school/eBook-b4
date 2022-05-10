@@ -1,7 +1,7 @@
 package kg.peaksoft.ebookb4.db.models.booksClasses;
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
+import kg.peaksoft.ebookb4.db.models.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,15 +26,8 @@ public class ClientOperations {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany
-    @JoinTable(
-            name = "client_operation_books",
-            joinColumns = @JoinColumn(
-                    name = "operation_id",
-                    referencedColumnName = "operation_id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "book_id",
-                    referencedColumnName = "book_id"))
+    @OneToMany(mappedBy = "operations")
     private List<Book> boughtBooks;
+
 
 }

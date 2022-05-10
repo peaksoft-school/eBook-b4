@@ -2,10 +2,12 @@ package kg.peaksoft.ebookb4.api.Vendor;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.dto.dto.others.BookDTO;
+import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +28,7 @@ public class BookVendorApi {
     @Operation(summary = "Save book",description = "Adding a new book")
     @PostMapping("/new-book")
     public ResponseEntity<?> saveBook(@RequestBody BookDTO bookDTO, Authentication authentication){
-        return  bookService.saveBook(bookDTO, authentication.getName());
+        return bookService.saveBook(bookDTO, authentication.getName());
     }
 
     @Operation(summary = "Delete book",description = "Deleting a book by id")
@@ -39,12 +41,13 @@ public class BookVendorApi {
     @PatchMapping("/editing/{id}")
     public ResponseEntity<?> update(@RequestBody BookDTO request,
                                     @PathVariable Long id){
-        return bookService.update(request,id);
+        Long genreId = request.getGenreId();
+        return bookService.update(request, id ,genreId);
     }
 
     @Operation(summary = "Get book",
             description = "Get book by id for vendor")
-    @GetMapping("/book{id}")
+    @GetMapping("/book/{id}")
     public Book getBookById(@PathVariable Long id){
         return bookService.findByBookId(id);
     }
@@ -70,19 +73,16 @@ public class BookVendorApi {
         return bookService.findBooksFromVendorAddedToBasket(--offset, 12, authentication.getName());
     }
 
-    @Operation(summary = "Get books with discount",
-            description = "Get books with discount")
+    @Operation(summary = "Get books with discount", description = "Get books with discount")
     @GetMapping("/books-discount/{offset}")
     public List<Book> getBooksWithDiscount(@PathVariable Integer offset, Authentication authentication){
         return bookService.findBooksFromVendorWithDiscount(--offset, 12, authentication.getName());
     }
 
-    @Operation(summary = "Get refused books",
-            description = "Get refused books")
-    @GetMapping("/books-refused/{offset}")
-    public List<Book> getBooksInCancel(@PathVariable Integer offset, Authentication authentication){
-        return bookService.findBooksFromVendorCancelled(--offset, 12, authentication.getName(),
-                RequestStatus.REFUSED);
+    @Operation(summary = "Get sold books",description = "Get All Books vendor solds")
+    @GetMapping("/sold")
+    public List<BookResponse> bookSold(Authentication authentication){
+        return bookService.getBooksSold(authentication.getName(), ERole.ROLE_VENDOR);
     }
 
     @Operation(summary = "Get books in progress",
@@ -91,5 +91,13 @@ public class BookVendorApi {
     public List<Book> getBooksInProcess(@PathVariable Integer offset, Authentication authentication){
         return bookService.findBooksFromVendorInProcess(--offset, 12, authentication.getName(),
                 RequestStatus.INPROGRESS);
+    }
+
+    @Operation(summary = "Get refused books",
+            description = "Get refused books")
+    @GetMapping("/books-refused/{offset}")
+    public List<Book> getBooksInCancel(@PathVariable Integer offset, Authentication authentication){
+        return bookService.findBooksFromVendorCancelled(--offset, 12, authentication.getName(),
+                RequestStatus.REFUSED);
     }
 }

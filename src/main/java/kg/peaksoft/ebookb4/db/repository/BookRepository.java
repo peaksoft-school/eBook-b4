@@ -1,17 +1,15 @@
 package kg.peaksoft.ebookb4.db.repository;
 
-import kg.peaksoft.ebookb4.db.models.books.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
-import kg.peaksoft.ebookb4.db.models.enums.Genre;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
-import kg.peaksoft.ebookb4.dto.dto.users.ClientOperationDTO;
-import kg.peaksoft.ebookb4.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.entity.User;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -23,6 +21,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     //find books by title, author, publishingHouse
     @Query("select b from Book b where b.title like %?1% " +
+            "or b.genre.name like %?1%" +
             "or b.authorFullName like %?1%" +
             "or b.publishingHouse like %?1% and b.requestStatus=?2")
     List<Book> findByName(String name, RequestStatus requestStatus);
@@ -54,13 +53,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.likes>0 and b.user.email = ?1")
     List<Book> findLikedBooksFromVendor(String username);
 
-
     @Query("select b from Book b where b.baskets>0 and b.user.email = ?1")
     List<Book> findBooksFromVendorAddedToBasket(String username);
 
-    @Query("select u.basket.books from User u where u.id = :clientId")
-    List<Book> findBasketByClientId(@Param("clientId") Long clientId);
+    @Query("select u.basket.books from User u where u.email = :name")
+    List<Book> findBasketByClientId(@Param("name") String name);
 
+    @Query("select u.basket.books from User u where u.id = ?1")
+    List<Book> findBasketByClientIdAdmin(Long id);
 
     @Query("select b from Book b where b.discount is not null and b.user.email = ?1")
     List<Book> findBooksFromVendorWithDiscount(String username);
@@ -86,14 +86,15 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByBookType(BookType bookType, RequestStatus requestStatus);
     //fin books by genre and book type /admin panel
 
-    @Query("select b from Book b where b.genre =?1 or b.bookType= ?2 and b.requestStatus = ?3")
-    List<Book> getBooks(Genre genre, BookType bookType, RequestStatus requestStatus);
+    @Query("select b from Book b where b.genre.name like %?1% " +
+            "or b.bookType = ?2 and b.requestStatus = ?3")
+    List<Book> getBooks(String genreName, BookType bookType, RequestStatus requestStatus);
 
-    @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
+    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
             "b.yearOfIssue, b.price) from Book b where b.requestStatus = ?1")
     List<BookResponse> findBooksInProgress(RequestStatus requestStatus);
 
-    @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
+    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
             "b.yearOfIssue, b.price) from Book b where b.requestStatus = ?1")
     List<BookResponse> findBooksAccepted(RequestStatus requestStatus);
 
@@ -101,21 +102,38 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Optional<Book> findBookInProgress(Long bookId, RequestStatus requestStatus);
 
     //find books by genre / admin panel
-    @Query(value = "select b  from Book b where b.genre = ?1 and b.requestStatus = ?2 ")
-    List<Book> findAllByGenre(Genre genre, RequestStatus requestStatus);
+    @Query(value = "select b from Book b where b.genre.name like %?1% and b.requestStatus = ?2 ")
+    List<Book> findAllByGenre(String genreName, RequestStatus requestStatus);
 
-    @Query("select count (b) from Book b where b.genre =?1 and b.requestStatus = ?2")
-    Integer getCountGenre(Genre genre, RequestStatus requestStatus);
+    @Query("select count (b) from Book b where b.genre.name like %?1% and b.requestStatus = ?2")
+    Integer getCountGenre(String genre, RequestStatus requestStatus);
 
     @Query("select b.likedBooks from Book b")
     List<Book> clientLikeBooks();
+
     @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
             "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyPutLike(Long bookId, Long userId);
 
+    @Query("select b from Book b where b.isBestSeller = true")
+    List<Book> findAllByIsBestSeller();
 
-    @Query(value = "select count (*) from books_basket where books.prise =?1 " +
-            "and books.id= ?1 and books.discount = ?1 ",nativeQuery = true)
-    ClientOperationDTO getBooksCount(ClientOperationDTO clientOperationDTO);
+    @Query("select b from Book b where b.isNew = true order by b.dateOfRegister desc")
+    List<Book> BooksNovelties(List<Book> books);
+
+    @Transactional
+    @Modifying
+    @Query("update Book b set b.isNew = false where b.bookId = ?1")
+    void updateBook(Long bookId);
+
+    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
+            "b.yearOfIssue, b.price) from Book b where b.operations.user.id = ?1")
+    List<BookResponse> getBooksInPurchased(Long clientId);
+
+    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, " +
+            "b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price)" +
+            " from Book b where b.operations.id > 0 and b.user.email = ?1 and b.user.role.name = ?2")
+    List<BookResponse> getVendorBooksSold(String name, ERole role);
+
 
 }

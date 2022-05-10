@@ -1,8 +1,8 @@
 package kg.peaksoft.ebookb4.db.models.booksClasses;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import kg.peaksoft.ebookb4.db.models.books.Book;
-import kg.peaksoft.ebookb4.db.models.userClasses.User;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
+import kg.peaksoft.ebookb4.db.models.entity.User;
 import lombok.*;
 import lombok.RequiredArgsConstructor;
 
