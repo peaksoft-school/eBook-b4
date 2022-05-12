@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.models.response;
 
+import kg.peaksoft.ebookb4.db.models.booksClasses.FileInformation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,7 @@ public class BookResponse {
     private String publishingHouse;
     private LocalDate yearOfIssue;
     private Double price;
+
+    private FileInformation fileInformation;
 
 }

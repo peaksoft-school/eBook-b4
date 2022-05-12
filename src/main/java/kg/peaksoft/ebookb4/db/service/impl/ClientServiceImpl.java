@@ -232,11 +232,6 @@ public class ClientServiceImpl implements ClientService {
                         book, BookResponse.class)).collect(Collectors.toList());
     }
 
-//    @Override
-//    public ClientOperationDTO getBooksInBasket(String id) {
-//        return clientOperationMapper.create(id);
-//    }
-
     @Override
     public ResponseEntity<?> placeOrder(String name) {
 
@@ -288,16 +283,6 @@ public class ClientServiceImpl implements ClientService {
         }
         return false;
     }
-//    @Override
-//    public List<CardResponse> getAllInCard(String name) {
-//        List<CardResponse> cardResponses = bookRepository.findBasketByClientId(name)
-//                .stream().map(book -> modelMapper.map(
-//                        book, CardResponse.class))
-//                .map(BookResponse -> modelMapper.map(BookResponse,
-//                        CardResponse.class)).collect(Collectors.toList());
-//        return cardOperationResponse.create(name,cardResponses,"",null);
-//
-//    }
 
     @Override
     public List<CardResponse> plusOrMinus(String name, String plusOrMinus, Long bookId) {

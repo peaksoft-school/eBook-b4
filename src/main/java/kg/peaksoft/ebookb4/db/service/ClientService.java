@@ -12,7 +12,6 @@ import java.util.List;
 
 public interface ClientService {
 
-//    public void save(ClientOperations name);
 
     ResponseEntity<?> register (ClientRegisterDTO clientRegisterDTO, Long number);
 
@@ -21,8 +20,6 @@ public interface ClientService {
     ResponseEntity<?> addBookToBasket(Long bookId, String username);
 
     List<BookResponse> getBooksFromBasket(String name);
-
-//    ClientOperationDTO getBooksInBasket(String name);
 
     @Transactional
     ResponseEntity<?> update(ClientUpdateDTO newClientDTO, String username);
@@ -38,8 +35,6 @@ public interface ClientService {
     ResponseEntity<?> placeOrder(String name);
 
     List<BookResponse> getBooksInPurchased(String name);
-
-//    List<CardResponse> getAllInCard(String name);
 
     List<CardResponse> plusOrMinus(String name, String plusOrMinus, Long bookId);
 }

@@ -34,6 +34,7 @@ private final GenreRepository repository;
         book.setPaperBook(dto.getPaperBook());
         book.setElectronicBook(dto.getElectronicBook());
         book.setGenre(repository.getById(dto.getGenreId()));
+        book.setFileInformation(dto.getFileInformation());
 
         return book;
     }
