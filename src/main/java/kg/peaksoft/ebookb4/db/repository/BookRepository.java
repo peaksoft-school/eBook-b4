@@ -91,11 +91,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> getBooks(String genreName, BookType bookType, RequestStatus requestStatus);
 
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
-            "b.yearOfIssue, b.price) from Book b where b.requestStatus = ?1")
+            "b.yearOfIssue, b.price, b.fileInformation) from Book b where b.requestStatus = ?1")
     List<BookResponse> findBooksInProgress(RequestStatus requestStatus);
 
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
-            "b.yearOfIssue, b.price) from Book b where b.requestStatus = ?1")
+            "b.yearOfIssue, b.price, b.fileInformation) from Book b where b.requestStatus = ?1")
     List<BookResponse> findBooksAccepted(RequestStatus requestStatus);
 
     @Query("select b from Book b where b.requestStatus = ?2 and b.bookId = ?1")
@@ -127,11 +127,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     void updateBook(Long bookId);
 
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
-            "b.yearOfIssue, b.price) from Book b where b.operations.user.id = ?1")
+            "b.yearOfIssue, b.price, b.fileInformation) from Book b where b.operations.user.id = ?1")
     List<BookResponse> getBooksInPurchased(Long clientId);
 
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, " +
-            "b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price)" +
+            "b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price, b.fileInformation)" +
             " from Book b where b.operations.id > 0 and b.user.email = ?1 and b.user.role.name = ?2")
     List<BookResponse> getVendorBooksSold(String name, ERole role);
 

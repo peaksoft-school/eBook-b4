@@ -21,7 +21,7 @@ public class ClientAdminApi {
 
     @Operation(summary = "Get all client",
             description = "Get all client ")
-    @GetMapping("/")
+    @GetMapping
     public List<ClientResponse> getAllClient() {
         return service.findAllClient();
     }

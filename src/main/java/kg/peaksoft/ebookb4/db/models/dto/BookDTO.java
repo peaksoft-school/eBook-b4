@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.models.dto;
 
+import kg.peaksoft.ebookb4.db.models.booksClasses.FileInformation;
 import kg.peaksoft.ebookb4.db.models.entity.AudioBook;
 import kg.peaksoft.ebookb4.db.models.entity.ElectronicBook;
 import kg.peaksoft.ebookb4.db.models.entity.PaperBook;
@@ -29,5 +30,7 @@ public class BookDTO {
     AudioBook audioBook;
     PaperBook paperBook;
     ElectronicBook electronicBook;
+    FileInformation fileInformation;
+
 
 }
