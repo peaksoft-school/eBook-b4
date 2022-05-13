@@ -24,12 +24,11 @@ public class FileApi {
 
     @Operation(summary = "Upload files",description = "Upload files to aws")
     @PostMapping("/uploadFile/{bookId}")
-    public Map<String, String> uploadAudioFile12(@RequestBody MultipartFile file1,
-                                                 @RequestBody MultipartFile file2,
-                                                 @RequestBody MultipartFile file3,
+    public Map<String, String> uploadFile(@RequestBody MultipartFile firstPhoto,
+                                                 @RequestBody MultipartFile secondPhoto,
+                                                 @RequestBody MultipartFile bookFile,
                                                  @PathVariable Long bookId) {
-        Map<String, String> stringStringMap = fileService.uploadFile(file1, file2, file3, bookId);
-        return stringStringMap;
+        return fileService.uploadFile(firstPhoto, secondPhoto, bookFile, bookId);
     }
 
     @Operation(summary = "Delete files", description = "Delete files with key name")

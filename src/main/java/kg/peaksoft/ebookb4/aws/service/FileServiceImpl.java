@@ -85,9 +85,26 @@ public class FileServiceImpl implements FileService {
 
         Book bookById = bookRepository.getById(bookId);
 
-        log.info("its key {}", key1);
-        log.info("its key {}", key2);
-        log.info("its key {}", key3);
+        if(!bookById.getFileInformation().getFirstPhoto().equals(awsS3Client.getResourceUrl("test-b4-ebook", key1))){
+            if (bookById.getFileInformation().getKeyOfFirstPhoto() == null){
+                log.info("it's new first photo");
+            }else{
+                deleteFile(bookById.getFileInformation().getKeyOfFirstPhoto());
+            }
+            bookById.getFileInformation().setFirstPhoto(awsS3Client.getResourceUrl("test-b4-ebook", key1));
+        }if (!bookById.getFileInformation().getSecondPhoto().equals(awsS3Client.getResourceUrl("test-b4-ebook", key2))){
+            if (bookById.getFileInformation().getKeyOfSecondPhoto() == null){
+                log.info("it's new second photo");
+            }else {
+                deleteFile(bookById.getFileInformation().getKeyOfSecondPhoto());
+            }
+        }if (!bookById.getFileInformation().getBookFile().equals(awsS3Client.getResourceUrl("test-b4-ebook", key3))){
+            if (bookById.getFileInformation().getKeyOfBookFile() == null){
+                log.info("it's new book file");
+            }else {
+                deleteFile(bookById.getFileInformation().getKeyOfBookFile());
+            }
+        }
 
         bookById.getFileInformation().setKeyOfFirstPhoto(key1);
         bookById.getFileInformation().setKeyOfSecondPhoto(key2);
