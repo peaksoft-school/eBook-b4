@@ -100,8 +100,8 @@ public class BookServiceImpl implements BookService {
         repository.save(book);
         log.info("Save book works");
         return ResponseEntity.ok(new MessageResponse(
-                String.format("%s with name %s registered successfully!", book.getBookType().name(),
-                        book.getTitle())));
+                String.format("%s with name %s and with id %s registered successfully!", book.getBookType().name(),
+                        book.getTitle(), book.getBookId())));
 
     }
 
