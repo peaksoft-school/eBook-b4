@@ -1,9 +1,9 @@
 package kg.peaksoft.ebookb4.aws.service;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.IOUtils;
 import kg.peaksoft.ebookb4.aws.enums.BucketName;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
@@ -109,5 +109,15 @@ public class FileServiceImpl implements FileService {
                 DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(), keyName);
         awsS3Client.deleteObject(deleteObjectRequest);
         log.info("Successfully deleted");
+    }
+
+    public byte[] downloadFile(String key) {
+        try {
+            S3Object object = awsS3Client.getObject(BucketName.AWS_BOOKS.getBucketName(), key);
+            S3ObjectInputStream objectContent = object.getObjectContent();
+            return IOUtils.toByteArray(objectContent);
+        } catch (AmazonServiceException | IOException e) {
+            throw new IllegalStateException("Failed to download the file", e);
+        }
     }
 }
