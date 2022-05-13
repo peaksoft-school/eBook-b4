@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.api.Vendor;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.aws.service.FileService;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class FileApi {
 
     private final FileService fileService;
 
+    @Operation(summary = "Upload files",description = "Upload files to aws")
     @PostMapping("/uploadFile/{bookId}")
     public Map<String, String> uploadAudioFile12(@RequestBody MultipartFile file1,
                                                  @RequestBody MultipartFile file2,
@@ -30,10 +32,17 @@ public class FileApi {
         return stringStringMap;
     }
 
+    @Operation(summary = "Delete files", description = "Delete files with key name")
     @DeleteMapping("/delete/{keyName}")
     public ResponseEntity<?> deleteFile(@PathVariable String keyName){
         fileService.deleteFile(keyName);
         return ResponseEntity.ok("File successfully deleted");
+    }
+
+    @Operation(summary = "Download file", description = "Download file with key name")
+    @GetMapping("/download/{keyName}")
+    public byte[] downloadFile(@PathVariable String keyName){
+        return fileService.downloadFile(keyName);
     }
     
 }
