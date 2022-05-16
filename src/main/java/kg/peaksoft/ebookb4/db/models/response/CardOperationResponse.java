@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Slf4j
@@ -94,7 +95,16 @@ public class CardOperationResponse {
 
                 user.getPlaceCounts().setCountOfBooksInTotal(count(bookListFromBasketOfClient));
                 user.getPlaceCounts().setDiscount(discount(bookListFromBasketOfClient));
-                user.getPlaceCounts().setSumAfterPromo(sumAfterPromo(bookListFromBasketOfClient, promoCode));
+                List<Promocode> allPromos = promocodeRepository.findAll();
+                for (Promocode promo: allPromos) {
+                if (!Objects.equals(promoCode, promo.getPromocode())){
+                user.getPlaceCounts().setSumAfterPromo(user.getPlaceCounts().getSumAfterPromo());
+                }else {
+                    log.info("else is work");
+                    user.getPlaceCounts().setSumAfterPromo(sumAfterPromo(bookListFromBasketOfClient, promoCode));
+                    System.out.println(sumAfterPromo(bookListFromBasketOfClient, promoCode));
+                }
+                }
                 user.getPlaceCounts().setSum(priseSum(bookListFromBasketOfClient));
                 user.getPlaceCounts().setTotal(total(bookListFromBasketOfClient));
                 bookRepository.save(bookListFromBasketOfClient.get(i));

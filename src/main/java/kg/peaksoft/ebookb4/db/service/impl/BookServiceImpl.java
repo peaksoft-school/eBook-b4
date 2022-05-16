@@ -68,10 +68,6 @@ public class BookServiceImpl implements BookService {
         book.setDateOfRegister(LocalDate.now());
         book.setEndOfTheNewTerm(LocalDate.now().plusDays(30));
 
-        User byEmail = userRepository.findByEmail(username).orElseThrow(() ->
-                new BadRequestException(
-                "Client with email = " + username + " does not exists"
-        ));
         book.setUser(user);
         FileInformation newFileInformation = createNewFileInformation();
         book.setFileInformation(newFileInformation);

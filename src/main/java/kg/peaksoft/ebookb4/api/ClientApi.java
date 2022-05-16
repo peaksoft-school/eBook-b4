@@ -70,7 +70,7 @@ public class ClientApi {
     }
 
 
-    @Operation(summary = "Compare the promo code", description = "Compare the promo code if it fits then the person gets a discount ")
+    @Operation(summary = "Get all sum with discount", description = "Get all sum with discount in cart")
     @GetMapping("/get-count-in-card")
     public ClientOperationDTO comparePromoCode( Authentication authentication) {
         return clientService.sumAfterPromo( authentication.getName());

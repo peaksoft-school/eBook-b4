@@ -39,7 +39,8 @@ import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
-    private final PromoRepo repo;
+
+    private final PromocodeRepository promoRepo;
     private final PasswordEncoder encoder;
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
@@ -49,9 +50,7 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRegisterMapper clientRegisterMapper;
     private final ClientOperationMapper clientOperationMapper;
     private final ClientOperationRepository clientOperationRepository;
-
     private final CardOperationResponse cardOperationResponse;
-
     private final PlaceCountRepository placeCountRepository;
 
     @Override
@@ -234,32 +233,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
-//    @Override
-//    public ClientOperationDTO sumAfterPromo(String promo, String name) {
-//        List<Book> books = bookRepository.findBasketByClientId(name);
-//        Double sum = 0.0;
-//        for (Book book : books) {
-//            if (book.getDiscountFromPromo() != null) {
-//                if (checkPromo(promo)) {
-//                    sum += (book.getPrice() * book.getDiscountFromPromo()) / 100;
-//                }else
-//                    log.info("Your promo code is not suitable");
-//            }
-//            continue;
-//        }
-//        ClientOperationDTO clientOperationDTO = clientOperationMapper.create(name);
-//
-//        Double total = clientOperationDTO.getTotal() - sum;
-//        Double discountPromo = clientOperationDTO.getDiscount() + sum;
-//
-//        clientOperationDTO.setTotal(total);
-//        clientOperationDTO.setDiscount(discountPromo);
-//
-//        return clientOperationDTO;
-//    }
-
-        return clientOperationDTO;
-    }
 
     @Override
     public List<BookResponse> getBooksFromBasket(String clientId) {
@@ -288,12 +261,12 @@ public class ClientServiceImpl implements ClientService {
                 if (book.getBookType().equals(BookType.PAPERBOOK)) {
                     book.getPaperBook().setNumberOfSelectedCopy(book.getPaperBook().getNumberOfSelected());
                 }
-                bookRepository.save(book);
+//                bookRepository.save(book);
             }
 //        }else {
 //            return ResponseEntity.ok("Your basked null");
 //        }
-        clientOperationRepository.save(clientOperations);
+//        clientOperationRepository.save(clientOperations);
         user.getBasket().clear();
         userRepository.save(user);
         return ResponseEntity.ok("Your order has been successfully placed!");
@@ -311,7 +284,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     public Boolean checkPromo(String promo) {
-        List<Promocode> promocode = repo.findAll();
+        List<Promocode> promocode = promoRepo.findAll();
         for (Promocode promocode1 : promocode) {
             if (promocode1.getPromocode().equals(promo)) {
                 if (promocode1.getIsActive().equals(true)) {
