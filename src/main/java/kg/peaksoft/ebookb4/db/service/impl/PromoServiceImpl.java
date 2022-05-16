@@ -29,7 +29,6 @@ public class PromoServiceImpl implements PromoService {
     private PromocodeRepository promoRepository;
     private UserRepository userRepository;
     private PromoMapper promoMapper;
-    private BookRepository bookRepository;
 
     @Override
     @Transactional
@@ -74,14 +73,14 @@ public class PromoServiceImpl implements PromoService {
             if (Period.between(i.getBeginningDay(), i.getEndDay()).getDays() < 0) {
                 log.info("Срок прошёл!");
                 i.setIsActive(false);
-                bookRepository.checkForPromos(i.getUser());
+                userRepository.checkForPromos(i.getUser());
             } else {
                 if (Period.between(LocalDate.now(), i.getBeginningDay()).getDays() <= 0) {
                     i.setIsActive(true);
                 }
                 log.info("Срок ещё не прошёл!");
                 if (i.getIsActive()) {
-                    bookRepository.givePromo(i.getUser(), i.getDiscount());
+                    userRepository.givePromo(i.getUser(), i.getDiscount());
                 }
             }
         }

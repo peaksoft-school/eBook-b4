@@ -34,18 +34,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.bookId = ?1 and b.requestStatus = ?2")
     Optional<Book> findBookByIdAndActive(Long id, RequestStatus requestStatus);
 
-    //change discountPromo to null if it is expired
-    @Transactional
-    @Modifying
-    @Query("update Book b set b.discountFromPromo = null where b.user = ?1")
-    void checkForPromos(User user);
-
-    //We give here a promo
-    @Transactional
-    @Modifying
-    @Query("update Book b set b.discountFromPromo = ?2 where b.user = ?1 and b.discount is null ")
-    void givePromo(User user, int discount);
-
     //Find all books of current vendor
     @Query("select b from Book b where b.user.email = ?1")
     List<Book> findBooksFromVendor(String username);
@@ -108,9 +96,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select count (b) from Book b where b.genre.name like %?1% and b.requestStatus = ?2")
     Integer getCountGenre(String genre, RequestStatus requestStatus);
 
-    @Query("select b.likedBooks from Book b")
-    List<Book> clientLikeBooks();
-
     @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
             "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyPutLike(Long bookId, Long userId);
@@ -134,6 +119,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price, b.fileInformation)" +
             " from Book b where b.operations.id > 0 and b.user.email = ?1 and b.user.role.name = ?2")
     List<BookResponse> getVendorBooksSold(String name, ERole role);
-
 
 }

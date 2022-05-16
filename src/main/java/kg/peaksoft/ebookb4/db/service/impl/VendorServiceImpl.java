@@ -34,7 +34,7 @@ public class VendorServiceImpl implements VendorService {
     public ResponseEntity<?> register(VendorRegisterDTO vendorDTO, Long number) {
 
         if (!vendorDTO.getPassword().equals(vendorDTO.getConfirmPassword())) {
-            throw new BadRequestException("Passwords are not the same !");
+            throw new BadRequestException("Passwords are not the same!");
         }
         if (userRepository.existsByEmail(vendorDTO.getEmail())) {
             return ResponseEntity

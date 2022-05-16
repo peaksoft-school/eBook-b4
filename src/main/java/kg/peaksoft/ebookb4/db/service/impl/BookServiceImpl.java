@@ -16,6 +16,7 @@ import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
 import kg.peaksoft.ebookb4.db.models.mappers.BookMapper;
 import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
+import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import kg.peaksoft.ebookb4.db.models.entity.AudioBook;
@@ -48,7 +49,7 @@ public class BookServiceImpl implements BookService {
     private final UserRepository userRepository;
     private final PromocodeRepository promoRepository;
     private final GenreRepository genreRepository;
-
+    private final PromoService promoService;
     private final AmazonS3Client awsS3Client;
 
     @Override
@@ -107,6 +108,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findByBookId(Long bookId) {
+        promoService.checkPromos();
         return repository.findById(bookId)
                 .orElseThrow(() -> {
                     log.error("Book with id = {} does not exists",bookId);
@@ -225,7 +227,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findBooksFromVendor(Integer offset, int pageSize, String username) {
-
+        promoService.checkPromos();
         List<Book> books = repository.findBooksFromVendor(username);
 
         log.info("founded {} accepted books", books.size());

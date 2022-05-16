@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.api.Vendor;
+package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -57,6 +57,7 @@ public class EBookB4Application {
 
         User c = new User();
         c.setEmail("client@gmail.com");
+        c.setFirstName("Client");
         c.setPassword(encoder.encode("client"));
         c.setRole(roleRepository.getById(1L));
         Basket basket1 = new Basket();
@@ -67,6 +68,7 @@ public class EBookB4Application {
 
         User v = new User();
         v.setEmail("vendor@gmail.com");
+        v.setFirstName("Vendor");
         v.setPassword(encoder.encode("vendor"));
         v.setRole(roleRepository.getById(2L));
         v.setDateOfRegistration(LocalDate.now());
@@ -74,6 +76,7 @@ public class EBookB4Application {
 
         User a = new User();
         a.setEmail("admin@gmail.com");
+        a.setFirstName("Admin");
         a.setPassword(encoder.encode("admin"));
         a.setRole(roleRepository.getById(3L));
         a.setDateOfRegistration(LocalDate.now());
