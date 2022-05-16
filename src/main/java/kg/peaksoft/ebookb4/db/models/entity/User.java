@@ -71,6 +71,10 @@ public class User {
     @OneToOne
     private Role role;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "place_id")
+    private PlaceCounts placeCounts;
+
     public User(String email, String password) {
         this.email = email;
         this.password = password;

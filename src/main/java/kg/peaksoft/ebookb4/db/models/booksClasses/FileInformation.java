@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.models.booksClasses;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -10,10 +11,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class FileInformation {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_seq")
-    @SequenceGenerator(name = "hibernate_seq", sequenceName = "audiobook_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "file_id")
     private Long fileId;
 

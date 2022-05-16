@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.service;
 
+import kg.peaksoft.ebookb4.db.models.booksClasses.FileInformation;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
@@ -33,7 +34,8 @@ public interface BookService {
     List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, String username,
                                             RequestStatus requestStatus);
 
-
     List<BookResponse> getBooksSold(String name, ERole role);
+
+    FileInformation createNewFileInformation();
 
 }
