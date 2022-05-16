@@ -42,6 +42,7 @@ public class BookGetServiceImpl implements BookGetService {
 
     @Override
     public List<Book> findBooksByName(String name, RequestStatus requestStatus) {
+        promoService.checkPromos();
         log.info("Find boos by name works");
         return bookRepository.findByName(name, requestStatus);
     }
@@ -131,19 +132,21 @@ public class BookGetServiceImpl implements BookGetService {
 
     @Override
     public List<BookResponse> getAllBooksRequests() {
+        promoService.checkPromos();
         log.info("Get all books request works");
         return bookRepository.findBooksInProgress(INPROGRESS);
     }
 
     @Override
     public List<BookResponse> getAllAcceptedBooks() {
+        promoService.checkPromos();
         log.info("accepted books size =s%" + bookRepository.findBooksAccepted(ACCEPTED).size());
         return bookRepository.findBooksAccepted(ACCEPTED);
     }
 
     @Override
     public List<GenreRequest> getCountGenre() {
-
+        promoService.checkPromos();
         List<GenreRequest> genreRequest = new ArrayList<>();
         genreRequest.add(new GenreRequest(genreRepository.getById(1L).getName()));
         genreRequest.add(new GenreRequest(genreRepository.getById(2L).getName()));
@@ -166,11 +169,13 @@ public class BookGetServiceImpl implements BookGetService {
 
     @Override
     public List<Book> booksIsBestseller() {
+        promoService.checkPromos();
         return bookRepository.findAllByIsBestSeller();
     }
 
     @Override
     public List<Book> BooksNovelties() {
+        promoService.checkPromos();
         List<Book> books = bookRepository.findAll();
         for (Book book : books) {
             if (Period.between(book.getDateOfRegister(), book.getEndOfTheNewTerm()).getDays() > 0) {

@@ -1,29 +1,56 @@
-package kg.peaksoft.ebookb4.api.Vendor;
+package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
+import kg.peaksoft.ebookb4.db.service.PromoService;
+import kg.peaksoft.ebookb4.db.service.VendorService;
+import kg.peaksoft.ebookb4.db.models.request.PromoRequest;
+import kg.peaksoft.ebookb4.db.models.dto.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.db.models.dto.VendorUpdateDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/api/vendor/books")
+@RequestMapping("/api/vendor")
 @AllArgsConstructor
 @PreAuthorize("hasRole('ROLE_VENDOR')")
-@Tag(name = "Books vendor",description = "crud operations ...")
-public class BookVendorApi {
+@Tag(name = "Vendor",description = "Vendor accessible apis")
+public class VendorApi {
 
-    private final BookService bookService;
+    private PromoService promoService;
+    private VendorService vendorService;
+    private BookService bookService;
+
+    @Operation(summary = "Promo", description = "Vendor creates a promo")
+    @PostMapping("/promo")
+    public ResponseEntity<?> createPromo(@RequestBody PromoRequest promoRequest, Authentication authentication){
+        return promoService.createPromo(promoRequest, authentication.getName());
+    }
+
+    @Operation(summary = "Vendor profile", description = "All accessible data of client")
+    @GetMapping("/profile")
+    public VendorRegisterDTO getVendorDetails(Authentication authentication){
+        return vendorService.getVendorDetails(authentication.getName());
+    }
+
+    @Operation(summary = "Update vendor", description = "Updating vendor profile")
+    @PatchMapping("/profile/settings")
+    public ResponseEntity<?> updateVendor(@RequestBody VendorUpdateDTO newVendorDTO, Authentication authentication){
+        return vendorService.update(newVendorDTO, authentication.getName());
+    }
+
 
     @Operation(summary = "Save book",description = "Adding a new book")
     @PostMapping("/new-book")
@@ -38,24 +65,24 @@ public class BookVendorApi {
     }
 
     @Operation(summary = "Update book",description = "update a book")
-    @PatchMapping("/editing/{id}")
+    @PatchMapping("/editing/{bookId}")
     public ResponseEntity<?> update(@RequestBody BookDTO request,
-                                    @PathVariable Long id){
+                                    @PathVariable Long  bookId){
         Long genreId = request.getGenreId();
-        return bookService.update(request, id ,genreId);
+        return bookService.update(request, bookId ,genreId);
     }
 
     @Operation(summary = "Get book",
             description = "Get book by id for vendor")
-    @GetMapping("/book/{id}")
-    public Book getBookById(@PathVariable Long id){
-        return bookService.findByBookId(id);
+    @GetMapping("/book/{bookId}")
+    public Book getBookById(@PathVariable Long bookId){
+        return bookService.findByBookId(bookId);
     }
 
     @Operation(summary = "Get all books for vendor",
             description = "Get all books by token")
     @GetMapping("/books/{offset}")
-    public List<Book> getBooksOfVendor(@PathVariable Integer offset,Authentication authentication){
+    public List<Book> getBooksOfVendor(@PathVariable Integer offset, Authentication authentication){
         return bookService.findBooksFromVendor(--offset, 12, authentication.getName());
     }
 
@@ -80,7 +107,7 @@ public class BookVendorApi {
     }
 
     @Operation(summary = "Get sold books",description = "Get All Books vendor solds")
-    @GetMapping("/sold")
+    @GetMapping("/sold-books")
     public List<BookResponse> bookSold(Authentication authentication){
         return bookService.getBooksSold(authentication.getName(), ERole.ROLE_VENDOR);
     }

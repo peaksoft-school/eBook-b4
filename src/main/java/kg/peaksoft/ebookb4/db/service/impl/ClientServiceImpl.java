@@ -38,7 +38,7 @@ import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
-    private final PromoRepo repo;
+    private final PromocodeRepository repo;
     private final PasswordEncoder encoder;
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
@@ -48,7 +48,6 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRegisterMapper clientRegisterMapper;
     private final ClientOperationMapper clientOperationMapper;
     private final ClientOperationRepository clientOperationRepository;
-
     private final CardOperationResponse cardOperationResponse;
 
     @Override

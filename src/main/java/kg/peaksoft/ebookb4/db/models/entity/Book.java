@@ -57,8 +57,6 @@ public class Book {
     private Boolean isNew = true;
     private Integer discountFromPromo;
 
-
-
     @ManyToMany(cascade = CascadeType.REMOVE)
     @JsonIgnore
     @JoinTable(
@@ -79,6 +77,10 @@ public class Book {
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "file_id")
+    private FileInformation fileInformation;
 
     @OneToMany(mappedBy = "book")
     private List<FileSources> images;
@@ -102,10 +104,6 @@ public class Book {
     @JsonIgnore
     @JoinColumn(name = "operation_id")
     private ClientOperations operations;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "file_id")
-    private FileInformation fileInformation;
 
     @Override
     public boolean equals(Object o) {

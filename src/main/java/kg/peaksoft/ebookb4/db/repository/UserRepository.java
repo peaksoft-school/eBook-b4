@@ -5,9 +5,11 @@ import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,4 +39,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price, b.fileInformation)" +
           "from Book b where b.operations.user.email = ?1")
   List<BookResponse> getBooksInPurchased(String name);
+
+  //change discountPromo to null if it is expired
+  @Transactional
+  @Modifying
+  @Query("update Book b set b.discountFromPromo = null where b.user = ?1")
+  void checkForPromos(User user);
+
+  //We give here a promo
+  @Transactional
+  @Modifying
+  @Query("update Book b set b.discountFromPromo = ?2 where b.user = ?1 and b.discount is null ")
+  void givePromo(User user, int discount);
+
 }
