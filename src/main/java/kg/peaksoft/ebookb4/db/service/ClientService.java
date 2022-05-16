@@ -30,11 +30,12 @@ public interface ClientService {
 
     ResponseEntity<?> cleanBasketOfClientByEmail(String clientEmail);
 
-     ClientOperationDTO sumAfterPromo(String promoCode,String id);
+     ClientOperationDTO sumAfterPromo(String name);
+
 
     ResponseEntity<?> placeOrder(String name);
 
     List<BookResponse> getBooksInPurchased(String name);
 
-    List<CardResponse> plusOrMinus(String name, String plusOrMinus, Long bookId);
+    List<CardResponse> plusOrMinus(String name, String plusOrMinus, Long bookId, String promoCode);
 }

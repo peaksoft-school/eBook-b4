@@ -23,6 +23,4 @@ public class AudioBook {
     private LocalTime duration;
 
     private String fragment;
-
-    private String urlOfBookFromCloud;
 }

@@ -55,16 +55,11 @@ public class BookClientApi {
         return clientService.getBooksFromBasket(authentication.getName());
     }
 
-//    @Operation(summary = "Get all counts", description = "Get count of books, discount, sum after we get total")
-//    @GetMapping("/count")
-//    public ClientOperationDTO getCountsAlsoTotal(Authentication id){
-//        return clientService.getBooksInBasket(id.getName());
-//    }
 
     @Operation(summary = "Compare the promo code", description = "Compare the promo code if it fits then the person gets a discount ")
-    @PostMapping("/{promoCode}")
-    public ClientOperationDTO comparePromoCode(@PathVariable String promoCode, Authentication authentication) {
-        return clientService.sumAfterPromo(promoCode, authentication.getName());
+    @GetMapping("/get-count-in-card")
+    public ClientOperationDTO comparePromoCode( Authentication authentication) {
+        return clientService.sumAfterPromo( authentication.getName());
     }
 
     @Operation(summary = "Place an order", description = "Place an order for all books in the basket")
@@ -85,10 +80,11 @@ public class BookClientApi {
     }
 
     @Operation(summary = "Plus or minus paper book", description = "Plus or minus paper books when ordering with paper book id ")
-    @GetMapping("/plus-or-minus/{plsOrMns}/{bookId}")
+    @GetMapping("/plus-or-minus/{plsOrMns}/{bookId}/{promoCode}")
     public List<CardResponse> plusOrMinusPaperBook(Authentication authentication,
                                                    @PathVariable String plsOrMns,
-                                                   @PathVariable Long bookId) {
-        return clientService.plusOrMinus(authentication.getName(), plsOrMns, bookId);
+                                                   @PathVariable Long bookId,
+                                                   @PathVariable String promoCode) {
+        return clientService.plusOrMinus(authentication.getName(), plsOrMns, bookId, promoCode);
     }
 }

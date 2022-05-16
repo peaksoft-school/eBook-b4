@@ -3,6 +3,7 @@ package kg.peaksoft.ebookb4;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.entity.Genre;
+import kg.peaksoft.ebookb4.db.models.entity.PlaceCounts;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.entity.Role;
 import kg.peaksoft.ebookb4.db.models.entity.User;
@@ -59,6 +60,8 @@ public class EBookB4Application {
         c.setEmail("client@gmail.com");
         c.setPassword(encoder.encode("client"));
         c.setRole(roleRepository.getById(1L));
+        PlaceCounts placeCounts = new PlaceCounts(null, 0.0,0.0,0.0,0,0,0, 0.0, 0.0, 0.0, 0.0);
+        c.setPlaceCounts(placeCounts);
         Basket basket1 = new Basket();
         basket1.setUser(c);
         c.setBasket(basket1);
@@ -89,6 +92,24 @@ public class EBookB4Application {
         Genre biography=new Genre(null,"BIOGRAPHY");
         Genre poetry =new Genre(null,"POETRY");
         Genre horror=new Genre(null,"HORROR");
+        Genre comics = new Genre(null, "COMICS");
+        Genre manga = new Genre(null,"MANGA");
+        Genre thriller = new Genre(null, "THRILLER");
+        Genre prose = new Genre(null, "PROSE");
+        Genre businessLiterature = new Genre(null,"BUSINESS LITERATURE");
+        Genre psychology = new Genre(null, "PSYCHOLOGY");
+        Genre art = new Genre(null, "ART");
+        Genre culture = new Genre(null, "CULTURE");
+        Genre computerLiterature = new Genre(null, "COMPUTER LITERATURE");
+        Genre history = new Genre(null, "HISTORY");
+        Genre society = new Genre(null, "SOCIETY");
+        Genre health = new Genre(null, "HEALTH");
+        Genre schoolchildren = new Genre(null, "SCHOOLCHILDREN");
+        Genre folklore = new Genre(null, "FOLKLORE");
+        Genre hobby = new Genre(null, "HOBBY");
+        Genre humor = new Genre(null, "HUMOR");
+        Genre technic = new Genre(null, "TECHNIC");
+
 
         genreRepository.save(journal);
         genreRepository.save(romance);
@@ -100,8 +121,24 @@ public class EBookB4Application {
         genreRepository.save(biography);
         genreRepository.save(poetry);
         genreRepository.save(horror);
+        genreRepository.save(comics);
+        genreRepository.save(manga);
+        genreRepository.save(thriller);
+        genreRepository.save(prose);
+        genreRepository.save(businessLiterature);
+        genreRepository.save(psychology);
+        genreRepository.save(art);
+        genreRepository.save(culture);
+        genreRepository.save(computerLiterature);
+        genreRepository.save(history);
+        genreRepository.save(society);
+        genreRepository.save(health);
+        genreRepository.save(schoolchildren);
+        genreRepository.save(folklore);
+        genreRepository.save(hobby);
+        genreRepository.save(humor);
+        genreRepository.save(technic);
 
-        System.out.println(genreRepository.findAll());
     }
 
 }

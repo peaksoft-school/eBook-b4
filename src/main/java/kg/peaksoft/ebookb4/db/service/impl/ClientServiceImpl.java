@@ -7,6 +7,7 @@ import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
+import kg.peaksoft.ebookb4.db.models.entity.PlaceCounts;
 import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.response.CardOperationResponse;
@@ -51,6 +52,8 @@ public class ClientServiceImpl implements ClientService {
 
     private final CardOperationResponse cardOperationResponse;
 
+    private final PlaceCountRepository placeCountRepository;
+
     @Override
     public ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number) {
         //checking if passwords are the same or not
@@ -78,6 +81,9 @@ public class ClientServiceImpl implements ClientService {
         Basket basket1 = new Basket();
         basket1.setUser(user);
         user.setBasket(basket1);
+
+        PlaceCounts newPlaceCounts = createNewPLaceCount();
+        user.setPlaceCounts(newPlaceCounts);
 
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse(
@@ -202,28 +208,56 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientOperationDTO sumAfterPromo(String promo, String name) {
-        List<Book> books = bookRepository.findBasketByClientId(name);
-        Double sum = 0.0;
-        for (Book book : books) {
-            if (book.getDiscountFromPromo() != null) {
-                if (checkPromo(promo)) {
-                    sum += (book.getPrice() * book.getDiscountFromPromo()) / 100;
-                }else
-                    log.info("Your promo code is not suitable");
-            }
-            continue;
-        }
-        ClientOperationDTO clientOperationDTO = clientOperationMapper.create(name);
+    public ClientOperationDTO sumAfterPromo(String name) {
+        User user = userRepository.findByEmail(name)
+                .orElseThrow(() -> new BadRequestException(
+                        "Client with email = " + name + " does not exists"
+                ));
 
-        Double total = clientOperationDTO.getTotal() - sum;
-        Double discountPromo = clientOperationDTO.getDiscount() + sum;
+        Double sum = user.getPlaceCounts().getSum();
+        Double sumAfterPromo = user.getPlaceCounts().getSumAfterPromo();
+        int countOfBooksInTotal = user.getPlaceCounts().getCountOfBooksInTotal();
+        Double total = user.getPlaceCounts().getTotal();
+        Double discount = user.getPlaceCounts().getDiscount();
+        Double sumPB = user.getPlaceCounts().getSumPB();
+        Double sumAfterPromoPB = user.getPlaceCounts().getSumAfterPromoPB();
+        int countOfPaperBookPB = user.getPlaceCounts().getCountOfPaperBookPB();
+        Double totalPB = user.getPlaceCounts().getTotalPB();
+        Double discountPB = user.getPlaceCounts().getDiscountPB();
 
-        clientOperationDTO.setTotal(total);
-        clientOperationDTO.setDiscount(discountPromo);
-
-        return clientOperationDTO;
+        return clientOperationMapper.build((countOfBooksInTotal+countOfPaperBookPB), (discount+discountPB + sumAfterPromo + sumAfterPromoPB) , (sum + sumPB), (total+totalPB - sumAfterPromo - sumAfterPromoPB));
     }
+
+    public PlaceCounts createNewPLaceCount(){
+        PlaceCounts placeCounts = new PlaceCounts(null, 0.0,0.0,0.0,0,0,0, 0.0, 0.0, 0.0, 0.0);
+        return placeCountRepository.save(placeCounts);
+    }
+
+
+//    @Override
+//    public ClientOperationDTO sumAfterPromo(String promo, String name) {
+//        List<Book> books = bookRepository.findBasketByClientId(name);
+//        Double sum = 0.0;
+//        for (Book book : books) {
+//            if (book.getDiscountFromPromo() != null) {
+//                if (checkPromo(promo)) {
+//                    sum += (book.getPrice() * book.getDiscountFromPromo()) / 100;
+//                }else
+//                    log.info("Your promo code is not suitable");
+//            }
+//            continue;
+//        }
+//        ClientOperationDTO clientOperationDTO = clientOperationMapper.create(name);
+//
+//        Double total = clientOperationDTO.getTotal() - sum;
+//        Double discountPromo = clientOperationDTO.getDiscount() + sum;
+//
+//        clientOperationDTO.setTotal(total);
+//        clientOperationDTO.setDiscount(discountPromo);
+//
+//        return clientOperationDTO;
+//    }
+
 
     @Override
     public List<BookResponse> getBooksFromBasket(String clientId) {
@@ -285,12 +319,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<CardResponse> plusOrMinus(String name, String plusOrMinus, Long bookId) {
+    public List<CardResponse> plusOrMinus(String name, String plusOrMinus, Long bookId, String promoCode) {
         List<CardResponse> cardResponses = bookRepository.findBasketByClientId(name)
                 .stream().map(book -> modelMapper.map(
                         book, CardResponse.class))
                 .map(BookResponse -> modelMapper.map(BookResponse,
                         CardResponse.class)).collect(Collectors.toList());
-        return cardOperationResponse.create(name, cardResponses, plusOrMinus, bookId);
+        return cardOperationResponse.create(name, cardResponses, plusOrMinus, bookId, promoCode);
     }
+
 }

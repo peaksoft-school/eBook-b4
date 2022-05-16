@@ -155,6 +155,23 @@ public class BookGetServiceImpl implements BookGetService {
         genreRequest.add(new GenreRequest(genreRepository.getById(8L).getName()));
         genreRequest.add(new GenreRequest(genreRepository.getById(9L).getName()));
         genreRequest.add(new GenreRequest(genreRepository.getById(10L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(11L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(12L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(13L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(14L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(15L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(16L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(17L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(18L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(19L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(20L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(21L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(22L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(23L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(24L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(25L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(26L).getName()));
+        genreRequest.add(new GenreRequest(genreRepository.getById(27L).getName()));
 
         for (GenreRequest request : genreRequest) {
             request.setCount(bookRepository.getCountGenre(request.getGenreName(), ACCEPTED));
