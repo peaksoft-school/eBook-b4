@@ -11,6 +11,8 @@ public interface FileService {
                                              MultipartFile file3,
                                              Long bookId);
 
-    void deleteFile(String keyName);;
+    void deleteFile(String keyName);
+
+    byte[] downloadFile(String key);
 
 }
