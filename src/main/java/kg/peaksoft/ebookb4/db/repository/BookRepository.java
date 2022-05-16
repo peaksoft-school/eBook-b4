@@ -96,9 +96,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select count (b) from Book b where b.genre.name like %?1% and b.requestStatus = ?2")
     Integer getCountGenre(String genre, RequestStatus requestStatus);
 
-    @Query("select b.likedBooks from Book b")
-    List<Book> clientLikeBooks();
-
     @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
             "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyPutLike(Long bookId, Long userId);

@@ -22,9 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("select s from User s where s.email = ?1")
   Optional<User> getUser(String username);
 
-  @Query("select s from User s where s.email = ?1")
-  User findByUserName(String username);
-
   //fin all vendors / admin panel
   @Query("select u from User u where u.role.name=?1")
   List<User> findAllVendors(ERole role);

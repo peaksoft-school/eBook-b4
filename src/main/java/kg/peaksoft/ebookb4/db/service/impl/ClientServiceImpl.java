@@ -172,7 +172,7 @@ public class ClientServiceImpl implements ClientService {
         User user = userRepository.getUser(email).orElseThrow(() ->
                 new BadRequestException(String.format("User with id %s has not been found!", email)));
         Book book = bookRepository.getById(id);
-        if(book.getBookType().equals(BookType.PAPERBOOK)){
+        if (book.getBookType().equals(BookType.PAPERBOOK)) {
             book.getPaperBook().setNumberOfSelected(book.getPaperBook().getNumberOfSelectedCopy());
             bookRepository.save(book);
         }
@@ -190,7 +190,7 @@ public class ClientServiceImpl implements ClientService {
                 ));
         List<Book> basketByClientId = bookRepository.findBasketByClientId(email);
         for (Book book : basketByClientId) {
-            if (book.getBookType().equals(BookType.PAPERBOOK)){
+            if (book.getBookType().equals(BookType.PAPERBOOK)) {
                 book.getPaperBook().setNumberOfSelected(book.getPaperBook().getNumberOfSelectedCopy());
                 bookRepository.save(book);
             }
@@ -208,7 +208,7 @@ public class ClientServiceImpl implements ClientService {
             if (book.getDiscountFromPromo() != null) {
                 if (checkPromo(promo)) {
                     sum += (book.getPrice() * book.getDiscountFromPromo()) / 100;
-                }else
+                } else
                     log.info("Your promo code is not suitable");
             }
             continue;
@@ -242,16 +242,20 @@ public class ClientServiceImpl implements ClientService {
                 .orElseThrow(() -> new BadRequestException(
                         "user with email ={} does not exists "
                 ));
-        clientOperations.setBoughtBooks(all);
-        clientOperations.setUser(user);
+//        if (all != null) {
+            clientOperations.setBoughtBooks(all);
+            clientOperations.setUser(user);
 
-        for (Book book : all) {
-            book.setOperations(clientOperations);
-            if(book.getBookType().equals(BookType.PAPERBOOK)){
-                book.getPaperBook().setNumberOfSelectedCopy(book.getPaperBook().getNumberOfSelected());
+            for (Book book : all) {
+                book.setOperations(clientOperations);
+                if (book.getBookType().equals(BookType.PAPERBOOK)) {
+                    book.getPaperBook().setNumberOfSelectedCopy(book.getPaperBook().getNumberOfSelected());
+                }
                 bookRepository.save(book);
             }
-        }
+//        }else {
+//            return ResponseEntity.ok("Your basked null");
+//        }
         clientOperationRepository.save(clientOperations);
         user.getBasket().clear();
         userRepository.save(user);

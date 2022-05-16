@@ -14,11 +14,6 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class VendorUpdateDTO {
-//    @NotBlank
-//    @Size(max = 50)
-//    @Email
-//    private String email;
-//    private Long id;
 
     private String firstName;
 

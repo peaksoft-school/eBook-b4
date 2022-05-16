@@ -165,7 +165,13 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public ResponseEntity<?> getBookById(Long bookId) {
-        Book book = bookRepository.findBookInProgress(bookId, RequestStatus.INPROGRESS)
+
+        RequestStatus requestStatus = null;
+
+        assert false;
+
+
+        Book book = bookRepository.findBookInProgress(bookId,requestStatus)
                 .orElseThrow(() -> {
                     log.error("Book with id ={} does not exists", bookId);
                     throw new BadRequestException(
@@ -173,7 +179,10 @@ public class AdminServiceImpl implements AdminService {
                     );
                 });
         book.setAdminWatch(true);
+
+
         log.info("Get book by id works");
+
         return ResponseEntity.ok(String.format("Book with id %s has been watched by admin!", bookId));
     }
 
