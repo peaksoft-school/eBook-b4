@@ -82,8 +82,8 @@ public class Book {
     @JoinColumn(name = "file_id")
     private FileInformation fileInformation;
 
-    @OneToMany(mappedBy = "book")
-    private List<FileSources> images;
+//    @OneToMany(mappedBy = "book")
+//    private List<FileSources> images;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "audiobook_id")
@@ -110,12 +110,12 @@ public class Book {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return baskets == book.baskets && likes == book.likes && Objects.equals(bookId, book.bookId) && Objects.equals(title, book.title) && Objects.equals(authorFullName, book.authorFullName) && Objects.equals(aboutBook, book.aboutBook) && Objects.equals(publishingHouse, book.publishingHouse) && Objects.equals(yearOfIssue, book.yearOfIssue) && Objects.equals(price, book.price) && Objects.equals(isBestSeller, book.isBestSeller) && language == book.language && bookType == book.bookType && requestStatus == book.requestStatus && Objects.equals(adminWatch, book.adminWatch) && Objects.equals(discount, book.discount) && Objects.equals(dateOfRegister, book.dateOfRegister) && Objects.equals(endOfTheNewTerm, book.endOfTheNewTerm) && Objects.equals(isNew, book.isNew) && Objects.equals(discountFromPromo, book.discountFromPromo)  && Objects.equals(basket, book.basket) && Objects.equals(likedBooks, book.likedBooks) && Objects.equals(user, book.user) && Objects.equals(images, book.images) && Objects.equals(audioBook, book.audioBook) && Objects.equals(electronicBook, book.electronicBook) && Objects.equals(paperBook, book.paperBook) && Objects.equals(genre, book.genre);
+        return baskets == book.baskets && likes == book.likes && Objects.equals(bookId, book.bookId) && Objects.equals(title, book.title) && Objects.equals(authorFullName, book.authorFullName) && Objects.equals(aboutBook, book.aboutBook) && Objects.equals(publishingHouse, book.publishingHouse) && Objects.equals(yearOfIssue, book.yearOfIssue) && Objects.equals(price, book.price) && Objects.equals(isBestSeller, book.isBestSeller) && language == book.language && bookType == book.bookType && requestStatus == book.requestStatus && Objects.equals(adminWatch, book.adminWatch) && Objects.equals(discount, book.discount) && Objects.equals(dateOfRegister, book.dateOfRegister) && Objects.equals(endOfTheNewTerm, book.endOfTheNewTerm) && Objects.equals(isNew, book.isNew) && Objects.equals(discountFromPromo, book.discountFromPromo)  && Objects.equals(basket, book.basket) && Objects.equals(likedBooks, book.likedBooks) && Objects.equals(user, book.user) && Objects.equals(audioBook, book.audioBook) && Objects.equals(electronicBook, book.electronicBook) && Objects.equals(paperBook, book.paperBook) && Objects.equals(genre, book.genre);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookId, title, authorFullName, aboutBook, publishingHouse, yearOfIssue, price, isBestSeller, language, bookType, requestStatus, adminWatch, baskets, likes, discount, dateOfRegister, endOfTheNewTerm, isNew, discountFromPromo, basket, likedBooks, user, images, audioBook, electronicBook, paperBook, genre);
+        return Objects.hash(bookId, title, authorFullName, aboutBook, publishingHouse, yearOfIssue, price, isBestSeller, language, bookType, requestStatus, adminWatch, baskets, likes, discount, dateOfRegister, endOfTheNewTerm, isNew, discountFromPromo, basket, likedBooks, user, audioBook, electronicBook, paperBook, genre);
     }
 
     @Override
