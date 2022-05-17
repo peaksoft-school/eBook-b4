@@ -252,21 +252,20 @@ public class ClientServiceImpl implements ClientService {
                 .orElseThrow(() -> new BadRequestException(
                         "user with email ={} does not exists "
                 ));
-//        if (all != null) {
+        if (all.size() == 0) {
+            return ResponseEntity.ok("Your basket is empty");
+        }
             clientOperations.setBoughtBooks(all);
             clientOperations.setUser(user);
 
             for (Book book : all) {
-                book.setOperations(clientOperations);
                 if (book.getBookType().equals(BookType.PAPERBOOK)) {
-                    book.getPaperBook().setNumberOfSelectedCopy(book.getPaperBook().getNumberOfSelected());
-                }
-//                bookRepository.save(book);
+                    Integer numberOfSelected = book.getPaperBook().getNumberOfSelected();
+                    book.getPaperBook().setNumberOfSelectedCopy(numberOfSelected);
+                }else continue;
             }
-//        }else {
-//            return ResponseEntity.ok("Your basked null");
-//        }
-//        clientOperationRepository.save(clientOperations);
+
+        clientOperationRepository.save(clientOperations);
         user.getBasket().clear();
         userRepository.save(user);
         return ResponseEntity.ok("Your order has been successfully placed!");

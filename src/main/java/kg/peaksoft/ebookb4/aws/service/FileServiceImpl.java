@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
 
@@ -22,6 +23,7 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 @Slf4j
+@Transactional
 public class FileServiceImpl implements FileService {
     private AmazonS3Client awsS3Client;
 
@@ -85,26 +87,26 @@ public class FileServiceImpl implements FileService {
 
         Book bookById = bookRepository.getById(bookId);
 
-//        if(!bookById.getFileInformation().getFirstPhoto().equals(awsS3Client.getResourceUrl("test-b4-ebook", key1))){
-//            if (bookById.getFileInformation().getKeyOfFirstPhoto() == null){
-//                log.info("it's new first photo");
-//            }else{
-//                deleteFile(bookById.getFileInformation().getKeyOfFirstPhoto());
-//            }
-//            bookById.getFileInformation().setFirstPhoto(awsS3Client.getResourceUrl("test-b4-ebook", key1));
-//        }if (!bookById.getFileInformation().getSecondPhoto().equals(awsS3Client.getResourceUrl("test-b4-ebook", key2))){
-//            if (bookById.getFileInformation().getKeyOfSecondPhoto() == null){
-//                log.info("it's new second photo");
-//            }else {
-//                deleteFile(bookById.getFileInformation().getKeyOfSecondPhoto());
-//            }
-//        }if (!bookById.getFileInformation().getBookFile().equals(awsS3Client.getResourceUrl("test-b4-ebook", key3))){
-//            if (bookById.getFileInformation().getKeyOfBookFile() == null){
-//                log.info("it's new book file");
-//            }else {
-//                deleteFile(bookById.getFileInformation().getKeyOfBookFile());
-//            }
-//        }
+        if(!bookById.getFileInformation().getFirstPhoto().equals(awsS3Client.getResourceUrl("test-b4-ebook", key1))){
+            if (bookById.getFileInformation().getKeyOfFirstPhoto() == null){
+                log.info("it's new first photo");
+            }else{
+                deleteFile(bookById.getFileInformation().getKeyOfFirstPhoto());
+            }
+            bookById.getFileInformation().setFirstPhoto(awsS3Client.getResourceUrl("test-b4-ebook", key1));
+        }if (!bookById.getFileInformation().getSecondPhoto().equals(awsS3Client.getResourceUrl("test-b4-ebook", key2))){
+            if (bookById.getFileInformation().getKeyOfSecondPhoto() == null){
+                log.info("it's new second photo");
+            }else {
+                deleteFile(bookById.getFileInformation().getKeyOfSecondPhoto());
+            }
+        }if (!bookById.getFileInformation().getBookFile().equals(awsS3Client.getResourceUrl("test-b4-ebook", key3))){
+            if (bookById.getFileInformation().getKeyOfBookFile() == null){
+                log.info("it's new book file");
+            }else {
+                deleteFile(bookById.getFileInformation().getKeyOfBookFile());
+            }
+        }
 
         bookById.getFileInformation().setKeyOfFirstPhoto(key1);
         bookById.getFileInformation().setKeyOfSecondPhoto(key2);
