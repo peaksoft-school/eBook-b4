@@ -26,7 +26,7 @@ public class ClientOperations {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "operations")
+    @ManyToMany(mappedBy = "operations")
     private List<Book> boughtBooks;
 
 

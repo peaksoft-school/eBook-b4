@@ -100,10 +100,9 @@ public class Book {
     @ManyToOne(fetch = FetchType.EAGER)
     private Genre genre;
 
-    @ManyToOne()
+    @ManyToMany()
     @JsonIgnore
-    @JoinColumn(name = "operation_id")
-    private ClientOperations operations;
+    private List<ClientOperations> operations;
 
     @Override
     public boolean equals(Object o) {

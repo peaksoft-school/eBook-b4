@@ -156,7 +156,9 @@ public class AdminServiceImpl implements AdminService {
                     );
                 });
         book.setRequestStatus(REFUSED);
+
         // TODO: 24.04.2022  sand massage to gmail
+
         log.info("admin refuse book request");
         return ResponseEntity.ok().body(
                 refuseBookRequest.getReason());

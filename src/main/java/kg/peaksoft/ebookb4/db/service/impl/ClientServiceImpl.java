@@ -252,9 +252,11 @@ public class ClientServiceImpl implements ClientService {
                 .orElseThrow(() -> new BadRequestException(
                         "user with email ={} does not exists "
                 ));
+
         if (all.size() == 0) {
             return ResponseEntity.ok("Your basket is empty");
         }
+
             clientOperations.setBoughtBooks(all);
             clientOperations.setUser(user);
 
