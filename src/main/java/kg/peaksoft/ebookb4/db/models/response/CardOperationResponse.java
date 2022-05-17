@@ -1,21 +1,20 @@
 package kg.peaksoft.ebookb4.db.models.response;
 
+import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
+import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
+import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
+import kg.peaksoft.ebookb4.db.repository.UserRepository;
+import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
-/**
- * 1)Написал логику в котором если указывать 0 то выйдут сумма вся только из EBOOK,AUDIOBOOK
- * 2)Если дать ID PAPERBOOK он вычислит и выдаст всю сумму дополнительно с EBOOK,AUDIOBOOK
- * 3)сегодня поговорил с фронтендом они сказали что данные сами сохранят и смогут объеденить,
- * Если они скажут по другому сделать есть идея разделить все чтоб выдавал данные без участия 2-блок
- * Это остается до разговора с фронтендом E-Book. Версия вторая готова, если захотите перейти на версию 1 уберите коментарии в методе create
- **/
 
 @Slf4j
 @Component
@@ -23,7 +22,15 @@ import java.util.List;
 public class CardOperationResponse {
     private BookRepository bookRepository;
 
-    public List<CardResponse> create(String name, List<CardResponse> cardResponseList, String plusOrMinus, Long bookId) {
+    private UserRepository userRepository;
+
+    private PromocodeRepository promocodeRepository;
+
+    public List<CardResponse> create(String name, List<CardResponse> cardResponseList, String plusOrMinus, Long bookId, String promoCode) {
+        User user = userRepository.findByEmail(name)
+                .orElseThrow(() -> new BadRequestException(
+                        "Client with email = " + name + " does not exists"
+                ));
         List<Book> bookListFromBasketOfClient = bookRepository.findBasketByClientId(name);
         for (int i = 0; i < cardResponseList.size(); i++) {
             cardResponseList.get(i).setBookId(bookListFromBasketOfClient.get(i).getBookId());
@@ -33,20 +40,30 @@ public class CardOperationResponse {
             cardResponseList.get(i).setPublishingHouse(bookListFromBasketOfClient.get(i).getPublishingHouse());
             cardResponseList.get(i).setYearOfIssue(bookListFromBasketOfClient.get(i).getYearOfIssue());
             cardResponseList.get(i).setPrice(bookListFromBasketOfClient.get(i).getPrice());
+            if (bookListFromBasketOfClient.get(i).getDiscount() == null) {
+                cardResponseList.get(i).setSumAfterDiscount(bookListFromBasketOfClient.get(i).getPrice() - (bookListFromBasketOfClient.get(i).getDiscountFromPromo() * bookListFromBasketOfClient.get(i).getPrice()) / 100);
+            } else if (bookListFromBasketOfClient.get(i).getDiscountFromPromo() == null) {
+                cardResponseList.get(i).setSumAfterDiscount(bookListFromBasketOfClient.get(i).getPrice() - (bookListFromBasketOfClient.get(i).getDiscount() * bookListFromBasketOfClient.get(i).getPrice()) / 100);
+            } else cardResponseList.get(i).setSumAfterDiscount(null);
+            cardResponseList.get(i).setDiscount(bookListFromBasketOfClient.get(i).getDiscount());
+            cardResponseList.get(i).setPromoDiscount(bookListFromBasketOfClient.get(i).getDiscountFromPromo());
 
             if (bookListFromBasketOfClient.get(i).getBookType().equals(BookType.PAPERBOOK) && bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelected() > 0) {
                 if (bookListFromBasketOfClient.get(i).getBookId().equals(bookId)) {
                     if (plusOrMinus.equals("plus")) {
-                        if (bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelected() > 1) {
+                        if (bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelected() >= 0) {
                             Integer numberOfSelectedCopy = bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelectedCopy();
-                            /*Integer count = count(bookListFromBasketOfClient);*/
                             int minus = minus(bookId);
                             int i1 = numberOfSelectedCopy - minus;
                             cardResponseList.get(i).setCountOfPaperBook(i1);
-                            cardResponseList.get(i).setCountOfBooksInTotal(/*count + */  (i1));
-                            cardResponseList.get(i).setDiscount(/*discount(bookListFromBasketOfClient) +*/ (discountForPaperBook(bookId) * i1));
-                            cardResponseList.get(i).setSum(/*priseSum(bookListFromBasketOfClient) + */  (priseSumForPaperBook(bookId) * i1));
-                            cardResponseList.get(i).setTotal(/*total(bookListFromBasketOfClient) +*/ (totalForPaperBook(bookId) * i1));
+                            cardResponseList.get(i).setCountOfBooksInTotal((i1));
+
+                            user.getPlaceCounts().setCountOfPaperBookPB(user.getPlaceCounts().getCountOfPaperBookPB() + 1);
+                            user.getPlaceCounts().setDiscountPB(user.getPlaceCounts().getDiscountPB() + discountForPaperBook(bookId));
+                            user.getPlaceCounts().setSumAfterPromoPB(user.getPlaceCounts().getSumAfterPromoPB() + sumAfterPromoPaperBook(promoCode, bookId));
+                            user.getPlaceCounts().setTotalPB(user.getPlaceCounts().getTotalPB() + totalForPaperBook(bookId));
+                            user.getPlaceCounts().setSumPB(user.getPlaceCounts().getSumPB() + priseSumForPaperBook(bookId));
+                            bookRepository.save(bookListFromBasketOfClient.get(i));
                         } else {
                             log.info("the paper books under this id = {} are over", bookListFromBasketOfClient.get(i).getBookId());
                             continue;
@@ -54,21 +71,36 @@ public class CardOperationResponse {
                     } else if (plusOrMinus.equals("minus")) {
                         Integer numberOfSelectedCopy = bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelectedCopy();
                         System.out.println(numberOfSelectedCopy);
-                        /*Integer count = count(bookListFromBasketOfClient);*/
                         int plus = plus(bookId);
                         int abs = Math.abs(plus - numberOfSelectedCopy);
                         cardResponseList.get(i).setCountOfPaperBook(abs);
-                        cardResponseList.get(i).setCountOfBooksInTotal(/*count +*/ (abs));
-                        cardResponseList.get(i).setDiscount(/*discount(bookListFromBasketOfClient) +*/ (discountForPaperBook(bookId) * abs));
-                        cardResponseList.get(i).setSum(/*priseSum(bookListFromBasketOfClient) +*/ (priseSumForPaperBook(bookId) * abs));
-                        cardResponseList.get(i).setTotal(/*total(bookListFromBasketOfClient) +*/ (totalForPaperBook(bookId) * abs));
+                        cardResponseList.get(i).setCountOfBooksInTotal((abs));
+
+                        user.getPlaceCounts().setCountOfPaperBookPB(user.getPlaceCounts().getCountOfPaperBookPB() - 1);
+                        user.getPlaceCounts().setDiscountPB(user.getPlaceCounts().getDiscountPB() - (discountForPaperBook(bookId)));
+                        user.getPlaceCounts().setSumAfterPromoPB(user.getPlaceCounts().getSumAfterPromoPB() - sumAfterPromoPaperBook(promoCode, bookId));
+                        user.getPlaceCounts().setTotalPB(user.getPlaceCounts().getTotalPB() - totalForPaperBook(bookId));
+                        user.getPlaceCounts().setSumPB(user.getPlaceCounts().getSumPB() - priseSumForPaperBook(bookId));
+                        bookRepository.save(bookListFromBasketOfClient.get(i));
                     }
                 }
             } else {
                 cardResponseList.get(i).setCountOfBooksInTotal(count(bookListFromBasketOfClient));
-                cardResponseList.get(i).setDiscount(discount(bookListFromBasketOfClient));
-                cardResponseList.get(i).setSum(priseSum(bookListFromBasketOfClient));
-                cardResponseList.get(i).setTotal(total(bookListFromBasketOfClient));
+
+                user.getPlaceCounts().setCountOfBooksInTotal(count(bookListFromBasketOfClient));
+                user.getPlaceCounts().setDiscount(discount(bookListFromBasketOfClient));
+                List<Promocode> allPromos = promocodeRepository.findAll();
+                for (Promocode promo : allPromos) {
+                    if (!Objects.equals(promoCode, promo.getPromocode())) {
+                        user.getPlaceCounts().setSumAfterPromo(user.getPlaceCounts().getSumAfterPromo());
+                    } else {
+                        user.getPlaceCounts().setSumAfterPromo(sumAfterPromo(bookListFromBasketOfClient, promoCode));
+                        System.out.println(sumAfterPromo(bookListFromBasketOfClient, promoCode));
+                    }
+                }
+                user.getPlaceCounts().setSum(priseSum(bookListFromBasketOfClient));
+                user.getPlaceCounts().setTotal(total(bookListFromBasketOfClient));
+                bookRepository.save(bookListFromBasketOfClient.get(i));
             }
         }
         return cardResponseList;
@@ -202,5 +234,47 @@ public class CardOperationResponse {
         } else
             log.error("The minus method does not work with other types of books except paper books");
         return numForReturn;
+    }
+
+    public Boolean checkPromo(String promo) {
+        List<Promocode> promocode = promocodeRepository.findAll();
+        for (Promocode promocode1 : promocode) {
+            if (promocode1.getPromocode().equals(promo)) {
+                if (promocode1.getIsActive().equals(true)) {
+                    return true;
+                }
+                log.error("this {} promo not found", promo);
+            }
+            log.error("this {} promo is not active", promocode);
+        }
+        return false;
+    }
+
+    public Double sumAfterPromoPaperBook(String promo, Long id) {
+        Book book = bookRepository.getById(id);
+        Double sum = 0.0;
+        if (book.getDiscountFromPromo() != null) {
+            if (checkPromo(promo)) {
+                sum += (book.getPrice() * book.getDiscountFromPromo()) / 100;
+            } else
+                log.info("Your promo code is not suitable");
+        }
+        return sum;
+    }
+
+    public Double sumAfterPromo(List<Book> list, String promo) {
+        Double sum = 0.0;
+        for (Book book : list) {
+            if (book.getBookType().equals(BookType.EBOOK) || book.getBookType().equals(BookType.AUDIOBOOK)) {
+                if (book.getDiscountFromPromo() != null) {
+                    if (checkPromo(promo)) {
+                        sum += (book.getPrice() * book.getDiscountFromPromo()) / 100;
+                    } else
+                        log.info("Your promo code is not suitable");
+                }
+                continue;
+            }
+        }
+        return sum;
     }
 }

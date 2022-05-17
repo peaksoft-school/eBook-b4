@@ -23,7 +23,7 @@ public class FileApi {
     private final FileService fileService;
 
     @Operation(summary = "Upload files",description = "Upload files to aws")
-    @PostMapping("/uploadFile/{bookId}")
+    @PostMapping("/upload-file/{bookId}")
     public Map<String, String> uploadFile(@RequestBody MultipartFile firstPhoto,
                                                  @RequestBody MultipartFile secondPhoto,
                                                  @RequestBody MultipartFile bookFile,

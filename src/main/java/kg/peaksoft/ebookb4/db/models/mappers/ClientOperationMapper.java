@@ -14,6 +14,15 @@ import java.util.List;
 public class ClientOperationMapper {
 
     private BookRepository bookRepository;
+    public ClientOperationDTO build(int count, Double discount, Double sum, Double total){
+
+        ClientOperationDTO dto = new ClientOperationDTO();
+        dto.setCount(count);
+        dto.setDiscount(discount);
+        dto.setSum(sum);
+        dto.setTotal(total);
+        return dto;
+    }
 
     public ClientOperationDTO create(String name) {
 

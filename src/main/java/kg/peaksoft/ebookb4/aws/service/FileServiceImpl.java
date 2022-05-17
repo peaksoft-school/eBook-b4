@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
 
@@ -22,6 +23,7 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 @Slf4j
+@Transactional
 public class FileServiceImpl implements FileService {
     private AmazonS3Client awsS3Client;
 
@@ -58,7 +60,7 @@ public class FileServiceImpl implements FileService {
             log.info("upload the file");
             log.info("name: {}" , file1.getOriginalFilename());
         } catch (IOException e) {
-            log.error("an exception occured while uploading the file");
+            log.error("an exception occurred while uploading the file");
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occured while uploading the file");
         }
         awsS3Client.setObjectAcl("test-b4-ebook", key1, CannedAccessControlList.PublicRead);
@@ -68,7 +70,7 @@ public class FileServiceImpl implements FileService {
             log.info("upload the file");
             log.info("name: {}" , file2.getOriginalFilename());
         } catch (IOException e) {
-            log.error("an exception occured while uploading the file");
+            log.error("an exception occurred while uploading the file");
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occured while uploading the file");
         }
         awsS3Client.setObjectAcl("test-b4-ebook", key2, CannedAccessControlList.PublicRead);
@@ -78,7 +80,7 @@ public class FileServiceImpl implements FileService {
             log.info("upload the file");
             log.info("name: {}" , file3.getOriginalFilename());
         } catch (IOException e) {
-            log.error("an exception occured while uploading the file");
+            log.error("an exception occurred while uploading the file");
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occured while uploading the file");
         }
         awsS3Client.setObjectAcl("test-b4-ebook", key3, CannedAccessControlList.PublicRead);

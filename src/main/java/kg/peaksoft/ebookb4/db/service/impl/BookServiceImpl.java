@@ -4,13 +4,11 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import kg.peaksoft.ebookb4.aws.enums.BucketName;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileInformation;
-import kg.peaksoft.ebookb4.db.models.entity.Genre;
+import kg.peaksoft.ebookb4.db.models.entity.*;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
-import kg.peaksoft.ebookb4.db.repository.GenreRepository;
-import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
+import kg.peaksoft.ebookb4.db.repository.*;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
 import kg.peaksoft.ebookb4.db.models.mappers.BookMapper;
@@ -19,15 +17,9 @@ import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
-import kg.peaksoft.ebookb4.db.models.entity.AudioBook;
-import kg.peaksoft.ebookb4.db.models.entity.Book;
-import kg.peaksoft.ebookb4.db.models.entity.ElectronicBook;
-import kg.peaksoft.ebookb4.db.models.entity.PaperBook;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 
 import kg.peaksoft.ebookb4.db.models.enums.Language;
-import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
@@ -38,6 +30,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -51,6 +44,9 @@ public class BookServiceImpl implements BookService {
     private final GenreRepository genreRepository;
     private final PromoService promoService;
     private final AmazonS3Client awsS3Client;
+
+    private final FileInformationRepository fileInformationRepository;
+
 
     @Override
     public ResponseEntity<?> saveBook(BookDTO bookDTO, String username) {
@@ -73,11 +69,12 @@ public class BookServiceImpl implements BookService {
         book.setEndOfTheNewTerm(LocalDate.now().plusDays(30));
 
         book.setUser(user);
+        FileInformation newFileInformation = createNewFileInformation();
+        book.setFileInformation(newFileInformation);
         if (bookDTO.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
             AudioBook audio = new AudioBook();
             audio.setDuration(bookDTO.getAudioBook().getDuration());
             audio.setFragment(bookDTO.getAudioBook().getFragment());
-            audio.setUrlOfBookFromCloud(bookDTO.getAudioBook().getUrlOfBookFromCloud());
             book.setAudioBook(audio);
             log.info("Save audio book");
 
@@ -85,7 +82,6 @@ public class BookServiceImpl implements BookService {
             ElectronicBook ebook = new ElectronicBook();
             ebook.setFragmentOfBook(bookDTO.getElectronicBook().getFragmentOfBook());
             ebook.setNumberOfPages(bookDTO.getElectronicBook().getNumberOfPages());
-            ebook.setUrlOfBookFromCloud(bookDTO.getElectronicBook().getUrlOfBookFromCloud());
             book.setElectronicBook(ebook);
             log.info("Save electronic book");
         } else {
@@ -209,13 +205,11 @@ public class BookServiceImpl implements BookService {
             case EBOOK:
                 book.getElectronicBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
                 book.getElectronicBook().setNumberOfPages(newBook.getElectronicBook().getNumberOfPages());
-                book.getElectronicBook().setUrlOfBookFromCloud(newBook.getElectronicBook().getUrlOfBookFromCloud());
                 log.info("Update ebook");
                 break;
             case AUDIOBOOK:
                 book.getAudioBook().setDuration(newBook.getAudioBook().getDuration());
                 book.getAudioBook().setFragment(newBook.getAudioBook().getFragment());
-                book.getAudioBook().setUrlOfBookFromCloud(newBook.getAudioBook().getUrlOfBookFromCloud());
                 log.info("Update audio book");
                 break;
         }
@@ -301,6 +295,14 @@ public class BookServiceImpl implements BookService {
     public List<BookResponse> getBooksSold(String name , ERole role) {
         return repository.getVendorBooksSold(name, role);
     }
+
+    @Override
+    public FileInformation createNewFileInformation() {
+        FileInformation fileInformation = new FileInformation(null, "null", "null","null", "null", "null", "null");
+        return fileInformationRepository.save(fileInformation);
+    }
+
+
 
     public void deleteFile(String keyName) {
         final DeleteObjectRequest deleteObjectRequest = new

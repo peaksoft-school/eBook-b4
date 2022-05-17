@@ -31,4 +31,5 @@ public class PaperBook {
 
     private Integer numberOfSelectedCopy;
 
+
 }

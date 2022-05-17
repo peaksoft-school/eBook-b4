@@ -23,7 +23,5 @@ public class ElectronicBook {
 
     private Integer numberOfPages;
 
-    private String urlOfBookFromCloud;
-
 
 }
