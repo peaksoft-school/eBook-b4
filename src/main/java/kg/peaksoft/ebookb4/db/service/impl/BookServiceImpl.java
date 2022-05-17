@@ -303,7 +303,6 @@ public class BookServiceImpl implements BookService {
     }
 
 
-
     public void deleteFile(String keyName) {
         final DeleteObjectRequest deleteObjectRequest = new
                 DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(), keyName);
