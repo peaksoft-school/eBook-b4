@@ -40,21 +40,26 @@ public class CardOperationResponse {
             cardResponseList.get(i).setPublishingHouse(bookListFromBasketOfClient.get(i).getPublishingHouse());
             cardResponseList.get(i).setYearOfIssue(bookListFromBasketOfClient.get(i).getYearOfIssue());
             cardResponseList.get(i).setPrice(bookListFromBasketOfClient.get(i).getPrice());
+            if(bookListFromBasketOfClient.get(i).getDiscount() == null){
+                cardResponseList.get(i).setSumAfterDiscount(bookListFromBasketOfClient.get(i).getPrice() - (bookListFromBasketOfClient.get(i).getDiscountFromPromo() * bookListFromBasketOfClient.get(i).getPrice())/100);
+            }else if(bookListFromBasketOfClient.get(i).getDiscountFromPromo() == null){
+                cardResponseList.get(i).setSumAfterDiscount(bookListFromBasketOfClient.get(i).getPrice() -(bookListFromBasketOfClient.get(i).getDiscount() * bookListFromBasketOfClient.get(i).getPrice())/100);
+            }else cardResponseList.get(i).setSumAfterDiscount(0.0);
+            cardResponseList.get(i).setDiscount(bookListFromBasketOfClient.get(i).getDiscount());
+            cardResponseList.get(i).setPromoDiscount(bookListFromBasketOfClient.get(i).getDiscountFromPromo());
 
             if (bookListFromBasketOfClient.get(i).getBookType().equals(BookType.PAPERBOOK) && bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelected() > 0) {
                 if (bookListFromBasketOfClient.get(i).getBookId().equals(bookId)) {
                     if (plusOrMinus.equals("plus")) {
-                        if (bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelected() > 1) {
+                        if (bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelected() >= 0) {
                             Integer numberOfSelectedCopy = bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelectedCopy();
-                            /*Integer count = count(bookListFromBasketOfClient);*/
                             int minus = minus(bookId);
                             int i1 = numberOfSelectedCopy - minus;
                             cardResponseList.get(i).setCountOfPaperBook(i1);
-                            cardResponseList.get(i).setCountOfBooksInTotal(/*count + */  (i1));
-                            cardResponseList.get(i).setDiscount(/*discount(bookListFromBasketOfClient) +*/ (discountForPaperBook(bookId) * i1) + (sumAfterPromoPaperBook(promoCode, bookId) * i1));
-                            cardResponseList.get(i).setSum(/*priseSum(bookListFromBasketOfClient) + */  (priseSumForPaperBook(bookId) * i1));
-                            cardResponseList.get(i).setTotal(/*total(bookListFromBasketOfClient) +*/ (totalForPaperBook(bookId) * i1) - (sumAfterPromoPaperBook(promoCode, bookId) * i1));
-                            bookListFromBasketOfClient.get(i).getPaperBook().setCountOfPaperBook(i1);
+                            cardResponseList.get(i).setCountOfBooksInTotal((i1));
+//                            cardResponseList.get(i).setDiscount((discountForPaperBook(bookId) * i1) + (sumAfterPromoPaperBook(promoCode, bookId) * i1));
+//                            cardResponseList.get(i).setSum((priseSumForPaperBook(bookId) * i1));
+//                            cardResponseList.get(i).setTotal((totalForPaperBook(bookId) * i1) - (sumAfterPromoPaperBook(promoCode, bookId) * i1));
 
 
                             user.getPlaceCounts().setCountOfPaperBookPB(user.getPlaceCounts().getCountOfPaperBookPB() + 1);
@@ -70,14 +75,13 @@ public class CardOperationResponse {
                     } else if (plusOrMinus.equals("minus")) {
                         Integer numberOfSelectedCopy = bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelectedCopy();
                         System.out.println(numberOfSelectedCopy);
-                        /*Integer count = count(bookListFromBasketOfClient);*/
                         int plus = plus(bookId);
                         int abs = Math.abs(plus - numberOfSelectedCopy);
                         cardResponseList.get(i).setCountOfPaperBook(abs);
-                        cardResponseList.get(i).setCountOfBooksInTotal(/*count +*/ (abs));
-                        cardResponseList.get(i).setDiscount(/*discount(bookListFromBasketOfClient) +*/ (discountForPaperBook(bookId) * abs) + (sumAfterPromoPaperBook(promoCode, bookId) * abs));
-                        cardResponseList.get(i).setSum(/*priseSum(bookListFromBasketOfClient) +*/ (priseSumForPaperBook(bookId) * abs));
-                        cardResponseList.get(i).setTotal(/*total(bookListFromBasketOfClient) +*/ (totalForPaperBook(bookId) * abs) - (sumAfterPromoPaperBook(promoCode, bookId) * abs));
+                        cardResponseList.get(i).setCountOfBooksInTotal((abs));
+//                        cardResponseList.get(i).setDiscount((discountForPaperBook(bookId) * abs) + (sumAfterPromoPaperBook(promoCode, bookId) * abs));
+//                        cardResponseList.get(i).setSum((priseSumForPaperBook(bookId) * abs));
+//                        cardResponseList.get(i).setTotal((totalForPaperBook(bookId) * abs) - (sumAfterPromoPaperBook(promoCode, bookId) * abs));
 
                         user.getPlaceCounts().setCountOfPaperBookPB(user.getPlaceCounts().getCountOfPaperBookPB()-1);
                         user.getPlaceCounts().setDiscountPB(user.getPlaceCounts().getDiscountPB() - (discountForPaperBook(bookId)));
@@ -89,9 +93,9 @@ public class CardOperationResponse {
                 }
             } else {
                 cardResponseList.get(i).setCountOfBooksInTotal(count(bookListFromBasketOfClient));
-                cardResponseList.get(i).setDiscount(discount(bookListFromBasketOfClient) + sumAfterPromo(bookListFromBasketOfClient, promoCode));
-                cardResponseList.get(i).setSum(priseSum(bookListFromBasketOfClient));
-                cardResponseList.get(i).setTotal(total(bookListFromBasketOfClient) - sumAfterPromo(bookListFromBasketOfClient, promoCode));
+//                cardResponseList.get(i).setDiscount(discount(bookListFromBasketOfClient) + sumAfterPromo(bookListFromBasketOfClient, promoCode));
+//                cardResponseList.get(i).setSum(priseSum(bookListFromBasketOfClient));
+//                cardResponseList.get(i).setTotal(total(bookListFromBasketOfClient) - sumAfterPromo(bookListFromBasketOfClient, promoCode));
 
                 user.getPlaceCounts().setCountOfBooksInTotal(count(bookListFromBasketOfClient));
                 user.getPlaceCounts().setDiscount(discount(bookListFromBasketOfClient));
@@ -100,7 +104,6 @@ public class CardOperationResponse {
                 if (!Objects.equals(promoCode, promo.getPromocode())){
                 user.getPlaceCounts().setSumAfterPromo(user.getPlaceCounts().getSumAfterPromo());
                 }else {
-                    log.info("else is work");
                     user.getPlaceCounts().setSumAfterPromo(sumAfterPromo(bookListFromBasketOfClient, promoCode));
                     System.out.println(sumAfterPromo(bookListFromBasketOfClient, promoCode));
                 }

@@ -19,11 +19,12 @@ public class CardResponse {
     private String publishingHouse;
     private LocalDate yearOfIssue;
     private Double price;
-
+    private Double sumAfterDiscount;
+    private Integer promoDiscount;
     int countOfBooksInTotal;
-    Double discount;
-    Double sum;
-    Double total;
+    Integer discount;
+//    Double sum;
+//    Double total;
 
     int countOfPaperBook = 0;
 

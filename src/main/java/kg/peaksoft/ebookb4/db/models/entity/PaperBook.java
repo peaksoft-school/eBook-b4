@@ -31,6 +31,5 @@ public class PaperBook {
 
     private Integer numberOfSelectedCopy;
 
-    private Integer countOfPaperBook;
 
 }
