@@ -264,6 +264,17 @@ public class ClientServiceImpl implements ClientService {
                     book.getPaperBook().setNumberOfSelectedCopy(numberOfSelected);
                 }else continue;
             }
+            user.getPlaceCounts().setSumAfterPromo(0.0);
+            user.getPlaceCounts().setTotal(0.0);
+            user.getPlaceCounts().setSum(0.0);
+            user.getPlaceCounts().setDiscount(0.0);
+            user.getPlaceCounts().setCountOfBooksInTotal(0);
+
+        user.getPlaceCounts().setSumAfterPromoPB(0.0);
+        user.getPlaceCounts().setTotalPB(0.0);
+        user.getPlaceCounts().setSumPB(0.0);
+        user.getPlaceCounts().setDiscountPB(0.0);
+        user.getPlaceCounts().setCountOfPaperBookPB(0);
 
         clientOperationRepository.save(clientOperations);
         user.getBasket().clear();

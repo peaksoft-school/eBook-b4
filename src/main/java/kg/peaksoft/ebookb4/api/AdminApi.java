@@ -130,6 +130,7 @@ public class AdminApi {
         return service.findAllVendors();
     }
 
+    @CrossOrigin
     @Operation(summary = "Get vendor by id")
     @GetMapping("/vendor/{id}")
     public VendorResponse getByVendorId(@PathVariable Long id) {
