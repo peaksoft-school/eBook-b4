@@ -137,18 +137,6 @@ public class BookServiceImpl implements BookService {
         if (!Objects.equals(bookName, newBookName)) {
             book.setTitle(newBookName);
         }
-        FileInformation fileInformation = book.getFileInformation();
-        FileInformation newFileInformation = newBook.getFileInformation();
-        if (!Objects.equals(fileInformation, newFileInformation)){
-            if (!Objects.equals(fileInformation.getFirstPhoto(), newFileInformation.getFirstPhoto()) && newFileInformation.getFirstPhoto() != null){
-                deleteFile(fileInformation.getKeyOfFirstPhoto());
-            }if (!Objects.equals(fileInformation.getSecondPhoto(),newFileInformation.getSecondPhoto()) && newFileInformation.getSecondPhoto() != null){
-                deleteFile(fileInformation.getKeyOfSecondPhoto());
-            }if(!Objects.equals(fileInformation.getBookFile(),newFileInformation.getBookFile()) && newFileInformation.getBookFile() != null){
-                deleteFile(fileInformation.getKeyOfBookFile());
-            }
-            book.setFileInformation(newFileInformation);
-        }
         String bookAuthor = book.getAuthorFullName();
         String newBookAuthor = newBook.getAuthorFullName();
         if (!Objects.equals(bookAuthor, newBookAuthor)) {
