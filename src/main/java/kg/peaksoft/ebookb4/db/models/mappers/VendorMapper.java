@@ -15,6 +15,9 @@ public class VendorMapper {
         vendorResponse.setVendorId(user.getId());
         vendorResponse.setFirstName(user.getFirstName());
         vendorResponse.setLastName(user.getLastName());
+
+//        vendorResponse.setLastName(user.getLastName()+" "+user.getFirstName());
+
         vendorResponse.setPhoneNumber(user.getNumber());
         vendorResponse.setEmail(user.getEmail());
         vendorResponse.setAmountOfBooks(user.getVendorAddedBooks().size());

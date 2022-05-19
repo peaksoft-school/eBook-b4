@@ -1,20 +1,21 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.entity.Book;
+import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.entity.User;
-import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import kg.peaksoft.ebookb4.db.repository.UserRepository;
-import kg.peaksoft.ebookb4.db.service.AdminService;
-import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
 import kg.peaksoft.ebookb4.db.models.mappers.ClientMapper;
 import kg.peaksoft.ebookb4.db.models.mappers.VendorMapper;
+import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
 import kg.peaksoft.ebookb4.db.models.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
+import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
+import kg.peaksoft.ebookb4.db.repository.UserRepository;
+import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,7 @@ public class AdminServiceImpl implements AdminService {
     private VendorMapper vendorMapper;
     private ClientMapper clientMapper;
     private ModelMapper modelMapper;
+    private EmailServiceImpl emailService;
 
     @Override
     public List<Book> getBooksBy(String genreName, BookType bookType) {
@@ -91,7 +93,7 @@ public class AdminServiceImpl implements AdminService {
         }
         log.info("Successfully deleter");
         userRepository.deleteById(id);
-        return ResponseEntity.ok("Successfully deleter");
+        return ResponseEntity.ok().body("Successfully deleter {}");
     }
 
     @Override
@@ -159,6 +161,8 @@ public class AdminServiceImpl implements AdminService {
 
         // TODO: 24.04.2022  sand massage to gmail
 
+        emailService.send(book.getUser().getEmail(), refuseBookRequest.getReason());
+
         log.info("admin refuse book request");
         return ResponseEntity.ok().body(
                 refuseBookRequest.getReason());
@@ -173,7 +177,7 @@ public class AdminServiceImpl implements AdminService {
         assert false;
 
 
-        Book book = bookRepository.findBookInProgress(bookId,requestStatus)
+        Book book = bookRepository.findBookInProgress(bookId, requestStatus)
                 .orElseThrow(() -> {
                     log.error("Book with id ={} does not exists", bookId);
                     throw new BadRequestException(
@@ -191,12 +195,12 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<Book> findBooksFromVendor(Integer offset, int pageSize, Long vendorId) {
         User user = userRepository.findById(vendorId)
-           .orElseThrow(() -> {
-            log.error("Vendor with id ={} does not exists", vendorId);
-            throw new BadRequestException(
-                    String.format("Vendor with id %s doesn't exist!", vendorId)
-            );
-        });
+                .orElseThrow(() -> {
+                    log.error("Vendor with id ={} does not exists", vendorId);
+                    throw new BadRequestException(
+                            String.format("Vendor with id %s doesn't exist!", vendorId)
+                    );
+                });
         List<Book> books = bookRepository.findBooksFromVendor(user.getEmail());
 
 
@@ -206,7 +210,7 @@ public class AdminServiceImpl implements AdminService {
         Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
         System.out.println(new CustomPageRequest<>(pages).getContent().size());
 
-        log.info("Vendor books=s%"+new CustomPageRequest<>(pages).getContent().size());
+        log.info("Vendor books=s%" + new CustomPageRequest<>(pages).getContent().size());
 
         return new CustomPageRequest<>(pages).getContent();
     }
@@ -217,7 +221,7 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> {
                     log.error("Vendor with id ={} does not exists", vendorId);
                     throw new BadRequestException(
-                            String.format( "Vendor with id %s doesn't exist!", vendorId)
+                            String.format("Vendor with id %s doesn't exist!", vendorId)
                     );
                 });
         List<Book> likedBooksFromVendor = bookRepository.findLikedBooksFromVendor(user.getEmail());
@@ -231,12 +235,12 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<Book> findBooksFromVendorAddedToBasket(Integer offset, int pageSize, Long vendorId) {
         User user = userRepository.findById(vendorId)
-          .orElseThrow(() -> {
-            log.error("Vendor with id ={} does not exists", vendorId);
-            throw new BadRequestException(
-                    String.format( "Vendor with id %s doesn't exist!", vendorId)
-            );
-        });
+                .orElseThrow(() -> {
+                    log.error("Vendor with id ={} does not exists", vendorId);
+                    throw new BadRequestException(
+                            String.format("Vendor with id %s doesn't exist!", vendorId)
+                    );
+                });
         List<Book> booksWithBasket = bookRepository.findBooksFromVendorAddedToBasket(user.getEmail());
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksWithBasket.size());
@@ -288,10 +292,11 @@ public class AdminServiceImpl implements AdminService {
 //        return bookRepository.getBooksFavoritesClient(clientId);
 //    }
 
-    @Override
-    public List<BookResponse> getBooksInPurchased(Long clientId) {
-        return bookRepository.getBooksInPurchased(clientId);
-    }
+//    @Override
+//    public List<ClientOperations> getBooksInPurchased(Long clientId) {
+//        return bookRepository.getBooksInPurchased(clientId);
+//    }
+
 
     @Override
     public List<BookResponse> getAllLikedBooks(Long clientId) {

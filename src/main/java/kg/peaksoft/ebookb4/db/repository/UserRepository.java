@@ -33,9 +33,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("select c.likedBooks from User c where c.id = ?1")
   List<Book> getAllLikedBooks(Long id);
 
+
+
+
+
   @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price, b.fileInformation)" +
-          "from Book b where b.operations.user.email = ?1")
+          "from Book b where b.user.email = ?1 and b.bookId = b.operations.size")
   List<BookResponse> getBooksInPurchased(String name);
+
+
+
 
   //change discountPromo to null if it is expired
   @Transactional
@@ -49,4 +56,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("update Book b set b.discountFromPromo = ?2 where b.user = ?1 and b.discount is null ")
   void givePromo(User user, int discount);
 
+  @Modifying
+  @Query("delete from User u where u.id = ?1")
+  void deleteUserById(Long id);
 }

@@ -2,18 +2,15 @@ package kg.peaksoft.ebookb4.db.models.booksClasses;
 
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Getter @Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class ClientOperations {
 
     @Id
@@ -28,6 +25,5 @@ public class ClientOperations {
 
     @ManyToMany(mappedBy = "operations")
     private List<Book> boughtBooks;
-
 
 }

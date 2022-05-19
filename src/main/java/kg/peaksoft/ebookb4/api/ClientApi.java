@@ -3,9 +3,11 @@ package kg.peaksoft.ebookb4.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.request.Request;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.CardResponse;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
@@ -26,6 +28,7 @@ import java.util.List;
 public class ClientApi {
 
     private ClientService clientService;
+    private final BookRepository repository;
 
     @Operation(summary = "Client profile", description = "Client can see all accessible data of client")
     @GetMapping("/profile")
@@ -102,4 +105,9 @@ public class ClientApi {
         return clientService.plusOrMinus(authentication.getName(), plsOrMns, bookId, promoCode);
     }
 
+
+    @GetMapping("/gets2")
+    public List<Book> gets2(Authentication authentication){
+        return repository.hello2(authentication.getName());
+    }
 }

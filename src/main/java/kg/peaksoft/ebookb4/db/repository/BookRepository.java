@@ -1,5 +1,6 @@
 package kg.peaksoft.ebookb4.db.repository;
 
+import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
@@ -111,13 +112,34 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("update Book b set b.isNew = false where b.bookId = ?1")
     void updateBook(Long bookId);
 
-    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
-            "b.yearOfIssue, b.price, b.fileInformation) from Book b where b.operations.user.id = ?1")
-    List<BookResponse> getBooksInPurchased(Long clientId);
-
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, " +
             "b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price, b.fileInformation)" +
-            " from Book b where b.operations.id > 0 and b.user.email = ?1 and b.user.role.name = ?2")
+            " from Book b where b.operations.size > 0 and b.user.email = ?1 and b.user.role.name = ?2")
     List<BookResponse> getVendorBooksSold(String name, ERole role);
 
+
+
+
+
+    @Query(value = "SELECT * from book b " +
+            "join client_operations p on p.operation_id = b.book_id " +
+
+            "where p.user_id = ?1 ", nativeQuery = true)
+    List<Book> hello(Long id);
+
+
+   @Query(value = "SELECT  * FROM book b " +
+           "join client_operations e on e.book_id = b.book_id " +
+           "join operation_books o ON  o.operation_id = e.operation_id " +
+           "where e.user_id = ?1", nativeQuery = true)
+    List<Book> hello2(String name);
+
+
+
+
+
+//    @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
+//            "from client_operations where user_id = ?1", nativeQuery = true)
+//    List<BookResponse> gets(Long id);
+//
 }

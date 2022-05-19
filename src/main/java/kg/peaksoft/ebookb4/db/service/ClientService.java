@@ -7,6 +7,7 @@ import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.CardResponse;
 import org.springframework.http.ResponseEntity;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.List;
 

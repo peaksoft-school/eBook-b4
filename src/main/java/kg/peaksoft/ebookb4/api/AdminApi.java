@@ -2,6 +2,7 @@ package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
@@ -10,6 +11,7 @@ import kg.peaksoft.ebookb4.db.models.request.Request;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
 import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import lombok.AllArgsConstructor;
@@ -29,6 +31,8 @@ public class AdminApi {
 
     private AdminService service;
     private BookGetService bookGetService;
+    private final BookRepository repository;
+
 
     @Operation(summary = "Get all books in process", description = "Get books in process")
     @GetMapping("/books-in-process")
@@ -61,6 +65,7 @@ public class AdminApi {
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         return service.deleteById(id);
     }
+
     @Operation(summary = "Get all by genre and book type",
             description = "Filter all books by genre and book type ")
     @GetMapping("/booksByBoth/{genre}/{bookType}")
@@ -118,11 +123,13 @@ public class AdminApi {
         return service.getAllLikedBooks(clientId);
     }
 
-    @Operation(summary = "Get all purchased book in client")
-    @GetMapping("/client/operation/{clientId}")
-    public List<BookResponse> getBook(@PathVariable Long clientId){
-        return service.getBooksInPurchased(clientId);
-    }
+//    @Operation(summary = "Get all purchased book in client")
+//    @GetMapping("/client/operation/{clientId}")
+//    public List<ClientOperations> getBook(@PathVariable Long clientId){
+//        return service.getBooksInPurchased(clientId);
+//    }
+
+
     @Operation(summary = "Get all Vendors",
             description = "Get all vendors with amount of books")
     @GetMapping("/vendors")
@@ -183,5 +190,10 @@ public class AdminApi {
             , @PathVariable Integer offset) {
         return service.findBooksFromVendorInProcess(--offset, 12, vendorId,
                 RequestStatus.INPROGRESS);
+    }
+
+    @GetMapping("/gets/{clientId}")
+    public List<Book> gets(@PathVariable Long clientId){
+        return repository.hello(clientId);
     }
 }

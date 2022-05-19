@@ -11,9 +11,14 @@ public class VendorResponse {
 
     private Long vendorId;
     private String firstName;
-    private String lastName;
+    private String lastName ;
     private String phoneNumber;
     private String email;
     private int amountOfBooks;
     private LocalDate dateOfRegistration;
+
+    public void gets(String firstName,String lastName){
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }

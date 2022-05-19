@@ -3,13 +3,21 @@ package kg.peaksoft.ebookb4.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.aws.service.FileService;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
+import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -43,5 +51,5 @@ public class FileApi {
     public byte[] downloadFile(@PathVariable String keyName){
         return fileService.downloadFile(keyName);
     }
-    
+
 }
