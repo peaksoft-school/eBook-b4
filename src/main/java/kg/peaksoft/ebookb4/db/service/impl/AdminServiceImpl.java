@@ -93,7 +93,7 @@ public class AdminServiceImpl implements AdminService {
         }
         log.info("Successfully deleter");
         userRepository.deleteById(id);
-        return ResponseEntity.ok().body("Successfully deleter {}");
+        return ResponseEntity.ok("Successfully deleter");
     }
 
     @Override
@@ -104,7 +104,7 @@ public class AdminServiceImpl implements AdminService {
                     "Book with id " + id + " does not exists");
         }
         bookRepository.deleteById(id);
-        return ResponseEntity.ok("Successfully deleter");
+        return ResponseEntity.ok().body("Successfully deleter");
     }
 
     @Override

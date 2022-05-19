@@ -1,11 +1,9 @@
 package kg.peaksoft.ebookb4.db.repository;
 
-import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -122,9 +120,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
 
     @Query(value = "SELECT * from book b " +
-            "join client_operations p on p.operation_id = b.book_id " +
-
-            "where p.user_id = ?1 ", nativeQuery = true)
+            "join client_operations t on t.operation_id = b.book_id " +
+            "join operation_books o on o.operation_id = t.user_id "+
+            "where t.user_id = ?1 ", nativeQuery = true)
     List<Book> hello(Long id);
 
 
