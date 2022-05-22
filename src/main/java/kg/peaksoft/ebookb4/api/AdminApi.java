@@ -2,7 +2,6 @@ package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
@@ -11,7 +10,6 @@ import kg.peaksoft.ebookb4.db.models.request.Request;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
 import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
-import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import lombok.AllArgsConstructor;
@@ -31,8 +29,6 @@ public class AdminApi {
 
     private AdminService service;
     private BookGetService bookGetService;
-    private final BookRepository repository;
-
 
     @Operation(summary = "Get all books in process", description = "Get books in process")
     @GetMapping("/books-in-process")
@@ -95,12 +91,13 @@ public class AdminApi {
 
     @Operation(summary = "Get book by id", description = "Change color of book when admin watch is true")
     @GetMapping("/book/{id}")
-    public ResponseEntity<?> getBookById(@PathVariable Long id) {
+    public Book getBookById(@PathVariable Long id) {
         return service.getBookById(id);
     }
+
     @Operation(summary = "Get all client",
             description = "Get all client ")
-    @GetMapping
+    @GetMapping("/clients")
     public List<ClientResponse> getAllClient() {
         return service.findAllClient();
     }
@@ -119,15 +116,15 @@ public class AdminApi {
 
     @Operation(summary = "Get client liked books")
     @GetMapping("/client/favorites/{clientId}")
-    public List<BookResponse> booksClientFavorites(@PathVariable Long clientId){
+    public List<BookResponse> booksClientFavorites(@PathVariable Long clientId) {
         return service.getAllLikedBooks(clientId);
     }
 
-//    @Operation(summary = "Get all purchased book in client")
-//    @GetMapping("/client/operation/{clientId}")
-//    public List<ClientOperations> getBook(@PathVariable Long clientId){
-//        return service.getBooksInPurchased(clientId);
-//    }
+    @Operation(summary = "Get all purchased book in client")
+    @GetMapping("/client/operation/{clientId}")
+    public List<Book> getBook(@PathVariable Long clientId) {
+        return service.getBooksInPurchased(clientId);
+    }
 
 
     @Operation(summary = "Get all Vendors",
@@ -140,7 +137,7 @@ public class AdminApi {
     @Operation(summary = "Get vendor by id")
     @GetMapping("/vendor/{id}")
     public VendorResponse getByVendorId(@PathVariable Long id) {
-        return service.getVendor(id);
+        return service.getVendorById(id);
     }
 
     @Operation(summary = "Get all books of vendor in admin panel",
@@ -190,10 +187,5 @@ public class AdminApi {
             , @PathVariable Integer offset) {
         return service.findBooksFromVendorInProcess(--offset, 12, vendorId,
                 RequestStatus.INPROGRESS);
-    }
-
-    @GetMapping("/gets/{clientId}")
-    public List<Book> gets(@PathVariable Long clientId){
-        return repository.hello(clientId);
     }
 }

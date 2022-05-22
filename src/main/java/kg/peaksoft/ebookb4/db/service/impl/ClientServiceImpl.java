@@ -2,7 +2,6 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
-import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
 import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
@@ -18,7 +17,6 @@ import kg.peaksoft.ebookb4.db.models.response.CardResponse;
 import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.repository.*;
 import kg.peaksoft.ebookb4.db.service.ClientService;
-import kg.peaksoft.ebookb4.db.service.EmailService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +25,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
@@ -40,8 +37,6 @@ import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
-
-    private final PromocodeRepository promoRepo;
     private final PasswordEncoder encoder;
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
@@ -53,10 +48,9 @@ public class ClientServiceImpl implements ClientService {
     private final ClientOperationRepository clientOperationRepository;
     private final CardOperationResponse cardOperationResponse;
     private final PlaceCountRepository placeCountRepository;
-    private final EmailService emailService;
 
     @Override
-    public ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number)  {
+    public ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number) {
         //checking if passwords are the same or not
         if (!clientRegisterDTO.getPassword().equals(clientRegisterDTO.getConfirmPassword())) {
             log.error("password are not the same ");
@@ -234,7 +228,6 @@ public class ClientServiceImpl implements ClientService {
         return placeCountRepository.save(placeCounts);
     }
 
-
     @Override
     public List<BookResponse> getBooksFromBasket(String clientId) {
         return bookRepository.findBasketByClientId(clientId)
@@ -277,28 +270,16 @@ public class ClientServiceImpl implements ClientService {
         return ResponseEntity.ok("Your order has been successfully placed!");
     }
 
-
     @Override
-    public List<BookResponse> getBooksInPurchased(String name) {
-        return userRepository.getBooksInPurchased(name);
+    public List<Book> operationBook(String name) {
+        User byEmail = userRepository.findByEmail(name)
+                .orElseThrow(() -> new BadRequestException(
+                        "user with email ={} does not exists "));
+        return bookRepository.getBooksInPurchased(byEmail.getId());
     }
 
     public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);
-    }
-
-    public Boolean checkPromo(String promo) {
-        List<Promocode> promocode = promoRepo.findAll();
-        for (Promocode promocode1 : promocode) {
-            if (promocode1.getPromocode().equals(promo)) {
-                if (promocode1.getIsActive().equals(true)) {
-                    return true;
-                }
-                log.error("this {} promo not found", promo);
-            }
-            log.error("this {} promo is not active", promocode);
-        }
-        return false;
     }
 
     @Override

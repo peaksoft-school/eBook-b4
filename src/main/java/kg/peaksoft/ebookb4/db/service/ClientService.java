@@ -3,6 +3,7 @@ package kg.peaksoft.ebookb4.db.service;
 import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.CardResponse;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public interface ClientService {
 
     ResponseEntity<?> placeOrder(String name);
 
-    List<BookResponse> getBooksInPurchased(String name);
+    List<Book> operationBook(String name);
 
     List<CardResponse> plusOrMinus(String name, String plusOrMinus, Long bookId, String promoCode);
 }

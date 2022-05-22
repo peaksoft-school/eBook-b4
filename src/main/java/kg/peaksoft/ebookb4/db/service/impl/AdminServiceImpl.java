@@ -11,7 +11,6 @@ import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
 import kg.peaksoft.ebookb4.db.models.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
-import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
@@ -119,15 +118,29 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public VendorResponse getVendor(Long id) {
-        User user = userRepository.getById(id);
+    public VendorResponse getVendorById(Long id) {
+
+        User user = userRepository.getUserById(id, ERole.ROLE_VENDOR)
+                .orElseThrow(() -> {
+                    log.error("Vendor with id ={} does not exists", id);
+                    throw new BadRequestException(
+                            String.format("Vendor with id %s doesn't exist!", id)
+                    );
+                });
+
         log.info("Get all vendors works");
         return vendorMapper.createVendorDto(user);
     }
 
     @Override
     public ClientResponse getClientById(Long id) {
-        User user = userRepository.getById((id));
+        User user = userRepository.getUserById(id, ERole.ROLE_CLIENT)
+                .orElseThrow(() -> {
+                    log.error("Client with id ={} does not exists", id);
+                    throw new BadRequestException(
+                            String.format("Client with id %s doesn't exist!", id)
+                    );
+                });
         log.info("Get client by id works");
         return clientMapper.createClientDto(user);
     }
@@ -170,26 +183,19 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> getBookById(Long bookId) {
-
-        RequestStatus requestStatus = null;
-
-        assert false;
-
-
-        Book book = bookRepository.findBookInProgress(bookId, requestStatus)
+    public Book getBookById(Long bookId) {
+        Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> {
                     log.error("Book with id ={} does not exists", bookId);
                     throw new BadRequestException(
-                            String.format("Book with id %s has not been found it is already went through admin-check", bookId)
+                            String.format("The book with the id %s was not found", bookId)
                     );
                 });
-        book.setAdminWatch(true);
-
-
+        if (book.getAdminWatch().equals(false)) {
+            book.setAdminWatch(true);
+        }
         log.info("Get book by id works");
-
-        return ResponseEntity.ok(String.format("Book with id %s has been watched by admin!", bookId));
+        return book;
     }
 
     @Override
@@ -279,6 +285,7 @@ public class AdminServiceImpl implements AdminService {
                                                    RequestStatus requestStatus) {
         User user = userRepository.findById(vendorId).orElseThrow(() ->
                 new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId)));
+
         List<Book> booksInProgress = bookRepository.findBooksFromVendorInProgress(user.getEmail(), requestStatus);
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksInProgress.size());
@@ -287,15 +294,10 @@ public class AdminServiceImpl implements AdminService {
         return new CustomPageRequest<>(pages).getContent();
     }
 
-//    @Override
-//    public List<BookResponse> getBooksFavoriteClient(Long clientId) {
-//        return bookRepository.getBooksFavoritesClient(clientId);
-//    }
-
-//    @Override
-//    public List<ClientOperations> getBooksInPurchased(Long clientId) {
-//        return bookRepository.getBooksInPurchased(clientId);
-//    }
+    @Override
+    public List<Book> getBooksInPurchased(Long clientId) {
+        return bookRepository.getBooksInPurchased(clientId);
+    }
 
 
     @Override

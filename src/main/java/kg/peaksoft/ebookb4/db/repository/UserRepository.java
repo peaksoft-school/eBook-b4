@@ -1,9 +1,8 @@
 package kg.peaksoft.ebookb4.db.repository;
 
 import kg.peaksoft.ebookb4.db.models.entity.Book;
-import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.entity.User;
-import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +14,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
   Optional<User> findByEmail(String email);
 
   Boolean existsByEmail(String email);
@@ -33,17 +33,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("select c.likedBooks from User c where c.id = ?1")
   List<Book> getAllLikedBooks(Long id);
 
-
-
-
-
-  @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price, b.fileInformation)" +
-          "from Book b where b.user.email = ?1 and b.bookId = b.operations.size")
-  List<BookResponse> getBooksInPurchased(String name);
-
-
-
-
   //change discountPromo to null if it is expired
   @Transactional
   @Modifying
@@ -56,7 +45,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("update Book b set b.discountFromPromo = ?2 where b.user = ?1 and b.discount is null ")
   void givePromo(User user, int discount);
 
-  @Modifying
-  @Query("delete from User u where u.id = ?1")
-  void deleteUserById(Long id);
+
+  @Query("select b from User b where b.id = ?1 and b.role.name = ?2")
+    Optional<User> getUserById(Long id, ERole roleClient);
 }

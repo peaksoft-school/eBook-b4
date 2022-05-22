@@ -1,6 +1,5 @@
 package kg.peaksoft.ebookb4.db.service;
 
-import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
@@ -30,7 +29,7 @@ public interface AdminService {
 
     List<ClientResponse> findAllClient();
 
-    VendorResponse getVendor(Long id);
+    VendorResponse getVendorById(Long id);
 
     ClientResponse  getClientById(Long id);
 
@@ -38,7 +37,7 @@ public interface AdminService {
 
     ResponseEntity<?> refuseBookRequest(RefuseBookRequest refuseBookRequest, Long id);
 
-    ResponseEntity<?> getBookById(Long bookId);
+    Book getBookById(Long bookId);
 
     List<Book> findBooksFromVendor(Integer offset, int pageSize, Long vendorId);
 
@@ -53,8 +52,9 @@ public interface AdminService {
 
     List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, Long vendorId,
                                             RequestStatus requestStatus);
-//
-//    List<ClientOperations> getBooksInPurchased(Long clientId);
+
+    List<Book> getBooksInPurchased(Long clientId);
 
     List<BookResponse> getAllLikedBooks(Long clientId);
+
 }

@@ -116,28 +116,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<BookResponse> getVendorBooksSold(String name, ERole role);
 
 
-
-
-
     @Query(value = "SELECT * from book b " +
-            "join client_operations t on t.operation_id = b.book_id " +
-            "join operation_books o on o.operation_id = t.user_id "+
-            "where t.user_id = ?1 ", nativeQuery = true)
-    List<Book> hello(Long id);
+            "join operation_books o on o.book_id = b.book_id "+
+            "join client_operations t on t.operation_id = o.operation_id " +
+            "join users u on t.user_id = u.user_id " +
+            "where u.user_id = ?1 ", nativeQuery = true)
+    List<Book> getBooksInPurchased(Long id);
 
-
-   @Query(value = "SELECT  * FROM book b " +
-           "join client_operations e on e.book_id = b.book_id " +
-           "join operation_books o ON  o.operation_id = e.operation_id " +
-           "where e.user_id = ?1", nativeQuery = true)
-    List<Book> hello2(String name);
-
-
-
-
-
-//    @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
-//            "from client_operations where user_id = ?1", nativeQuery = true)
-//    List<BookResponse> gets(Long id);
-//
 }

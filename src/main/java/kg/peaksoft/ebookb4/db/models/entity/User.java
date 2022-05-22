@@ -61,7 +61,7 @@ public class User {
     @JoinColumn(name = "basket_id")
     private Basket basket;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Promocode> promocodes;
 
     @OneToMany
