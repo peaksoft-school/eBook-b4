@@ -27,7 +27,7 @@ public class FileSources {
     private String line3;
     private String line4;
 
-    @ManyToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
+//    @ManyToOne
+//    @JoinColumn(name = "book_id")
+//    private Book book;
 }
