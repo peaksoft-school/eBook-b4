@@ -39,9 +39,9 @@ public class FileServiceImpl implements FileService {
         String filenameExtension2 = StringUtils.getFilenameExtension(file2.getOriginalFilename());
         String filenameExtension3 = StringUtils.getFilenameExtension(file3.getOriginalFilename());
 
-        String key1 = UUID.randomUUID() + "." + filenameExtension1;
-        String key2 = UUID.randomUUID() + "." + filenameExtension2;
-        String key3 = UUID.randomUUID() + "." + filenameExtension3;
+        String key1 ="Images/" + UUID.randomUUID() + "." + filenameExtension1;
+        String key2 ="Images/" + UUID.randomUUID() + "." + filenameExtension2;
+        String key3 ="Book files/" +  UUID.randomUUID() + "." + filenameExtension3;
 
         ObjectMetadata metaData1 = new ObjectMetadata();
         metaData1.setContentLength(file1.getSize());
@@ -105,6 +105,7 @@ public class FileServiceImpl implements FileService {
         response.put("first image", awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key1));
         response.put("second image", awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key2));
         response.put("book file", awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key3));
+        response.put("file information Id ", String.valueOf(bookById.getFileInformation().getFileId()));
         return response;
     }
 

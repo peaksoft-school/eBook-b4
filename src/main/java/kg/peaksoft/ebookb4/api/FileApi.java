@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/aws")
+@RequestMapping("/api/aws")
 @AllArgsConstructor
 @PreAuthorize("hasRole('ROLE_VENDOR')")
 @Tag(name = "This API for saving files {images, audios, electronic_books} to amazon S3 bucket")
