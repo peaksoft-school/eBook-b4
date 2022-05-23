@@ -3,12 +3,14 @@ package kg.peaksoft.ebookb4.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
+import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
+import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
+import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.request.Request;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.CardResponse;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.service.ClientService;
-import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
-import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,20 +24,20 @@ import java.util.List;
 @RequestMapping("/api/client")
 @AllArgsConstructor
 @PreAuthorize("hasRole('ROLE_CLIENT')")
-@Tag(name = "Client",description = " Client accessible apis")
+@Tag(name = "Client", description = " Client accessible apis")
 public class ClientApi {
 
     private ClientService clientService;
 
     @Operation(summary = "Client profile", description = "Client can see all accessible data of client")
     @GetMapping("/profile")
-    public ClientRegisterDTO getClientDetails(Authentication authentication){
+    public ClientRegisterDTO getClientDetails(Authentication authentication) {
         return clientService.getClientDetails(authentication.getName());
     }
 
     @Operation(summary = "Update a client", description = "Update a client profile")
     @PatchMapping("/profile/settings")
-    public ResponseEntity<?> updateClient(@RequestBody ClientUpdateDTO newClientDTO, Authentication authentication){
+    public ResponseEntity<?> updateClient(@RequestBody ClientUpdateDTO newClientDTO, Authentication authentication) {
         return clientService.update(newClientDTO, authentication.getName());
     }
 
@@ -72,8 +74,8 @@ public class ClientApi {
 
     @Operation(summary = "Get all sum with discount", description = "Get all sum with discount in cart")
     @GetMapping("/get-count-in-card")
-    public ClientOperationDTO comparePromoCode( Authentication authentication) {
-        return clientService.sumAfterPromo( authentication.getName());
+    public ClientOperationDTO comparePromoCode(Authentication authentication) {
+        return clientService.sumAfterPromo(authentication.getName());
     }
 
     @Operation(summary = "Place an order", description = "Place an order for all books in the basket")
@@ -82,15 +84,10 @@ public class ClientApi {
         return clientService.placeOrder(authentication.getName());
     }
 
-//    @GetMapping("/get-all-card")
-//    public List<CardResponse> getAllInCard(Authentication authentication){
-//        return clientService.getAllInCard(authentication.getName());
-//    }
-
     @Operation(summary = "Get all purchased books", description = "Get all purchased books with username")
     @GetMapping("/operation")
-    public List<BookResponse> getBook(Authentication authentication) {
-        return clientService.getBooksInPurchased(authentication.getName());
+    public List<Book> getBook(Authentication authentication) {
+        return clientService.operationBook(authentication.getName());
     }
 
     @Operation(summary = "Plus or minus paper book", description = "Plus or minus paper books when ordering with paper book id ")
@@ -101,5 +98,4 @@ public class ClientApi {
                                                    @PathVariable String promoCode) {
         return clientService.plusOrMinus(authentication.getName(), plsOrMns, bookId, promoCode);
     }
-
 }

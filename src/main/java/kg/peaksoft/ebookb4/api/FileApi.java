@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.Map;
 
 
@@ -43,5 +42,5 @@ public class FileApi {
     public byte[] downloadFile(@PathVariable String keyName){
         return fileService.downloadFile(keyName);
     }
-    
+
 }

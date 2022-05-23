@@ -61,6 +61,7 @@ public class AdminApi {
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         return service.deleteById(id);
     }
+
     @Operation(summary = "Get all by genre and book type",
             description = "Filter all books by genre and book type ")
     @GetMapping("/booksByBoth/{genre}/{bookType}")
@@ -90,12 +91,13 @@ public class AdminApi {
 
     @Operation(summary = "Get book by id", description = "Change color of book when admin watch is true")
     @GetMapping("/book/{id}")
-    public ResponseEntity<?> getBookById(@PathVariable Long id) {
+    public Book getBookById(@PathVariable Long id) {
         return service.getBookById(id);
     }
+
     @Operation(summary = "Get all client",
             description = "Get all client ")
-    @GetMapping
+    @GetMapping("/clients")
     public List<ClientResponse> getAllClient() {
         return service.findAllClient();
     }
@@ -114,15 +116,17 @@ public class AdminApi {
 
     @Operation(summary = "Get client liked books")
     @GetMapping("/client/favorites/{clientId}")
-    public List<BookResponse> booksClientFavorites(@PathVariable Long clientId){
+    public List<BookResponse> booksClientFavorites(@PathVariable Long clientId) {
         return service.getAllLikedBooks(clientId);
     }
 
     @Operation(summary = "Get all purchased book in client")
     @GetMapping("/client/operation/{clientId}")
-    public List<BookResponse> getBook(@PathVariable Long clientId){
+    public List<Book> getBook(@PathVariable Long clientId) {
         return service.getBooksInPurchased(clientId);
     }
+
+
     @Operation(summary = "Get all Vendors",
             description = "Get all vendors with amount of books")
     @GetMapping("/vendors")
@@ -134,7 +138,7 @@ public class AdminApi {
     @Operation(summary = "Get vendor by id")
     @GetMapping("/vendor/{id}")
     public VendorResponse getByVendorId(@PathVariable Long id) {
-        return service.getVendor(id);
+        return service.getVendorById(id);
     }
 
     @Operation(summary = "Get all books of vendor in admin panel",

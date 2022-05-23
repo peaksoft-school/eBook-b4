@@ -4,7 +4,6 @@ import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -111,13 +110,17 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("update Book b set b.isNew = false where b.bookId = ?1")
     void updateBook(Long bookId);
 
-    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
-            "b.yearOfIssue, b.price, b.fileInformation) from Book b where b.operations.user.id = ?1")
-    List<BookResponse> getBooksInPurchased(Long clientId);
-
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, " +
             "b.authorFullName, b.aboutBook, b.publishingHouse,b.yearOfIssue, b.price, b.fileInformation)" +
-            " from Book b where b.operations.id > 0 and b.user.email = ?1 and b.user.role.name = ?2")
+            " from Book b where b.operations.size > 0 and b.user.email = ?1 and b.user.role.name = ?2")
     List<BookResponse> getVendorBooksSold(String name, ERole role);
+
+
+    @Query(value = "SELECT * from book b " +
+            "join operation_books o on o.book_id = b.book_id "+
+            "join client_operations t on t.operation_id = o.operation_id " +
+            "join users u on t.user_id = u.user_id " +
+            "where u.user_id = ?1 ", nativeQuery = true)
+    List<Book> getBooksInPurchased(Long id);
 
 }
