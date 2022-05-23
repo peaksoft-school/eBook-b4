@@ -39,9 +39,9 @@ public class FileServiceImpl implements FileService {
         String filenameExtension2 = StringUtils.getFilenameExtension(file2.getOriginalFilename());
         String filenameExtension3 = StringUtils.getFilenameExtension(file3.getOriginalFilename());
 
-        String key1 = UUID.randomUUID().toString() + "." + filenameExtension1;
-        String key2 = UUID.randomUUID().toString() + "." + filenameExtension2;
-        String key3 = UUID.randomUUID().toString() + "." + filenameExtension3;
+        String key1 = UUID.randomUUID() + "." + filenameExtension1;
+        String key2 = UUID.randomUUID() + "." + filenameExtension2;
+        String key3 = UUID.randomUUID() + "." + filenameExtension3;
 
         ObjectMetadata metaData1 = new ObjectMetadata();
         metaData1.setContentLength(file1.getSize());
@@ -56,51 +56,37 @@ public class FileServiceImpl implements FileService {
         metaData3.setContentType(file3.getContentType());
 
         try {
-            awsS3Client.putObject("test-b4-ebook", key1, file1.getInputStream(), metaData1);
+            awsS3Client.putObject(BucketName.AWS_BOOKS.getBucketName(), key1, file1.getInputStream(), metaData1);
+            awsS3Client.putObject(BucketName.AWS_BOOKS.getBucketName(), key2, file2.getInputStream(), metaData2);
+            awsS3Client.putObject(BucketName.AWS_BOOKS.getBucketName(), key3, file3.getInputStream(), metaData3);
             log.info("upload the file");
             log.info("name: {}" , file1.getOriginalFilename());
-        } catch (IOException e) {
-            log.error("an exception occurred while uploading the file");
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occured while uploading the file");
-        }
-        awsS3Client.setObjectAcl("test-b4-ebook", key1, CannedAccessControlList.PublicRead);
-
-        try {
-            awsS3Client.putObject("test-b4-ebook", key2, file2.getInputStream(), metaData2);
-            log.info("upload the file");
             log.info("name: {}" , file2.getOriginalFilename());
-        } catch (IOException e) {
-            log.error("an exception occurred while uploading the file");
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occured while uploading the file");
-        }
-        awsS3Client.setObjectAcl("test-b4-ebook", key2, CannedAccessControlList.PublicRead);
-
-        try {
-            awsS3Client.putObject("test-b4-ebook", key3, file3.getInputStream(), metaData3);
-            log.info("upload the file");
             log.info("name: {}" , file3.getOriginalFilename());
         } catch (IOException e) {
             log.error("an exception occurred while uploading the file");
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occured while uploading the file");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occurred while uploading the file");
         }
-        awsS3Client.setObjectAcl("test-b4-ebook", key3, CannedAccessControlList.PublicRead);
+        awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), key1, CannedAccessControlList.PublicRead);
+        awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), key2, CannedAccessControlList.PublicRead);
+        awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), key3, CannedAccessControlList.PublicRead);
 
         Book bookById = bookRepository.getById(bookId);
 
-        if(!bookById.getFileInformation().getFirstPhoto().equals(awsS3Client.getResourceUrl("test-b4-ebook", key1))){
+        if(!bookById.getFileInformation().getFirstPhoto().equals(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key1))){
             if (bookById.getFileInformation().getKeyOfFirstPhoto() == null){
                 log.info("it's new first photo");
             }else{
                 deleteFile(bookById.getFileInformation().getKeyOfFirstPhoto());
             }
-            bookById.getFileInformation().setFirstPhoto(awsS3Client.getResourceUrl("test-b4-ebook", key1));
-        }if (!bookById.getFileInformation().getSecondPhoto().equals(awsS3Client.getResourceUrl("test-b4-ebook", key2))){
+            bookById.getFileInformation().setFirstPhoto(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key1));
+        }if (!bookById.getFileInformation().getSecondPhoto().equals(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key2))){
             if (bookById.getFileInformation().getKeyOfSecondPhoto() == null){
                 log.info("it's new second photo");
             }else {
                 deleteFile(bookById.getFileInformation().getKeyOfSecondPhoto());
             }
-        }if (!bookById.getFileInformation().getBookFile().equals(awsS3Client.getResourceUrl("test-b4-ebook", key3))){
+        }if (!bookById.getFileInformation().getBookFile().equals(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key3))){
             if (bookById.getFileInformation().getKeyOfBookFile() == null){
                 log.info("it's new book file");
             }else {
@@ -111,14 +97,14 @@ public class FileServiceImpl implements FileService {
         bookById.getFileInformation().setKeyOfFirstPhoto(key1);
         bookById.getFileInformation().setKeyOfSecondPhoto(key2);
         bookById.getFileInformation().setKeyOfBookFile(key3);
-        bookById.getFileInformation().setFirstPhoto(awsS3Client.getResourceUrl("test-b4-ebook", key1));
-        bookById.getFileInformation().setSecondPhoto(awsS3Client.getResourceUrl("test-b4-ebook", key2));
-        bookById.getFileInformation().setBookFile(awsS3Client.getResourceUrl("test-b4-ebook", key3));
+        bookById.getFileInformation().setFirstPhoto(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key1));
+        bookById.getFileInformation().setSecondPhoto(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key2));
+        bookById.getFileInformation().setBookFile(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key3));
         bookRepository.save(bookById);
         LinkedHashMap<String, String> response = new LinkedHashMap<>();
-        response.put("first image", awsS3Client.getResourceUrl("test-b4-ebook", key1));
-        response.put("second image", awsS3Client.getResourceUrl("test-b4-ebook", key2));
-        response.put("book file", awsS3Client.getResourceUrl("test-b4-ebook", key3));
+        response.put("first image", awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key1));
+        response.put("second image", awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key2));
+        response.put("book file", awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), key3));
         return response;
     }
 

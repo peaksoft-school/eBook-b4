@@ -236,6 +236,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public List<BookResponse> getBooksFromBasket(String clientId) {
+        return bookRepository.findBasketByClientId(clientId)
+                .stream().map(book -> modelMapper.map(
+                        book, BookResponse.class)).collect(Collectors.toList());
+    }
+
+    @Override
     public ResponseEntity<?> placeOrder(String name) {
 
         ClientOperations clientOperations = new ClientOperations();
