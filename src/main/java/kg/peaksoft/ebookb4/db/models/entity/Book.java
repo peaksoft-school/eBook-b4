@@ -98,8 +98,6 @@ public class Book {
     @ManyToOne(fetch = FetchType.EAGER)
     private Genre genre;
 
-
-
     @ManyToMany(cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinTable(
@@ -107,7 +105,6 @@ public class Book {
             , joinColumns = @JoinColumn(name = "book_id")
             , inverseJoinColumns = @JoinColumn(name = "operation_id"))
     private List<ClientOperations> operations;
-
 
     @JsonIgnore
     public void setOperation(ClientOperations courseId) {
