@@ -149,7 +149,6 @@ public class AdminApi {
         return service.findBooksFromVendor(--offset, 12, vendorId);
     }
 
-
     @Operation(summary = "Get books with likes in admin panel",
             description = "Get books with at least one like")
     @GetMapping("/vendor/{vendorId}/favorite-books/{offset}")

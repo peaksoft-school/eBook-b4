@@ -90,6 +90,10 @@ public class AdminServiceImpl implements AdminService {
             throw new BadRequestException(
                     "Vendor with id " + id + " does not exists");
         }
+        User userById = userRepository.getById(id);
+        if (userById.getRole().getName().equals(ERole.ROLE_ADMIN)){
+            return ResponseEntity.badRequest().body("User with id " + id + " not found");
+        }
         log.info("Successfully deleter");
         userRepository.deleteById(id);
         return ResponseEntity.ok("Successfully deleter");
