@@ -131,17 +131,36 @@ public class BookGetServiceImpl implements BookGetService {
     }
 
     @Override
-    public List<BookResponse> getAllBooksRequests() {
+    public List<BookResponse> getAllBooksRequests(int offset, int pageSize) {
         promoService.checkPromos();
+        List<BookResponse> books = bookRepository.findBooksInProgress(INPROGRESS);
         log.info("Get all books request works");
-        return bookRepository.findBooksInProgress(INPROGRESS);
+
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int) paging.getOffset(), books.size());
+        int end = Math.min((start + paging.getPageSize()), books.size());
+        Page<BookResponse> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
+        System.out.println(new CustomPageRequest<>(pages).getContent().size());
+
+        log.info("Vendor books=s%"+new CustomPageRequest<>(pages).getContent().size());
+
+        return new CustomPageRequest<>(pages).getContent();
     }
 
     @Override
-    public List<BookResponse> getAllAcceptedBooks() {
+    public List<BookResponse> getAllAcceptedBooks(int offset, int pageSize) {
         promoService.checkPromos();
+        List<BookResponse> books = bookRepository.findBooksInProgress(ACCEPTED);
         log.info("accepted books size =s%" + bookRepository.findBooksAccepted(ACCEPTED).size());
-        return bookRepository.findBooksAccepted(ACCEPTED);
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int) paging.getOffset(), books.size());
+        int end = Math.min((start + paging.getPageSize()), books.size());
+        Page<BookResponse> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
+        System.out.println(new CustomPageRequest<>(pages).getContent().size());
+
+        log.info("Vendor books=s%"+new CustomPageRequest<>(pages).getContent().size());
+
+        return new CustomPageRequest<>(pages).getContent();
     }
 
     @Override
