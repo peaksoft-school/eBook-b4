@@ -37,10 +37,6 @@ public interface BookService {
 
     List<BookResponse> getBooksSold(String name, ERole role);
 
-    List<BookResponse> getBooksSold2();
-
-    FileInformation createNewFileInformation();
-
     List<Genre> getAllGenres();
 
 }
