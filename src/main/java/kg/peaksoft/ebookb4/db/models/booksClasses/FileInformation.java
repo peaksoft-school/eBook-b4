@@ -20,10 +20,12 @@ public class FileInformation {
 
     private String firstPhoto;
     private String secondPhoto;
+    private String thirdPhoto;
     private String bookFile;
 
     private String keyOfFirstPhoto;
     private String keyOfSecondPhoto;
+    private String keyOfThirdPhoto;
     private String KeyOfBookFile;
 
 }

@@ -1,6 +1,5 @@
 package kg.peaksoft.ebookb4.db.service;
 
-import kg.peaksoft.ebookb4.db.models.booksClasses.FileInformation;
 import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
@@ -36,10 +35,6 @@ public interface BookService {
                                             RequestStatus requestStatus);
 
     List<BookResponse> getBooksSold(String name, ERole role);
-
-    List<BookResponse> getBooksSold2();
-
-    FileInformation createNewFileInformation();
 
     List<Genre> getAllGenres();
 

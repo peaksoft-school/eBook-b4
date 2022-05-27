@@ -1,12 +1,10 @@
 package kg.peaksoft.ebookb4.db.models.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -19,8 +17,10 @@ public class AudioBook {
     @SequenceGenerator(name = "hibernate_seq", sequenceName = "audiobook_seq", allocationSize = 1)
     private Long audioBookId;
 
-    @JsonFormat(pattern = "HH-mm-ss")
-    private LocalTime duration;
+    private int hour;
+    private int minute;
+    private int second;
 
-    private String fragment;
+    private String urlFragment;
+    private String keyOfFragment;
 }

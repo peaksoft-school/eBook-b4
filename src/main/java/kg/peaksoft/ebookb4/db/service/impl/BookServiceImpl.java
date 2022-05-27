@@ -69,12 +69,13 @@ public class BookServiceImpl implements BookService {
         book.setEndOfTheNewTerm(LocalDate.now().plusDays(30));
 
         book.setUser(user);
-        FileInformation newFileInformation = createNewFileInformation();
+        FileInformation newFileInformation = new FileInformation();
         book.setFileInformation(newFileInformation);
         if (bookDTO.getBookType().name().equals(BookType.AUDIOBOOK.name())) {
             AudioBook audio = new AudioBook();
-            audio.setDuration(bookDTO.getAudioBook().getDuration());
-            audio.setFragment(bookDTO.getAudioBook().getFragment());
+            audio.setHour(bookDTO.getAudioBook().getHour());
+            audio.setMinute(bookDTO.getAudioBook().getMinute());
+            audio.setSecond(bookDTO.getAudioBook().getSecond());
             book.setAudioBook(audio);
             log.info("Save audio book");
 
@@ -197,8 +198,9 @@ public class BookServiceImpl implements BookService {
                 log.info("Update ebook");
                 break;
             case AUDIOBOOK:
-                book.getAudioBook().setDuration(newBook.getAudioBook().getDuration());
-                book.getAudioBook().setFragment(newBook.getAudioBook().getFragment());
+                book.getAudioBook().setHour(newBook.getAudioBook().getHour());
+                book.getAudioBook().setMinute(newBook.getAudioBook().getMinute());
+                book.getAudioBook().setSecond(newBook.getAudioBook().getSecond());
                 log.info("Update audio book");
                 break;
         }
@@ -283,17 +285,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookResponse> getBooksSold(String name , ERole role) {
         return repository.getVendorBooksSold(name, role);
-    }
-
-    @Override
-    public List<BookResponse> getBooksSold2() {
-        return null;
-    }
-
-    @Override
-    public FileInformation createNewFileInformation() {
-        FileInformation fileInformation = new FileInformation(null, "null", "null","null", "null", "null", "null");
-        return fileInformationRepository.save(fileInformation);
     }
 
     @Override
