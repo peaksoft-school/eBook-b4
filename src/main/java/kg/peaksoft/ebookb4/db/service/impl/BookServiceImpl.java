@@ -302,6 +302,11 @@ public class BookServiceImpl implements BookService {
         return fileInformationRepository.save(fileInformation);
     }
 
+    @Override
+    public List<Genre> getAllGenres() {
+        return genreRepository.findAll();
+    }
+
 
     public void deleteFile(String keyName) {
         final DeleteObjectRequest deleteObjectRequest = new
