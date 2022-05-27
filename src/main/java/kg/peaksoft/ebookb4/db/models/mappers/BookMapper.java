@@ -24,7 +24,7 @@ private final GenreRepository repository;
         book.setAboutBook(dto.getAboutBook());
         book.setLanguage(dto.getLanguage());
         book.setYearOfIssue(dto.getYearOfIssue());
-        book.setPublishingHouse(dto.getPublishingHouse());
+//        book.setPublishingHouse(dto.getPublishingHouse());
         book.setIsBestSeller(dto.getIsBestSeller());
         book.setPrice(dto.getPrice());
         book.setDiscount(dto.getDiscount());

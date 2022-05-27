@@ -22,6 +22,8 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.*;
 
 @Slf4j
@@ -44,6 +46,7 @@ public class BookGetServiceImpl implements BookGetService {
     public List<Book> findBooksByName(String name, RequestStatus requestStatus) {
         promoService.checkPromos();
         log.info("Find boos by name works");
+
         return bookRepository.findByName(name, requestStatus);
     }
 

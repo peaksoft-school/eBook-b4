@@ -138,6 +138,7 @@ public class BookServiceImpl implements BookService {
         if (!Objects.equals(bookName, newBookName)) {
             book.setTitle(newBookName);
         }
+
         String bookAuthor = book.getAuthorFullName();
         String newBookAuthor = newBook.getAuthorFullName();
         if (!Objects.equals(bookAuthor, newBookAuthor)) {

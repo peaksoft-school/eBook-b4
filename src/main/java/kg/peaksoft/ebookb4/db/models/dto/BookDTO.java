@@ -17,15 +17,15 @@ public class BookDTO {
     private String title;
     private String authorFullName;
     private String aboutBook;
-    private Integer discount;
-    private Boolean isBestSeller;
     private LocalDate yearOfIssue;
     private Double price;
     private String publishingHouse;
+
+    private Integer discount;
+    private Boolean isBestSeller;
     private Language language;
     private Long genreId;
     private BookType bookType;
-
 
     AudioBook audioBook;
     PaperBook paperBook;

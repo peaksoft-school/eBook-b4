@@ -2,7 +2,6 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
-import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
 import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
@@ -10,10 +9,10 @@ import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.PlaceCounts;
 import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
-import kg.peaksoft.ebookb4.db.models.response.CardOperationResponse;
 import kg.peaksoft.ebookb4.db.models.mappers.ClientOperationMapper;
 import kg.peaksoft.ebookb4.db.models.mappers.ClientRegisterMapper;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.response.CardOperationResponse;
 import kg.peaksoft.ebookb4.db.models.response.CardResponse;
 import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.repository.*;
@@ -29,7 +28,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
@@ -39,8 +37,6 @@ import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
-
-    private final PromocodeRepository promoRepo;
     private final PasswordEncoder encoder;
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
@@ -83,10 +79,10 @@ public class ClientServiceImpl implements ClientService {
 
         PlaceCounts newPlaceCounts = createNewPLaceCount();
         user.setPlaceCounts(newPlaceCounts);
-
         userRepository.save(user);
+
         return ResponseEntity.ok(new MessageResponse(
-                String.format("User with email %s registered successfully!", user.getEmail().toUpperCase(Locale.ROOT))));
+                String.format("User with email %s registered successfully!", user.getEmail())));
     }
 
     @Override
@@ -196,7 +192,7 @@ public class ClientServiceImpl implements ClientService {
                 ));
         List<Book> basketByClientId = bookRepository.findBasketByClientId(email);
         for (Book book : basketByClientId) {
-            if (book.getBookType().equals(BookType.PAPERBOOK)){
+            if (book.getBookType().equals(BookType.PAPERBOOK)) {
                 book.getPaperBook().setNumberOfSelected(book.getPaperBook().getNumberOfSelectedCopy());
                 bookRepository.save(book);
             }
@@ -224,15 +220,13 @@ public class ClientServiceImpl implements ClientService {
         Double totalPB = user.getPlaceCounts().getTotalPB();
         Double discountPB = user.getPlaceCounts().getDiscountPB();
 
-        return clientOperationMapper.build((countOfBooksInTotal+countOfPaperBookPB), (discount+discountPB + sumAfterPromo + sumAfterPromoPB) , (sum + sumPB), (total+totalPB - sumAfterPromo - sumAfterPromoPB));
+        return clientOperationMapper.build((countOfBooksInTotal + countOfPaperBookPB), (discount + discountPB + sumAfterPromo + sumAfterPromoPB), (sum + sumPB), (total + totalPB - sumAfterPromo - sumAfterPromoPB));
     }
 
-    public PlaceCounts createNewPLaceCount(){
-        PlaceCounts placeCounts = new PlaceCounts(null, 0.0,0.0,0.0,0,0,0, 0.0, 0.0, 0.0, 0.0);
+    public PlaceCounts createNewPLaceCount() {
+        PlaceCounts placeCounts = new PlaceCounts(null, 0.0, 0.0, 0.0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0);
         return placeCountRepository.save(placeCounts);
     }
-
-
 
     @Override
     public List<BookResponse> getBooksFromBasket(String clientId) {
@@ -250,31 +244,25 @@ public class ClientServiceImpl implements ClientService {
 
         User user = userRepository.getUser(name)
                 .orElseThrow(() -> new BadRequestException(
-                        "user with email ={} does not exists "
-                ));
+                        "user with email ={} does not exists "));
+
         if (all.size() == 0) {
             return ResponseEntity.ok("Your basket is empty");
         }
-            clientOperations.setBoughtBooks(all);
-            clientOperations.setUser(user);
 
-            for (Book book : all) {
-                if (book.getBookType().equals(BookType.PAPERBOOK)) {
-                    Integer numberOfSelected = book.getPaperBook().getNumberOfSelected();
-                    book.getPaperBook().setNumberOfSelectedCopy(numberOfSelected);
-                }else continue;
-            }
-            user.getPlaceCounts().setSumAfterPromo(0.0);
-            user.getPlaceCounts().setTotal(0.0);
-            user.getPlaceCounts().setSum(0.0);
-            user.getPlaceCounts().setDiscount(0.0);
-            user.getPlaceCounts().setCountOfBooksInTotal(0);
+        for (Book book : all) {
+            book.setOperation(clientOperations);
+        }
 
-        user.getPlaceCounts().setSumAfterPromoPB(0.0);
-        user.getPlaceCounts().setTotalPB(0.0);
-        user.getPlaceCounts().setSumPB(0.0);
-        user.getPlaceCounts().setDiscountPB(0.0);
-        user.getPlaceCounts().setCountOfPaperBookPB(0);
+        clientOperations.setBoughtBooks(all);
+        clientOperations.setUser(user);
+
+        for (Book book : all) {
+            if (book.getBookType().equals(BookType.PAPERBOOK)) {
+                Integer numberOfSelected = book.getPaperBook().getNumberOfSelected();
+                book.getPaperBook().setNumberOfSelectedCopy(numberOfSelected);
+            } else continue;
+        }
 
         clientOperationRepository.save(clientOperations);
         user.getBasket().clear();
@@ -282,29 +270,16 @@ public class ClientServiceImpl implements ClientService {
         return ResponseEntity.ok("Your order has been successfully placed!");
     }
 
-
     @Override
-    public List<BookResponse> getBooksInPurchased(String name) {
-        return userRepository.getBooksInPurchased(name);
+    public List<Book> operationBook(String name) {
+        User byEmail = userRepository.findByEmail(name)
+                .orElseThrow(() -> new BadRequestException(
+                        "user with email ={} does not exists "));
+        return bookRepository.getBooksInPurchased(byEmail.getId());
     }
-
 
     public Long getUsersBasketId(String username) {
         return basketRepository.getUsersBasketId(username);
-    }
-
-    public Boolean checkPromo(String promo) {
-        List<Promocode> promocode = promoRepo.findAll();
-        for (Promocode promocode1 : promocode) {
-            if (promocode1.getPromocode().equals(promo)) {
-                if (promocode1.getIsActive().equals(true)) {
-                    return true;
-                }
-                log.error("this {} promo not found", promo);
-            }
-            log.error("this {} promo is not active", promocode);
-        }
-        return false;
     }
 
     @Override
