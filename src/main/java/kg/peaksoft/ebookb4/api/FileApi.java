@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/aws")
+@RequestMapping("/api/aws")
 @AllArgsConstructor
 @PreAuthorize("hasRole('ROLE_VENDOR')")
 @Tag(name = "This API for saving files {images, audios, electronic_books} to amazon S3 bucket")
@@ -26,9 +26,11 @@ public class FileApi {
     @PostMapping("/upload-file/{bookId}")
     public Map<String, String> uploadFile(@RequestBody MultipartFile firstPhoto,
                                                  @RequestBody MultipartFile secondPhoto,
+                                                 @RequestBody MultipartFile thirdPhoto,
                                                  @RequestBody MultipartFile bookFile,
+                                                 @RequestBody MultipartFile audioFragment,
                                                  @PathVariable Long bookId) {
-        return fileService.uploadFile(firstPhoto, secondPhoto, bookFile, bookId);
+        return fileService.uploadFile(firstPhoto, secondPhoto, thirdPhoto, bookFile, audioFragment, bookId);
     }
 
     @Operation(summary = "Delete files", description = "Delete files with key name")

@@ -82,11 +82,6 @@ public class ClientApi {
         return clientService.placeOrder(authentication.getName());
     }
 
-//    @GetMapping("/get-all-card")
-//    public List<CardResponse> getAllInCard(Authentication authentication){
-//        return clientService.getAllInCard(authentication.getName());
-//    }
-
     @Operation(summary = "Get all purchased books", description = "Get all purchased books with username")
     @GetMapping("/operation")
     public List<BookResponse> getBook(Authentication authentication) {
