@@ -26,13 +26,16 @@ public class Genre {
 
     private String name;
 
+    private String rusName;
+
     @JsonIgnore
     @OneToMany(mappedBy = "genre")
     private List<Book> books;
 
-    public Genre(Long id, String name) {
+    public Genre(Long id, String name, String rusName) {
         this.id = id;
         this.name = name;
+        this.rusName=rusName;
     }
 
     @Override
