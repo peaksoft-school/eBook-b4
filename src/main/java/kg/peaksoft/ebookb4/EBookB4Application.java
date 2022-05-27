@@ -99,7 +99,7 @@ public class EBookB4Application {
         Genre manga = new Genre(null,"MANGA", "Манга");
         Genre thriller = new Genre(null, "THRILLER", "Триллер");
         Genre prose = new Genre(null, "PROSE", "Проза");
-        Genre businessLiterature = new Genre(null,"BUSINESS LITERATURE", "Бизнесс литература");
+        Genre businessLiterature = new Genre(null,"BUSINESS LITERATURE", "Бизнес литература");
         Genre psychology = new Genre(null, "PSYCHOLOGY", "Психология");
         Genre art = new Genre(null, "ART", "Исскуство");
         Genre culture = new Genre(null, "CULTURE", "Культура");
