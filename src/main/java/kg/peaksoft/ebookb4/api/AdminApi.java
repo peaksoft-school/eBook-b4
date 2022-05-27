@@ -31,9 +31,9 @@ public class AdminApi {
     private BookGetService bookGetService;
 
     @Operation(summary = "Get all books in process", description = "Get books in process")
-    @GetMapping("/books-in-process")
-    public List<BookResponse> getAllBookRequest() {
-        return bookGetService.getAllBooksRequests();
+    @GetMapping("/books-in-process/{offset}")
+    public List<BookResponse> getAllBookRequest(@PathVariable Integer offset) {
+        return bookGetService.getAllBooksRequests(--offset, 8);
     }
 
     @Operation(summary = "Accept a book by id", description = "Admin accepts book by Id")
@@ -43,9 +43,9 @@ public class AdminApi {
     }
 
     @Operation(summary = "Get all accepted books", description = "All accepted books")
-    @GetMapping("/books-accepted")
-    public List<BookResponse> getAllAcceptedBooks() {
-        return bookGetService.getAllAcceptedBooks();
+    @GetMapping("/books-accepted/{offset}")
+    public List<BookResponse> getAllAcceptedBooks(@PathVariable Integer offset) {
+        return bookGetService.getAllAcceptedBooks(--offset, 8);
     }
 
     @Operation(summary = "Refuse a book by id", description = "Admin refuses a book by id")
@@ -144,7 +144,6 @@ public class AdminApi {
                                        @PathVariable Integer offset) {
         return service.findBooksFromVendor(--offset, 12, vendorId);
     }
-
 
     @Operation(summary = "Get books with likes in admin panel",
             description = "Get books with at least one like")

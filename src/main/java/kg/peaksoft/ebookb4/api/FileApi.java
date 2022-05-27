@@ -26,9 +26,11 @@ public class FileApi {
     @PostMapping("/upload-file/{bookId}")
     public Map<String, String> uploadFile(@RequestBody MultipartFile firstPhoto,
                                                  @RequestBody MultipartFile secondPhoto,
+                                                 @RequestBody MultipartFile thirdPhoto,
                                                  @RequestBody MultipartFile bookFile,
+                                                 @RequestBody MultipartFile audioFragment,
                                                  @PathVariable Long bookId) {
-        return fileService.uploadFile(firstPhoto, secondPhoto, bookFile, bookId);
+        return fileService.uploadFile(firstPhoto, secondPhoto, thirdPhoto, bookFile, audioFragment, bookId);
     }
 
     @Operation(summary = "Delete files", description = "Delete files with key name")

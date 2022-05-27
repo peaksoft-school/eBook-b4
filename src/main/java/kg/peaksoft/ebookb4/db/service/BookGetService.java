@@ -18,9 +18,9 @@ public interface BookGetService {
 
     Book getBookById(Long id);
 
-    List<BookResponse> getAllBooksRequests();
+    List<BookResponse> getAllBooksRequests(int offset, int pageSize);
 
-    List<BookResponse> getAllAcceptedBooks();
+    List<BookResponse> getAllAcceptedBooks(int offset, int pageSize);
 
     List<GenreRequest> getCountGenre();
 

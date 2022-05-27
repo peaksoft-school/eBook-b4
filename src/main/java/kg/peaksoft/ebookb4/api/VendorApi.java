@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
+import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
@@ -126,5 +127,10 @@ public class VendorApi {
     public List<Book> getBooksInCancel(@PathVariable Integer offset, Authentication authentication){
         return bookService.findBooksFromVendorCancelled(--offset, 12, authentication.getName(),
                 RequestStatus.REFUSED);
+    }
+    @Operation(summary = "Get all genres")
+    @GetMapping("/get-all-genres")
+    public List<Genre> getAllGenres(){
+        return bookService.getAllGenres();
     }
 }
