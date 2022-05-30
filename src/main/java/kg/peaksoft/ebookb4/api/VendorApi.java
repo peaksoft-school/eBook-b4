@@ -8,6 +8,7 @@ import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.response.BookResponseAfterSaved;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.db.service.VendorService;
@@ -55,7 +56,7 @@ public class VendorApi {
 
     @Operation(summary = "Save book",description = "Adding a new book")
     @PostMapping("/new-book")
-    public ResponseEntity<?> saveBook(@RequestBody BookDTO bookDTO, Authentication authentication){
+    public BookResponseAfterSaved saveBook(@RequestBody BookDTO bookDTO, Authentication authentication){
         return bookService.saveBook(bookDTO, authentication.getName());
     }
 
