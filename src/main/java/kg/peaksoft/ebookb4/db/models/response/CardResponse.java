@@ -17,7 +17,7 @@ public class CardResponse {
     private String authorFullName;
     private String aboutBook;
     private String publishingHouse;
-    private LocalDate yearOfIssue;
+    private int yearOfIssue;
     private Double price;
     private Double sumAfterDiscount;
     private Integer promoDiscount;
