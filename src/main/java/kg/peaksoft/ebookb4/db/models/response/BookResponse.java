@@ -20,6 +20,7 @@ public class BookResponse {
     private String publishingHouse;
     private int yearOfIssue;
     private Double price;
+    private Boolean adminWatch;
 
     private FileInformation fileInformation;
 

@@ -29,7 +29,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
@@ -309,5 +311,15 @@ public class AdminServiceImpl implements AdminService {
         return userRepository.getAllLikedBooks(clientId)
                 .stream().map(book -> modelMapper.map(
                         book, BookResponse.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, Integer> getCountOfInProgressAlsoDontWatched() {
+        Integer booksInProgress = bookRepository.getCountOfBooksInProgress(RequestStatus.INPROGRESS);
+        Integer notWatch = bookRepository.getCountOfBooksWhereAdminDidNotWatch();
+        Map<String, Integer> counts = new HashMap<>();
+        counts.put("Count of books in progress", booksInProgress);
+        counts.put("Count of books where admin didn't watch", notWatch);
+        return counts;
     }
 }

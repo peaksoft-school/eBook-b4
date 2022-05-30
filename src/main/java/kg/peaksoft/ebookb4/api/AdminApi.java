@@ -18,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -181,11 +182,20 @@ public class AdminApi {
     }
 
     @Operation(summary = "Get books in progress in admin panel",
-            description = "Get a books in progress")
+            description = "Get a books in process")
     @GetMapping("/vendor/{vendorId}/books-in-process/{offset}")
     public List<Book> getBooksInProcess(@PathVariable Long vendorId
             , @PathVariable Integer offset) {
         return service.findBooksFromVendorInProcess(--offset, 12, vendorId,
                 RequestStatus.INPROGRESS);
     }
+
+    @Operation(summary = "Get two counts",
+    description = "get count of books in progress also get count of books where admin didn't watch")
+    @GetMapping("/countOfBooksInProgress")
+    public Map<String, Integer> getTwoCounts(){
+        return service.getCountOfInProgressAlsoDontWatched();
+    }
+
+
 }
