@@ -8,6 +8,7 @@ import kg.peaksoft.ebookb4.db.models.entity.*;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.response.BookResponseAfterSaved;
 import kg.peaksoft.ebookb4.db.repository.*;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
@@ -49,7 +50,7 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public ResponseEntity<?> saveBook(BookDTO bookDTO, String username) {
+    public BookResponseAfterSaved saveBook(BookDTO bookDTO, String username) {
         User user = userRepository.getUser(username)
                 .orElseThrow(() -> {
                     log.error("Vendor with name ={} does not exists", username);
@@ -97,9 +98,12 @@ public class BookServiceImpl implements BookService {
         user.getVendorAddedBooks().add(book);
         repository.save(book);
         log.info("Save book works");
-        return ResponseEntity.ok(new MessageResponse(
-                String.format("%s with name %s and with id %s registered successfully!", book.getBookType().name(),
-                        book.getTitle(), book.getBookId())));
+        BookResponseAfterSaved bookResponse = new BookResponseAfterSaved();
+        bookResponse.setId(book.getBookId());
+        bookResponse.setName(book.getTitle());
+        bookResponse.setBookType(book.getBookType());
+        bookResponse.setMessage("Book was successfully saved");
+        return bookResponse;
 
     }
 

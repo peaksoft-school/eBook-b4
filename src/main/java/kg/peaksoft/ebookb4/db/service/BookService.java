@@ -1,19 +1,19 @@
 package kg.peaksoft.ebookb4.db.service;
 
-import kg.peaksoft.ebookb4.db.models.booksClasses.FileInformation;
 import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.db.models.response.BookResponseAfterSaved;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface BookService {
 
-    ResponseEntity<?> saveBook(BookDTO bookDTO, String username);
+    BookResponseAfterSaved saveBook(BookDTO bookDTO, String username);
 
     Book findByBookId(Long bookId);
 

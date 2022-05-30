@@ -87,7 +87,7 @@ public class FileServiceImpl implements FileService {
             log.info("name: {}", audioFragment.getOriginalFilename());
         } catch (IOException e) {
             log.error("an exception occurred while uploading the file");
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occurred while uploading the file");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occured while uploading the file");
         }
         awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), keyOfFirstPhoto, CannedAccessControlList.PublicRead);
         awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), keyOfSecondPhoto, CannedAccessControlList.PublicRead);
