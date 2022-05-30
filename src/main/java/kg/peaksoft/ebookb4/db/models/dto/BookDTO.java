@@ -17,7 +17,7 @@ public class BookDTO {
     private String title;
     private String authorFullName;
     private String aboutBook;
-    private LocalDate yearOfIssue;
+    private int yearOfIssue;
     private Double price;
     private String publishingHouse;
 

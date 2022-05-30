@@ -10,6 +10,7 @@ import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AdminService {
 
@@ -56,5 +57,7 @@ public interface AdminService {
     List<Book> getBooksInPurchased(Long clientId);
 
     List<BookResponse> getAllLikedBooks(Long clientId);
+
+    Map<String, Integer> getCountOfInProgressAlsoDontWatched();
 
 }

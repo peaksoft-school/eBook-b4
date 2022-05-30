@@ -164,8 +164,8 @@ public class BookServiceImpl implements BookService {
         if (!Objects.equals(about, newAbout)) {
             book.setAboutBook(newAbout);
         }
-        LocalDate date = book.getYearOfIssue();
-        LocalDate newDate = newBook.getYearOfIssue();
+        int date = book.getYearOfIssue();
+        int newDate = newBook.getYearOfIssue();
         if (!Objects.equals(date, newDate)) {
             book.setYearOfIssue(newDate);
         }
