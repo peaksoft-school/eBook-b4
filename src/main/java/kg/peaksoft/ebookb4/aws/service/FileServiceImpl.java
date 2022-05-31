@@ -47,7 +47,6 @@ public class FileServiceImpl implements FileService {
         String secondPhotoExtension = StringUtils.getFilenameExtension(secondPhoto.getOriginalFilename());
         String thirdPhotoExtension = StringUtils.getFilenameExtension(thirdPhoto.getOriginalFilename());
 
-
         String keyOfFirstPhoto = "Images/" + UUID.randomUUID() + "." + firstPhotoExtension;
         String keyOfSecondPhoto = "Images/" + UUID.randomUUID() + "." + secondPhotoExtension;
         String keyOfThirdPhoto = "Images/" + UUID.randomUUID() + "." + thirdPhotoExtension;
@@ -63,7 +62,6 @@ public class FileServiceImpl implements FileService {
         ObjectMetadata metaDataForThirdPhoto = new ObjectMetadata();
         metaDataForThirdPhoto.setContentLength(thirdPhoto.getSize());
         metaDataForThirdPhoto.setContentType(thirdPhoto.getContentType());
-
 
         try {
             awsS3Client.putObject(BucketName.AWS_BOOKS.getBucketName(), keyOfFirstPhoto, firstPhoto.getInputStream(), metaDataForFirstPhoto);
@@ -121,17 +119,30 @@ public class FileServiceImpl implements FileService {
         response.put("first image", awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfFirstPhoto));
         response.put("second image", awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfSecondPhoto));
         response.put("third image", awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfThirdPhoto));
-        if (bookById.getBookType().equals(BookType.EBOOK) && bookFile != null) {
-            response.put("book file", uploadBookFile(bookFile, bookById));
+        if (bookById.getBookType().equals(BookType.EBOOK)) {
+            if (bookById.getFileInformation().getBookFile() == null || bookById.getFileInformation().getBookFile() != null) {
+                if (bookFile != null) {
+                    response.put("book file", uploadBookFile(bookFile, bookById));
+                } else if (audioFragment != null) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't upload the audio file in to EBOOK");
+                } else throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You didn't upload the Book file");
+            }
         }
-        if (bookById.getBookType().equals(BookType.AUDIOBOOK) && audioFragment != null && bookFile != null) {
-            response.put("book file", uploadBookFile(bookFile, bookById));
-            response.put("audio fragment", uploadAudioFragment(audioFragment, bookById));
+        if (bookById.getBookType().equals(BookType.AUDIOBOOK)) {
+            if (bookById.getFileInformation().getBookFile() == null || bookById.getFileInformation().getBookFile() != null ||
+            bookById.getAudioBook().getUrlFragment() == null || bookById.getAudioBook().getUrlFragment() != null){
+                if (bookFile != null && audioFragment != null) {
+                    response.put("book file", uploadBookFile(bookFile, bookById));
+                    response.put("audio fragment", uploadAudioFragment(audioFragment, bookById));
+                }else {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You should to upload audio file with audio fragment");
+                }
+            }
         }
         return response;
     }
 
-    public String uploadBookFile(MultipartFile bookFile, Book bookById){
+    public String uploadBookFile(MultipartFile bookFile, Book bookById) {
         String bookFileExtension = StringUtils.getFilenameExtension(bookFile.getOriginalFilename());
         String keyOfBookFile = "Book files/" + UUID.randomUUID() + "." + bookFileExtension;
 
@@ -212,4 +223,18 @@ public class FileServiceImpl implements FileService {
             throw new IllegalStateException("Failed to download the file", e);
         }
     }
+
+//    @Override
+//    public LinkedHashMap<String, String> updateFileInformation(MultipartFile firstPhoto,
+//                                                               MultipartFile secondPhoto,
+//                                                               MultipartFile thirdPhoto,
+//                                                               MultipartFile bookFile,
+//                                                               MultipartFile audioFragment,
+//                                                               Long bookId) {
+//
+//
+//        return null;
+//    }
+
+
 }

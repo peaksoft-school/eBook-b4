@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 
@@ -29,7 +31,8 @@ public class FileApi {
                                                  @RequestBody MultipartFile bookFile,
                                                  @RequestBody MultipartFile audioFragment,
                                                  @PathVariable Long bookId) {
-        return fileService.uploadFile(firstPhoto, secondPhoto, thirdPhoto, bookFile, audioFragment, bookId);
+
+            return fileService.uploadFile(firstPhoto, secondPhoto, thirdPhoto, bookFile, audioFragment, bookId);
     }
 
     @Operation(summary = "Delete files", description = "Delete files with key name")

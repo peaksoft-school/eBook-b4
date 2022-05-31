@@ -94,7 +94,7 @@ public class AdminServiceImpl implements AdminService {
                     "Vendor with id " + id + " does not exists");
         }
         User userById = userRepository.getById(id);
-        if (userById.getRole().getName().equals(ERole.ROLE_ADMIN)){
+        if (userById.getRole().getName().equals(ERole.ROLE_ADMIN)) {
             return ResponseEntity.badRequest().body("User with id " + id + " not found");
         }
         log.info("Successfully deleter");
@@ -294,11 +294,7 @@ public class AdminServiceImpl implements AdminService {
                 new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId)));
 
         List<Book> booksInProgress = bookRepository.findBooksFromVendorInProgress(user.getEmail(), requestStatus);
-        for (Book b:booksInProgress) {
-            if(b.getBookType().equals(BookType.EBOOK)){
 
-            }
-        }
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksInProgress.size());
         int end = Math.min((start + paging.getPageSize()), booksInProgress.size());
@@ -333,49 +329,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-    public Integer countOfPages(List<BookResponse> books){
+    public Integer countOfPages(List<BookResponse> books) {
         int count = 1;
-            int size = books.size();
+        int size = books.size();
         for (int i = 0; i < size; i++) {
-            if (size - 8 >= 0){
-            size -=8;
-            count++;
+            if (size - 8 >= 0) {
+                size -= 8;
+                count++;
             }
         }
         return count;
     }
 
-    public void chekHaveFiles(List<Book> books){
-        for (Book book: books) {
-            if (book.getBookType().equals(BookType.AUDIOBOOK)) {
-                if (book.getFileInformation().getBookFile() == null ||
-                        book.getAudioBook().getUrlFragment() == null ||
-                        book.getFileInformation().getFirstPhoto() == null ||
-                        book.getFileInformation().getSecondPhoto() == null ||
-                        book.getFileInformation().getThirdPhoto() == null) {
-                    log.info("Book with name = {} but without files was deleted", book.getTitle());
-                    bookRepository.deleteById(book.getBookId());
-                }
-            }
-            if (book.getBookType().equals(BookType.EBOOK)) {
-                if (book.getFileInformation().getBookFile() == null ||
-                        book.getFileInformation().getFirstPhoto() == null ||
-                        book.getFileInformation().getSecondPhoto() == null ||
-                        book.getFileInformation().getThirdPhoto() == null &&
-                                book.getAudioBook().getUrlFragment() == null ) {
-                    log.info("Book with name = {} but without files was deleted", book.getTitle());
-                    bookRepository.deleteById(book.getBookId());
-                }
-            }
-            if (book.getBookType().equals(BookType.PAPERBOOK)) {
-                if(book.getFileInformation().getFirstPhoto() == null ||
-                        book.getFileInformation().getSecondPhoto() == null ||
-                        book.getFileInformation().getThirdPhoto() == null &&
-                                book.getFileInformation().getBookFile() == null){
 
-                }
-            }
-        }
-
-    }
 }

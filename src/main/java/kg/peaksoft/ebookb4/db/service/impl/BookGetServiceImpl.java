@@ -2,6 +2,7 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.Genre;
+import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
@@ -138,7 +139,7 @@ public class BookGetServiceImpl implements BookGetService {
         promoService.checkPromos();
         List<BookResponse> books = bookRepository.findBooksInProgress(INPROGRESS);
         log.info("Get all books request works");
-
+//        chekHaveFiles(books);
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), books.size());
         int end = Math.min((start + paging.getPageSize()), books.size());
@@ -227,6 +228,42 @@ public class BookGetServiceImpl implements BookGetService {
             }
         }
         return bookRepository.BooksNovelties(books);
+    }
+
+    public void chekHaveFiles(List<Book> books) {
+        for (Book book : books) {
+            if (book.getBookType().equals(BookType.AUDIOBOOK)) {
+                if (book.getFileInformation().getBookFile() == null ||
+                        book.getAudioBook().getUrlFragment() == null ||
+                        book.getFileInformation().getFirstPhoto() == null ||
+                        book.getFileInformation().getSecondPhoto() == null ||
+                        book.getFileInformation().getThirdPhoto() == null) {
+                    log.info("Book with name = {} but without files was deleted", book.getTitle());
+                    bookRepository.deleteById(book.getBookId());
+                }
+            }
+            if (book.getBookType().equals(BookType.EBOOK)) {
+                if (book.getFileInformation().getBookFile() == null ||
+                        book.getFileInformation().getFirstPhoto() == null ||
+                        book.getFileInformation().getSecondPhoto() == null ||
+                        book.getFileInformation().getThirdPhoto() == null &&
+                                book.getAudioBook().getUrlFragment() == null) {
+                    log.info("Book with name = {} but without files was deleted", book.getTitle());
+                    bookRepository.deleteById(book.getBookId());
+                }
+            }
+            if (book.getBookType().equals(BookType.PAPERBOOK)) {
+                if (book.getFileInformation().getFirstPhoto() == null ||
+                        book.getFileInformation().getSecondPhoto() == null ||
+                        book.getFileInformation().getThirdPhoto() == null &&
+                                book.getFileInformation().getBookFile() == null &&
+                                book.getAudioBook().getUrlFragment() == null) {
+                    log.info("Book with name = {} but without files was deleted", book.getTitle());
+                    bookRepository.deleteById(book.getBookId());
+                }
+            }
+        }
+
     }
 }
 
