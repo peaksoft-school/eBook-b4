@@ -334,7 +334,7 @@ public class AdminServiceImpl implements AdminService {
 
 
     public Integer countOfPages(List<BookResponse> books){
-        int count = 0;
+        int count = 1;
             int size = books.size();
         for (int i = 0; i < size; i++) {
             if (size - 8 >= 0){
@@ -345,17 +345,24 @@ public class AdminServiceImpl implements AdminService {
         return count;
     }
 
-   /* public void chekHaveFiles(List<Book> books){
+    public void chekHaveFiles(List<Book> books){
         for (Book book: books) {
-            if (book.getBookType().equals(BookType.AUDIOBOOK)){
+            if (book.getBookType().equals(BookType.AUDIOBOOK)) {
                 if (book.getFileInformation().getBookFile() == null ||
-                        book.getAudioBook().getUrlFragment() == null){
+                        book.getAudioBook().getUrlFragment() == null ||
+                        book.getFileInformation().getFirstPhoto() == null ||
+                        book.getFileInformation().getSecondPhoto() == null ||
+                        book.getFileInformation().getThirdPhoto() == null) {
                     log.info("Book with name = {} but without files was deleted", book.getTitle());
                     bookRepository.deleteById(book.getBookId());
                 }
             }
             if (book.getBookType().equals(BookType.EBOOK)) {
-                if () {
+                if (book.getFileInformation().getBookFile() == null ||
+                        book.getFileInformation().getFirstPhoto() == null ||
+                        book.getFileInformation().getSecondPhoto() == null ||
+                        book.getFileInformation().getThirdPhoto() == null &&
+                                book.getAudioBook().getUrlFragment() == null ) {
                     log.info("Book with name = {} but without files was deleted", book.getTitle());
                     bookRepository.deleteById(book.getBookId());
                 }
@@ -363,11 +370,12 @@ public class AdminServiceImpl implements AdminService {
             if (book.getBookType().equals(BookType.PAPERBOOK)) {
                 if(book.getFileInformation().getFirstPhoto() == null ||
                         book.getFileInformation().getSecondPhoto() == null ||
-                        book.getFileInformation().getThirdPhoto() == null){
+                        book.getFileInformation().getThirdPhoto() == null &&
+                                book.getFileInformation().getBookFile() == null){
 
                 }
             }
         }
 
-    }*/
+    }
 }
