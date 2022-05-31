@@ -6,6 +6,7 @@ import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
+import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
 import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
 import org.springframework.http.ResponseEntity;
 
@@ -58,6 +59,6 @@ public interface AdminService {
 
     List<BookResponse> getAllLikedBooks(Long clientId);
 
-    Map<String, Integer> getCountOfInProgressAlsoDontWatched();
+    CountForAdmin getCountOfInProgressAlsoDontWatched();
 
 }

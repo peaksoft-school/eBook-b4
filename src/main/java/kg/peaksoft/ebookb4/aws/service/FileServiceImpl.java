@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -130,7 +131,7 @@ public class FileServiceImpl implements FileService {
         return response;
     }
 
-    public String uploadBookFile(MultipartFile bookFile, Book bookById) {
+    public String uploadBookFile(MultipartFile bookFile, Book bookById){
         String bookFileExtension = StringUtils.getFilenameExtension(bookFile.getOriginalFilename());
         String keyOfBookFile = "Book files/" + UUID.randomUUID() + "." + bookFileExtension;
 

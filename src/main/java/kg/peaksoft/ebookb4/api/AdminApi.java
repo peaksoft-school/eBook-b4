@@ -9,6 +9,7 @@ import kg.peaksoft.ebookb4.db.models.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.db.models.request.Request;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
+import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
 import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
@@ -193,7 +194,7 @@ public class AdminApi {
     @Operation(summary = "Get two counts",
     description = "get count of books in progress also get count of books where admin didn't watch")
     @GetMapping("/countOfBooksInProgress")
-    public Map<String, Integer> getTwoCounts(){
+    public CountForAdmin getTwoCounts(){
         return service.getCountOfInProgressAlsoDontWatched();
     }
 

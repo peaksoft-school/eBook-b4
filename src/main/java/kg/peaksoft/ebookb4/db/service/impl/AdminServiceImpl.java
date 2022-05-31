@@ -11,6 +11,7 @@ import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
 import kg.peaksoft.ebookb4.db.models.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
+import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
 import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
@@ -293,6 +294,11 @@ public class AdminServiceImpl implements AdminService {
                 new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId)));
 
         List<Book> booksInProgress = bookRepository.findBooksFromVendorInProgress(user.getEmail(), requestStatus);
+        for (Book b:booksInProgress) {
+            if(b.getBookType().equals(BookType.EBOOK)){
+
+            }
+        }
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksInProgress.size());
         int end = Math.min((start + paging.getPageSize()), booksInProgress.size());
@@ -314,12 +320,54 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Map<String, Integer> getCountOfInProgressAlsoDontWatched() {
+    public CountForAdmin getCountOfInProgressAlsoDontWatched() {
+        List<BookResponse> booksAccepted = bookRepository.findBooksAccepted(RequestStatus.INPROGRESS);
+        Integer countOfPages = countOfPages(booksAccepted);
         Integer booksInProgress = bookRepository.getCountOfBooksInProgress(RequestStatus.INPROGRESS);
         Integer notWatch = bookRepository.getCountOfBooksWhereAdminDidNotWatch();
-        Map<String, Integer> counts = new HashMap<>();
-        counts.put("Count of books in progress", booksInProgress);
-        counts.put("Count of books where admin didn't watch", notWatch);
+        CountForAdmin counts = new CountForAdmin();
+        counts.setCountOfPages(countOfPages);
+        counts.setAll(booksInProgress);
+        counts.setUnread(notWatch);
         return counts;
     }
+
+
+    public Integer countOfPages(List<BookResponse> books){
+        int count = 0;
+            int size = books.size();
+        for (int i = 0; i < size; i++) {
+            if (size - 8 >= 0){
+            size -=8;
+            count++;
+            }
+        }
+        return count;
+    }
+
+   /* public void chekHaveFiles(List<Book> books){
+        for (Book book: books) {
+            if (book.getBookType().equals(BookType.AUDIOBOOK)){
+                if (book.getFileInformation().getBookFile() == null ||
+                        book.getAudioBook().getUrlFragment() == null){
+                    log.info("Book with name = {} but without files was deleted", book.getTitle());
+                    bookRepository.deleteById(book.getBookId());
+                }
+            }
+            if (book.getBookType().equals(BookType.EBOOK)) {
+                if () {
+                    log.info("Book with name = {} but without files was deleted", book.getTitle());
+                    bookRepository.deleteById(book.getBookId());
+                }
+            }
+            if (book.getBookType().equals(BookType.PAPERBOOK)) {
+                if(book.getFileInformation().getFirstPhoto() == null ||
+                        book.getFileInformation().getSecondPhoto() == null ||
+                        book.getFileInformation().getThirdPhoto() == null){
+
+                }
+            }
+        }
+
+    }*/
 }
