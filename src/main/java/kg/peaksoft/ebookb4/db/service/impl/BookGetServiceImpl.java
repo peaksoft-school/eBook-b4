@@ -45,7 +45,7 @@ public class BookGetServiceImpl implements BookGetService {
     @Override
     public List<Book> findBooksByName(String name, RequestStatus requestStatus) {
         promoService.checkPromos();
-        log.info("Find boos by name works");
+        log.info("Find book by name works");
 
         return bookRepository.findByName(name, requestStatus);
     }
