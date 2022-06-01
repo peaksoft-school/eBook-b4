@@ -321,7 +321,23 @@ public class BookServiceImpl implements BookService {
         List<Book> booksFromVendor = repository.findBooksFromVendor(name);
         Integer integer = booksFromVendor.size();
         CountForAdmin count = new CountForAdmin();
+        count.setCountOfPages(countOfPages(integer));
+
         count.setAll(integer);
+
         return count;
     }
+
+    public Integer countOfPages(Integer books) {
+        int count = 1;
+        int size = books;
+        for (int i = 0; i < size; i++) {
+            if (size - 16 >= 0) {
+                size -= 16;
+                count++;
+            }
+        }
+        return count;
+    }
+
 }

@@ -142,6 +142,7 @@ public class VendorApi {
         return bookService.getCountOfVendorBooks(authentication.getName());
     }
 
+    @Operation(summary = "Delete Vendor profile ")
     @DeleteMapping("/delete/{vendorId}")
     public ResponseEntity<?> deleteVendorProfile(@PathVariable Long vendorId){
         return vendorService.delete(vendorId);

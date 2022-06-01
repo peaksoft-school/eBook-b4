@@ -105,6 +105,6 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public ResponseEntity<?> delete(Long vendorId) {
          userRepository.deleteById(vendorId);
-         return ResponseEntity.ok("Your profile deleted");
+         return ResponseEntity.ok("Your profile was deleted");
     }
 }
