@@ -78,7 +78,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> getBooks(String genreName, BookType bookType, RequestStatus requestStatus);
 
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
-            "b.yearOfIssue, b.price, b.adminWatch, b.fileInformation) from Book b where b.requestStatus = ?1")
+            "b.yearOfIssue, b.price, b.adminWatch, b.fileInformation) from Book b where b.requestStatus =:requestStatus")
     List<BookResponse> findBooksInProgress(RequestStatus requestStatus);
 
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, b.aboutBook, b.publishingHouse, " +
