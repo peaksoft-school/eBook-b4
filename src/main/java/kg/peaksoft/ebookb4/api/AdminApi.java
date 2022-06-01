@@ -59,9 +59,9 @@ public class AdminApi {
 
     @Operation(summary = "Delete client/vendor ",
             description = "Admin can delete client and vendor!")
-    @DeleteMapping({"/removeUser/{id}"})
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
-        return service.deleteById(id);
+    @DeleteMapping({"/user/{userId}"})
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        return service.deleteById(userId);
     }
 
     @Operation(summary = "Get all by genre and book type",
@@ -86,9 +86,9 @@ public class AdminApi {
     }
 
     @Operation(summary = "Delete book", description = "Delete books by id")
-    @DeleteMapping("/removeBook/{id}")
-    public ResponseEntity<?> deleteBookById(@PathVariable Long id) {
-        return service.deleteBookById(id);
+    @DeleteMapping("/book/{bookId}")
+    public ResponseEntity<?> deleteBookById(@PathVariable Long bookId) {
+        return service.deleteBookById(bookId);
     }
 
     @Operation(summary = "Get book by id", description = "Change color of book when admin watch is true")
@@ -197,6 +197,4 @@ public class AdminApi {
     public CountForAdmin getTwoCounts(){
         return service.getCountOfInProgressAlsoDontWatched();
     }
-
-
 }

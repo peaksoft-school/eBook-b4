@@ -143,9 +143,8 @@ public class VendorApi {
     }
 
     @Operation(summary = "Delete Vendor profile ")
-    @DeleteMapping("/delete/{vendorId}")
+    @DeleteMapping("/profile/{vendorId}")
     public ResponseEntity<?> deleteVendorProfile(@PathVariable Long vendorId){
         return vendorService.delete(vendorId);
     }
-
 }
