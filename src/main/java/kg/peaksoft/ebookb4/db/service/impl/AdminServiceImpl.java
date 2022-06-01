@@ -317,9 +317,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public CountForAdmin getCountOfInProgressAlsoDontWatched() {
-        List<BookResponse> booksAccepted = bookRepository.findBooksAccepted(RequestStatus.INPROGRESS);
-        Integer countOfPages = countOfPages(booksAccepted);
         Integer booksInProgress = bookRepository.getCountOfBooksInProgress(RequestStatus.INPROGRESS);
+        Integer countOfPages = countOfPages(booksInProgress);
         Integer notWatch = bookRepository.getCountOfBooksWhereAdminDidNotWatch();
         CountForAdmin counts = new CountForAdmin();
         counts.setCountOfPages(countOfPages);
@@ -329,9 +328,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-    public Integer countOfPages(List<BookResponse> books) {
+    public Integer countOfPages(Integer books) {
         int count = 1;
-        int size = books.size();
+        int size = books;
         for (int i = 0; i < size; i++) {
             if (size - 8 >= 0) {
                 size -= 8;

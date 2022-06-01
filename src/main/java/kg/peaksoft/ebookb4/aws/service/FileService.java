@@ -19,11 +19,8 @@ public interface FileService {
 
     byte[] downloadFile(String key);
 
-//    LinkedHashMap<String, String> updateFileInformation(MultipartFile firstPhoto,
-//                                                        MultipartFile secondPhoto,
-//                                                        MultipartFile thirdPhoto,
-//                                                        MultipartFile bookFile,
-//                                                        MultipartFile audioFragment,
-//                                                        Long bookId);
+    LinkedHashMap<String, String> updateFileInformation(MultipartFile file,
+                                                        String nameOfFile,
+                                                        Long bookId);
 
 }

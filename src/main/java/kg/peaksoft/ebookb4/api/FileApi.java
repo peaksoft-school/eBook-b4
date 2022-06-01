@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -48,4 +49,14 @@ public class FileApi {
         return fileService.downloadFile(keyName);
     }
 
+
+    @Operation(summary = "Update fileInformation",
+            description = "You need to put book id with name of file " +
+                    "for example {firstPhoto, secondPhoto, thirdPhoto, bookFile, audioFragment}, after you can update file information")
+    @PostMapping("/fileInformation/{nameOfFile}/{bookId}")
+    public LinkedHashMap<String, String> updateFileInformation(@RequestBody MultipartFile file,
+                                                               @PathVariable String nameOfFile,
+                                                               @PathVariable Long bookId){
+        return fileService.updateFileInformation(file,nameOfFile, bookId);
+    }
 }

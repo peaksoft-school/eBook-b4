@@ -80,32 +80,6 @@ public class FileServiceImpl implements FileService {
         awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), keyOfSecondPhoto, CannedAccessControlList.PublicRead);
         awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), keyOfThirdPhoto, CannedAccessControlList.PublicRead);
 
-        if (bookById.getFileInformation().getFirstPhoto() == null ||
-                !bookById.getFileInformation().getFirstPhoto().equals(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfFirstPhoto))) {
-            if (bookById.getFileInformation().getKeyOfFirstPhoto() == null) {
-                log.info("it's new first photo");
-            } else {
-                deleteFile(bookById.getFileInformation().getKeyOfFirstPhoto());
-            }
-            bookById.getFileInformation().setFirstPhoto(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfFirstPhoto));
-        }
-        if (bookById.getFileInformation().getSecondPhoto() == null ||
-                !bookById.getFileInformation().getSecondPhoto().equals(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfSecondPhoto))) {
-            if (bookById.getFileInformation().getKeyOfSecondPhoto() == null) {
-                log.info("it's new second photo");
-            } else {
-                deleteFile(bookById.getFileInformation().getKeyOfSecondPhoto());
-            }
-        }
-        if (bookById.getFileInformation().getThirdPhoto() == null ||
-                !bookById.getFileInformation().getThirdPhoto().equals(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfThirdPhoto))) {
-            if (bookById.getFileInformation().getKeyOfThirdPhoto() == null) {
-                log.info("it's new third photo");
-            } else {
-                deleteFile(bookById.getFileInformation().getKeyOfThirdPhoto());
-            }
-        }
-
         bookById.getFileInformation().setKeyOfFirstPhoto(keyOfFirstPhoto);
         bookById.getFileInformation().setKeyOfSecondPhoto(keyOfSecondPhoto);
         bookById.getFileInformation().setKeyOfThirdPhoto(keyOfThirdPhoto);
@@ -113,7 +87,9 @@ public class FileServiceImpl implements FileService {
         bookById.getFileInformation().setFirstPhoto(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfFirstPhoto));
         bookById.getFileInformation().setSecondPhoto(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfSecondPhoto));
         bookById.getFileInformation().setThirdPhoto(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfThirdPhoto));
+
         bookRepository.save(bookById);
+
         LinkedHashMap<String, String> response = new LinkedHashMap<>();
         response.put("file information Id ", String.valueOf(bookById.getFileInformation().getFileId()));
         response.put("first image", awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfFirstPhoto));
@@ -130,11 +106,11 @@ public class FileServiceImpl implements FileService {
         }
         if (bookById.getBookType().equals(BookType.AUDIOBOOK)) {
             if (bookById.getFileInformation().getBookFile() == null || bookById.getFileInformation().getBookFile() != null ||
-            bookById.getAudioBook().getUrlFragment() == null || bookById.getAudioBook().getUrlFragment() != null){
+                    bookById.getAudioBook().getUrlFragment() == null || bookById.getAudioBook().getUrlFragment() != null) {
                 if (bookFile != null && audioFragment != null) {
                     response.put("book file", uploadBookFile(bookFile, bookById));
                     response.put("audio fragment", uploadAudioFragment(audioFragment, bookById));
-                }else {
+                } else {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You should to upload audio file with audio fragment");
                 }
             }
@@ -224,17 +200,97 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-//    @Override
-//    public LinkedHashMap<String, String> updateFileInformation(MultipartFile firstPhoto,
-//                                                               MultipartFile secondPhoto,
-//                                                               MultipartFile thirdPhoto,
-//                                                               MultipartFile bookFile,
-//                                                               MultipartFile audioFragment,
-//                                                               Long bookId) {
-//
-//
-//        return null;
-//    }
+    @Override
+    public LinkedHashMap<String, String> updateFileInformation(MultipartFile file,
+                                                               String nameOfFile,
+                                                               Long bookId) {
+        Book bookById = bookRepository.getById(bookId);
+        String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+
+        ObjectMetadata metaData = new ObjectMetadata();
+        metaData.setContentLength(file.getSize());
+        metaData.setContentType(file.getContentType());
+
+        LinkedHashMap<String, String> response = new LinkedHashMap<>();
+
+        if (nameOfFile.equals("firstPhoto")) {
+            String keyOfFirstPhoto = "Images/" + UUID.randomUUID() + "." + fileExtension;
+            try {
+                awsS3Client.putObject(BucketName.AWS_BOOKS.getBucketName(), keyOfFirstPhoto, file.getInputStream(), metaData);
+            } catch (IOException e) {
+                log.error("an exception occurred while uploading the file");
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occurred while uploading the file");
+            }
+            awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), keyOfFirstPhoto, CannedAccessControlList.PublicRead);
+            deleteFile(bookById.getFileInformation().getKeyOfFirstPhoto());
+            bookById.getFileInformation().setKeyOfFirstPhoto(keyOfFirstPhoto);
+            bookById.getFileInformation().setFirstPhoto(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfFirstPhoto));
+            response.put(nameOfFile, awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfFirstPhoto));
+        }
+
+        if (nameOfFile.equals("secondPhoto")) {
+            String keyOfSecondPhoto = "Images/" + UUID.randomUUID() + "." + fileExtension;
+            try {
+                awsS3Client.putObject(BucketName.AWS_BOOKS.getBucketName(), keyOfSecondPhoto, file.getInputStream(), metaData);
+            } catch (IOException e) {
+                log.error("an exception occurred while uploading the file");
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occurred while uploading the file");
+            }
+            awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), keyOfSecondPhoto, CannedAccessControlList.PublicRead);
+            deleteFile(bookById.getFileInformation().getKeyOfSecondPhoto());
+            bookById.getFileInformation().setKeyOfSecondPhoto(keyOfSecondPhoto);
+            bookById.getFileInformation().setSecondPhoto(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfSecondPhoto));
+            response.put(nameOfFile, awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfSecondPhoto));
+        }
+
+        if (nameOfFile.equals("thirdPhoto")) {
+            String keyOfThirdPhoto = "Images/" + UUID.randomUUID() + "." + fileExtension;
+            try {
+                awsS3Client.putObject(BucketName.AWS_BOOKS.getBucketName(), keyOfThirdPhoto, file.getInputStream(), metaData);
+            } catch (IOException e) {
+                log.error("an exception occurred while uploading the file");
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occurred while uploading the file");
+            }
+            awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), keyOfThirdPhoto, CannedAccessControlList.PublicRead);
+            deleteFile(bookById.getFileInformation().getKeyOfThirdPhoto());
+            bookById.getFileInformation().setKeyOfThirdPhoto(keyOfThirdPhoto);
+            bookById.getFileInformation().setThirdPhoto(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfThirdPhoto));
+            response.put(nameOfFile, awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfThirdPhoto));
+        }
+
+        if (nameOfFile.equals("bookFile")) {
+            String keyOfBookFile = "Book files/" + UUID.randomUUID() + "." + fileExtension;
+            try {
+                awsS3Client.putObject(BucketName.AWS_BOOKS.getBucketName(), keyOfBookFile, file.getInputStream(), metaData);
+            } catch (IOException e) {
+                log.error("an exception occurred while uploading the file");
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occurred while uploading the file");
+            }
+            awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), keyOfBookFile, CannedAccessControlList.PublicRead);
+            deleteFile(bookById.getFileInformation().getKeyOfBookFile());
+            bookById.getFileInformation().setKeyOfBookFile(keyOfBookFile);
+            bookById.getFileInformation().setBookFile(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfBookFile));
+            response.put(nameOfFile, awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfBookFile));
+        }
+
+        if (nameOfFile.equals("audioFragment")) {
+            String keyOfAudioFragment = "Book files/" + UUID.randomUUID() + "." + fileExtension;
+            try {
+                awsS3Client.putObject(BucketName.AWS_BOOKS.getBucketName(), keyOfAudioFragment, file.getInputStream(), metaData);
+            } catch (IOException e) {
+                log.error("an exception occurred while uploading the file");
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occurred while uploading the file");
+            }
+            awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), keyOfAudioFragment, CannedAccessControlList.PublicRead);
+            deleteFile(bookById.getAudioBook().getKeyOfFragment());
+            bookById.getAudioBook().setKeyOfFragment(keyOfAudioFragment);
+            bookById.getAudioBook().setUrlFragment(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfAudioFragment));
+            response.put(nameOfFile, awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfAudioFragment));
+        }
+        bookRepository.save(bookById);
+
+        return response;
+    }
 
 
 }
