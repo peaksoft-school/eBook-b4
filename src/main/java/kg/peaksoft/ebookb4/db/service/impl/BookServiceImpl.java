@@ -9,6 +9,7 @@ import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.BookResponseAfterSaved;
+import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
 import kg.peaksoft.ebookb4.db.repository.*;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
@@ -313,5 +314,14 @@ public class BookServiceImpl implements BookService {
                 DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(), keyName);
         awsS3Client.deleteObject(deleteObjectRequest);
         log.info("Successfully deleted");
+    }
+
+    @Override
+    public CountForAdmin getCountOfVendorBooks(String name) {
+        List<Book> booksFromVendor = repository.findBooksFromVendor(name);
+        Integer integer = booksFromVendor.size();
+        CountForAdmin count = new CountForAdmin();
+        count.setAll(integer);
+        return count;
     }
 }

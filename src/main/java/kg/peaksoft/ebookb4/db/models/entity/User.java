@@ -48,7 +48,6 @@ public class User {
             mappedBy = "user")
     private List<Book> vendorAddedBooks;
 
-
     @ManyToMany
     @JoinTable(
             name = "liked_books"

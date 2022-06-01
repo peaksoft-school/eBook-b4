@@ -9,6 +9,7 @@ import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.BookResponseAfterSaved;
+import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.db.service.VendorService;
@@ -134,4 +135,16 @@ public class VendorApi {
     public List<Genre> getAllGenres(){
         return bookService.getAllGenres();
     }
+
+    @Operation(summary = "Get count of vendor books")
+    @GetMapping("/count-books")
+    public CountForAdmin getCountOfVendorBooks(Authentication authentication){
+        return bookService.getCountOfVendorBooks(authentication.getName());
+    }
+
+    @DeleteMapping("/delete/{vendorId}")
+    public ResponseEntity<?> deleteVendorProfile(@PathVariable Long vendorId){
+        return vendorService.delete(vendorId);
+    }
+
 }
