@@ -101,4 +101,10 @@ public class VendorServiceImpl implements VendorService {
         return vendorRegisterMapper.createDTO(userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found!", username))));
     }
+
+    @Override
+    public ResponseEntity<?> delete(Long vendorId) {
+         userRepository.deleteById(vendorId);
+         return ResponseEntity.ok("Your profile was deleted");
+    }
 }
