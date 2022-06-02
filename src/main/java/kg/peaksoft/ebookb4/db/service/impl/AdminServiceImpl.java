@@ -48,7 +48,6 @@ public class AdminServiceImpl implements AdminService {
     private VendorMapper vendorMapper;
     private ClientMapper clientMapper;
     private ModelMapper modelMapper;
-    private EmailServiceImpl emailService;
 
     @Override
     public List<Book> getBooksBy(String genreName, BookType bookType) {
@@ -178,10 +177,6 @@ public class AdminServiceImpl implements AdminService {
                     );
                 });
         book.setRequestStatus(REFUSED);
-
-        // TODO: 24.04.2022  sand massage to gmail
-
-        emailService.send(book.getUser().getEmail(), refuseBookRequest.getReason());
 
         log.info("admin refuse book request");
         return ResponseEntity.ok().body(
@@ -321,6 +316,9 @@ public class AdminServiceImpl implements AdminService {
         Integer countOfPages = countOfPages(booksInProgress);
         Integer notWatch = bookRepository.getCountOfBooksWhereAdminDidNotWatch();
         CountForAdmin counts = new CountForAdmin();
+        if (notWatch > booksInProgress){
+            notWatch = booksInProgress;
+        }
         counts.setCountOfPages(countOfPages);
         counts.setAll(booksInProgress);
         counts.setUnread(notWatch);

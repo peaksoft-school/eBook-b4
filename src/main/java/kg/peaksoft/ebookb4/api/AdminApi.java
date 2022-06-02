@@ -192,9 +192,9 @@ public class AdminApi {
     }
 
     @Operation(summary = "Get two counts",
-    description = "get count of books in progress also get count of books where admin didn't watch")
+            description = "get count of books in progress also get count of books where admin didn't watch")
     @GetMapping("/countOfBooksInProgress")
-    public CountForAdmin getTwoCounts(){
+    public CountForAdmin getTwoCounts() {
         return service.getCountOfInProgressAlsoDontWatched();
     }
 }
