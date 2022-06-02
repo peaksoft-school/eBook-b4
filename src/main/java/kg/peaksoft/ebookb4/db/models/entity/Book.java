@@ -35,16 +35,16 @@ public class Book {
             sequenceName = "book_seq", allocationSize = 1)
     @Column(name = "book_id")
     private Long bookId;
-    @Column(columnDefinition = "text")
+    @Column(length = 10000000)
     private String title;
 
-    @Column(columnDefinition = "text")
+    @Column(length = 10000000)
     private String authorFullName;
 
-    @Column(columnDefinition = "text")
+    @Column(length = 10000000)
     private String aboutBook;
 
-    @Column(columnDefinition = "text")
+    @Column(length = 10000000)
     private String publishingHouse;
     private int yearOfIssue;
     private Double price;
