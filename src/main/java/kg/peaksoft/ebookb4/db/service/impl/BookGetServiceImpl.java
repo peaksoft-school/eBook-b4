@@ -138,8 +138,9 @@ public class BookGetServiceImpl implements BookGetService {
     public List<BookResponse> getAllBooksRequests(int offset, int pageSize) {
         promoService.checkPromos();
         List<BookResponse> books = bookRepository.findBooksInProgress(INPROGRESS);
+        List<Book> bookList = bookRepository.findOnlyInprogressBooks(INPROGRESS);
         log.info("Get all books request works");
-//        chekHaveFiles(books);
+        chekHaveFiles(bookList);
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), books.size());
         int end = Math.min((start + paging.getPageSize()), books.size());
