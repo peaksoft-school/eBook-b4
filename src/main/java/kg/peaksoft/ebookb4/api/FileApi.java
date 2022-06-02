@@ -24,6 +24,7 @@ public class FileApi {
 
     private final FileService fileService;
 
+    @CrossOrigin
     @Operation(summary = "Upload files",description = "Upload files to aws")
     @PostMapping("/upload-file/{bookId}")
     public Map<String, String> uploadFile(@RequestBody MultipartFile firstPhoto,
@@ -36,6 +37,7 @@ public class FileApi {
             return fileService.uploadFile(firstPhoto, secondPhoto, thirdPhoto, bookFile, audioFragment, bookId);
     }
 
+    @CrossOrigin
     @Operation(summary = "Delete files", description = "Delete files with key name")
     @DeleteMapping("/delete/{keyName}")
     public ResponseEntity<?> deleteFile(@PathVariable String keyName){
@@ -50,6 +52,7 @@ public class FileApi {
     }
 
 
+    @CrossOrigin
     @Operation(summary = "Update fileInformation",
             description = "You need to put book id with name of file " +
                     "for example {firstPhoto, secondPhoto, thirdPhoto, bookFile, audioFragment}, after you can update file information")
