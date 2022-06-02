@@ -127,4 +127,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Integer getCountOfBooksInProgress(RequestStatus requestStatus);
     @Query(value = "select count (b) from Book b where b.adminWatch = false")
     Integer getCountOfBooksWhereAdminDidNotWatch();
+
+    @Query("select b from  Book b where  b.requestStatus =:requestStatus")
+    List<Book> findOnlyInprogressBooks(RequestStatus requestStatus);
 }

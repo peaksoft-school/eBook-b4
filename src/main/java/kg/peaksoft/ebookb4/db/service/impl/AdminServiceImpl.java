@@ -312,16 +312,23 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public CountForAdmin getCountOfInProgressAlsoDontWatched() {
-        Integer booksInProgress = bookRepository.getCountOfBooksInProgress(RequestStatus.INPROGRESS);
-        Integer countOfPages = countOfPages(booksInProgress);
-        Integer notWatch = bookRepository.getCountOfBooksWhereAdminDidNotWatch();
-        CountForAdmin counts = new CountForAdmin();
-        if (notWatch > booksInProgress){
-            notWatch = booksInProgress;
+
+        List<Book> bookList = bookRepository.findAll();
+        for (Book book : bookList) {
+            if (book.getRequestStatus().equals(ACCEPTED)) {
+                book.setAdminWatch(true);
+            }
+            bookRepository.save(book);
         }
+        Integer all = bookRepository.getCountOfBooksInProgress(RequestStatus.INPROGRESS);
+        Integer countOfPages = countOfPages(all);
+        Integer unread = bookRepository.getCountOfBooksWhereAdminDidNotWatch();
+        CountForAdmin counts = new CountForAdmin();
+
         counts.setCountOfPages(countOfPages);
-        counts.setAll(booksInProgress);
-        counts.setUnread(notWatch);
+        counts.setAll(all);
+        counts.setUnread(unread);
+
         return counts;
     }
 
