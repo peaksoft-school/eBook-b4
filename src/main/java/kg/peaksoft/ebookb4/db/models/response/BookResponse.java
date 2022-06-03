@@ -18,7 +18,7 @@ public class BookResponse {
     private String authorFullName;
     private String aboutBook;
     private String publishingHouse;
-    private int yearOfIssue;
+    private LocalDate dateOfRegister;
     private Double price;
     private Boolean adminWatch;
 
