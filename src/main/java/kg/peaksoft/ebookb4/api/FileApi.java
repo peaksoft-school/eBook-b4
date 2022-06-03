@@ -109,11 +109,14 @@ public class FileApi {
         S3Presigner s3Presigner = awsUtility.s3Presigner();
         awsUtility.getPresignedUrl(s3Presigner, BucketName.AWS_BOOKS.getBucketName(), keyName);
     }
-    @PostMapping("/sign/")
-    public void uploadSign(@RequestBody MultipartFile file) {
-        S3Presigner s3Presigner = awsUtility.s3Presigner();
-        awsUtility.signBucket(s3Presigner, BucketName.AWS_BOOKS.getBucketName(),file);
+    @PostMapping("/sign/{fileName}")
+    public String uploadSign(@PathVariable String fileName) {
+        return awsUtility.signBucket(BucketName.AWS_BOOKS.getBucketName(),fileName);
+    }
 
+    @GetMapping("/get/{fileName}")
+    public String getUrlOfFile(@PathVariable String fileName){
+        return awsUtility.urlOfFile(fileName);
     }
 
 

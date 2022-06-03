@@ -1,53 +1,27 @@
 package kg.peaksoft.ebookb4.aws.enums;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.HttpMethod;
-import com.amazonaws.SdkClientException;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
-//import com.amazonaws.services.mediastoredata.model.PutObjectRequest;
-import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.http.ContentStreamProvider;
-import software.amazon.awssdk.http.HttpExecuteRequest;
-import software.amazon.awssdk.http.SdkHttpClient;
 import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
-import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 import software.amazon.awssdk.utils.IoUtils;
-import software.amazon.awssdk.utils.StringInputStream;
 
-import javax.mail.Multipart;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
 import java.time.Duration;
 
 @Slf4j
@@ -63,6 +37,12 @@ public class AWSUtility {
     @Autowired
     public AWSUtility(AmazonS3Client amazonS3) {
         this.amazonS3 = amazonS3;
+    }
+
+
+    public String urlOfFile(String fileName){
+        amazonS3.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), fileName);
+        return amazonS3.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), fileName);
     }
 
 
@@ -134,8 +114,7 @@ public class AWSUtility {
             StaticCredentialsProvider.create(AwsBasicCredentials.create("AKIA3EDLM772OB45TPRY",
                     "j5wKMRw9dKIqRbqeAWAT1cvYvdvH79AsVsT8bmzd"));
 
-    public void signBucket(S3Presigner presigner, String bucketName, MultipartFile file) {
-
+    public String signBucket(String bucketName, String file) {
 //        try {
 //            PutObjectRequest objectRequest = PutObjectRequest.builder()
 //                    .bucket(bucketName)
@@ -234,11 +213,12 @@ public class AWSUtility {
         S3Presigner s3Presigner = S3Presigner.builder()
                 .credentialsProvider(credentialsProvider)
                 .region(Region.EU_CENTRAL_1).build();
+
         PresignedPutObjectRequest presignedRequest =
                 s3Presigner.presignPutObject(r -> r.signatureDuration(Duration.ofMinutes(5))
                         .putObjectRequest(por -> por.bucket(bucketName)
-                                .contentLength(file.getSize())
-                                .contentType(file.getContentType()).key(file.getOriginalFilename())));
+                                .key(file)));
+        String myUrl = presignedRequest.url().toString();
 
         System.out.println("Pre-signed URL to upload a file to: " +
                 presignedRequest.url());
@@ -247,6 +227,8 @@ public class AWSUtility {
         System.out.println("Which headers need to be sent with the upload: " +
                 presignedRequest.signedHeaders());
         s3Presigner.close();
+
+        return myUrl;
     }
 
 
