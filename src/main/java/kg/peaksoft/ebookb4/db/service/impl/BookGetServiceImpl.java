@@ -23,7 +23,6 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.*;
 
@@ -138,7 +137,7 @@ public class BookGetServiceImpl implements BookGetService {
     public List<BookResponse> getAllBooksRequests(int offset, int pageSize) {
         promoService.checkPromos();
         List<BookResponse> books = bookRepository.findBooksInProgress(INPROGRESS);
-        List<Book> bookList = bookRepository.findOnlyInprogressBooks(INPROGRESS);
+        List<Book> bookList = bookRepository.findOnlyInProgressBooks(INPROGRESS);
         log.info("Get all books request works");
         chekHaveFiles(bookList);
         Pageable paging = PageRequest.of(offset, pageSize);

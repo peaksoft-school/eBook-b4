@@ -45,12 +45,12 @@ public class FileApi {
         return ResponseEntity.ok("File successfully deleted");
     }
 
+    @CrossOrigin
     @Operation(summary = "Download file", description = "Download file with key name")
     @GetMapping("/download/{keyName}")
     public byte[] downloadFile(@PathVariable String keyName){
         return fileService.downloadFile(keyName);
     }
-
 
     @CrossOrigin
     @Operation(summary = "Update fileInformation",
