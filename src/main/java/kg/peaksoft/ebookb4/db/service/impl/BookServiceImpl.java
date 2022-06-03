@@ -2,7 +2,7 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import kg.peaksoft.ebookb4.aws.enums.BucketName;
+//import kg.peaksoft.ebookb4.aws.enums.BucketName;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileInformation;
 import kg.peaksoft.ebookb4.db.models.entity.*;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
     private final PromocodeRepository promoRepository;
     private final GenreRepository genreRepository;
     private final PromoService promoService;
-    private final AmazonS3Client awsS3Client;
+//    private final AmazonS3Client awsS3Client;
 
     private final FileInformationRepository fileInformationRepository;
 
@@ -122,9 +122,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public ResponseEntity<?> delete(Long bookId) {
         Book bookById = repository.getById(bookId);
-        deleteFile(bookById.getFileInformation().getKeyOfFirstPhoto());
-        deleteFile(bookById.getFileInformation().getKeyOfSecondPhoto());
-        deleteFile(bookById.getFileInformation().getKeyOfBookFile());
+//        deleteFile(bookById.getFileInformation().getKeyOfFirstPhoto());
+//        deleteFile(bookById.getFileInformation().getKeyOfSecondPhoto());
+//        deleteFile(bookById.getFileInformation().getKeyOfBookFile());
         repository.save(bookById);
         repository.deleteById(bookId);
         log.info("delete book works");
@@ -146,11 +146,11 @@ public class BookServiceImpl implements BookService {
         FileInformation newFileInformation = newBook.getFileInformation();
         if (!Objects.equals(fileInformation, newFileInformation)){
             if (!Objects.equals(fileInformation.getFirstPhoto(), newFileInformation.getFirstPhoto()) && newFileInformation.getFirstPhoto() != null){
-                deleteFile(fileInformation.getKeyOfFirstPhoto());
+//                deleteFile(fileInformation.getKeyOfFirstPhoto());
             }if (!Objects.equals(fileInformation.getSecondPhoto(),newFileInformation.getSecondPhoto()) && newFileInformation.getSecondPhoto() != null){
-                deleteFile(fileInformation.getKeyOfSecondPhoto());
+//                deleteFile(fileInformation.getKeyOfSecondPhoto());
             }if(!Objects.equals(fileInformation.getBookFile(),newFileInformation.getBookFile()) && newFileInformation.getBookFile() != null){
-                deleteFile(fileInformation.getKeyOfBookFile());
+//                deleteFile(fileInformation.getKeyOfBookFile());
             }
             book.setFileInformation(newFileInformation);
         }
@@ -308,10 +308,10 @@ public class BookServiceImpl implements BookService {
     }
 
 
-    public void deleteFile(String keyName) {
-        final DeleteObjectRequest deleteObjectRequest = new
-                DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(), keyName);
-        awsS3Client.deleteObject(deleteObjectRequest);
-        log.info("Successfully deleted");
-    }
+//    public void deleteFile(String keyName) {
+//        final DeleteObjectRequest deleteObjectRequest = new
+//                DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(), keyName);
+//        awsS3Client.deleteObject(deleteObjectRequest);
+//        log.info("Successfully deleted");
+//    }
 }

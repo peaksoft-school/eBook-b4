@@ -137,7 +137,7 @@ public class BookGetServiceImpl implements BookGetService {
     @Override
     public List<BookResponse> getAllBooksRequests(int offset, int pageSize) {
         promoService.checkPromos();
-        List<BookResponse> books = bookRepository.findBooksInProgress(INPROGRESS);
+        List<BookResponse> books = bookRepository.findBooksInProgress(RequestStatus.INPROGRESS);
         log.info("Get all books request works");
 //        chekHaveFiles(books);
         Pageable paging = PageRequest.of(offset, pageSize);
