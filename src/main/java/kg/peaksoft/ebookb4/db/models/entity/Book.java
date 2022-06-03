@@ -18,8 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.CascadeType.*;
 
 @Entity
 @Getter
@@ -81,7 +80,7 @@ public class Book {
             , inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> likedBooks;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {REFRESH,MERGE,PERSIST,DETACH})
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;

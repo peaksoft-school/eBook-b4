@@ -115,7 +115,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             " from Book b where b.operations.size > 0 and b.user.email = ?1 and b.user.role.name = ?2")
     List<BookResponse> getVendorBooksSold(String name, ERole role);
 
-
     @Query(value = "SELECT * from book b " +
             "join operation_books o on o.book_id = b.book_id "+
             "join client_operations t on t.operation_id = o.operation_id " +
@@ -125,6 +124,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query(value = "select count(b) from Book b where b.requestStatus =:requestStatus")
     Integer getCountOfBooksInProgress(RequestStatus requestStatus);
+
     @Query(value = "select count (b) from Book b where b.adminWatch = false")
     Integer getCountOfBooksWhereAdminDidNotWatch();
 
