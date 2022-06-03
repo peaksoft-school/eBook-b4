@@ -19,5 +19,5 @@ public interface VendorService {
 
     VendorRegisterDTO getVendorDetails(String username);
 
-    ResponseEntity<?> delete(Long vendorId);
+    ResponseEntity<?> delete(String email);
 }

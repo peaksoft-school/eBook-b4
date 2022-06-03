@@ -123,10 +123,23 @@ public class BookServiceImpl implements BookService {
     @Override
     public ResponseEntity<?> delete(Long bookId) {
         Book bookById = repository.getById(bookId);
-        deleteFile(bookById.getFileInformation().getKeyOfFirstPhoto());
-        deleteFile(bookById.getFileInformation().getKeyOfSecondPhoto());
-        deleteFile(bookById.getFileInformation().getKeyOfBookFile());
-        repository.save(bookById);
+        if (bookById.getFileInformation().getKeyOfFirstPhoto() != null) {
+            deleteFile(bookById.getFileInformation().getKeyOfFirstPhoto());
+        }
+        if (bookById.getFileInformation().getKeyOfSecondPhoto() != null) {
+            deleteFile(bookById.getFileInformation().getKeyOfSecondPhoto());
+        }
+        if (bookById.getFileInformation().getKeyOfThirdPhoto() != null) {
+            deleteFile(bookById.getFileInformation().getThirdPhoto());
+        }
+        if (bookById.getFileInformation().getKeyOfBookFile() != null) {
+            deleteFile(bookById.getFileInformation().getKeyOfBookFile());
+        }
+        if (bookById.getBookType().equals(BookType.AUDIOBOOK)) {
+            if (bookById.getAudioBook().getKeyOfFragment() != null) {
+                deleteFile(bookById.getAudioBook().getKeyOfFragment());
+            }
+        }
         repository.deleteById(bookId);
         log.info("delete book works");
         return ResponseEntity.ok(new MessageResponse(
