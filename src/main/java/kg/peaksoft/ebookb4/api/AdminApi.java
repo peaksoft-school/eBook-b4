@@ -66,10 +66,10 @@ public class AdminApi {
 
     @Operation(summary = "Get all by genre and book type",
             description = "Filter all books by genre and book type ")
-    @GetMapping("/booksByBoth/{genre}/{bookType}")
-    public List<Book> getBooksBy(@PathVariable String genre,
+    @GetMapping("/booksByBoth/{genreId}/{bookType}")
+    public List<Book> getBooksBy(@PathVariable Long genreId,
                                  @PathVariable BookType bookType) {
-        return service.getBooksBy(genre.toUpperCase(), bookType);
+        return service.getBooksBy(genreId, bookType);
     }
 
     @Operation(summary = "Get books by genre", description = "Filter all books only by genre ")

@@ -15,7 +15,7 @@ import java.util.Map;
 
 public interface AdminService {
 
-    List<Book> getBooksBy(String genre, BookType bookType);
+    List<Book> getBooksBy(Long genreId, BookType bookType);
 
     List<Book> getBooksByGenre(String genre);
 

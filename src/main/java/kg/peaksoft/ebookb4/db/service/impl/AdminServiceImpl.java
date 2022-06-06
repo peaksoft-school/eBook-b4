@@ -30,9 +30,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
@@ -50,14 +49,14 @@ public class AdminServiceImpl implements AdminService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<Book> getBooksBy(String genreName, BookType bookType) {
+    public List<Book> getBooksBy(Long genreId, BookType bookType) {
         log.info("getBooks By genre and book type works");
         List<Book> books = bookRepository.findAllActive(ACCEPTED);
         List<Book> sortByOnlyGenres = new ArrayList<>();
         List<Book> sortByOnlyBookType = new ArrayList<>();
         List<Book> sort = new ArrayList<>();
         for (Book book : books) {
-            if (book.getGenre().getName().equals(genreName)) {
+            if (Objects.equals(book.getGenre().getId(), genreId)) {
                 sortByOnlyGenres.add(book);
             }
         }
@@ -71,7 +70,7 @@ public class AdminServiceImpl implements AdminService {
                 sort.add(book2);
             }
         }
-        if (genreName == null) {
+        if (genreId == null) {
             return sortByOnlyBookType;
         }
         if (bookType == null) {
