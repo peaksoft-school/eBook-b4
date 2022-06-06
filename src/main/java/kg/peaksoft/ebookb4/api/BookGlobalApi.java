@@ -24,6 +24,12 @@ public class BookGlobalApi {
 
     private final BookGetService bookGetService;
 
+    @Operation(summary = "Get all genre count books", description = "get genres countBooks")
+    @GetMapping("/genre_count")
+    List<GenreRequest> getCountGenre() {
+        return bookGetService.getCountGenre();
+    }
+
     @Operation(summary = "Find all books by genre", description = "Sorting books by genre")
     @GetMapping("/genre/{genre}")
     public List<Book> findBooksByGenre(@PathVariable String genre) {
