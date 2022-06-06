@@ -28,4 +28,9 @@ public interface BookGetService {
 
     List<Book> BooksNovelties();
 
+    List<Book> getAllAudioBook();
+
+    List<Book> getAllEBook();
+
+    List<Book> getBook();
 }
