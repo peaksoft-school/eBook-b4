@@ -18,4 +18,6 @@ public interface VendorService {
     ResponseEntity<?> update(VendorUpdateDTO newVendorDTO, String username);
 
     VendorRegisterDTO getVendorDetails(String username);
+
+    ResponseEntity<?> delete(String email);
 }

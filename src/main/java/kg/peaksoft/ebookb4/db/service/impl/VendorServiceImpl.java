@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Locale;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -100,5 +101,13 @@ public class VendorServiceImpl implements VendorService {
         log.info("Get vendor details");
         return vendorRegisterMapper.createDTO(userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found!", username))));
+    }
+
+    @Override
+    public ResponseEntity<?> delete(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new BadRequestException(String.format("User with username %s has not been found", email)));
+        userRepository.deleteById(user.getId());
+         return ResponseEntity.ok("Your profile was deleted");
     }
 }

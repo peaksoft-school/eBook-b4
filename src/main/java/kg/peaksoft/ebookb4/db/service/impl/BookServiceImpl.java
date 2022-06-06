@@ -2,13 +2,14 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
-//import kg.peaksoft.ebookb4.aws.enums.BucketName;
+import kg.peaksoft.ebookb4.aws.enums.BucketName;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileInformation;
 import kg.peaksoft.ebookb4.db.models.entity.*;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.BookResponseAfterSaved;
+import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
 import kg.peaksoft.ebookb4.db.repository.*;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
@@ -44,7 +45,7 @@ public class BookServiceImpl implements BookService {
     private final PromocodeRepository promoRepository;
     private final GenreRepository genreRepository;
     private final PromoService promoService;
-//    private final AmazonS3Client awsS3Client;
+    private final AmazonS3Client awsS3Client;
 
     private final FileInformationRepository fileInformationRepository;
 
@@ -122,10 +123,23 @@ public class BookServiceImpl implements BookService {
     @Override
     public ResponseEntity<?> delete(Long bookId) {
         Book bookById = repository.getById(bookId);
-//        deleteFile(bookById.getFileInformation().getKeyOfFirstPhoto());
-//        deleteFile(bookById.getFileInformation().getKeyOfSecondPhoto());
-//        deleteFile(bookById.getFileInformation().getKeyOfBookFile());
-        repository.save(bookById);
+        if (bookById.getFileInformation().getKeyOfFirstPhoto() != null) {
+            deleteFile(bookById.getFileInformation().getKeyOfFirstPhoto());
+        }
+        if (bookById.getFileInformation().getKeyOfSecondPhoto() != null) {
+            deleteFile(bookById.getFileInformation().getKeyOfSecondPhoto());
+        }
+        if (bookById.getFileInformation().getKeyOfThirdPhoto() != null) {
+            deleteFile(bookById.getFileInformation().getThirdPhoto());
+        }
+        if (bookById.getFileInformation().getKeyOfBookFile() != null) {
+            deleteFile(bookById.getFileInformation().getKeyOfBookFile());
+        }
+        if (bookById.getBookType().equals(BookType.AUDIOBOOK)) {
+            if (bookById.getAudioBook().getKeyOfFragment() != null) {
+                deleteFile(bookById.getAudioBook().getKeyOfFragment());
+            }
+        }
         repository.deleteById(bookId);
         log.info("delete book works");
         return ResponseEntity.ok(new MessageResponse(
@@ -146,11 +160,11 @@ public class BookServiceImpl implements BookService {
         FileInformation newFileInformation = newBook.getFileInformation();
         if (!Objects.equals(fileInformation, newFileInformation)){
             if (!Objects.equals(fileInformation.getFirstPhoto(), newFileInformation.getFirstPhoto()) && newFileInformation.getFirstPhoto() != null){
-//                deleteFile(fileInformation.getKeyOfFirstPhoto());
+                deleteFile(fileInformation.getKeyOfFirstPhoto());
             }if (!Objects.equals(fileInformation.getSecondPhoto(),newFileInformation.getSecondPhoto()) && newFileInformation.getSecondPhoto() != null){
-//                deleteFile(fileInformation.getKeyOfSecondPhoto());
+                deleteFile(fileInformation.getKeyOfSecondPhoto());
             }if(!Objects.equals(fileInformation.getBookFile(),newFileInformation.getBookFile()) && newFileInformation.getBookFile() != null){
-//                deleteFile(fileInformation.getKeyOfBookFile());
+                deleteFile(fileInformation.getKeyOfBookFile());
             }
             book.setFileInformation(newFileInformation);
         }
@@ -308,10 +322,35 @@ public class BookServiceImpl implements BookService {
     }
 
 
-//    public void deleteFile(String keyName) {
-//        final DeleteObjectRequest deleteObjectRequest = new
-//                DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(), keyName);
-//        awsS3Client.deleteObject(deleteObjectRequest);
-//        log.info("Successfully deleted");
-//    }
+    public void deleteFile(String keyName) {
+        final DeleteObjectRequest deleteObjectRequest = new
+                DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(), keyName);
+        awsS3Client.deleteObject(deleteObjectRequest);
+        log.info("Successfully deleted");
+    }
+
+    @Override
+    public CountForAdmin getCountOfVendorBooks(String name) {
+        List<Book> booksFromVendor = repository.findBooksFromVendor(name);
+        Integer integer = booksFromVendor.size();
+        CountForAdmin count = new CountForAdmin();
+        count.setCountOfPages(countOfPages(integer));
+
+        count.setAll(integer);
+
+        return count;
+    }
+
+    public Integer countOfPages(Integer books) {
+        int count = 1;
+        int size = books;
+        for (int i = 0; i < size; i++) {
+            if (size - 16 >= 0) {
+                size -= 16;
+                count++;
+            }
+        }
+        return count;
+    }
+
 }

@@ -48,7 +48,6 @@ public class AdminServiceImpl implements AdminService {
     private VendorMapper vendorMapper;
     private ClientMapper clientMapper;
     private ModelMapper modelMapper;
-    private EmailServiceImpl emailService;
 
     @Override
     public List<Book> getBooksBy(String genreName, BookType bookType) {
@@ -178,10 +177,6 @@ public class AdminServiceImpl implements AdminService {
                     );
                 });
         book.setRequestStatus(REFUSED);
-
-        // TODO: 24.04.2022  sand massage to gmail
-
-        emailService.send(book.getUser().getEmail(), refuseBookRequest.getReason());
 
         log.info("admin refuse book request");
         return ResponseEntity.ok().body(
@@ -317,13 +312,24 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public CountForAdmin getCountOfInProgressAlsoDontWatched() {
-        Integer booksInProgress = bookRepository.getCountOfBooksInProgress(RequestStatus.INPROGRESS);
-        Integer countOfPages = countOfPages(booksInProgress);
-        Integer notWatch = bookRepository.getCountOfBooksWhereAdminDidNotWatch();
+
+        List<Book> bookList = bookRepository.findAll();
+        for (Book book : bookList) {
+            if (book.getRequestStatus().equals(ACCEPTED)) {
+                book.setAdminWatch(true);
+            }
+            bookRepository.save(book);
+        }
+
+        Integer all = bookRepository.getCountOfBooksInProgress(RequestStatus.INPROGRESS);
+        Integer countOfPages = countOfPages(all);
+        Integer unread = getCountOfDidNotWatched(bookList);
         CountForAdmin counts = new CountForAdmin();
+
         counts.setCountOfPages(countOfPages);
-        counts.setAll(booksInProgress);
-        counts.setUnread(notWatch);
+        counts.setAll(all);
+        counts.setUnread(unread);
+
         return counts;
     }
 
@@ -340,5 +346,15 @@ public class AdminServiceImpl implements AdminService {
         return count;
     }
 
+    @Override
+    public Integer getCountOfDidNotWatched(List<Book> bookList) {
+        Integer count=0;
+        for (Book book : bookList) {
+            if (book.getAdminWatch().equals(false)){
+                count++;
+            }
+        }
 
+        return count;
+    }
 }

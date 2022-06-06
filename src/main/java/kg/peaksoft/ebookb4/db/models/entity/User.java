@@ -48,8 +48,7 @@ public class User {
             mappedBy = "user")
     private List<Book> vendorAddedBooks;
 
-
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "liked_books"
             , joinColumns = @JoinColumn(name = "user_id")
@@ -64,7 +63,7 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Promocode> promocodes;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "operation_id")
     private List<ClientOperations> clientOperation;
 

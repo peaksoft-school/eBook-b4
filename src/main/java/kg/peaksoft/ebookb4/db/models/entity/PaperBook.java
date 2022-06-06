@@ -23,6 +23,7 @@ public class PaperBook {
             allocationSize = 1)
     private Long paperBookId;
 
+    @Column(length = 10000000)
     private String fragmentOfBook;
 
     private Integer numberOfPages;

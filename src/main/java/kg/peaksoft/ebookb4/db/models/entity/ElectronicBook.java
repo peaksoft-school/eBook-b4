@@ -19,6 +19,7 @@ public class ElectronicBook {
     @SequenceGenerator(name = "hibernate_seq", sequenceName = "ebook_seq", allocationSize = 1)
     private Long ebookId;
 
+    @Column(length = 10000000)
     private String fragmentOfBook;
 
     private Integer numberOfPages;

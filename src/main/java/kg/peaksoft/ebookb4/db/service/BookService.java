@@ -7,6 +7,7 @@ import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.BookResponseAfterSaved;
+import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -38,5 +39,7 @@ public interface BookService {
     List<BookResponse> getBooksSold(String name, ERole role);
 
     List<Genre> getAllGenres();
+
+    CountForAdmin getCountOfVendorBooks(String name);
 
 }
