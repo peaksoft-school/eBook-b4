@@ -4,7 +4,6 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +17,8 @@ public class AmazonConfig {
     @Bean
     public static AmazonS3Client s3(){
         AWSCredentials awsCredentials = new BasicAWSCredentials(
-                "AKIA3EDLM772OB45TPRY",
-                "j5wKMRw9dKIqRbqeAWAT1cvYvdvH79AsVsT8bmzd"
+                AwsCredentials.AWS_ACCESSKEY.getAwsCredentials(),
+                AwsCredentials.AWS_SECRETKEY.getAwsCredentials()
         );
         return (AmazonS3Client) AmazonS3ClientBuilder
                 .standard()
