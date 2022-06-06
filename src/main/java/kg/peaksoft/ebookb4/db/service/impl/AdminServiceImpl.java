@@ -52,7 +52,32 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<Book> getBooksBy(String genreName, BookType bookType) {
         log.info("getBooks By genre and book type works");
-        return bookRepository.getBooks(genreName, bookType, ACCEPTED);
+        List<Book> books = bookRepository.findAllActive(ACCEPTED);
+        List<Book> sortByOnlyGenres = new ArrayList<>();
+        List<Book> sortByOnlyBookType = new ArrayList<>();
+        List<Book> sort = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getGenre().getName().equals(genreName)) {
+                sortByOnlyGenres.add(book);
+            }
+        }
+        for (Book book1 : books) {
+            if (book1.getBookType().equals(bookType)) {
+                sortByOnlyBookType.add(book1);
+            }
+        }
+        for (Book book2 : sortByOnlyGenres) {
+            if (book2.getBookType().equals(bookType)) {
+                sort.add(book2);
+            }
+        }
+        if (genreName == null) {
+            return sortByOnlyBookType;
+        }
+        if (bookType == null) {
+            return sortByOnlyGenres;
+        } else
+            return sort;
     }
 
     @Override
@@ -348,9 +373,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Integer getCountOfDidNotWatched(List<Book> bookList) {
-        Integer count=0;
+        Integer count = 0;
         for (Book book : bookList) {
-            if (book.getAdminWatch().equals(false)){
+            if (book.getAdminWatch().equals(false)) {
                 count++;
             }
         }

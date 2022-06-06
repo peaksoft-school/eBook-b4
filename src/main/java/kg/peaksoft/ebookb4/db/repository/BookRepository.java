@@ -73,9 +73,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByBookType(BookType bookType, RequestStatus requestStatus);
     //fin books by genre and book type /admin panel
 
-    @Query("select b from Book b where b.genre.name like %?1% " +
-            "or b.bookType = ?2 and b.requestStatus = ?3")
-    List<Book> getBooks(String genreName, BookType bookType, RequestStatus requestStatus);
+//    @Query("select b from Book b where b.genre.name like %?1% " +
+//            "or b.bookType = ?2 and b.requestStatus = ?3")
+//    List<Book> getBooks(String genreName, BookType bookType, RequestStatus requestStatus);
 
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, " +
             "b.aboutBook, b.publishingHouse, b.dateOfRegister, b.price, b.adminWatch, b.fileInformation) " +
