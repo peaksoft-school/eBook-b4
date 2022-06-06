@@ -99,7 +99,7 @@ public class BookGetServiceImpl implements BookGetService {
             log.info("I am sort by language");
             if (sortBook.getLanguage().size() > 1) {
                 int counter = 0;
-                for(Iterator<Book> iterator = books.iterator(); iterator.hasNext(); ) {
+                for (Iterator<Book> iterator = books.iterator(); iterator.hasNext(); ) {
                     Book book = iterator.next();
                     for (Language l : sortBook.getLanguage()) {
                         if (book.getLanguage().equals(l)) {
@@ -146,7 +146,7 @@ public class BookGetServiceImpl implements BookGetService {
         Page<BookResponse> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
         System.out.println(new CustomPageRequest<>(pages).getContent().size());
 
-        log.info("Vendor books=s%"+new CustomPageRequest<>(pages).getContent().size());
+        log.info("Vendor books=s%" + new CustomPageRequest<>(pages).getContent().size());
 
         return new CustomPageRequest<>(pages).getContent();
     }
@@ -162,7 +162,7 @@ public class BookGetServiceImpl implements BookGetService {
         Page<BookResponse> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
         System.out.println(new CustomPageRequest<>(pages).getContent().size());
 
-        log.info("Vendor books=s%"+new CustomPageRequest<>(pages).getContent().size());
+        log.info("Vendor books=s%" + new CustomPageRequest<>(pages).getContent().size());
 
         return new CustomPageRequest<>(pages).getContent();
     }
@@ -228,6 +228,22 @@ public class BookGetServiceImpl implements BookGetService {
             }
         }
         return bookRepository.BooksNovelties(books);
+    }
+
+    @Override
+    public List<Book> getAllAudioBook() {
+        return bookRepository.getAllAudioBook(BookType.AUDIOBOOK, ACCEPTED);
+    }
+
+    @Override
+    public List<Book> getAllEBook() {
+        return bookRepository.getAllEBook(BookType.EBOOK, ACCEPTED);
+    }
+
+    @Override
+    public List<Book> getBook() {
+        return  bookRepository.getBook(ACCEPTED);
+
     }
 
     public void chekHaveFiles(List<Book> books) {
