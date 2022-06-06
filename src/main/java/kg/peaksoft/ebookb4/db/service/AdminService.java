@@ -61,4 +61,6 @@ public interface AdminService {
 
     CountForAdmin getCountOfInProgressAlsoDontWatched();
 
+    Integer getCountOfDidNotWatched(List<Book> bookList);
+
 }

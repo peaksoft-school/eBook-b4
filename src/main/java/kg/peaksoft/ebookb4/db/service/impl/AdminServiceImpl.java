@@ -320,9 +320,10 @@ public class AdminServiceImpl implements AdminService {
             }
             bookRepository.save(book);
         }
+
         Integer all = bookRepository.getCountOfBooksInProgress(RequestStatus.INPROGRESS);
         Integer countOfPages = countOfPages(all);
-        Integer unread = bookRepository.getCountOfBooksWhereAdminDidNotWatch();
+        Integer unread = getCountOfDidNotWatched(bookList);
         CountForAdmin counts = new CountForAdmin();
 
         counts.setCountOfPages(countOfPages);
@@ -345,5 +346,15 @@ public class AdminServiceImpl implements AdminService {
         return count;
     }
 
+    @Override
+    public Integer getCountOfDidNotWatched(List<Book> bookList) {
+        Integer count=0;
+        for (Book book : bookList) {
+            if (book.getAdminWatch().equals(false)){
+                count++;
+            }
+        }
 
+        return count;
+    }
 }
