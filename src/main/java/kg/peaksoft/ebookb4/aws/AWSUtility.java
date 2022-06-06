@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.aws.enums;
+package kg.peaksoft.ebookb4.aws;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -8,7 +8,6 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
-import kg.peaksoft.ebookb4.db.models.response.AwsUploadResponse;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +50,7 @@ public class AWSUtility {
         return amazonS3Client.getResourceUrl(bucketName, fileName);
     }
 
-    public AwsUploadResponse getUrlForUploadFile(Long bookId, String abstractNameOfFile, String file) {
+    public String getUrlForUploadFile(Long bookId, String abstractNameOfFile, String file) {
         Book bookById = bookRepository.getById(bookId);
         String nameOfFile = chekAbstractName(abstractNameOfFile) + UUID.randomUUID() + "." + file;
         if (abstractNameOfFile.equals("firstPhoto")) {
@@ -133,10 +132,7 @@ public class AWSUtility {
                 s3Presigner.presignPutObject(r -> r.signatureDuration(Duration.ofMinutes(5))
                         .putObjectRequest(por -> por.bucket(bucketName)
                                 .key(fileName)));
-        AwsUploadResponse awsUploadResponse = new AwsUploadResponse();
-        awsUploadResponse.setUrlForUpload(presignedRequest.url().toString());
-        awsUploadResponse.setNewUniqueNameForFile(nameOfFile);
-        return awsUploadResponse;
+        return presignedRequest.url().toString();
     }
 
 

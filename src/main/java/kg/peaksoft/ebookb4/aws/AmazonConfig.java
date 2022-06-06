@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.aws.enums;
+package kg.peaksoft.ebookb4.aws;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

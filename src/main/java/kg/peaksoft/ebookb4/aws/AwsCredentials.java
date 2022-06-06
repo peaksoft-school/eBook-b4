@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.aws.enums;
+package kg.peaksoft.ebookb4.aws;
 
 import lombok.Getter;
 
