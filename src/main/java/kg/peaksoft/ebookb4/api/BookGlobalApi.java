@@ -6,9 +6,8 @@ import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
-import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
+import kg.peaksoft.ebookb4.db.service.BookGetService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
