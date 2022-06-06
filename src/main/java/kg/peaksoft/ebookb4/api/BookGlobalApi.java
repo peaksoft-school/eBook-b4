@@ -48,12 +48,6 @@ public class BookGlobalApi {
         return bookGetService.getBookById(id);
     }
 
-    @Operation(summary = "Get all genre count books", description = "get genres countBooks")
-    @GetMapping("/genre_count")
-    List<GenreRequest> getCountGenre() {
-        return bookGetService.getCountGenre();
-    }
-
     @Operation(summary = "Get books with bestSeller = true")
     @GetMapping("/bestSeller")
     public List<Book> isBestSeller(){

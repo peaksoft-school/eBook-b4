@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
+import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
 import kg.peaksoft.ebookb4.db.models.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.db.models.request.Request;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
@@ -19,7 +20,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -196,5 +196,11 @@ public class AdminApi {
     @GetMapping("/countOfBooksInProgress")
     public CountForAdmin getTwoCounts() {
         return service.getCountOfInProgressAlsoDontWatched();
+    }
+
+    @Operation(summary = "Get all genre count books", description = "get genres countBooks")
+    @GetMapping("/genre_count")
+    List<GenreRequest> getCountGenre() {
+        return bookGetService.getCountGenre();
     }
 }
