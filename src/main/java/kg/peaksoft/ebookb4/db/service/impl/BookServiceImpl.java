@@ -2,29 +2,31 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import kg.peaksoft.ebookb4.aws.enums.BucketName;
+import kg.peaksoft.ebookb4.aws.AwsCredentials;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileInformation;
+import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.models.entity.*;
+import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
+import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
+import kg.peaksoft.ebookb4.db.models.mappers.BookMapper;
+import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.BookResponseAfterSaved;
 import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
+import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.repository.*;
 import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
-import kg.peaksoft.ebookb4.db.models.mappers.BookMapper;
-import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
-import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
-import kg.peaksoft.ebookb4.db.models.enums.BookType;
-
-import kg.peaksoft.ebookb4.db.models.enums.Language;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +34,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -47,7 +48,6 @@ public class BookServiceImpl implements BookService {
     private final PromoService promoService;
     private final AmazonS3Client awsS3Client;
 
-    private final FileInformationRepository fileInformationRepository;
 
 
     @Override
@@ -324,7 +324,7 @@ public class BookServiceImpl implements BookService {
 
     public void deleteFile(String keyName) {
         final DeleteObjectRequest deleteObjectRequest = new
-                DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(), keyName);
+                DeleteObjectRequest(AwsCredentials.AWS_BUCKET_NAME.getAwsCredentials(), keyName);
         awsS3Client.deleteObject(deleteObjectRequest);
         log.info("Successfully deleted");
     }
@@ -335,9 +335,7 @@ public class BookServiceImpl implements BookService {
         Integer integer = booksFromVendor.size();
         CountForAdmin count = new CountForAdmin();
         count.setCountOfPages(countOfPages(integer));
-
         count.setAll(integer);
-
         return count;
     }
 

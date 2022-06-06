@@ -78,4 +78,22 @@ public class BookGlobalApi {
         files.add(file);
         return files;
     }
+
+    @Operation(summary = "Get three books")
+    @GetMapping("/three_book")
+    public List<Book> getBooks(){
+        return bookGetService.getBook();
+    }
+
+    @Operation(summary = "Get all audioBook")
+    @GetMapping("/audio-book")
+    public List<Book> getAllAudioBook(){
+        return bookGetService.getAllAudioBook();
+    }
+
+    @Operation(summary = "Get all electronic book")
+    @GetMapping("/ebook")
+    public List<Book> getAllEBook(){
+        return bookGetService.getAllEBook();
+    }
 }
