@@ -101,13 +101,13 @@ public class AWSUtility {
         if (abstractNameOfFile.equals("audioBookFile")) {
             if (bookById.getBookType().equals(BookType.AUDIOBOOK)) {
                 if (bookById.getFileInformation().getBookFile() == null) {
-                    bookById.getFileInformation().setBookFile(nameOfFile);
-                    bookById.getFileInformation().setKeyOfBookFile(urlOfFile(nameOfFile));
+                    bookById.getFileInformation().setBookFile(urlOfFile(nameOfFile));
+                    bookById.getFileInformation().setKeyOfBookFile(nameOfFile);
                     log.info("It's new audio file in - {}", abstractNameOfFile);
                 } else {
                     deleteFile(bookById.getFileInformation().getKeyOfBookFile());
-                    bookById.getFileInformation().setBookFile(nameOfFile);
-                    bookById.getFileInformation().setKeyOfBookFile(urlOfFile(nameOfFile));
+                    bookById.getFileInformation().setBookFile(urlOfFile(nameOfFile));
+                    bookById.getFileInformation().setKeyOfBookFile(nameOfFile);
                 }
             }
         }
