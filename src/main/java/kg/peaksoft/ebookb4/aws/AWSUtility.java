@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
+import kg.peaksoft.ebookb4.db.models.response.AwsUploadResponse;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class AWSUtility {
         return amazonS3Client.getResourceUrl(bucketName, fileName);
     }
 
-    public String getUrlForUploadFile(Long bookId, String abstractNameOfFile, String file) {
+    public AwsUploadResponse getUrlForUploadFile(Long bookId, String abstractNameOfFile, String file) {
         Book bookById = bookRepository.getById(bookId);
         String nameOfFile = chekAbstractName(abstractNameOfFile) + UUID.randomUUID() + "." + file;
         if (abstractNameOfFile.equals("firstPhoto")) {
@@ -88,13 +89,13 @@ public class AWSUtility {
         }
         if (abstractNameOfFile.equals("bookFile")) {
             if (bookById.getFileInformation().getBookFile() == null) {
-                bookById.getFileInformation().setBookFile(nameOfFile);
-                bookById.getFileInformation().setKeyOfBookFile(urlOfFile(nameOfFile));
+                bookById.getFileInformation().setBookFile(urlOfFile(nameOfFile));
+                bookById.getFileInformation().setKeyOfBookFile(nameOfFile);
                 log.info("It's new book file in - {}", abstractNameOfFile);
             } else {
                 deleteFile(bookById.getFileInformation().getKeyOfBookFile());
-                bookById.getFileInformation().setBookFile(nameOfFile);
-                bookById.getFileInformation().setKeyOfBookFile(urlOfFile(nameOfFile));
+                bookById.getFileInformation().setBookFile(urlOfFile(nameOfFile));
+                bookById.getFileInformation().setKeyOfBookFile(nameOfFile);
             }
         }
         if (abstractNameOfFile.equals("audioBookFile")) {
@@ -132,7 +133,10 @@ public class AWSUtility {
                 s3Presigner.presignPutObject(r -> r.signatureDuration(Duration.ofMinutes(5))
                         .putObjectRequest(por -> por.bucket(bucketName)
                                 .key(fileName)));
-        return presignedRequest.url().toString();
+        AwsUploadResponse awsUploadResponse = new AwsUploadResponse();
+        awsUploadResponse.setUrlForUpload(presignedRequest.url().toString());
+        awsUploadResponse.setUrlForView(urlOfFile(nameOfFile));
+        return awsUploadResponse;
     }
 
 

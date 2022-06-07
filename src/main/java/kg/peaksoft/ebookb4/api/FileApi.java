@@ -3,6 +3,7 @@ package kg.peaksoft.ebookb4.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.peaksoft.ebookb4.aws.AWSUtility;
+import kg.peaksoft.ebookb4.db.models.response.AwsUploadResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,9 +22,9 @@ public class FileApi {
 
     @Operation(summary = "Get url for upload the file")
     @GetMapping("/urlForUpload/{bookId}/{abstractNameOfFile}/{keyName}")
-    public String getUrlForUpload(@PathVariable String abstractNameOfFile,
-                                        @PathVariable Long bookId,
-                                        @PathVariable String keyName) {
+    public AwsUploadResponse getUrlForUpload(@PathVariable String abstractNameOfFile,
+                                             @PathVariable Long bookId,
+                                             @PathVariable String keyName) {
         return awsUtility.getUrlForUploadFile(bookId, abstractNameOfFile, keyName);
     }
 
