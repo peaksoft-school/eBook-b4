@@ -66,24 +66,24 @@ public class AdminApi {
 
     @Operation(summary = "Get all by genre and book type",
             description = "Filter all books by genre and book type ")
-    @GetMapping("/booksByBoth/{genreId}/{bookType}")
-    public List<Book> getBooksBy(@PathVariable Long genreId,
-                                 @PathVariable BookType bookType) {
+    @GetMapping("/booksByBoth")
+    public List<Book> getBooksBy(@RequestParam Long genreId,
+                                 @RequestParam BookType bookType) {
         return service.getBooksBy(genreId, bookType);
     }
 
-    @Operation(summary = "Get books by genre", description = "Filter all books only by genre ")
-    @GetMapping("/booksByGenre/{genre}")
-    public List<Book> getBooksByGenre(@PathVariable String genre) {
-        return service.getBooksByGenre(genre.toUpperCase());
-    }
+//    @Operation(summary = "Get books by genre", description = "Filter all books only by genre ")
+//    @GetMapping("/booksByGenre/{genre}")
+//    public List<Book> getBooksByGenre(@PathVariable String genre) {
+//        return service.getBooksByGenre(genre.toUpperCase());
+//    }
 
-    @Operation(summary = "Get all books by book type",
-            description = "Filter all books only by book type ")
-    @GetMapping("/booksByType/{bookType}")
-    public List<Book> getBooksByBookType(@PathVariable BookType bookType) {
-        return service.getBooksByBookType(bookType);
-    }
+//    @Operation(summary = "Get all books by book type",
+//            description = "Filter all books only by book type ")
+//    @GetMapping("/booksByType/{bookType}")
+//    public List<Book> getBooksByBookType(@PathVariable BookType bookType) {
+//        return service.getBooksByBookType(bookType);
+//    }
 
     @Operation(summary = "Delete book", description = "Delete books by id")
     @DeleteMapping("/book/{bookId}")
