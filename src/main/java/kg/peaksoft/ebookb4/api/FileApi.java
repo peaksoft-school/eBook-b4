@@ -33,5 +33,4 @@ public class FileApi {
     public byte[] downloadFile(@PathVariable String keyName) {
         return awsUtility.downloadFile(keyName);
     }
-
 }
