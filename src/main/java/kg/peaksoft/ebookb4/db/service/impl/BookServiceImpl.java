@@ -48,8 +48,6 @@ public class BookServiceImpl implements BookService {
     private final PromoService promoService;
     private final AmazonS3Client awsS3Client;
 
-
-
     @Override
     public BookResponseAfterSaved saveBook(BookDTO bookDTO, String username) {
         User user = userRepository.getUser(username)
@@ -350,5 +348,4 @@ public class BookServiceImpl implements BookService {
         }
         return count;
     }
-
 }

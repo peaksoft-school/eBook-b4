@@ -9,10 +9,7 @@ import kg.peaksoft.ebookb4.db.models.mappers.ClientMapper;
 import kg.peaksoft.ebookb4.db.models.mappers.VendorMapper;
 import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
 import kg.peaksoft.ebookb4.db.models.request.RefuseBookRequest;
-import kg.peaksoft.ebookb4.db.models.response.BookResponse;
-import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
-import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
-import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
+import kg.peaksoft.ebookb4.db.models.response.*;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.AdminService;
@@ -50,8 +47,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Book> getBooksBy(Long genreId, BookType bookType) {
-        log.info("getBooks By genre and book type works");
         List<Book> books = bookRepository.findAllActive(ACCEPTED);
+
+        if (genreId == null && bookType == null){
+            return books;
+        }
+
         List<Book> sortByOnlyGenres = new ArrayList<>();
         List<Book> sortByOnlyBookType = new ArrayList<>();
         List<Book> sort = new ArrayList<>();
@@ -79,23 +80,13 @@ public class AdminServiceImpl implements AdminService {
             return sort;
     }
 
+
+
     @Override
     public List<BookResponse> getBooksFromBasket(Long clientId) {
         return bookRepository.findBasketByClientIdAdmin(clientId)
                 .stream().map(book -> modelMapper.map(
                         book, BookResponse.class)).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Book> getBooksByBookType(BookType bookType) {
-        log.info("get books by book type works");
-        return bookRepository.findAllByBookType(bookType, ACCEPTED);
-    }
-
-    @Override
-    public List<Book> getBooksByGenre(String genreName) {
-        log.info("get books by genre works");
-        return bookRepository.findAllByGenre(genreName, ACCEPTED);
     }
 
     @Override

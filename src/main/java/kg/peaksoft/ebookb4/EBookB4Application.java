@@ -143,5 +143,4 @@ public class EBookB4Application {
         genreRepository.save(technic);
 
     }
-
 }

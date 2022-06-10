@@ -1,6 +1,7 @@
 package kg.peaksoft.ebookb4.db.service;
 
 import kg.peaksoft.ebookb4.db.models.entity.Book;
+import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
@@ -20,7 +21,7 @@ public interface BookGetService {
 
     List<BookResponse> getAllBooksRequests(int offset, int pageSize);
 
-    List<BookResponse> getAllAcceptedBooks(int offset, int pageSize);
+    List<Book> getAllAcceptedBooks(int offset, int pageSize,Long genreId, BookType bookType);
 
     List<GenreRequest> getCountGenre();
 

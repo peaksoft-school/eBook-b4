@@ -15,12 +15,4 @@ public class GenreRequest {
         this.genreName = genreName;
         this.genreId=genreId;
     }
-
-    @Override
-    public String toString() {
-        return "GenreRequest{" +
-                "genre=" + genreName +
-                ", count=" + count +
-                '}';
-    }
 }
