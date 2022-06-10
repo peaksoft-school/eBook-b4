@@ -4,10 +4,7 @@ import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.request.RefuseBookRequest;
-import kg.peaksoft.ebookb4.db.models.response.BookResponse;
-import kg.peaksoft.ebookb4.db.models.response.ClientResponse;
-import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
-import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
+import kg.peaksoft.ebookb4.db.models.response.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -17,11 +14,7 @@ public interface AdminService {
 
     List<Book> getBooksBy(Long genreId, BookType bookType);
 
-    List<Book> getBooksByGenre(String genre);
-
     List<BookResponse> getBooksFromBasket(Long id);
-
-    List<Book> getBooksByBookType(BookType bookType);
 
     List<VendorResponse> findAllVendors();
 

@@ -41,7 +41,7 @@ public class EBookB4Application {
         return "<h1>Welcome to eBook application!!!<h1/>";
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         Role client = new Role();
         client.setId(1L);

@@ -29,6 +29,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.requestStatus = ?1")
     List<Book> findAllActive(RequestStatus requestStatus);
 
+    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, " +
+            "b.aboutBook, b.publishingHouse, b.dateOfRegister, b.price, b.adminWatch, b.fileInformation) " +
+            "from Book b where b.requestStatus =:requestStatus")
+    List<BookResponse> findBooksInProgress(RequestStatus requestStatus);
+
+
     //find book by id and active one
     @Query("select b from Book b where b.bookId = ?1 and b.requestStatus = ?2")
     Optional<Book> findBookByIdAndActive(Long id, RequestStatus requestStatus);
@@ -71,16 +77,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     //find books by BookType / admin panes
     @Query("select b from Book b where b.bookType = ?1 and b.requestStatus = ?2")
     List<Book> findAllByBookType(BookType bookType, RequestStatus requestStatus);
-    //fin books by genre and book type /admin panel
-
-//    @Query("select b from Book b where b.genre.name like %?1% " +
-//            "or b.bookType = ?2 and b.requestStatus = ?3")
-//    List<Book> getBooks(String genreName, BookType bookType, RequestStatus requestStatus);
-
-    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, " +
-            "b.aboutBook, b.publishingHouse, b.dateOfRegister, b.price, b.adminWatch, b.fileInformation) " +
-            "from Book b where b.requestStatus =:requestStatus")
-    List<BookResponse> findBooksInProgress(RequestStatus requestStatus);
 
     @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, " +
             "b.aboutBook, b.publishingHouse, b.dateOfRegister, b.price, b.adminWatch, b.fileInformation) " +
@@ -94,8 +90,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(value = "select b from Book b where b.genre.name like %?1% and b.requestStatus = ?2 ")
     List<Book> findAllByGenre(String genreName, RequestStatus requestStatus);
 
-    @Query("select count (b) from Book b where b.genre.name like %?1% and b.requestStatus = ?2")
-    Integer getCountGenre(String genre, RequestStatus requestStatus);
+
+    @Query("select count(b) from Book b where b.genre.id = ?1 and b.requestStatus = ?2")
+    int getCountGenre(Long genre, RequestStatus requestStatus);
+
 
     @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
             "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
@@ -126,9 +124,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query(value = "select count(b) from Book b where b.requestStatus =:requestStatus")
     Integer getCountOfBooksInProgress(RequestStatus requestStatus);
-
-//    @Query(value = "select count (b) from Book b where b.adminWatch = false")
-//    Integer getCountOfBooksWhereAdminDidNotWatch();
 
     @Query("select b from  Book b where  b.requestStatus =:requestStatus")
     List<Book> findOnlyInProgressBooks(RequestStatus requestStatus);

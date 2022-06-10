@@ -8,6 +8,7 @@ import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.GenreRepository;
+import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
@@ -23,6 +24,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.*;
 
@@ -34,6 +36,51 @@ public class BookGetServiceImpl implements BookGetService {
     private final BookRepository bookRepository;
     private final PromoService promoService;
     private final GenreRepository genreRepository;
+    private final AdminService adminService;
+
+    @Override
+    public List<Book> getAllAcceptedBooks(int offset, int pageSize,Long genreId, BookType bookType) {
+        promoService.checkPromos();
+
+        List<Book> books = getBooksBy2(genreId,bookType);
+
+        Pageable paging = PageRequest.of(offset, pageSize);
+        int start = Math.min((int) paging.getOffset(), books.size());
+        int end = Math.min((start + paging.getPageSize()), books.size());
+        Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
+
+        return new CustomPageRequest<>(pages).getContent();
+    }
+
+    public List<Book> getBooksBy2(Long genreId, BookType bookType) {
+        List<Book> books = bookRepository.findAllActive(ACCEPTED);
+
+        List<Book> sortByOnlyGenres = new ArrayList<>();
+        List<Book> sortByOnlyBookType = new ArrayList<>();
+        List<Book> sort = new ArrayList<>();
+        for (Book book : books) {
+            if (Objects.equals(book.getGenre().getId(), genreId)) {
+                sortByOnlyGenres.add(book);
+            }
+        }
+        for (Book book1 : books) {
+            if (book1.getBookType().equals(bookType)) {
+                sortByOnlyBookType.add(book1);
+            }
+        }
+        for (Book book2 : sortByOnlyGenres) {
+            if (book2.getBookType().equals(bookType)) {
+                sort.add(book2);
+            }
+        }
+        if (genreId == null) {
+            return sortByOnlyBookType;
+        }
+        if (bookType == null) {
+            return sortByOnlyGenres;
+        } else
+            return sort;
+    }
 
     @Override
     public List<Book> findByGenre(String genreName, RequestStatus requestStatus) {
@@ -152,22 +199,6 @@ public class BookGetServiceImpl implements BookGetService {
     }
 
     @Override
-    public List<BookResponse> getAllAcceptedBooks(int offset, int pageSize) {
-        promoService.checkPromos();
-        List<BookResponse> books = bookRepository.findBooksInProgress(ACCEPTED);
-        log.info("accepted books size =s%" + bookRepository.findBooksAccepted(ACCEPTED).size());
-        Pageable paging = PageRequest.of(offset, pageSize);
-        int start = Math.min((int) paging.getOffset(), books.size());
-        int end = Math.min((start + paging.getPageSize()), books.size());
-        Page<BookResponse> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
-        System.out.println(new CustomPageRequest<>(pages).getContent().size());
-
-        log.info("Vendor books=s%" + new CustomPageRequest<>(pages).getContent().size());
-
-        return new CustomPageRequest<>(pages).getContent();
-    }
-
-    @Override
     public List<GenreRequest> getCountGenre() {
         promoService.checkPromos();
         List<GenreRequest> genreRequest = new ArrayList<>();
@@ -200,10 +231,10 @@ public class BookGetServiceImpl implements BookGetService {
         genreRequest.add(new GenreRequest(genreRepository.getById(27L).getRusName(), 27L));
 
         for (GenreRequest request : genreRequest) {
-            request.setCount(bookRepository.getCountGenre(request.getGenreName(), ACCEPTED));
+
+            request.setCount(bookRepository.getCountGenre(request.getGenreId(),ACCEPTED));
+
         }
-        genreRequest.forEach(System.out::println);
-        log.info("Get count Genre works");
         return genreRequest;
     }
 
