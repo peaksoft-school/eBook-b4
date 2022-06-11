@@ -38,10 +38,10 @@ public class BookGetServiceImpl implements BookGetService {
     private final GenreRepository genreRepository;
 
     @Override
-    public List<Book> getAllAcceptedBooks(int offset, int pageSize,Long genreId, BookType bookType) {
+    public List<Book> getAllAcceptedBooks(int offset, int pageSize, Long genreId, BookType bookType) {
         promoService.checkPromos();
 
-        List<Book> books = getBooksBy2(genreId,bookType);
+        List<Book> books = getBooksBy2(genreId, bookType);
 
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), books.size());
@@ -53,7 +53,8 @@ public class BookGetServiceImpl implements BookGetService {
 
     public List<Book> getBooksBy2(Long genreId, BookType bookType) {
         List<Book> books = bookRepository.findAllActive(ACCEPTED);
-        if (genreId == null || bookType == null || genreId == 28  && bookType.equals(BookType.ALL)){
+
+      if (genreId == null || bookType == null || genreId == 28  && bookType.equals(BookType.ALL)){
             return books;
         }
         List<Book> sortByOnlyGenres = new ArrayList<>();
@@ -74,13 +75,14 @@ public class BookGetServiceImpl implements BookGetService {
                 sort.add(book2);
             }
         }
-        if (genreId == null) {
+        if (genreId == null || genreId == 28) {
             return sortByOnlyBookType;
         }
-        if (bookType == null) {
+        if (bookType == null || bookType.equals(BookType.ALL)) {
             return sortByOnlyGenres;
-        } else
+        }else
             return sort;
+
     }
 
     @Override
@@ -204,7 +206,7 @@ public class BookGetServiceImpl implements BookGetService {
         promoService.checkPromos();
         List<GenreRequest> genreRequest = new ArrayList<>();
         genreRequest.add(new GenreRequest(genreRepository.getById(1L).getRusName(), 1L));
-        genreRequest.add(new GenreRequest(genreRepository.getById(2L).getRusName(),2L));
+        genreRequest.add(new GenreRequest(genreRepository.getById(2L).getRusName(), 2L));
         genreRequest.add(new GenreRequest(genreRepository.getById(3L).getRusName(), 3L));
         genreRequest.add(new GenreRequest(genreRepository.getById(4L).getRusName(), 4L));
         genreRequest.add(new GenreRequest(genreRepository.getById(5L).getRusName(), 5L));
@@ -233,7 +235,7 @@ public class BookGetServiceImpl implements BookGetService {
 
         for (GenreRequest request : genreRequest) {
 
-            request.setCount(bookRepository.getCountGenre(request.getGenreId(),ACCEPTED));
+            request.setCount(bookRepository.getCountGenre(request.getGenreId(), ACCEPTED));
 
         }
         return genreRequest;
@@ -274,7 +276,7 @@ public class BookGetServiceImpl implements BookGetService {
 
     @Override
     public List<Book> getBook() {
-        return  bookRepository.getBook(ACCEPTED);
+        return bookRepository.getBook(ACCEPTED);
 
     }
 
