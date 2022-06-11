@@ -45,40 +45,43 @@ public class AdminServiceImpl implements AdminService {
     private ClientMapper clientMapper;
     private ModelMapper modelMapper;
 
-    @Override
-    public List<Book> getBooksBy(Long genreId, BookType bookType) {
-        List<Book> books = bookRepository.findAllActive(ACCEPTED);
-
-        if (genreId == null && bookType == null){
-            return books;
-        }
-
-        List<Book> sortByOnlyGenres = new ArrayList<>();
-        List<Book> sortByOnlyBookType = new ArrayList<>();
-        List<Book> sort = new ArrayList<>();
-        for (Book book : books) {
-            if (Objects.equals(book.getGenre().getId(), genreId)) {
-                sortByOnlyGenres.add(book);
-            }
-        }
-        for (Book book1 : books) {
-            if (book1.getBookType().equals(bookType)) {
-                sortByOnlyBookType.add(book1);
-            }
-        }
-        for (Book book2 : sortByOnlyGenres) {
-            if (book2.getBookType().equals(bookType)) {
-                sort.add(book2);
-            }
-        }
-        if (genreId == null) {
-            return sortByOnlyBookType;
-        }
-        if (bookType == null) {
-            return sortByOnlyGenres;
-        } else
-            return sort;
-    }
+//    @Override
+//    public List<Book> getBooksBy(Long genreId, BookType bookType) {
+//        List<Book> books = bookRepository.findAllActive(ACCEPTED);
+//
+//        if (genreId == null && bookType == null){
+//            return books;
+//        }
+//
+//        if (genreId == 28){
+//            return books;
+//        }
+//        List<Book> sortByOnlyGenres = new ArrayList<>();
+//        List<Book> sortByOnlyBookType = new ArrayList<>();
+//        List<Book> sort = new ArrayList<>();
+//        for (Book book : books) {
+//            if (Objects.equals(book.getGenre().getId(), genreId)) {
+//                sortByOnlyGenres.add(book);
+//            }
+//        }
+//        for (Book book1 : books) {
+//            if (book1.getBookType().equals(bookType)) {
+//                sortByOnlyBookType.add(book1);
+//            }
+//        }
+//        for (Book book2 : sortByOnlyGenres) {
+//            if (book2.getBookType().equals(bookType)) {
+//                sort.add(book2);
+//            }
+//        }
+//        if (genreId == null) {
+//            return sortByOnlyBookType;
+//        }
+//        if (bookType == null) {
+//            return sortByOnlyGenres;
+//        } else
+//            return sort;
+//    }
 
 
 

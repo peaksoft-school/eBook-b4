@@ -12,7 +12,7 @@ import java.util.Map;
 
 public interface AdminService {
 
-    List<Book> getBooksBy(Long genreId, BookType bookType);
+//    List<Book> getBooksBy(Long genreId, BookType bookType);
 
     List<BookResponse> getBooksFromBasket(Long id);
 
