@@ -13,7 +13,6 @@ import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class AdminApi {
     @Operation(summary = "Get all books in process", description = "Get books in process")
     @GetMapping("/books-in-process/{offset}")
     public List<BookResponse> getAllBookRequest(@PathVariable Integer offset) {
-        return bookGetService.getAllBooksRequests(--offset, 8);
+        return bookGetService.getAllBooksInProgress(--offset, 8);
     }
 
     @Operation(summary = "Accept a book by id", description = "Admin accepts book by Id")
@@ -42,18 +41,18 @@ public class AdminApi {
 
     @Operation(summary = "Get all accepted books", description = "All accepted books")
     @GetMapping("/books-accepted/{offset}")
-    public List<Book> getAllAcceptedBooks(@RequestParam Long genreId,
-                                          @RequestParam BookType bookType,
+    public List<Book> getAllAcceptedBooks(@RequestParam(required = false) Long genreId,
+                                          @RequestParam(required = false) BookType bookType,
                                           @PathVariable Integer offset) {
         return bookGetService.getAllAcceptedBooks(--offset, 12,genreId,bookType);
     }
 
-    @Operation(summary = "Get all by genre and book type",
-            description = "Filter all books by genre and book type ")
-    @GetMapping("/booksByBoth")
-    public List<Book> getBooksBy(@RequestParam(required = false) Long genreId, @RequestParam(required = false) BookType bookType) {
-        return service.getBooksBy(genreId,bookType);
-    }
+//    @Operation(summary = "Get all by genre and book type",
+//            description = "Filter all books by genre and book type ")
+//    @GetMapping("/booksByBoth")
+//    public List<Book> getBooksBy(@RequestParam(required = false) Long genreId, @RequestParam(required = false) BookType bookType) {
+//        return service.getBooksBy(genreId,bookType);
+//    }
 
     @Operation(summary = "Refuse a book by id", description = "Admin refuses a book by id")
     @PostMapping("/book-refuse/{id}")

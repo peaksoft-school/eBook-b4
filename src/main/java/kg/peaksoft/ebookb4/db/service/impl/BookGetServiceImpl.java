@@ -36,7 +36,6 @@ public class BookGetServiceImpl implements BookGetService {
     private final BookRepository bookRepository;
     private final PromoService promoService;
     private final GenreRepository genreRepository;
-    private final AdminService adminService;
 
     @Override
     public List<Book> getAllAcceptedBooks(int offset, int pageSize,Long genreId, BookType bookType) {
@@ -54,7 +53,9 @@ public class BookGetServiceImpl implements BookGetService {
 
     public List<Book> getBooksBy2(Long genreId, BookType bookType) {
         List<Book> books = bookRepository.findAllActive(ACCEPTED);
-
+        if (genreId == null || bookType == null || genreId == 28  && bookType.equals(BookType.ALL)){
+            return books;
+        }
         List<Book> sortByOnlyGenres = new ArrayList<>();
         List<Book> sortByOnlyBookType = new ArrayList<>();
         List<Book> sort = new ArrayList<>();
@@ -181,7 +182,7 @@ public class BookGetServiceImpl implements BookGetService {
     }
 
     @Override
-    public List<BookResponse> getAllBooksRequests(int offset, int pageSize) {
+    public List<BookResponse> getAllBooksInProgress(int offset, int pageSize) {
         promoService.checkPromos();
         List<BookResponse> books = bookRepository.findBooksInProgress(INPROGRESS);
         List<Book> bookList = bookRepository.findOnlyInProgressBooks(INPROGRESS);

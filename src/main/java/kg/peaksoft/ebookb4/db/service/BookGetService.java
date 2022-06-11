@@ -19,7 +19,7 @@ public interface BookGetService {
 
     Book getBookById(Long id);
 
-    List<BookResponse> getAllBooksRequests(int offset, int pageSize);
+    List<BookResponse> getAllBooksInProgress(int offset, int pageSize);
 
     List<Book> getAllAcceptedBooks(int offset, int pageSize,Long genreId, BookType bookType);
 

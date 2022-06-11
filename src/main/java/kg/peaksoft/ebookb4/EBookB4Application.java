@@ -112,7 +112,7 @@ public class EBookB4Application {
         Genre hobby = new Genre(null, "HOBBY", "Хобби");
         Genre humor = new Genre(null, "HUMOR", "Юмор");
         Genre technic = new Genre(null, "TECHNIC", "Технология");
-
+        Genre all = new Genre(null,"All","Все");
 
         genreRepository.save(journal);
         genreRepository.save(romance);
@@ -141,6 +141,7 @@ public class EBookB4Application {
         genreRepository.save(hobby);
         genreRepository.save(humor);
         genreRepository.save(technic);
+        genreRepository.save(all);
 
     }
 }
