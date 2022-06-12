@@ -110,14 +110,14 @@ public class BookGetServiceImpl implements BookGetService {
             return books;
         }
         //sorting if there are selected genres
-        if (sortBook.getGenre() != null) {
+        if (sortBook.getGenreName() != null) {
             log.info("I am in sort by genre");
-            if (sortBook.getGenre().size() > 1) {
+            if (sortBook.getGenreName().size() > 1) {
                 int counter = 0;
                 for (Iterator<Book> iterator = books.iterator(); iterator.hasNext(); ) {
                     Book book = iterator.next();
-                    for (Genre g : sortBook.getGenre()) {
-                        if (book.getGenre().equals(g)) {
+                    for (String g : sortBook.getGenreName()) {
+                        if (book.getGenre().getName().equals(g)) {
                             counter++;
                         }
                     }
@@ -128,7 +128,7 @@ public class BookGetServiceImpl implements BookGetService {
                 }
             } else {
                 log.info("In else of sort by genre");
-                books.removeIf(book -> book.getGenre().equals(sortBook.getGenre().get(0)));
+                books.removeIf(book -> book.getGenre().getName().equals(sortBook.getGenreName().get(0)));
             }
         }
 
@@ -143,7 +143,6 @@ public class BookGetServiceImpl implements BookGetService {
             log.info("I am sort by book type");
             books.removeIf(i -> !i.getBookType().equals(sortBook.getBookType()));
         }
-        System.out.println(books.size());
         //sorting if there are selected language
         if (sortBook.getLanguage() != null) {
             log.info("I am sort by language");

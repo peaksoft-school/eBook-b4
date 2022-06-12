@@ -16,7 +16,8 @@ public class SortBooksGlobal {
 
     private Double max;
 
-    private List<Genre> genre;
+//    private List<Genre> genre;
+    private List<String> genreName;
 
     private BookType bookType  = BookType.PAPERBOOK;
 
