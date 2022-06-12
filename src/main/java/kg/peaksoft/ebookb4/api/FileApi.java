@@ -2,12 +2,15 @@ package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.aws.AWSUtility;
-import kg.peaksoft.ebookb4.db.models.response.AwsUploadResponse;
+import kg.peaksoft.ebookb4.aws.FileService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.LinkedHashMap;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -18,19 +21,42 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class FileApi {
 
-    private AWSUtility awsUtility;
+    private final FileService fileService;
 
-    @Operation(summary = "Get url for upload the file")
-    @GetMapping("/urlForUpload/{bookId}/{abstractNameOfFile}/{keyName}")
-    public AwsUploadResponse getUrlForUpload(@PathVariable String abstractNameOfFile,
-                                             @PathVariable Long bookId,
-                                             @PathVariable String keyName) {
-        return awsUtility.getUrlForUploadFile(bookId, abstractNameOfFile, keyName);
+    @CrossOrigin
+    @Operation(summary = "Upload files", description = "Upload files to aws")
+    @PostMapping("/upload-file/{bookId}")
+    public LinkedHashMap<String, String> uploadFile(@RequestBody MultipartFile firstPhoto,
+                                                    @RequestBody MultipartFile secondPhoto,
+                                                    @RequestBody MultipartFile thirdPhoto,
+                                                    @RequestBody MultipartFile bookFile,
+                                                    @RequestBody MultipartFile audioFragment,
+                                                    @PathVariable Long bookId) {
+        return fileService.uploadFile(firstPhoto, secondPhoto, thirdPhoto, bookFile, audioFragment, bookId);
+    }
+
+    @CrossOrigin
+    @Operation(summary = "Delete files", description = "Delete files with key name")
+    @DeleteMapping("/delete/{keyName}")
+    public ResponseEntity<?> deleteFile(@PathVariable String keyName) {
+        fileService.deleteFile(keyName);
+        return ResponseEntity.ok("File successfully deleted");
     }
 
     @Operation(summary = "Download file", description = "Download file with key name")
-    @GetMapping("/downloadFile/{keyName}")
+    @GetMapping("/download/{keyName}")
     public byte[] downloadFile(@PathVariable String keyName) {
-        return awsUtility.downloadFile(keyName);
+        return fileService.downloadFile(keyName);
+    }
+
+    @CrossOrigin
+    @Operation(summary = "Update fileInformation",
+            description = "You need to put book id with name of file " +
+                    "for example {firstPhoto, secondPhoto, thirdPhoto, bookFile, audioFragment}, after you can update file information")
+    @PostMapping("/fileInformation/{nameOfFile}/{bookId}")
+    public LinkedHashMap<String, String> updateFileInformation(@RequestBody MultipartFile file,
+                                                               @PathVariable String nameOfFile,
+                                                               @PathVariable Long bookId) {
+        return fileService.updateFileInformation(file, nameOfFile, bookId);
     }
 }

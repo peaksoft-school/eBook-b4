@@ -2,7 +2,7 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import kg.peaksoft.ebookb4.aws.AwsCredentials;
+import kg.peaksoft.ebookb4.aws.BucketName;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileInformation;
 import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.models.entity.*;
@@ -322,7 +322,7 @@ public class BookServiceImpl implements BookService {
 
     public void deleteFile(String keyName) {
         final DeleteObjectRequest deleteObjectRequest = new
-                DeleteObjectRequest(AwsCredentials.AWS_BUCKET_NAME.getAwsCredentials(), keyName);
+                DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(),keyName);
         awsS3Client.deleteObject(deleteObjectRequest);
         log.info("Successfully deleted");
     }
