@@ -10,6 +10,7 @@ import kg.peaksoft.ebookb4.db.models.request.Request;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.CardResponse;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
+import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import java.util.List;
 @Tag(name = "Client", description = " Client accessible apis")
 public class ClientApi {
 
+    private AdminService service;
     private ClientService clientService;
 
     @Operation(summary = "Client profile", description = "Client can see all accessible data of client")
@@ -97,5 +99,12 @@ public class ClientApi {
                                                    @PathVariable Long bookId,
                                                    @PathVariable String promoCode) {
         return clientService.plusOrMinus(authentication.getName(), plsOrMns, bookId, promoCode);
+    }
+
+    @Operation(summary = "Delete client/vendor ",
+            description = "Admin can delete client and vendor!")
+    @DeleteMapping({"/{userId}"})
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        return service.deleteById(userId);
     }
 }

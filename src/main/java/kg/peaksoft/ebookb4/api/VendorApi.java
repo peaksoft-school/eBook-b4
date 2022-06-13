@@ -10,6 +10,7 @@ import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.response.BookResponse;
 import kg.peaksoft.ebookb4.db.models.response.BookResponseAfterSaved;
 import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
+import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.db.service.VendorService;
@@ -35,6 +36,7 @@ public class VendorApi {
     private PromoService promoService;
     private VendorService vendorService;
     private BookService bookService;
+    private AdminService service;
 
     @Operation(summary = "Promo", description = "Vendor creates a promo")
     @PostMapping("/promo")
@@ -146,5 +148,11 @@ public class VendorApi {
     @DeleteMapping("/profile")
     public ResponseEntity<?> deleteVendorProfile(Authentication authentication){
         return vendorService.delete(authentication.getName());
+    }
+    @Operation(summary = "Delete vendor ",
+            description = "you can delete vendor!")
+    @DeleteMapping({"/{userId}"})
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        return service.deleteById(userId);
     }
 }
