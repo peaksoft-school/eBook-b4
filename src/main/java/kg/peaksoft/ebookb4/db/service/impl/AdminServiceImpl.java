@@ -29,6 +29,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
@@ -104,19 +105,16 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ResponseEntity<?> deleteById(Long id) {
-        if (!userRepository.existsById(id)) {
-            log.error("With id = " + id + " does not exists");
-            throw new BadRequestException(
-                    "Vendor with id " + id + " does not exists");
-        }
-        User userById = userRepository.getById(id);
+    public ResponseEntity<?> deleteById(String email) {
+        User userById = userRepository.findByEmail(email).orElseThrow(
+                () -> new BadRequestException("User not Found!")
+        );
         if (userById.getRole().getName().equals(ERole.ROLE_ADMIN)) {
-            return ResponseEntity.badRequest().body("User with id " + id + " not found");
+            return ResponseEntity.badRequest().body("User with id "  + " not found");
         }
         log.info("Successfully deleter");
-        userRepository.deleteById(id);
-        return ResponseEntity.ok("Successfully deleter");
+        userRepository.deleteById(userById.getId());
+        return ResponseEntity.ok("Successfully deleted");
     }
 
     @Override

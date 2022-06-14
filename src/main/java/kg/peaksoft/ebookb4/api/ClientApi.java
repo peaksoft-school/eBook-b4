@@ -103,8 +103,8 @@ public class ClientApi {
 
     @Operation(summary = "Delete client/vendor ",
             description = "Admin can delete client and vendor!")
-    @DeleteMapping({"/{userId}"})
-    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
-        return service.deleteById(userId);
+    @DeleteMapping({"/profile"})
+    public ResponseEntity<?> deleteUser(Authentication authentication) {
+        return service.deleteById(authentication.getName());
     }
 }
