@@ -46,7 +46,7 @@ public class FileServiceImpl implements FileService {
         String secondPhotoExtension = StringUtils.getFilenameExtension(secondPhoto.getOriginalFilename());
         String thirdPhotoExtension = StringUtils.getFilenameExtension(thirdPhoto.getOriginalFilename());
 
-        String keyOfFirstPhoto = "Images/" + UUID.randomUUID() + "." + firstPhotoExtension;
+        String keyOfFirstPhoto = "Images/" + UUID.randomUUID() + "." + firstPhoto.getOriginalFilename();
         String keyOfSecondPhoto = "Images/" + UUID.randomUUID() + "." + secondPhotoExtension;
         String keyOfThirdPhoto = "Images/" + UUID.randomUUID() + "." + thirdPhotoExtension;
 
@@ -119,7 +119,7 @@ public class FileServiceImpl implements FileService {
 
     public String uploadBookFile(MultipartFile bookFile, Book bookById) {
         String bookFileExtension = StringUtils.getFilenameExtension(bookFile.getOriginalFilename());
-        String keyOfBookFile = "Book files/" + UUID.randomUUID() + "." + bookFileExtension;
+        String keyOfBookFile = "BookFiles/" + UUID.randomUUID() + "." + bookFileExtension;
 
         ObjectMetadata metaDataForBookFile = new ObjectMetadata();
         metaDataForBookFile.setContentLength(bookFile.getSize());
@@ -148,7 +148,7 @@ public class FileServiceImpl implements FileService {
 
     public String uploadAudioFragment(MultipartFile audioFragment, Book bookById) {
         String audioBookFragmentExtension = StringUtils.getFilenameExtension(audioFragment.getOriginalFilename());
-        String keyOfAudioBookFragment = "Book files/" + UUID.randomUUID() + "." + audioBookFragmentExtension;
+        String keyOfAudioBookFragment = "BookFiles/" + UUID.randomUUID() + "." + audioBookFragmentExtension;
 
         ObjectMetadata metaDataForAudioBookFragment = new ObjectMetadata();
         metaDataForAudioBookFragment.setContentLength(audioFragment.getSize());

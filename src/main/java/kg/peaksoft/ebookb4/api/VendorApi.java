@@ -151,8 +151,8 @@ public class VendorApi {
     }
     @Operation(summary = "Delete vendor ",
             description = "you can delete vendor!")
-    @DeleteMapping({"/{userId}"})
-    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
-        return service.deleteById(userId);
+    @DeleteMapping({"/profile"})
+    public ResponseEntity<?> deleteUser(Authentication authentication) {
+        return service.deleteById(authentication.getName());
     }
 }

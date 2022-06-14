@@ -65,7 +65,7 @@ public class AdminApi {
             description = "Admin can delete client and vendor!")
     @DeleteMapping({"/user/{userId}"})
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
-        return service.deleteById(userId);
+        return service.deleteByIdAdmin(userId);
     }
 
 

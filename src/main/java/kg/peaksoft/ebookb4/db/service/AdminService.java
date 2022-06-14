@@ -19,6 +19,7 @@ public interface AdminService {
     List<VendorResponse> findAllVendors();
 
     ResponseEntity<?> deleteById(String email);
+    ResponseEntity<?> deleteByIdAdmin(Long userId);
 
     ResponseEntity<?> deleteBookById(Long id);
 

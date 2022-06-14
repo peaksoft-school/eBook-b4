@@ -118,6 +118,19 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public ResponseEntity<?> deleteByIdAdmin(Long userId) {
+        User userById = userRepository.findById(userId).orElseThrow(
+                () -> new BadRequestException("User not Found!")
+        );
+        if (userById.getRole().getName().equals(ERole.ROLE_ADMIN)) {
+            return ResponseEntity.badRequest().body("User with id "  + " not found");
+        }
+        log.info("Successfully deleter");
+        userRepository.deleteById(userById.getId());
+        return ResponseEntity.ok("Successfully deleted");
+    }
+
+    @Override
     public ResponseEntity<?> deleteBookById(Long id) {
         if (!bookRepository.existsById(id)) {
             log.error("Delete book by id works");
