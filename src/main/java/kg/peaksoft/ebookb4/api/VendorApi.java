@@ -149,10 +149,4 @@ public class VendorApi {
     public ResponseEntity<?> deleteVendorProfile(Authentication authentication){
         return vendorService.delete(authentication.getName());
     }
-    @Operation(summary = "Delete vendor ",
-            description = "you can delete vendor!")
-    @DeleteMapping({"/profile"})
-    public ResponseEntity<?> deleteUser(Authentication authentication) {
-        return service.deleteById(authentication.getName());
-    }
 }
