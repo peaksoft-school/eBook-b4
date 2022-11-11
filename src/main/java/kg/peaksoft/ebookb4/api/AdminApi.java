@@ -36,8 +36,8 @@ import java.util.List;
 @Tag(name = "Admin API", description = "Admin accessible endpoints")
 public class AdminApi {
 
-    private AdminService service;
-    private BookGetService bookGetService;
+    private final AdminService service;
+    private final BookGetService bookGetService;
 
     @Operation(summary = "Get all books in process", description = "Get books in process")
     @GetMapping("books-in-process/{offset}")
