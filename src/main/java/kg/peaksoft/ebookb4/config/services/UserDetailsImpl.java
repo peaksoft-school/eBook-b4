@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 public class UserDetailsImpl implements UserDetails {
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -32,8 +33,11 @@ public class UserDetailsImpl implements UserDetails {
     private List<? extends GrantedAuthority> authorities;
 
     private boolean isAccountNonExpired = true;
+
     private boolean isAccountNonLocked = true;
+
     private boolean isCredentialsNonExpired = true;
+
     private boolean isEnabled = true;
 
     public UserDetailsImpl(Long id, String email, String password,
@@ -66,4 +70,5 @@ public class UserDetailsImpl implements UserDetails {
     public String getUsername() {
         return email;
     }
+
 }
