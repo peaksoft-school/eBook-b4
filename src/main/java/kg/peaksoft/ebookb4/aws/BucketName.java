@@ -5,7 +5,6 @@ import lombok.Getter;
 @Getter
 public enum BucketName {
 
-
     AWS_BOOKS("ebook-b4-test");
 
     private final String bucketName;
