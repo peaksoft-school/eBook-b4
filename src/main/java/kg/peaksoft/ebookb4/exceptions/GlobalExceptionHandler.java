@@ -8,15 +8,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-
 import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({
-            MethodArgumentNotValidException.class,
-            BadRequestException.class})
+    @ExceptionHandler({MethodArgumentNotValidException.class, BadRequestException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse handleMethodArgumentNotValidException(RuntimeException e) {
         ExceptionResponse exceptionResponse = new ExceptionResponse();
@@ -24,7 +21,6 @@ public class GlobalExceptionHandler {
         exceptionResponse.setMessage(e.getMessage());
         return exceptionResponse;
     }
-
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -51,4 +47,5 @@ public class GlobalExceptionHandler {
         exceptionResponse.setMessage(constraintViolationException.getMessage());
         return exceptionResponse;
     }
+
 }
