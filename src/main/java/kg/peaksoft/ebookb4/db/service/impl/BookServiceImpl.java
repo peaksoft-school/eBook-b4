@@ -4,21 +4,24 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import kg.peaksoft.ebookb4.aws.BucketName;
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileInformation;
-import kg.peaksoft.ebookb4.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.models.entity.*;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.mappers.BookMapper;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
+import kg.peaksoft.ebookb4.db.repository.GenreRepository;
+import kg.peaksoft.ebookb4.db.repository.PromoCodeRepository;
+import kg.peaksoft.ebookb4.db.repository.UserRepository;
+import kg.peaksoft.ebookb4.db.service.BookService;
+import kg.peaksoft.ebookb4.db.service.PromoService;
+import kg.peaksoft.ebookb4.dto.BookDTO;
 import kg.peaksoft.ebookb4.dto.request.CustomPageRequest;
 import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.dto.response.BookResponseAfterSaved;
 import kg.peaksoft.ebookb4.dto.response.CountForAdmin;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
-import kg.peaksoft.ebookb4.db.repository.*;
-import kg.peaksoft.ebookb4.db.service.BookService;
-import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -50,13 +53,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResponseAfterSaved saveBook(BookDTO bookDTO, String username) {
-        User user = userRepository.getUser(username)
-                .orElseThrow(() -> {
-                    log.error("Vendor with name ={} does not exists", username);
-                    throw new BadRequestException(
-                            String.format("User with username %s doesn't exist!", username)
-                    );
-                });
+        User user = userRepository.getUser(username).orElseThrow(() -> {
+            log.error("Vendor with name ={} does not exists", username);
+            throw new BadRequestException(String.format("User with username %s doesn't exist!", username));
+        });
         Book book = mapper.create(bookDTO);
         if (promoRepository.ifVendorAlreadyCreatedPromo(user, LocalDate.now())) {
             log.info("check promo book");
@@ -103,19 +103,15 @@ public class BookServiceImpl implements BookService {
         bookResponse.setBookType(book.getBookType());
         bookResponse.setMessage("Book was successfully saved");
         return bookResponse;
-
     }
 
     @Override
     public Book findByBookId(Long bookId) {
         promoService.checkPromos();
-        return repository.findById(bookId)
-                .orElseThrow(() -> {
-                    log.error("Book with id = {} does not exists",bookId);
-                    throw new NotFoundException(
-                            String.format("Book with id = %s does not exists", bookId)
-                    );
-                });
+        return repository.findById(bookId).orElseThrow(() -> {
+            log.error("Book with id = {} does not exists", bookId);
+            throw new NotFoundException(String.format("Book with id = %s does not exists", bookId));
+        });
     }
 
     @Override
@@ -140,15 +136,13 @@ public class BookServiceImpl implements BookService {
         }
         repository.deleteById(bookId);
         log.info("delete book works");
-        return ResponseEntity.ok(new MessageResponse(
-                String.format("Book with id = %s successfully delete!", bookId)));
+        return ResponseEntity.ok(new MessageResponse(String.format("Book with id = %s successfully delete!", bookId)));
     }
 
     @Override
     @Transactional
     public ResponseEntity<?> update(BookDTO newBook, Long bookId, Long genreId) {
         Book book = findByBookId(bookId);
-
         String bookName = book.getTitle();
         String newBookName = newBook.getTitle();
         if (!Objects.equals(bookName, newBookName)) {
@@ -156,12 +150,14 @@ public class BookServiceImpl implements BookService {
         }
         FileInformation fileInformation = book.getFileInformation();
         FileInformation newFileInformation = newBook.getFileInformation();
-        if (!Objects.equals(fileInformation, newFileInformation)){
-            if (!Objects.equals(fileInformation.getFirstPhoto(), newFileInformation.getFirstPhoto()) && newFileInformation.getFirstPhoto() != null){
+        if (!Objects.equals(fileInformation, newFileInformation)) {
+            if (!Objects.equals(fileInformation.getFirstPhoto(), newFileInformation.getFirstPhoto()) && newFileInformation.getFirstPhoto() != null) {
                 deleteFile(fileInformation.getKeyOfFirstPhoto());
-            }if (!Objects.equals(fileInformation.getSecondPhoto(),newFileInformation.getSecondPhoto()) && newFileInformation.getSecondPhoto() != null){
+            }
+            if (!Objects.equals(fileInformation.getSecondPhoto(), newFileInformation.getSecondPhoto()) && newFileInformation.getSecondPhoto() != null) {
                 deleteFile(fileInformation.getKeyOfSecondPhoto());
-            }if(!Objects.equals(fileInformation.getBookFile(),newFileInformation.getBookFile()) && newFileInformation.getBookFile() != null){
+            }
+            if (!Objects.equals(fileInformation.getBookFile(), newFileInformation.getBookFile()) && newFileInformation.getBookFile() != null) {
                 deleteFile(fileInformation.getKeyOfBookFile());
             }
             book.setFileInformation(newFileInformation);
@@ -211,7 +207,6 @@ public class BookServiceImpl implements BookService {
         if (!Objects.equals(bookType, newBookType)) {
             book.setBookType(newBookType);
         }
-
         switch (newBook.getBookType()) {
             case PAPERBOOK:
                 book.getPaperBook().setFragmentOfBook(newBook.getPaperBook().getFragmentOfBook());
@@ -241,7 +236,6 @@ public class BookServiceImpl implements BookService {
     public List<Book> findBooksFromVendor(Integer offset, int pageSize, String username) {
         promoService.checkPromos();
         List<Book> books = repository.findBooksFromVendor(username);
-
         log.info("founded {} accepted books", books.size());
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), books.size());
@@ -257,20 +251,18 @@ public class BookServiceImpl implements BookService {
         int start = Math.min((int) paging.getOffset(), likedBooksFromVendor.size());
         int end = Math.min((start + paging.getPageSize()), likedBooksFromVendor.size());
         Page<Book> pages = new PageImpl<>(likedBooksFromVendor.subList(start, end), paging, likedBooksFromVendor.size());
-        log.info("likes book = {}",likedBooksFromVendor.size());
+        log.info("likes book = {}", likedBooksFromVendor.size());
         return new CustomPageRequest<>(pages).getContent();
     }
 
     @Override
     public List<Book> findBooksFromVendorAddedToBasket(Integer offset, int pageSize, String username) {
-
         List<Book> booksWithBasket = repository.findBooksFromVendorAddedToBasket(username);
-
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksWithBasket.size());
         int end = Math.min((start + paging.getPageSize()), booksWithBasket.size());
         Page<Book> pages = new PageImpl<>(booksWithBasket.subList(start, end), paging, booksWithBasket.size());
-        log.info("{} Books from vendor added to basket ",booksWithBasket.size());
+        log.info("{} Books from vendor added to basket ", booksWithBasket.size());
         return new CustomPageRequest<>(pages).getContent();
     }
 
@@ -286,31 +278,29 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username,
-                                                   RequestStatus status) {
+    public List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username, RequestStatus status) {
         List<Book> booksWithCancel = repository.findBooksFromVendorWithCancel(username, status);
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksWithCancel.size());
         int end = Math.min((start + paging.getPageSize()), booksWithCancel.size());
         Page<Book> pages = new PageImpl<>(booksWithCancel.subList(start, end), paging, booksWithCancel.size());
-        log.info("vendor books {} cancelled",booksWithCancel.size());
+        log.info("vendor books {} cancelled", booksWithCancel.size());
         return new CustomPageRequest<>(pages).getContent();
     }
 
     @Override
-    public List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, String username,
-                                                   RequestStatus status) {
+    public List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, String username, RequestStatus status) {
         List<Book> booksInProgress = repository.findBooksFromVendorInProgress(username, status);
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksInProgress.size());
         int end = Math.min((start + paging.getPageSize()), booksInProgress.size());
         Page<Book> pages = new PageImpl<>(booksInProgress.subList(start, end), paging, booksInProgress.size());
-        log.info("Vendor book = {} in process",booksInProgress.size());
+        log.info("Vendor book = {} in process", booksInProgress.size());
         return new CustomPageRequest<>(pages).getContent();
     }
 
     @Override
-    public List<BookResponse> getBooksSold(String name , ERole role) {
+    public List<BookResponse> getBooksSold(String name, ERole role) {
         return repository.getVendorBooksSold(name, role);
     }
 
@@ -319,10 +309,8 @@ public class BookServiceImpl implements BookService {
         return genreRepository.findAll();
     }
 
-
     public void deleteFile(String keyName) {
-        final DeleteObjectRequest deleteObjectRequest = new
-                DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(),keyName);
+        final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(), keyName);
         awsS3Client.deleteObject(deleteObjectRequest);
         log.info("Successfully deleted");
     }
@@ -348,4 +336,5 @@ public class BookServiceImpl implements BookService {
         }
         return count;
     }
+
 }
