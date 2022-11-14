@@ -2,6 +2,12 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
+import kg.peaksoft.ebookb4.db.repository.BasketRepository;
+import kg.peaksoft.ebookb4.db.repository.BookRepository;
+import kg.peaksoft.ebookb4.db.repository.ClientOperationRepository;
+import kg.peaksoft.ebookb4.db.repository.PlaceCountRepository;
+import kg.peaksoft.ebookb4.db.repository.RoleRepository;
+import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.dto.ClientOperationDTO;
 import kg.peaksoft.ebookb4.dto.ClientRegisterDTO;
 import kg.peaksoft.ebookb4.dto.ClientUpdateDTO;
@@ -15,7 +21,6 @@ import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.dto.response.CardOperationResponse;
 import kg.peaksoft.ebookb4.dto.response.CardResponse;
 import kg.peaksoft.ebookb4.dto.response.MessageResponse;
-import kg.peaksoft.ebookb4.db.repository.*;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
@@ -51,12 +56,10 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number) {
-        //checking if passwords are the same or not
         if (!clientRegisterDTO.getPassword().equals(clientRegisterDTO.getConfirmPassword())) {
             log.error("password are not the same ");
             throw new BadRequestException("Passwords are not the same!");
         }
-
         if (userRepository.existsByEmail(clientRegisterDTO.getEmail())) {
             log.error("Client with email = {} already in use", clientRegisterDTO.getEmail());
             return ResponseEntity
@@ -64,9 +67,8 @@ public class ClientServiceImpl implements ClientService {
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
         log.info("Saving new client {} to the database", clientRegisterDTO.getEmail());
-        User user = new User(
-                clientRegisterDTO.getEmail(),
-                encoder.encode(clientRegisterDTO.getPassword()));
+
+        User user = new User(clientRegisterDTO.getEmail(), encoder.encode(clientRegisterDTO.getPassword()));
         user.setFirstName(clientRegisterDTO.getFirstName());
         user.setRole(roleRepository.getById(number));
         user.setLastName("");
@@ -80,15 +82,12 @@ public class ClientServiceImpl implements ClientService {
         PlaceCounts newPlaceCounts = createNewPLaceCount();
         user.setPlaceCounts(newPlaceCounts);
         userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageResponse(
-                String.format("User with email %s registered successfully!", user.getEmail())));
+        return ResponseEntity.ok(new MessageResponse(String.format("User with email %s registered successfully!", user.getEmail())));
     }
 
     @Override
     @Transactional
     public ResponseEntity<?> likeABook(Long bookId, String username) {
-
         User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException("User doesn't exist!"));
         Book book = bookRepository.getById(bookId);
@@ -105,23 +104,19 @@ public class ClientServiceImpl implements ClientService {
             throw new BadRequestException("This book has not went through admin-check yet!");
         }
         log.info("{} like to {}", user.getEmail(), book.getTitle());
-        return ResponseEntity.ok(new MessageResponse(String.format(
-                "Book with id %s successfully has been liked by user with name %s", bookId, username)));
+        return ResponseEntity.ok(new MessageResponse(String.format("Book with id %s successfully has been liked by user with name %s", bookId, username)));
     }
 
     @Override
     @Transactional
     public ResponseEntity<?> addBookToBasket(Long bookId, String username) {
-
         if (basketRepository.checkIfAlreadyClientPutInBasket(
                 getUsersBasketId(username), bookId) > 0) {
             log.error("with book already to basket!");
             throw new BadRequestException("You already put this book in your basket");
         }
-
         User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s not found", username)));
-
         if (bookRepository.getById(bookId).getRequestStatus() == ACCEPTED) {
             user.getBasket().getBooks().add(bookRepository.getById(bookId));
             bookRepository.incrementBasketsOfBooks(bookId);
@@ -138,7 +133,6 @@ public class ClientServiceImpl implements ClientService {
     public ResponseEntity<?> update(ClientUpdateDTO newClientDTO, String username) {
         User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found", username)));
-
         String oldFirstName = user.getFirstName();
         String newFirstName = newClientDTO.getFirstName();
         if (!oldFirstName.equals(newFirstName)) {
@@ -186,10 +180,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @Transactional
     public void cleanBasketOfClientByEmail(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new BadRequestException(
-                        "Client with email = " + email + " does not exists"
-                ));
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new BadRequestException("Client with email = " + email + " does not exists"));
         List<Book> basketByClientId = bookRepository.findBasketByClientId(email);
         for (Book book : basketByClientId) {
             if (book.getBookType().equals(BookType.PAPERBOOK)) {
@@ -204,11 +196,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientOperationDTO sumAfterPromo(String name) {
-        User user = userRepository.findByEmail(name)
-                .orElseThrow(() -> new BadRequestException(
-                        "Client with email = " + name + " does not exists"
-                ));
-
+        User user = userRepository.findByEmail(name).orElseThrow(() ->
+                new BadRequestException("Client with email = " + name + " does not exists"));
         Double sum = user.getPlaceCounts().getSum();
         Double sumAfterPromo = user.getPlaceCounts().getSumAfterPromo();
         int countOfBooksInTotal = user.getPlaceCounts().getCountOfBooksInTotal();
@@ -219,7 +208,6 @@ public class ClientServiceImpl implements ClientService {
         int countOfPaperBookPB = user.getPlaceCounts().getCountOfPaperBookPB();
         Double totalPB = user.getPlaceCounts().getTotalPB();
         Double discountPB = user.getPlaceCounts().getDiscountPB();
-
         return clientOperationMapper.build((countOfBooksInTotal + countOfPaperBookPB), (discount + discountPB + sumAfterPromo + sumAfterPromoPB), (sum + sumPB), (total + totalPB - sumAfterPromo - sumAfterPromoPB));
     }
 
@@ -230,30 +218,21 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<BookResponse> getBooksFromBasket(String clientId) {
-        return bookRepository.findBasketByClientId(clientId)
-                .stream().map(book -> modelMapper.map(
-                        book, BookResponse.class)).collect(Collectors.toList());
+        return bookRepository.findBasketByClientId(clientId).stream().map(book -> modelMapper.map(book, BookResponse.class)).collect(Collectors.toList());
     }
 
     @Override
     public ResponseEntity<?> placeOrder(String name) {
-
         ClientOperations clientOperations = new ClientOperations();
-
         List<Book> all = bookRepository.findBasketByClientId(name);
-
-        User user = userRepository.getUser(name)
-                .orElseThrow(() -> new BadRequestException(
-                        "user with email ={} does not exists "));
-
+        User user = userRepository.getUser(name).orElseThrow(() ->
+                new BadRequestException("User with email ={} does not exists "));
         if (all.size() == 0) {
             return ResponseEntity.ok("Your basket is empty");
         }
-
         for (Book book : all) {
             book.setOperation(clientOperations);
         }
-
         clientOperations.setBoughtBooks(all);
         clientOperations.setUser(user);
 
@@ -261,9 +240,8 @@ public class ClientServiceImpl implements ClientService {
             if (book.getBookType().equals(BookType.PAPERBOOK)) {
                 Integer numberOfSelected = book.getPaperBook().getNumberOfSelected();
                 book.getPaperBook().setNumberOfSelectedCopy(numberOfSelected);
-            } else continue;
+            }
         }
-
         clientOperationRepository.save(clientOperations);
         user.getBasket().clear();
         userRepository.save(user);
@@ -272,9 +250,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<Book> operationBook(String name) {
-        User byEmail = userRepository.findByEmail(name)
-                .orElseThrow(() -> new BadRequestException(
-                        "user with email ={} does not exists "));
+        User byEmail = userRepository.findByEmail(name).orElseThrow(() ->
+                new BadRequestException("User with email ={} does not exists "));
         return bookRepository.getBooksInPurchased(byEmail.getId());
     }
 
@@ -285,10 +262,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<CardResponse> plusOrMinus(String name, String plusOrMinus, Long bookId, String promoCode) {
         List<CardResponse> cardResponses = bookRepository.findBasketByClientId(name)
-                .stream().map(book -> modelMapper.map(
-                        book, CardResponse.class))
-                .map(BookResponse -> modelMapper.map(BookResponse,
-                        CardResponse.class)).collect(Collectors.toList());
+                .stream().map(book -> modelMapper.map(book, CardResponse.class))
+                .map(BookResponse -> modelMapper.map(BookResponse, CardResponse.class)).collect(Collectors.toList());
         return cardOperationResponse.create(name, cardResponses, plusOrMinus, bookId, promoCode);
     }
 
