@@ -5,15 +5,18 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter @Setter
+@Getter
+@Setter
 public class ClientRegisterDTO {
 
     private String email;
 
     private String firstName;
+
     @NotBlank
     private String password;
 
     @NotBlank
     private String confirmPassword;
+
 }
