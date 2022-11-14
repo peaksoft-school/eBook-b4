@@ -5,7 +5,7 @@ import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
+import kg.peaksoft.ebookb4.db.repository.PromoCodeRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ public class CardOperationResponse {
 
     private UserRepository userRepository;
 
-    private PromocodeRepository promocodeRepository;
+    private PromoCodeRepository promocodeRepository;
 
     public List<CardResponse> create(String name, List<CardResponse> cardResponseList, String plusOrMinus, Long bookId, String promoCode) {
         User user = userRepository.findByEmail(name).orElseThrow(() ->

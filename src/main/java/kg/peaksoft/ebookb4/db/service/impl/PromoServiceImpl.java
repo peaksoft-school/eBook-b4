@@ -2,7 +2,7 @@ package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.booksClasses.PromoCode;
 import kg.peaksoft.ebookb4.db.models.entity.User;
-import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
+import kg.peaksoft.ebookb4.db.repository.PromoCodeRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.db.models.mappers.PromoMapper;
@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PromoServiceImpl implements PromoService {
 
-    private PromocodeRepository promoRepository;
+    private PromoCodeRepository promoRepository;
     private UserRepository userRepository;
     private PromoMapper promoMapper;
 

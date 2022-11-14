@@ -43,7 +43,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository repository;
     private final BookMapper mapper;
     private final UserRepository userRepository;
-    private final PromocodeRepository promoRepository;
+    private final PromoCodeRepository promoRepository;
     private final GenreRepository genreRepository;
     private final PromoService promoService;
     private final AmazonS3Client awsS3Client;
