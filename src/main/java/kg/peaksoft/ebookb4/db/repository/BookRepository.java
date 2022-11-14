@@ -96,19 +96,19 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Transactional
     @Modifying
-    @Query("update Book b set b.isNew = false where b.bookId = ?1")
+    @Query("UPDATE Book b SET b.isNew = false WHERE b.bookId = ?1")
     void updateBook(Long bookId);
 
-    @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, " +
+    @Query("SELECT NEW kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, " +
             "b.authorFullName, b.aboutBook, b.publishingHouse,b.dateOfRegister, b.price, b.adminWatch, b.fileInformation)" +
-            "from Book b where b.operations.size > 0 and b.user.email = ?1 and b.user.role.name = ?2")
+            "FROM Book b WHERE b.operations.size > 0 AND b.user.email = ?1 AND b.user.role.name = ?2")
     List<BookResponse> getVendorBooksSold(String name, ERole role);
 
-    @Query(value = "SELECT * from book b " +
-            "join operation_books o on o.book_id = b.book_id " +
-            "join client_operations t on t.operation_id = o.operation_id " +
-            "join users u on t.user_id = u.user_id " +
-            "where u.user_id = ?1 ", nativeQuery = true)
+    @Query(value = "SELECT * FROM book b " +
+            "JOIN operation_books o ON o.book_id = b.book_id " +
+            "JOIN client_operations t ON t.operation_id = o.operation_id " +
+            "JOIN users u ON t.user_id = u.user_id " +
+            "WHERE u.user_id = ?1 ", nativeQuery = true)
     List<Book> getBooksInPurchased(Long id);
 
     @Query(value = "select count(b) from Book b where b.requestStatus =:requestStatus")
