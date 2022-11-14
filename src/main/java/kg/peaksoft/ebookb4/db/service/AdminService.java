@@ -13,13 +13,12 @@ import java.util.List;
 
 public interface AdminService {
 
-//    List<Book> getBooksBy(Long genreId, BookType bookType);
-
     List<BookResponse> getBooksFromBasket(Long id);
 
     List<VendorResponse> findAllVendors();
 
     ResponseEntity<?> deleteById(String email);
+
     ResponseEntity<?> deleteByIdAdmin(Long userId);
 
     ResponseEntity<?> deleteBookById(Long id);
@@ -28,11 +27,11 @@ public interface AdminService {
 
     VendorResponse getVendorById(Long id);
 
-    ClientResponse  getClientById(Long id);
+    ClientResponse getClientById(Long id);
 
     ResponseEntity<?> acceptBookRequest(Long bookId);
 
-    ResponseEntity<?> refuseBookRequest(RefuseBookRequest refuseBookRequest, Long id);
+    ResponseEntity<?> refuseBookRequest(RefuseBookRequest request, Long id);
 
     Book getBookById(Long bookId);
 
@@ -44,11 +43,9 @@ public interface AdminService {
 
     List<Book> findBooksFromVendorWithDiscount(Integer offset, int pageSize, Long vendorId);
 
-    List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, Long vendorId,
-                                            RequestStatus requestStatus);
+    List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, Long vendorId, RequestStatus status);
 
-    List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, Long vendorId,
-                                            RequestStatus requestStatus);
+    List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, Long vendorId, RequestStatus status);
 
     List<Book> getBooksInPurchased(Long clientId);
 

@@ -197,7 +197,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> refuseBookRequest(RefuseBookRequest refuseBookRequest, Long id) {
+    public ResponseEntity<?> refuseBookRequest(RefuseBookRequest request, Long id) {
         Book book = bookRepository.findBookInProgress(id, RequestStatus.INPROGRESS)
                 .orElseThrow(() -> {
                     log.error("Book with id ={} does not exists", id);
@@ -209,7 +209,7 @@ public class AdminServiceImpl implements AdminService {
 
         log.info("admin refuse book request");
         return ResponseEntity.ok().body(
-                refuseBookRequest.getReason());
+                request.getReason());
     }
 
     @Override
@@ -300,10 +300,10 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, Long vendorId,
-                                                   RequestStatus requestStatus) {
+                                                   RequestStatus status) {
         User user = userRepository.findById(vendorId).orElseThrow(() ->
                 new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId)));
-        List<Book> booksWithCancel = bookRepository.findBooksFromVendorWithCancel(user.getEmail(), requestStatus);
+        List<Book> booksWithCancel = bookRepository.findBooksFromVendorWithCancel(user.getEmail(), status);
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksWithCancel.size());
         int end = Math.min((start + paging.getPageSize()), booksWithCancel.size());
@@ -313,11 +313,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, Long vendorId,
-                                                   RequestStatus requestStatus) {
+                                                   RequestStatus status) {
         User user = userRepository.findById(vendorId).orElseThrow(() ->
                 new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId)));
 
-        List<Book> booksInProgress = bookRepository.findBooksFromVendorInProgress(user.getEmail(), requestStatus);
+        List<Book> booksInProgress = bookRepository.findBooksFromVendorInProgress(user.getEmail(), status);
 
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksInProgress.size());
