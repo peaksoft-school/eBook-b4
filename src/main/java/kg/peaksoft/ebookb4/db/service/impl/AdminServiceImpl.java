@@ -46,51 +46,10 @@ public class AdminServiceImpl implements AdminService {
     private ClientMapper clientMapper;
     private ModelMapper modelMapper;
 
-//    @Override
-//    public List<Book> getBooksBy(Long genreId, BookType bookType) {
-//        List<Book> books = bookRepository.findAllActive(ACCEPTED);
-//
-//        if (genreId == null && bookType == null){
-//            return books;
-//        }
-//
-//        if (genreId == 28){
-//            return books;
-//        }
-//        List<Book> sortByOnlyGenres = new ArrayList<>();
-//        List<Book> sortByOnlyBookType = new ArrayList<>();
-//        List<Book> sort = new ArrayList<>();
-//        for (Book book : books) {
-//            if (Objects.equals(book.getGenre().getId(), genreId)) {
-//                sortByOnlyGenres.add(book);
-//            }
-//        }
-//        for (Book book1 : books) {
-//            if (book1.getBookType().equals(bookType)) {
-//                sortByOnlyBookType.add(book1);
-//            }
-//        }
-//        for (Book book2 : sortByOnlyGenres) {
-//            if (book2.getBookType().equals(bookType)) {
-//                sort.add(book2);
-//            }
-//        }
-//        if (genreId == null) {
-//            return sortByOnlyBookType;
-//        }
-//        if (bookType == null) {
-//            return sortByOnlyGenres;
-//        } else
-//            return sort;
-//    }
-
-
-
     @Override
     public List<BookResponse> getBooksFromBasket(Long clientId) {
-        return bookRepository.findBasketByClientIdAdmin(clientId)
-                .stream().map(book -> modelMapper.map(
-                        book, BookResponse.class)).collect(Collectors.toList());
+        return bookRepository.findBasketByClientIdAdmin(clientId).stream().map(book ->
+                modelMapper.map(book, BookResponse.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -106,11 +65,10 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ResponseEntity<?> deleteById(String email) {
-        User userById = userRepository.findByEmail(email).orElseThrow(
-                () -> new BadRequestException("User not Found!")
-        );
+        User userById = userRepository.findByEmail(email).orElseThrow(() ->
+                new BadRequestException("User not Found!"));
         if (userById.getRole().getName().equals(ERole.ROLE_ADMIN)) {
-            return ResponseEntity.badRequest().body("User with id "  + " not found");
+            return ResponseEntity.badRequest().body("User with id " + " not found");
         }
         log.info("Successfully deleter");
         userRepository.deleteById(userById.getId());
@@ -119,11 +77,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ResponseEntity<?> deleteByIdAdmin(Long userId) {
-        User userById = userRepository.findById(userId).orElseThrow(
-                () -> new BadRequestException("User not Found!")
-        );
+        User userById = userRepository.findById(userId).orElseThrow(() -> new BadRequestException("User not Found!"));
         if (userById.getRole().getName().equals(ERole.ROLE_ADMIN)) {
-            return ResponseEntity.badRequest().body("User with id "  + " not found");
+            return ResponseEntity.badRequest().body("User with id " + " not found");
         }
         log.info("Successfully deleter");
         userRepository.deleteById(userById.getId());
@@ -134,8 +90,7 @@ public class AdminServiceImpl implements AdminService {
     public ResponseEntity<?> deleteBookById(Long id) {
         if (!bookRepository.existsById(id)) {
             log.error("Delete book by id works");
-            throw new BadRequestException(
-                    "Book with id " + id + " does not exists");
+            throw new BadRequestException("Book with id " + id + " does not exists");
         }
         bookRepository.deleteById(id);
         return ResponseEntity.ok().body("Successfully deleter");
@@ -154,28 +109,20 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public VendorResponse getVendorById(Long id) {
-
-        User user = userRepository.getUserById(id, ERole.ROLE_VENDOR)
-                .orElseThrow(() -> {
-                    log.error("Vendor with id ={} does not exists", id);
-                    throw new BadRequestException(
-                            String.format("Vendor with id %s doesn't exist!", id)
-                    );
-                });
-
+        User user = userRepository.getUserById(id, ERole.ROLE_VENDOR).orElseThrow(() -> {
+            log.error("Vendor with id ={} does not exists", id);
+            throw new BadRequestException(String.format("Vendor with id %s doesn't exist!", id));
+        });
         log.info("Get all vendors works");
         return vendorMapper.createVendorDto(user);
     }
 
     @Override
     public ClientResponse getClientById(Long id) {
-        User user = userRepository.getUserById(id, ERole.ROLE_CLIENT)
-                .orElseThrow(() -> {
-                    log.error("Client with id ={} does not exists", id);
-                    throw new BadRequestException(
-                            String.format("Client with id %s doesn't exist!", id)
-                    );
-                });
+        User user = userRepository.getUserById(id, ERole.ROLE_CLIENT).orElseThrow(() -> {
+            log.error("Client with id ={} does not exists", id);
+            throw new BadRequestException(String.format("Client with id %s doesn't exist!", id));
+        });
         log.info("Get client by id works");
         return clientMapper.createClientDto(user);
     }
@@ -183,13 +130,10 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public ResponseEntity<?> acceptBookRequest(Long bookId) {
-        Book book = bookRepository.findBookInProgress(bookId, RequestStatus.INPROGRESS)
-                .orElseThrow(() -> {
-                    log.error("Book with id ={} does not exists", bookId);
-                    throw new BadRequestException(
-                            String.format("Book with id %s does not exists or it is already went through admin-check", bookId)
-                    );
-                });
+        Book book = bookRepository.findBookInProgress(bookId, RequestStatus.INPROGRESS).orElseThrow(() -> {
+            log.error("Book with id ={} does not exists", bookId);
+            throw new BadRequestException(String.format("Book with id %s does not exists or it is already went through admin-check", bookId));
+        });
         log.info("admin accept books ");
         book.setRequestStatus(ACCEPTED);
         return ResponseEntity.status(HttpStatus.OK).body("Accepted successfully book with id = " + book.getTitle());
@@ -198,30 +142,22 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public ResponseEntity<?> refuseBookRequest(RefuseBookRequest request, Long id) {
-        Book book = bookRepository.findBookInProgress(id, RequestStatus.INPROGRESS)
-                .orElseThrow(() -> {
-                    log.error("Book with id ={} does not exists", id);
-                    throw new BadRequestException(
-                            String.format("Book with id %s does not exists or it is already went through admin-check", id)
-                    );
-                });
+        Book book = bookRepository.findBookInProgress(id, RequestStatus.INPROGRESS).orElseThrow(() -> {
+            log.error("Book with id ={} does not exists", id);
+            throw new BadRequestException(String.format("Book with id %s does not exists or it is already went through admin-check", id));
+        });
         book.setRequestStatus(REFUSED);
-
         log.info("admin refuse book request");
-        return ResponseEntity.ok().body(
-                request.getReason());
+        return ResponseEntity.ok().body(request.getReason());
     }
 
     @Override
     @Transactional
     public Book getBookById(Long bookId) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> {
-                    log.error("Book with id ={} does not exists", bookId);
-                    throw new BadRequestException(
-                            String.format("The book with the id %s was not found", bookId)
-                    );
-                });
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> {
+            log.error("Book with id ={} does not exists", bookId);
+            throw new BadRequestException(String.format("The book with the id %s was not found", bookId));
+        });
         if (book.getAdminWatch().equals(false)) {
             book.setAdminWatch(true);
         }
@@ -231,36 +167,26 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Book> findBooksFromVendor(Integer offset, int pageSize, Long vendorId) {
-        User user = userRepository.findById(vendorId)
-                .orElseThrow(() -> {
-                    log.error("Vendor with id ={} does not exists", vendorId);
-                    throw new BadRequestException(
-                            String.format("Vendor with id %s doesn't exist!", vendorId)
-                    );
-                });
+        User user = userRepository.findById(vendorId).orElseThrow(() -> {
+            log.error("Vendor with id ={} does not exists", vendorId);
+            throw new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId));
+        });
         List<Book> books = bookRepository.findBooksFromVendor(user.getEmail());
-
-
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), books.size());
         int end = Math.min((start + paging.getPageSize()), books.size());
         Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
         System.out.println(new CustomPageRequest<>(pages).getContent().size());
-
         log.info("Vendor books=s%" + new CustomPageRequest<>(pages).getContent().size());
-
         return new CustomPageRequest<>(pages).getContent();
     }
 
     @Override
     public List<Book> findBooksFromVendorInFavorites(Integer offset, int pageSize, Long vendorId) {
-        User user = userRepository.findById(vendorId)
-                .orElseThrow(() -> {
-                    log.error("Vendor with id ={} does not exists", vendorId);
-                    throw new BadRequestException(
-                            String.format("Vendor with id %s doesn't exist!", vendorId)
-                    );
-                });
+        User user = userRepository.findById(vendorId).orElseThrow(() -> {
+            log.error("Vendor with id ={} does not exists", vendorId);
+            throw new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId));
+        });
         List<Book> likedBooksFromVendor = bookRepository.findLikedBooksFromVendor(user.getEmail());
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), likedBooksFromVendor.size());
@@ -271,13 +197,10 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Book> findBooksFromVendorAddedToBasket(Integer offset, int pageSize, Long vendorId) {
-        User user = userRepository.findById(vendorId)
-                .orElseThrow(() -> {
-                    log.error("Vendor with id ={} does not exists", vendorId);
-                    throw new BadRequestException(
-                            String.format("Vendor with id %s doesn't exist!", vendorId)
-                    );
-                });
+        User user = userRepository.findById(vendorId).orElseThrow(() -> {
+            log.error("Vendor with id ={} does not exists", vendorId);
+            throw new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId));
+        });
         List<Book> booksWithBasket = bookRepository.findBooksFromVendorAddedToBasket(user.getEmail());
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksWithBasket.size());
@@ -288,8 +211,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<Book> findBooksFromVendorWithDiscount(Integer offset, int pageSize, Long vendorId) {
-        User user = userRepository.findById(vendorId).orElseThrow(() ->
-                new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId)));
+        User user = userRepository.findById(vendorId).orElseThrow(() -> new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId)));
         List<Book> booksWithDiscount = bookRepository.findBooksFromVendorWithDiscount(user.getEmail());
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksWithDiscount.size());
@@ -299,10 +221,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, Long vendorId,
-                                                   RequestStatus status) {
-        User user = userRepository.findById(vendorId).orElseThrow(() ->
-                new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId)));
+    public List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, Long vendorId, RequestStatus status) {
+        User user = userRepository.findById(vendorId).orElseThrow(() -> new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId)));
         List<Book> booksWithCancel = bookRepository.findBooksFromVendorWithCancel(user.getEmail(), status);
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksWithCancel.size());
@@ -312,13 +232,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, Long vendorId,
-                                                   RequestStatus status) {
-        User user = userRepository.findById(vendorId).orElseThrow(() ->
-                new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId)));
-
+    public List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, Long vendorId, RequestStatus status) {
+        User user = userRepository.findById(vendorId).orElseThrow(() -> new BadRequestException(String.format("Vendor with id %s doesn't exist!", vendorId)));
         List<Book> booksInProgress = bookRepository.findBooksFromVendorInProgress(user.getEmail(), status);
-
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksInProgress.size());
         int end = Math.min((start + paging.getPageSize()), booksInProgress.size());
@@ -331,17 +247,14 @@ public class AdminServiceImpl implements AdminService {
         return bookRepository.getBooksInPurchased(clientId);
     }
 
-
     @Override
     public List<BookResponse> getAllLikedBooks(Long clientId) {
-        return userRepository.getAllLikedBooks(clientId)
-                .stream().map(book -> modelMapper.map(
-                        book, BookResponse.class)).collect(Collectors.toList());
+        return userRepository.getAllLikedBooks(clientId).stream().map(book ->
+                modelMapper.map(book, BookResponse.class)).collect(Collectors.toList());
     }
 
     @Override
     public CountForAdmin getCountOfInProgressAlsoDontWatched() {
-
         List<Book> bookList = bookRepository.findAll();
         for (Book book : bookList) {
             if (book.getRequestStatus().equals(ACCEPTED)) {
@@ -349,19 +262,15 @@ public class AdminServiceImpl implements AdminService {
             }
             bookRepository.save(book);
         }
-
         Integer all = bookRepository.getCountOfBooksInProgress(RequestStatus.INPROGRESS);
         Integer countOfPages = countOfPages(all);
         Integer unread = getCountOfDidNotWatched(bookList);
         CountForAdmin counts = new CountForAdmin();
-
         counts.setCountOfPages(countOfPages);
         counts.setAll(all);
         counts.setUnread(unread);
-
         return counts;
     }
-
 
     public Integer countOfPages(Integer books) {
         int count = 1;
@@ -383,7 +292,7 @@ public class AdminServiceImpl implements AdminService {
                 count++;
             }
         }
-
         return count;
     }
+
 }
