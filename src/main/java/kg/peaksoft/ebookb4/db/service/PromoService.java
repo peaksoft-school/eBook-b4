@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface PromoService {
 
-    ResponseEntity<?> createPromo(PromoRequest promoRequest, String username);
+    ResponseEntity<?> createPromo(PromoRequest request, String username);
 
     void checkPromos();
 

@@ -31,7 +31,7 @@ public class PromoServiceImpl implements PromoService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> createPromo(PromoRequest promoRequest, String username) {
+    public ResponseEntity<?> createPromo(PromoRequest request, String username) {
         //Getting authenticated vendor from db if exists
         User user = userRepository.getUser(username).orElseThrow(() ->
                 new NotFoundException(String.format("User with username: %s doesn't exist!",
@@ -43,7 +43,7 @@ public class PromoServiceImpl implements PromoService {
         }
 
         //creating promo
-        PromoCode promo = promoMapper.create(promoRequest);
+        PromoCode promo = promoMapper.create(request);
         if (Period.between(promo.getBeginningDay(), promo.getEndDay()).getDays() < 0) {
             throw new BadRequestException("You entered invalid date!");
         }
@@ -58,7 +58,7 @@ public class PromoServiceImpl implements PromoService {
         promoRepository.save(promo);
         log.info("Create promo works");
         return ResponseEntity.ok(new MessageResponse(
-                String.format("Promo with promo_name %s has been saved", promoRequest.getPromoName())
+                String.format("Promo with promo_name %s has been saved", request.getPromoName())
         ));
     }
 
