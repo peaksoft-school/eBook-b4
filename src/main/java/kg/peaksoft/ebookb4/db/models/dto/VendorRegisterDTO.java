@@ -7,21 +7,23 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Getter @Setter
+@Getter
+@Setter
 public class VendorRegisterDTO {
 
-  @NotBlank
-  @Size(max = 50)
-  @Email
-  private String email;
+    @NotBlank
+    @Size(max = 50)
+    @Email
+    private String email;
 
-  private String firstName;
+    private String firstName;
 
-  private String lastName;
+    private String lastName;
 
-  private String number;
+    private String number;
 
-  private String password;
+    private String password;
 
-  private String confirmPassword;
+    private String confirmPassword;
+
 }
