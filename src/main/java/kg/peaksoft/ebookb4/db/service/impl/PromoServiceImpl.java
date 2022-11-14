@@ -32,10 +32,8 @@ public class PromoServiceImpl implements PromoService {
     @Override
     @Transactional
     public ResponseEntity<?> createPromo(PromoRequest request, String username) {
-        //Getting authenticated vendor from db if exists
         User user = userRepository.getUser(username).orElseThrow(() ->
-                new NotFoundException(String.format("User with username: %s doesn't exist!",
-                        username)));
+                new NotFoundException(String.format("User with username: %s doesn't exist!", username)));
 
         //If vendor already have active will be a bad request
         if (promoRepository.ifVendorAlreadyCreatedPromo(user, LocalDate.now())) {
@@ -57,11 +55,8 @@ public class PromoServiceImpl implements PromoService {
         }
         promoRepository.save(promo);
         log.info("Create promo works");
-        return ResponseEntity.ok(new MessageResponse(
-                String.format("Promo with promo_name %s has been saved", request.getPromoName())
-        ));
+        return ResponseEntity.ok(new MessageResponse(String.format("Promo with promo_name %s has been saved", request.getPromoName())));
     }
-
 
     public void checkPromos() {
         List<PromoCode> promos = promoRepository.getPromos().orElseThrow(() ->
@@ -84,4 +79,5 @@ public class PromoServiceImpl implements PromoService {
             }
         }
     }
+
 }
