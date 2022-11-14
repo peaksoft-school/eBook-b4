@@ -1,24 +1,25 @@
 package kg.peaksoft.ebookb4.db.models.entity;
 
-/**
- * Author: Nurbek Abdirasulov
- * Date: 04/5/22
- */
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Data
-@Table(name = "genres")
+@Getter
+@Setter
 @NoArgsConstructor
+@Entity
+@Table(name = "genres")
 public class Genre {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +36,7 @@ public class Genre {
     public Genre(Long id, String name, String rusName) {
         this.id = id;
         this.name = name;
-        this.rusName=rusName;
+        this.rusName = rusName;
     }
 
     @Override
@@ -55,7 +56,8 @@ public class Genre {
     public String toString() {
         return "Genre{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                "name=" + name + '\'' +
                 '}';
     }
+
 }
