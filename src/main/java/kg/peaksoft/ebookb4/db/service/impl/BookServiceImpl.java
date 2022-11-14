@@ -287,8 +287,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username,
-                                                   RequestStatus requestStatus) {
-        List<Book> booksWithCancel = repository.findBooksFromVendorWithCancel(username, requestStatus);
+                                                   RequestStatus status) {
+        List<Book> booksWithCancel = repository.findBooksFromVendorWithCancel(username, status);
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksWithCancel.size());
         int end = Math.min((start + paging.getPageSize()), booksWithCancel.size());
@@ -299,8 +299,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, String username,
-                                                   RequestStatus requestStatus) {
-        List<Book> booksInProgress = repository.findBooksFromVendorInProgress(username, requestStatus);
+                                                   RequestStatus status) {
+        List<Book> booksInProgress = repository.findBooksFromVendorInProgress(username, status);
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), booksInProgress.size());
         int end = Math.min((start + paging.getPageSize()), booksInProgress.size());

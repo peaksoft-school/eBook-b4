@@ -30,11 +30,9 @@ public interface BookService {
 
     List<Book> findBooksFromVendorWithDiscount(Integer offset, int pageSize, String username);
 
-    List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username,
-                                            RequestStatus requestStatus);
+    List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username, RequestStatus status);
 
-    List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, String username,
-                                            RequestStatus requestStatus);
+    List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, String username, RequestStatus status);
 
     List<BookResponse> getBooksSold(String name, ERole role);
 
