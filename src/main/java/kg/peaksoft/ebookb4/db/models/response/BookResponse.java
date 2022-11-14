@@ -8,18 +8,26 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookResponse {
 
     private Long bookId;
+
     private String title;
+
     private String authorFullName;
+
     private String aboutBook;
+
     private String publishingHouse;
+
     private LocalDate dateOfRegister;
+
     private Double price;
+
     private Boolean adminWatch;
 
     private FileInformation fileInformation;
