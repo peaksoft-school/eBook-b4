@@ -2,13 +2,13 @@ package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
-import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
-import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
+import kg.peaksoft.ebookb4.dto.ClientOperationDTO;
+import kg.peaksoft.ebookb4.dto.ClientRegisterDTO;
+import kg.peaksoft.ebookb4.dto.ClientUpdateDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
-import kg.peaksoft.ebookb4.db.models.request.Request;
-import kg.peaksoft.ebookb4.db.models.response.BookResponse;
-import kg.peaksoft.ebookb4.db.models.response.CardResponse;
+import kg.peaksoft.ebookb4.dto.request.Request;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.dto.response.CardResponse;
 import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.ClientService;
 

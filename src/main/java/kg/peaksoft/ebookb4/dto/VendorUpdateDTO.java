@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.db.models.dto;
+package kg.peaksoft.ebookb4.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,9 +8,13 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-public class ClientUpdateDTO {
+public class VendorUpdateDTO {
 
     private String firstName;
+
+    private String lastName;
+
+    private String number;
 
     @NotBlank
     @Size(min = 6, max = 40)

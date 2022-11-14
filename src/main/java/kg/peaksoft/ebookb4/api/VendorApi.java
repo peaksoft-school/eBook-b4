@@ -2,20 +2,20 @@ package kg.peaksoft.ebookb4.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
+import kg.peaksoft.ebookb4.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.response.BookResponse;
-import kg.peaksoft.ebookb4.db.models.response.BookResponseAfterSaved;
-import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.dto.response.BookResponseAfterSaved;
+import kg.peaksoft.ebookb4.dto.response.CountForAdmin;
 import kg.peaksoft.ebookb4.db.service.BookService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.db.service.VendorService;
-import kg.peaksoft.ebookb4.db.models.request.PromoRequest;
-import kg.peaksoft.ebookb4.db.models.dto.VendorRegisterDTO;
-import kg.peaksoft.ebookb4.db.models.dto.VendorUpdateDTO;
+import kg.peaksoft.ebookb4.dto.request.PromoRequest;
+import kg.peaksoft.ebookb4.dto.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.dto.VendorUpdateDTO;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

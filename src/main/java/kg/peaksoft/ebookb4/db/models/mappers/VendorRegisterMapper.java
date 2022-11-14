@@ -1,6 +1,6 @@
 package kg.peaksoft.ebookb4.db.models.mappers;
 
-import kg.peaksoft.ebookb4.db.models.dto.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.dto.VendorRegisterDTO;
 import kg.peaksoft.ebookb4.db.models.entity.User;
 import org.springframework.stereotype.Component;
 

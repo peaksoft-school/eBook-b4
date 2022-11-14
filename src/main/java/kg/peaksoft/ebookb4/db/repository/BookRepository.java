@@ -4,7 +4,7 @@ import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,7 +29,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.requestStatus = ?1")
     List<Book> findAllActive(RequestStatus requestStatus);
 
-    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, " +
+    @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, " +
             "b.aboutBook, b.publishingHouse, b.dateOfRegister, b.price, b.adminWatch, b.fileInformation) " +
             "from Book b where b.requestStatus =:requestStatus")
     List<BookResponse> findBooksInProgress(RequestStatus requestStatus);
@@ -78,7 +78,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("select b from Book b where b.bookType = ?1 and b.requestStatus = ?2")
     List<Book> findAllByBookType(BookType bookType, RequestStatus requestStatus);
 
-    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, " +
+    @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, " +
             "b.aboutBook, b.publishingHouse, b.dateOfRegister, b.price, b.adminWatch, b.fileInformation) " +
             "from Book b where b.requestStatus = ?1")
     List<BookResponse> findBooksAccepted(RequestStatus requestStatus);
@@ -110,7 +110,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("update Book b set b.isNew = false where b.bookId = ?1")
     void updateBook(Long bookId);
 
-    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, " +
+    @Query("select new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, " +
             "b.authorFullName, b.aboutBook, b.publishingHouse,b.dateOfRegister, b.price, b.adminWatch, b.fileInformation)" +
             " from Book b where b.operations.size > 0 and b.user.email = ?1 and b.user.role.name = ?2")
     List<BookResponse> getVendorBooksSold(String name, ERole role);

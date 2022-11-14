@@ -1,7 +1,7 @@
 package kg.peaksoft.ebookb4.db.models.mappers;
 
 import kg.peaksoft.ebookb4.db.models.entity.User;
-import kg.peaksoft.ebookb4.db.models.response.VendorResponse;
+import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import org.springframework.stereotype.Component;
 
 @Component

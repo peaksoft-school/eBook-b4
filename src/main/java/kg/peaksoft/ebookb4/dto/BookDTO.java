@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.db.models.dto;
+package kg.peaksoft.ebookb4.dto;
 
 import kg.peaksoft.ebookb4.db.models.booksClasses.FileInformation;
 import kg.peaksoft.ebookb4.db.models.entity.AudioBook;

@@ -1,15 +1,17 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.dto.response.ClientResponse;
+import kg.peaksoft.ebookb4.dto.response.CountForAdmin;
+import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.User;
-import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.mappers.ClientMapper;
 import kg.peaksoft.ebookb4.db.models.mappers.VendorMapper;
-import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
-import kg.peaksoft.ebookb4.db.models.request.RefuseBookRequest;
-import kg.peaksoft.ebookb4.db.models.response.*;
+import kg.peaksoft.ebookb4.dto.request.CustomPageRequest;
+import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.AdminService;
@@ -28,8 +30,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;

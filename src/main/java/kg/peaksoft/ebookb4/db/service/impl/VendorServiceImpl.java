@@ -1,10 +1,10 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.dto.VendorRegisterDTO;
-import kg.peaksoft.ebookb4.db.models.dto.VendorUpdateDTO;
+import kg.peaksoft.ebookb4.dto.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.dto.VendorUpdateDTO;
 import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.mappers.VendorRegisterMapper;
-import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
+import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.VendorService;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Locale;
-import java.util.Optional;
 
 @Slf4j
 @Service

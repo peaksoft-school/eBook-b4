@@ -1,6 +1,6 @@
 package kg.peaksoft.ebookb4.exceptions;
 
-import kg.peaksoft.ebookb4.db.models.response.ExceptionResponse;
+import kg.peaksoft.ebookb4.dto.response.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;

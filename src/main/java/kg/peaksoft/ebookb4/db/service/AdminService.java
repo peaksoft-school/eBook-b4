@@ -1,14 +1,15 @@
 package kg.peaksoft.ebookb4.db.service;
 
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.dto.response.ClientResponse;
+import kg.peaksoft.ebookb4.dto.response.CountForAdmin;
+import kg.peaksoft.ebookb4.dto.response.VendorResponse;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
-import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.request.RefuseBookRequest;
-import kg.peaksoft.ebookb4.db.models.response.*;
+import kg.peaksoft.ebookb4.dto.request.RefuseBookRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Map;
 
 public interface AdminService {
 

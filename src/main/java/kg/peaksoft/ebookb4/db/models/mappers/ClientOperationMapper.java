@@ -2,7 +2,7 @@ package kg.peaksoft.ebookb4.db.models.mappers;
 
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
+import kg.peaksoft.ebookb4.dto.ClientOperationDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

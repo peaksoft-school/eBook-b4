@@ -1,11 +1,11 @@
 package kg.peaksoft.ebookb4.db.service;
 
-import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
-import kg.peaksoft.ebookb4.db.models.dto.ClientRegisterDTO;
-import kg.peaksoft.ebookb4.db.models.dto.ClientUpdateDTO;
+import kg.peaksoft.ebookb4.dto.ClientOperationDTO;
+import kg.peaksoft.ebookb4.dto.ClientRegisterDTO;
+import kg.peaksoft.ebookb4.dto.ClientUpdateDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
-import kg.peaksoft.ebookb4.db.models.response.BookResponse;
-import kg.peaksoft.ebookb4.db.models.response.CardResponse;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.dto.response.CardResponse;
 import org.springframework.http.ResponseEntity;
 
 import javax.transaction.Transactional;

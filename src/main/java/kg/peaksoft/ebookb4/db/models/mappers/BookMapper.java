@@ -1,6 +1,6 @@
 package kg.peaksoft.ebookb4.db.models.mappers;
 
-import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
+import kg.peaksoft.ebookb4.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.repository.GenreRepository;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import lombok.AllArgsConstructor;

@@ -4,8 +4,8 @@ import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
-import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
-import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.dto.request.GenreRequest;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
 
 import java.util.List;
 

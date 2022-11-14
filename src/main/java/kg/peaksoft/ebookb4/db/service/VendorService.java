@@ -1,7 +1,7 @@
 package kg.peaksoft.ebookb4.db.service;
 
-import kg.peaksoft.ebookb4.db.models.dto.VendorRegisterDTO;
-import kg.peaksoft.ebookb4.db.models.dto.VendorUpdateDTO;
+import kg.peaksoft.ebookb4.dto.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.dto.VendorUpdateDTO;
 import org.springframework.http.ResponseEntity;
 
 import javax.transaction.Transactional;

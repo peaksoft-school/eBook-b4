@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.db.models.request;
+package kg.peaksoft.ebookb4.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;

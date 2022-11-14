@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.db.models.response;
+package kg.peaksoft.ebookb4.dto.response;
 
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import lombok.AllArgsConstructor;

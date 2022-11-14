@@ -6,7 +6,7 @@ import kg.peaksoft.ebookb4.db.models.booksClasses.FileSources;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
-import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
+import kg.peaksoft.ebookb4.dto.request.GenreRequest;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 
 import lombok.RequiredArgsConstructor;

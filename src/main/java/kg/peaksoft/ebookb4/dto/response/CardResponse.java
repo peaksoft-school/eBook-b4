@@ -1,4 +1,4 @@
-package kg.peaksoft.ebookb4.db.models.response;
+package kg.peaksoft.ebookb4.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
