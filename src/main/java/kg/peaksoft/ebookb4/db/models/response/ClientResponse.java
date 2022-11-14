@@ -10,7 +10,11 @@ import java.time.LocalDate;
 public class ClientResponse {
 
     private Long id;
+
     private String name;
+
     public String email;
+
     private LocalDate dateOfRegistration;
+
 }
