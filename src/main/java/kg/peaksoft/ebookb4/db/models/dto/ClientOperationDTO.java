@@ -5,9 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientOperationDTO {
@@ -19,4 +18,5 @@ public class ClientOperationDTO {
     Double sum;
 
     Double total;
+
 }
