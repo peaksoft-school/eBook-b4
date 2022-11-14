@@ -84,14 +84,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT COUNT (b) FROM Book b WHERE b.genre.id = ?1 AND b.requestStatus = ?2")
     int getCountGenre(Long genre, RequestStatus requestStatus);
 
-    @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
-            "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
+    @Query(value = "SELECT case WHEN count(*) > 0 then 1 else 0 end " +
+            "FROM liked_books WHERE book_id = ?1 AND user_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyPutLike(Long bookId, Long userId);
 
-    @Query("select b from Book b where b.isBestSeller = true")
+    @Query("SELECT b FROM Book b WHERE b.isBestSeller = true")
     List<Book> findAllByIsBestSeller();
 
-    @Query("select b from Book b where b.isNew = true order by b.dateOfRegister desc")
+    @Query("SELECT b FROM Book b WHERE b.isNew = true ORDER BY b.dateOfRegister DESC")
     List<Book> BooksNovelties(List<Book> books);
 
     @Transactional
