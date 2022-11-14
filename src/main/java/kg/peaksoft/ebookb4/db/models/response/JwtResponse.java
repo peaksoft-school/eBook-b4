@@ -1,6 +1,9 @@
 package kg.peaksoft.ebookb4.db.models.response;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -11,8 +14,11 @@ import java.util.List;
 public class JwtResponse {
 
     private String token;
+
     private String type = "Bearer";
+
     private String firstName;
+
     private String role;
 
     public JwtResponse(String accessToken, List<String> role, String firstName) {
