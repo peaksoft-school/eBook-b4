@@ -6,10 +6,6 @@ import org.springframework.http.ResponseEntity;
 
 import javax.transaction.Transactional;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 12/4/22
- */
 public interface VendorService {
 
     ResponseEntity<?> register(VendorRegisterDTO vendorDTO, Long number);
@@ -20,4 +16,5 @@ public interface VendorService {
     VendorRegisterDTO getVendorDetails(String username);
 
     ResponseEntity<?> delete(String email);
+
 }
