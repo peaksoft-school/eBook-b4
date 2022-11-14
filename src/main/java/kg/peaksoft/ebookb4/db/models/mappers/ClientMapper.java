@@ -15,4 +15,5 @@ public class ClientMapper {
         responseClient.setDateOfRegistration(user.getDateOfRegistration());
         return responseClient;
     }
+
 }
