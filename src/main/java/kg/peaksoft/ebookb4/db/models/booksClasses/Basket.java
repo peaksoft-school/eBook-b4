@@ -3,16 +3,26 @@ package kg.peaksoft.ebookb4.db.models.booksClasses;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.User;
-import lombok.*;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
+@Entity
 public class Basket {
 
     @Id
@@ -36,4 +46,5 @@ public class Basket {
     public void clear() {
         books.removeIf(books -> true);
     }
+
 }
