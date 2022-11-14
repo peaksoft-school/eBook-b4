@@ -27,10 +27,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllVendors(ERole role);
 
     //fin all clients / admin panel
-    @Query("select u from User u where u.role.name=?1")
+    @Query("SELECT u FROM User u WHERE u.role.name=?1")
     List<User> findAllClients(ERole role);
 
-    @Query("select c.likedBooks from User c where c.id = ?1")
+    @Query("SELECT c.likedBooks FROM User c WHERE c.id = ?1")
     List<Book> getAllLikedBooks(Long id);
 
     //change discountPromo to null if it is expired
