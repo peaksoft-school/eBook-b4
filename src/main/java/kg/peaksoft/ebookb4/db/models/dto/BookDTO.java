@@ -9,28 +9,38 @@ import kg.peaksoft.ebookb4.db.models.enums.Language;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
-@Getter @Setter
+@Getter
+@Setter
 public class BookDTO {
 
     private String title;
+
     private String authorFullName;
+
     private String aboutBook;
+
     private int yearOfIssue;
+
     private Double price;
+
     private String publishingHouse;
 
     private Integer discount;
+
     private Boolean isBestSeller;
+
     private Language language;
+
     private Long genreId;
+
     private BookType bookType;
 
     AudioBook audioBook;
-    PaperBook paperBook;
-    ElectronicBook electronicBook;
-    FileInformation fileInformation;
 
+    PaperBook paperBook;
+
+    ElectronicBook electronicBook;
+
+    FileInformation fileInformation;
 
 }
