@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface BookGetService {
 
-    List<Book> findByGenre(String genreName, RequestStatus requestStatus);
+    List<Book> findByGenre(String genreName, RequestStatus status);
 
-    List<Book> findBooksByName(String name, RequestStatus requestStatus);
+    List<Book> findBooksByName(String name, RequestStatus status);
 
     List<Book> getAllBooksOrSortedOnes(SortBooksGlobal sortBook, int offset, int pageSize);
 
@@ -21,7 +21,7 @@ public interface BookGetService {
 
     List<BookResponse> getAllBooksInProgress(int offset, int pageSize);
 
-    List<Book> getAllAcceptedBooks(int offset, int pageSize,Long genreId, BookType bookType);
+    List<Book> getAllAcceptedBooks(int offset, int pageSize, Long genreId, BookType bookType);
 
     List<GenreRequest> getCountGenre();
 
@@ -34,4 +34,5 @@ public interface BookGetService {
     List<Book> getAllEBook();
 
     List<Book> getBook();
+
 }

@@ -84,18 +84,18 @@ public class BookGetServiceImpl implements BookGetService {
     }
 
     @Override
-    public List<Book> findByGenre(String genreName, RequestStatus requestStatus) {
+    public List<Book> findByGenre(String genreName, RequestStatus status) {
         promoService.checkPromos();
         log.info("Find By Genre works");
-        return bookRepository.findAllByGenre(genreName, requestStatus);
+        return bookRepository.findAllByGenre(genreName, status);
     }
 
     @Override
-    public List<Book> findBooksByName(String name, RequestStatus requestStatus) {
+    public List<Book> findBooksByName(String name, RequestStatus status) {
         promoService.checkPromos();
         log.info("Find book by name works");
 
-        return bookRepository.findByName(name, requestStatus);
+        return bookRepository.findByName(name, status);
     }
 
     @Override
