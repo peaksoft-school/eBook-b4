@@ -185,7 +185,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> cleanBasketOfClientByEmail(String email) {
+    public void cleanBasketOfClientByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BadRequestException(
                         "Client with email = " + email + " does not exists"
@@ -199,7 +199,7 @@ public class ClientServiceImpl implements ClientService {
         }
         user.getBasket().clear();
         log.info("Clean Basket of Client by email works");
-        return ResponseEntity.ok("Clean books from basket of " + email);
+        ResponseEntity.ok("Clean books from basket of " + email);
     }
 
     @Override

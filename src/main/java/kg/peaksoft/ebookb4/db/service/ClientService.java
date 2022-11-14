@@ -13,8 +13,7 @@ import java.util.List;
 
 public interface ClientService {
 
-
-    ResponseEntity<?> register (ClientRegisterDTO clientRegisterDTO, Long number);
+    ResponseEntity<?> register(ClientRegisterDTO clientRegisterDTO, Long number);
 
     ResponseEntity<?> likeABook(Long bookId, String username);
 
@@ -29,14 +28,14 @@ public interface ClientService {
 
     ResponseEntity<?> deleteBookFromBasket(Long id, String authentication);
 
-    ResponseEntity<?> cleanBasketOfClientByEmail(String clientEmail);
+    void cleanBasketOfClientByEmail(String clientEmail);
 
-     ClientOperationDTO sumAfterPromo(String name);
-
+    ClientOperationDTO sumAfterPromo(String name);
 
     ResponseEntity<?> placeOrder(String name);
 
     List<Book> operationBook(String name);
 
     List<CardResponse> plusOrMinus(String name, String plusOrMinus, Long bookId, String promoCode);
+
 }
