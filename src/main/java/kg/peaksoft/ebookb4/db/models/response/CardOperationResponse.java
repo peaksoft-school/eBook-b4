@@ -1,6 +1,6 @@
 package kg.peaksoft.ebookb4.db.models.response;
 
-import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
+import kg.peaksoft.ebookb4.db.models.booksClasses.PromoCode;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
@@ -89,9 +89,9 @@ public class CardOperationResponse {
 
                 user.getPlaceCounts().setCountOfBooksInTotal(count(bookListFromBasketOfClient));
                 user.getPlaceCounts().setDiscount(discount(bookListFromBasketOfClient));
-                List<Promocode> allPromos = promocodeRepository.findAll();
-                for (Promocode promo : allPromos) {
-                    if (!Objects.equals(promoCode, promo.getPromocode())) {
+                List<PromoCode> allPromos = promocodeRepository.findAll();
+                for (PromoCode promo : allPromos) {
+                    if (!Objects.equals(promoCode, promo.getPromoCode())) {
                         user.getPlaceCounts().setSumAfterPromo(user.getPlaceCounts().getSumAfterPromo());
                     } else {
                         user.getPlaceCounts().setSumAfterPromo(sumAfterPromo(bookListFromBasketOfClient, promoCode));
@@ -237,10 +237,10 @@ public class CardOperationResponse {
     }
 
     public Boolean checkPromo(String promo) {
-        List<Promocode> promocode = promocodeRepository.findAll();
-        for (Promocode promocode1 : promocode) {
-            if (promocode1.getPromocode().equals(promo)) {
-                if (promocode1.getIsActive().equals(true)) {
+        List<PromoCode> promocode = promocodeRepository.findAll();
+        for (PromoCode promoCode1 : promocode) {
+            if (promoCode1.getPromoCode().equals(promo)) {
+                if (promoCode1.getIsActive().equals(true)) {
                     return true;
                 }
                 log.error("this {} promo not found", promo);

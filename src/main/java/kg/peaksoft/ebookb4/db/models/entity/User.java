@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.peaksoft.ebookb4.db.models.booksClasses.Basket;
 import kg.peaksoft.ebookb4.db.models.booksClasses.ClientOperations;
 //import kg.peaksoft.ebookb4.db.models.booksClasses.Favorites;
-import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
+import kg.peaksoft.ebookb4.db.models.booksClasses.PromoCode;
 import lombok.*;
 
 import javax.persistence.*;
@@ -61,7 +61,7 @@ public class User {
     private Basket basket;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Promocode> promocodes;
+    private List<PromoCode> promoCodes;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "operation_id")

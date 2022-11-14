@@ -1,8 +1,7 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
+import kg.peaksoft.ebookb4.db.models.booksClasses.PromoCode;
 import kg.peaksoft.ebookb4.db.models.entity.User;
-import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.PromoService;
@@ -44,7 +43,7 @@ public class PromoServiceImpl implements PromoService {
         }
 
         //creating promo
-        Promocode promo = promoMapper.create(promoRequest);
+        PromoCode promo = promoMapper.create(promoRequest);
         if (Period.between(promo.getBeginningDay(), promo.getEndDay()).getDays() < 0) {
             throw new BadRequestException("You entered invalid date!");
         }
@@ -65,11 +64,11 @@ public class PromoServiceImpl implements PromoService {
 
 
     public void checkPromos() {
-        List<Promocode> promos = promoRepository.getPromos().orElseThrow(() ->
+        List<PromoCode> promos = promoRepository.getPromos().orElseThrow(() ->
                 new BadRequestException("There are no promo codes yes!"));
         log.info("Promocode size: " + promos.size());
 
-        for (Promocode i : promos) {
+        for (PromoCode i : promos) {
             if (Period.between(i.getBeginningDay(), i.getEndDay()).getDays() < 0) {
                 log.info("Срок прошёл!");
                 i.setIsActive(false);
