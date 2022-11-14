@@ -19,11 +19,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
 
-    @Query("select s from User s where s.email = ?1")
+    @Query("SELECT s FROM User s WHERE s.email = ?1")
     Optional<User> getUser(String username);
 
     //fin all vendors / admin panel
-    @Query("select u from User u where u.role.name=?1")
+    @Query("SELECT u FROM User u WHERE u.role.name=?1")
     List<User> findAllVendors(ERole role);
 
     //fin all clients / admin panel
@@ -47,4 +47,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select b from User b where b.id = ?1 and b.role.name = ?2")
     Optional<User> getUserById(Long id, ERole roleClient);
+
 }
