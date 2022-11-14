@@ -8,11 +8,14 @@ import lombok.Setter;
 public class GenreRequest {
 
     private Long genreId;
+
     private String genreName;
+
     private int count;
 
     public GenreRequest(String genreName, Long genreId) {
         this.genreName = genreName;
-        this.genreId=genreId;
+        this.genreId = genreId;
     }
+
 }
