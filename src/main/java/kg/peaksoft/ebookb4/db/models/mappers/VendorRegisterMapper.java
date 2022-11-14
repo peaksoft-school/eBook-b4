@@ -1,19 +1,14 @@
 package kg.peaksoft.ebookb4.db.models.mappers;
 
-import kg.peaksoft.ebookb4.db.models.dto.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.dto.VendorRegisterDTO;
 import kg.peaksoft.ebookb4.db.models.entity.User;
 import org.springframework.stereotype.Component;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 24/4/22
- */
 @Component
 public class VendorRegisterMapper {
 
-    public VendorRegisterDTO createDTO(User user){
+    public VendorRegisterDTO createDTO(User user) {
         VendorRegisterDTO dto = new VendorRegisterDTO();
-
         dto.setEmail(user.getEmail());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
@@ -22,4 +17,5 @@ public class VendorRegisterMapper {
         dto.setConfirmPassword(user.getPassword());
         return dto;
     }
+
 }

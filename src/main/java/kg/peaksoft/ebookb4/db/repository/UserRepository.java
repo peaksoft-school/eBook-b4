@@ -19,32 +19,33 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
 
-    @Query("select s from User s where s.email = ?1")
+    @Query("SELECT s FROM User s WHERE s.email = ?1")
     Optional<User> getUser(String username);
 
     //fin all vendors / admin panel
-    @Query("select u from User u where u.role.name=?1")
+    @Query("SELECT u FROM User u WHERE u.role.name=?1")
     List<User> findAllVendors(ERole role);
 
     //fin all clients / admin panel
-    @Query("select u from User u where u.role.name=?1")
+    @Query("SELECT u FROM User u WHERE u.role.name=?1")
     List<User> findAllClients(ERole role);
 
-    @Query("select c.likedBooks from User c where c.id = ?1")
+    @Query("SELECT c.likedBooks FROM User c WHERE c.id = ?1")
     List<Book> getAllLikedBooks(Long id);
 
     //change discountPromo to null if it is expired
     @Transactional
     @Modifying
-    @Query("update Book b set b.discountFromPromo = null where b.user = ?1")
+    @Query("UPDATE Book b SET b.discountFromPromo = null WHERE b.user = ?1")
     void checkForPromos(User user);
 
     //We give here a promo
     @Transactional
     @Modifying
-    @Query("update Book b set b.discountFromPromo = ?2 where b.user = ?1 and b.discount is null ")
+    @Query("UPDATE Book b SET b.discountFromPromo = ?2 WHERE b.user = ?1 AND b.discount is null ")
     void givePromo(User user, int discount);
 
-    @Query("select b from User b where b.id = ?1 and b.role.name = ?2")
+    @Query("SELECT b FROM User b WHERE b.id = ?1 AND b.role.name = ?2")
     Optional<User> getUserById(Long id, ERole roleClient);
+
 }

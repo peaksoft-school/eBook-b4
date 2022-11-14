@@ -2,12 +2,17 @@ package kg.peaksoft.ebookb4.aws;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.*;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import lombok.AllArgsConstructor;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,16 +25,13 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
-/**
- * Nurbek Abdirasulov
- * 12.06.2022
- */
-@Service
-@AllArgsConstructor
 @Slf4j
 @Transactional
+@Service
+@RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
-    private AmazonS3Client awsS3Client;
+
+    private final AmazonS3Client awsS3Client;
 
     private final BookRepository bookRepository;
 
@@ -46,7 +48,7 @@ public class FileServiceImpl implements FileService {
         String secondPhotoExtension = StringUtils.getFilenameExtension(secondPhoto.getOriginalFilename());
         String thirdPhotoExtension = StringUtils.getFilenameExtension(thirdPhoto.getOriginalFilename());
 
-        String keyOfFirstPhoto = "Images/" + UUID.randomUUID() + "." + firstPhoto.getOriginalFilename();
+        String keyOfFirstPhoto = "Images/" + UUID.randomUUID() + "." + firstPhotoExtension;
         String keyOfSecondPhoto = "Images/" + UUID.randomUUID() + "." + secondPhotoExtension;
         String keyOfThirdPhoto = "Images/" + UUID.randomUUID() + "." + thirdPhotoExtension;
 
@@ -171,19 +173,16 @@ public class FileServiceImpl implements FileService {
                 }
             }
         }
-
         if (bookById.getBookType().equals(BookType.AUDIOBOOK)) {
             bookById.getAudioBook().setKeyOfFragment(keyOfAudioBookFragment);
             bookById.getAudioBook().setUrlFragment(awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfAudioBookFragment));
         }
-
         return awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfAudioBookFragment);
     }
 
     @Override
     public void deleteFile(String keyName) {
-        final DeleteObjectRequest deleteObjectRequest = new
-                DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(), keyName);
+        final DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(BucketName.AWS_BOOKS.getBucketName(), keyName);
         awsS3Client.deleteObject(deleteObjectRequest);
         log.info("Successfully deleted");
     }
@@ -200,9 +199,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public LinkedHashMap<String, String> updateFileInformation(MultipartFile file,
-                                                               String nameOfFile,
-                                                               Long bookId) {
+    public LinkedHashMap<String, String> updateFileInformation(MultipartFile file, String nameOfFile, Long bookId) {
         Book bookById = bookRepository.getById(bookId);
         String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
 
@@ -262,7 +259,7 @@ public class FileServiceImpl implements FileService {
             try {
                 awsS3Client.putObject(BucketName.AWS_BOOKS.getBucketName(), keyOfBookFile, file.getInputStream(), metaData);
             } catch (IOException e) {
-                log.error("an exception occurred while uploading the file");
+                log.error("An exception occurred while uploading the file");
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occurred while uploading the file");
             }
             awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), keyOfBookFile, CannedAccessControlList.PublicRead);
@@ -277,7 +274,7 @@ public class FileServiceImpl implements FileService {
             try {
                 awsS3Client.putObject(BucketName.AWS_BOOKS.getBucketName(), keyOfAudioFragment, file.getInputStream(), metaData);
             } catch (IOException e) {
-                log.error("an exception occurred while uploading the file");
+                log.error("An exception occurred while uploading the file");
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An exception occurred while uploading the file");
             }
             awsS3Client.setObjectAcl(BucketName.AWS_BOOKS.getBucketName(), keyOfAudioFragment, CannedAccessControlList.PublicRead);
@@ -287,9 +284,7 @@ public class FileServiceImpl implements FileService {
             response.put(nameOfFile, awsS3Client.getResourceUrl(BucketName.AWS_BOOKS.getBucketName(), keyOfAudioFragment));
         }
         bookRepository.save(bookById);
-
         return response;
     }
-
 
 }

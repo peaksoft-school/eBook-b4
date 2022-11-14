@@ -1,10 +1,10 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.dto.VendorRegisterDTO;
-import kg.peaksoft.ebookb4.db.models.dto.VendorUpdateDTO;
+import kg.peaksoft.ebookb4.dto.VendorRegisterDTO;
+import kg.peaksoft.ebookb4.dto.VendorUpdateDTO;
 import kg.peaksoft.ebookb4.db.models.entity.User;
 import kg.peaksoft.ebookb4.db.models.mappers.VendorRegisterMapper;
-import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
+import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.db.repository.RoleRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.VendorService;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Locale;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -33,7 +32,6 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public ResponseEntity<?> register(VendorRegisterDTO vendorDTO, Long number) {
-
         if (!vendorDTO.getPassword().equals(vendorDTO.getConfirmPassword())) {
             throw new BadRequestException("Passwords are not the same!");
         }
@@ -42,16 +40,14 @@ public class VendorServiceImpl implements VendorService {
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
-        User user = new User(vendorDTO.getEmail(),
-                encoder.encode(vendorDTO.getPassword()));
+        User user = new User(vendorDTO.getEmail(), encoder.encode(vendorDTO.getPassword()));
         user.setFirstName(vendorDTO.getFirstName());
         user.setLastName(vendorDTO.getLastName());
         user.setNumber(vendorDTO.getNumber());
         user.setRole(roleRepository.getById(number));
-
         user.setDateOfRegistration(LocalDate.now());
-
         userRepository.save(user);
+
         log.info("Method save vendor works");
         return ResponseEntity.ok(new MessageResponse(
                 String.format("User with email %s registered successfully!", user.getEmail().toUpperCase(Locale.ROOT))));
@@ -62,7 +58,6 @@ public class VendorServiceImpl implements VendorService {
     public ResponseEntity<?> update(VendorUpdateDTO newVendorDTO, String username) {
         User user = userRepository.getUser(username).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found", username)));
-
         String oldFirstName = user.getFirstName();
         String newFirstName = newVendorDTO.getFirstName();
         if (!oldFirstName.equals(newFirstName)) {
@@ -80,7 +75,6 @@ public class VendorServiceImpl implements VendorService {
         }
 
         String oldPasswordOldUser = user.getPassword();
-
         String oldPasswordNewUser = newVendorDTO.getOldPassword();
         String newPasswordNewUser = newVendorDTO.getNewPassword();
         String newPasswordConfirmNewUser = newVendorDTO.getConfirmNewPassword();
@@ -108,6 +102,7 @@ public class VendorServiceImpl implements VendorService {
         User user = userRepository.findByEmail(email).orElseThrow(() ->
                 new BadRequestException(String.format("User with username %s has not been found", email)));
         userRepository.deleteById(user.getId());
-         return ResponseEntity.ok("Your profile was deleted");
+        return ResponseEntity.ok("Your profile was deleted");
     }
+
 }

@@ -1,9 +1,8 @@
 package kg.peaksoft.ebookb4.db.models.mappers;
 
-
 import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import kg.peaksoft.ebookb4.db.models.dto.ClientOperationDTO;
+import kg.peaksoft.ebookb4.dto.ClientOperationDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +13,8 @@ import java.util.List;
 public class ClientOperationMapper {
 
     private BookRepository bookRepository;
-    public ClientOperationDTO build(int count, Double discount, Double sum, Double total){
 
+    public ClientOperationDTO build(int count, Double discount, Double sum, Double total) {
         ClientOperationDTO dto = new ClientOperationDTO();
         dto.setCount(count);
         dto.setDiscount(discount);
@@ -25,16 +24,12 @@ public class ClientOperationMapper {
     }
 
     public ClientOperationDTO create(String name) {
-
         List<Book> all = bookRepository.findBasketByClientId(name);
-
         ClientOperationDTO dto = new ClientOperationDTO();
-
         dto.setCount(count(all));
         dto.setDiscount(discount(all));
         dto.setSum(priseSum(all));
         dto.setTotal(total(all));
-
         return dto;
     }
 
@@ -72,7 +67,6 @@ public class ClientOperationMapper {
         }
         return sum;
     }
-
 
     public Integer count(List<Book> list) {
         Integer sum = 0;

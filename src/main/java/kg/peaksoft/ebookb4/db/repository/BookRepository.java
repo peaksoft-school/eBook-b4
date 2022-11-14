@@ -4,7 +4,7 @@ import kg.peaksoft.ebookb4.db.models.entity.Book;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,121 +19,111 @@ import java.util.Optional;
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     //find books by title, author, publishingHouse
-    @Query("select b from Book b where b.title like %?1% " +
-            "or b.genre.name like %?1%" +
-            "or b.authorFullName like %?1%" +
-            "or b.publishingHouse like %?1% and b.requestStatus=?2")
+    @Query("SELECT b FROM Book b WHERE b.title LIKE %?1% " +
+            "OR b.genre.name LIKE %?1%" +
+            "OR b.authorFullName LIKE %?1%" +
+            "OR b.publishingHouse LIKE %?1% AND b.requestStatus=?2")
     List<Book> findByName(String name, RequestStatus requestStatus);
 
     //find all active books
-    @Query("select b from Book b where b.requestStatus = ?1")
+    @Query("SELECT b FROM Book b WHERE b.requestStatus = ?1")
     List<Book> findAllActive(RequestStatus requestStatus);
 
-    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, " +
+    @Query("SELECT new kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, b.authorFullName, " +
             "b.aboutBook, b.publishingHouse, b.dateOfRegister, b.price, b.adminWatch, b.fileInformation) " +
-            "from Book b where b.requestStatus =:requestStatus")
+            "FROM Book b WHERE b.requestStatus =:requestStatus")
     List<BookResponse> findBooksInProgress(RequestStatus requestStatus);
 
 
     //find book by id and active one
-    @Query("select b from Book b where b.bookId = ?1 and b.requestStatus = ?2")
+    @Query("SELECT b FROM Book b WHERE b.bookId = ?1 AND b.requestStatus = ?2")
     Optional<Book> findBookByIdAndActive(Long id, RequestStatus requestStatus);
 
     //Find all books of current vendor
-    @Query("select b from Book b where b.user.email = ?1")
+    @Query("SELECT b FROM Book b WHERE b.user.email = ?1")
     List<Book> findBooksFromVendor(String username);
 
-    @Query("select b from Book b where b.likes>0 and b.user.email = ?1")
+    @Query("SELECT b FROM Book b WHERE b.likes>0 AND b.user.email = ?1")
     List<Book> findLikedBooksFromVendor(String username);
 
-    @Query("select b from Book b where b.baskets>0 and b.user.email = ?1")
+    @Query("SELECT b FROM Book b WHERE b.baskets>0 AND b.user.email = ?1")
     List<Book> findBooksFromVendorAddedToBasket(String username);
 
-    @Query("select u.basket.books from User u where u.email = :name")
+    @Query("SELECT u.basket.books FROM User u WHERE u.email = :name")
     List<Book> findBasketByClientId(@Param("name") String name);
 
-    @Query("select u.basket.books from User u where u.id = ?1")
+    @Query("SELECT u.basket.books FROM User u WHERE u.id = ?1")
     List<Book> findBasketByClientIdAdmin(Long id);
 
-    @Query("select b from Book b where b.discount is not null and b.user.email = ?1")
+    @Query("SELECT b FROM Book b WHERE b.discount is not null AND b.user.email = ?1")
     List<Book> findBooksFromVendorWithDiscount(String username);
 
-    @Query("select b from Book b where b.requestStatus = ?2 and b.user.email = ?1")
+    @Query("SELECT b FROM Book b WHERE b.requestStatus = ?2 AND b.user.email = ?1")
     List<Book> findBooksFromVendorWithCancel(String username, RequestStatus requestStatus);
 
-    @Query("select b from Book b where b.requestStatus = ?2 and b.user.email = ?1")
+    @Query("SELECT b FROM Book b WHERE b.requestStatus = ?2 AND b.user.email = ?1")
     List<Book> findBooksFromVendorInProgress(String username, RequestStatus requestStatus);
 
     @Transactional
     @Modifying
-    @Query("update Book b set b.likes = b.likes+1 where b.bookId = ?1")
+    @Query("UPDATE Book b SET b.likes = b.likes+1 WHERE b.bookId = ?1")
     void incrementLikesOfBook(Long bookId);
 
     @Transactional
     @Modifying
-    @Query("update Book b set b.baskets = b.baskets+1 where b.bookId = ?1")
+    @Query("UPDATE Book b SET b.baskets = b.baskets+1 WHERE b.bookId = ?1")
     void incrementBasketsOfBooks(Long bookId);
 
-    //find books by BookType / admin panes
-    @Query("select b from Book b where b.bookType = ?1 and b.requestStatus = ?2")
-    List<Book> findAllByBookType(BookType bookType, RequestStatus requestStatus);
-
-    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, b.authorFullName, " +
-            "b.aboutBook, b.publishingHouse, b.dateOfRegister, b.price, b.adminWatch, b.fileInformation) " +
-            "from Book b where b.requestStatus = ?1")
-    List<BookResponse> findBooksAccepted(RequestStatus requestStatus);
-
-    @Query("select b from Book b where b.requestStatus = ?2 and b.bookId = ?1")
+    @Query("SELECT b FROM Book b WHERE b.requestStatus = ?2 AND b.bookId = ?1")
     Optional<Book> findBookInProgress(Long bookId, RequestStatus requestStatus);
 
     //find books by genre / admin panel
-    @Query(value = "select b from Book b where b.genre.name like %?1% and b.requestStatus = ?2 ")
+    @Query(value = "SELECT b FROM Book b WHERE b.genre.name LIKE %?1% AND b.requestStatus = ?2 ")
     List<Book> findAllByGenre(String genreName, RequestStatus requestStatus);
 
-
-    @Query("select count(b) from Book b where b.genre.id = ?1 and b.requestStatus = ?2")
+    @Query("SELECT COUNT (b) FROM Book b WHERE b.genre.id = ?1 AND b.requestStatus = ?2")
     int getCountGenre(Long genre, RequestStatus requestStatus);
 
-
-    @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
-            "from liked_books where book_id = ?1 and user_id = ?2", nativeQuery = true)
+    @Query(value = "SELECT case WHEN count(*) > 0 then 1 else 0 end " +
+            "FROM liked_books WHERE book_id = ?1 AND user_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyPutLike(Long bookId, Long userId);
 
-    @Query("select b from Book b where b.isBestSeller = true")
+    @Query("SELECT b FROM Book b WHERE b.isBestSeller = true")
     List<Book> findAllByIsBestSeller();
 
-    @Query("select b from Book b where b.isNew = true order by b.dateOfRegister desc")
+    @Query("SELECT b FROM Book b WHERE b.isNew = true ORDER BY b.dateOfRegister DESC")
     List<Book> BooksNovelties(List<Book> books);
 
     @Transactional
     @Modifying
-    @Query("update Book b set b.isNew = false where b.bookId = ?1")
+    @Query("UPDATE Book b SET b.isNew = false WHERE b.bookId = ?1")
     void updateBook(Long bookId);
 
-    @Query("select new kg.peaksoft.ebookb4.db.models.response.BookResponse(b.bookId, b.title, " +
+    @Query("SELECT NEW kg.peaksoft.ebookb4.dto.response.BookResponse(b.bookId, b.title, " +
             "b.authorFullName, b.aboutBook, b.publishingHouse,b.dateOfRegister, b.price, b.adminWatch, b.fileInformation)" +
-            " from Book b where b.operations.size > 0 and b.user.email = ?1 and b.user.role.name = ?2")
+            "FROM Book b WHERE b.operations.size > 0 AND b.user.email = ?1 AND b.user.role.name = ?2")
     List<BookResponse> getVendorBooksSold(String name, ERole role);
 
-    @Query(value = "SELECT * from book b " +
-            "join operation_books o on o.book_id = b.book_id "+
-            "join client_operations t on t.operation_id = o.operation_id " +
-            "join users u on t.user_id = u.user_id " +
-            "where u.user_id = ?1 ", nativeQuery = true)
+    @Query(value = "SELECT * FROM book b " +
+            "JOIN operation_books o ON o.book_id = b.book_id " +
+            "JOIN client_operations t ON t.operation_id = o.operation_id " +
+            "JOIN users u ON t.user_id = u.user_id " +
+            "WHERE u.user_id = ?1 ", nativeQuery = true)
     List<Book> getBooksInPurchased(Long id);
 
-    @Query(value = "select count(b) from Book b where b.requestStatus =:requestStatus")
+    @Query(value = "SELECT COUNT (b) FROM Book b WHERE b.requestStatus =:requestStatus")
     Integer getCountOfBooksInProgress(RequestStatus requestStatus);
 
-    @Query("select b from  Book b where  b.requestStatus =:requestStatus")
+    @Query("SELECT b FROM  Book b WHERE  b.requestStatus =:requestStatus")
     List<Book> findOnlyInProgressBooks(RequestStatus requestStatus);
 
-    @Query("select b from Book b where b.bookType = ?1 and b.requestStatus = ?2")
-    List<Book> getAllAudioBook(BookType bookType,RequestStatus requestStatus);
+    @Query("SELECT b FROM Book b WHERE b.bookType = ?1 AND b.requestStatus = ?2")
+    List<Book> getAllAudioBook(BookType bookType, RequestStatus requestStatus);
 
-    @Query("select b from Book b where b.bookType = ?1 and b.requestStatus = ?2")
-    List<Book> getAllEBook(BookType ebook,RequestStatus requestStatus);
+    @Query("SELECT b FROM Book b WHERE b.bookType = ?1 AND b.requestStatus = ?2")
+    List<Book> getAllEBook(BookType ebook, RequestStatus requestStatus);
 
-    @Query(value = "select * from book order by title desc limit 3;",nativeQuery = true)
+    @Query(value = "SELECT * FROM book ORDER BY title DESC limit 3;", nativeQuery = true)
     List<Book> getBook(RequestStatus accepted);
+
 }

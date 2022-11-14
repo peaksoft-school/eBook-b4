@@ -8,11 +8,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BasketRepository extends JpaRepository<Basket, Long> {
 
-    @Query("select b.basketId from Basket b where b.user.email = ?1")
+    @Query("SELECT b.basketId FROM Basket b WHERE b.user.email = ?1")
     Long getUsersBasketId(String username);
 
-    @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
-            "from books_basket where basket_id = ?1 and book_id = ?2", nativeQuery = true)
+    @Query(value = "SELECT case WHEN COUNT(*) > 0 then 1 else 0 end FROM books_basket WHERE basket_id = ?1 AND book_id = ?2", nativeQuery = true)
     Integer checkIfAlreadyClientPutInBasket(Long basketId, Long bookId);
 
 }

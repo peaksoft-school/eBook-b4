@@ -3,11 +3,11 @@ package kg.peaksoft.ebookb4.db.service;
 import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.ERole;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
-import kg.peaksoft.ebookb4.db.models.dto.BookDTO;
+import kg.peaksoft.ebookb4.dto.BookDTO;
 import kg.peaksoft.ebookb4.db.models.entity.Book;
-import kg.peaksoft.ebookb4.db.models.response.BookResponse;
-import kg.peaksoft.ebookb4.db.models.response.BookResponseAfterSaved;
-import kg.peaksoft.ebookb4.db.models.response.CountForAdmin;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
+import kg.peaksoft.ebookb4.dto.response.BookResponseAfterSaved;
+import kg.peaksoft.ebookb4.dto.response.CountForAdmin;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -30,11 +30,9 @@ public interface BookService {
 
     List<Book> findBooksFromVendorWithDiscount(Integer offset, int pageSize, String username);
 
-    List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username,
-                                            RequestStatus requestStatus);
+    List<Book> findBooksFromVendorCancelled(Integer offset, int pageSize, String username, RequestStatus status);
 
-    List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, String username,
-                                            RequestStatus requestStatus);
+    List<Book> findBooksFromVendorInProcess(Integer offset, int pageSize, String username, RequestStatus status);
 
     List<BookResponse> getBooksSold(String name, ERole role);
 

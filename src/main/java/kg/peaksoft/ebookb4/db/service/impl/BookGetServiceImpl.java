@@ -1,23 +1,24 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
 import kg.peaksoft.ebookb4.db.models.entity.Book;
-import kg.peaksoft.ebookb4.db.models.entity.Genre;
 import kg.peaksoft.ebookb4.db.models.enums.BookType;
 import kg.peaksoft.ebookb4.db.models.enums.Language;
 import kg.peaksoft.ebookb4.db.models.enums.RequestStatus;
 import kg.peaksoft.ebookb4.db.models.notEntities.SortBooksGlobal;
 import kg.peaksoft.ebookb4.db.repository.BookRepository;
 import kg.peaksoft.ebookb4.db.repository.GenreRepository;
-import kg.peaksoft.ebookb4.db.service.AdminService;
 import kg.peaksoft.ebookb4.db.service.BookGetService;
 import kg.peaksoft.ebookb4.db.service.PromoService;
-import kg.peaksoft.ebookb4.db.models.request.CustomPageRequest;
-import kg.peaksoft.ebookb4.db.models.request.GenreRequest;
-import kg.peaksoft.ebookb4.db.models.response.BookResponse;
+import kg.peaksoft.ebookb4.dto.request.CustomPageRequest;
+import kg.peaksoft.ebookb4.dto.request.GenreRequest;
+import kg.peaksoft.ebookb4.dto.response.BookResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Period;
@@ -26,7 +27,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.*;
+import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.ACCEPTED;
+import static kg.peaksoft.ebookb4.db.models.enums.RequestStatus.INPROGRESS;
 
 @Slf4j
 @Service
@@ -40,21 +42,17 @@ public class BookGetServiceImpl implements BookGetService {
     @Override
     public List<Book> getAllAcceptedBooks(int offset, int pageSize, Long genreId, BookType bookType) {
         promoService.checkPromos();
-
         List<Book> books = getBooksBy2(genreId, bookType);
-
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), books.size());
         int end = Math.min((start + paging.getPageSize()), books.size());
         Page<Book> pages = new PageImpl<>(books.subList(start, end), paging, books.size());
-
         return new CustomPageRequest<>(pages).getContent();
     }
 
     public List<Book> getBooksBy2(Long genreId, BookType bookType) {
         List<Book> books = bookRepository.findAllActive(ACCEPTED);
-
-      if (genreId == null || bookType == null || genreId == 28  && bookType.equals(BookType.ALL)){
+        if (genreId == null || bookType == null || genreId == 28 && bookType.equals(BookType.ALL)) {
             return books;
         }
         List<Book> sortByOnlyGenres = new ArrayList<>();
@@ -75,36 +73,32 @@ public class BookGetServiceImpl implements BookGetService {
                 sort.add(book2);
             }
         }
-        if (genreId == null || genreId == 28) {
-            return sortByOnlyBookType;
-        }
-        if (bookType == null || bookType.equals(BookType.ALL)) {
+        if (genreId == 28) return sortByOnlyBookType;
+        if (bookType.equals(BookType.ALL)) {
             return sortByOnlyGenres;
-        }else
+        } else
             return sort;
-
     }
 
     @Override
-    public List<Book> findByGenre(String genreName, RequestStatus requestStatus) {
+    public List<Book> findByGenre(String genreName, RequestStatus status) {
         promoService.checkPromos();
         log.info("Find By Genre works");
-        return bookRepository.findAllByGenre(genreName, requestStatus);
+        return bookRepository.findAllByGenre(genreName, status);
     }
 
     @Override
-    public List<Book> findBooksByName(String name, RequestStatus requestStatus) {
+    public List<Book> findBooksByName(String name, RequestStatus status) {
         promoService.checkPromos();
         log.info("Find book by name works");
 
-        return bookRepository.findByName(name, requestStatus);
+        return bookRepository.findByName(name, status);
     }
 
     @Override
     public List<Book> getAllBooksOrSortedOnes(SortBooksGlobal sortBook, int offset, int pageSize) {
         promoService.checkPromos();
         List<Book> books = bookRepository.findAllActive(ACCEPTED);
-        //if it is empty it returns empty list
         if (books.size() < 1) {
             log.info("if it is empty it returns empty list");
             return books;
@@ -188,7 +182,7 @@ public class BookGetServiceImpl implements BookGetService {
         List<BookResponse> books = bookRepository.findBooksInProgress(INPROGRESS);
         List<Book> bookList = bookRepository.findOnlyInProgressBooks(INPROGRESS);
         log.info("Get all books request works");
-        chekHaveFiles(bookList);
+        checkHaveFiles(bookList);
         Pageable paging = PageRequest.of(offset, pageSize);
         int start = Math.min((int) paging.getOffset(), books.size());
         int end = Math.min((start + paging.getPageSize()), books.size());
@@ -196,7 +190,6 @@ public class BookGetServiceImpl implements BookGetService {
         System.out.println(new CustomPageRequest<>(pages).getContent().size());
 
         log.info("Vendor books=s%" + new CustomPageRequest<>(pages).getContent().size());
-
         return new CustomPageRequest<>(pages).getContent();
     }
 
@@ -231,9 +224,7 @@ public class BookGetServiceImpl implements BookGetService {
         genreRequest.add(new GenreRequest(genreRepository.getById(25L).getRusName(), 25L));
         genreRequest.add(new GenreRequest(genreRepository.getById(26L).getRusName(), 26L));
         genreRequest.add(new GenreRequest(genreRepository.getById(27L).getRusName(), 27L));
-
         for (GenreRequest request : genreRequest) {
-
             request.setCount(bookRepository.getCountGenre(request.getGenreId(), ACCEPTED));
 
         }
@@ -276,10 +267,9 @@ public class BookGetServiceImpl implements BookGetService {
     @Override
     public List<Book> getBook() {
         return bookRepository.getBook(ACCEPTED);
-
     }
 
-    public void chekHaveFiles(List<Book> books) {
+    public void checkHaveFiles(List<Book> books) {
         for (Book book : books) {
             if (book.getBookType().equals(BookType.AUDIOBOOK)) {
                 if (book.getFileInformation().getBookFile() == null ||
@@ -312,7 +302,7 @@ public class BookGetServiceImpl implements BookGetService {
                 }
             }
         }
-
     }
+
 }
 

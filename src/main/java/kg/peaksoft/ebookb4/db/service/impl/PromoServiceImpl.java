@@ -1,14 +1,13 @@
 package kg.peaksoft.ebookb4.db.service.impl;
 
-import kg.peaksoft.ebookb4.db.models.booksClasses.Promocode;
+import kg.peaksoft.ebookb4.db.models.booksClasses.PromoCode;
 import kg.peaksoft.ebookb4.db.models.entity.User;
-import kg.peaksoft.ebookb4.db.repository.BookRepository;
-import kg.peaksoft.ebookb4.db.repository.PromocodeRepository;
+import kg.peaksoft.ebookb4.db.repository.PromoCodeRepository;
 import kg.peaksoft.ebookb4.db.repository.UserRepository;
 import kg.peaksoft.ebookb4.db.service.PromoService;
 import kg.peaksoft.ebookb4.db.models.mappers.PromoMapper;
-import kg.peaksoft.ebookb4.db.models.request.PromoRequest;
-import kg.peaksoft.ebookb4.db.models.response.MessageResponse;
+import kg.peaksoft.ebookb4.dto.request.PromoRequest;
+import kg.peaksoft.ebookb4.dto.response.MessageResponse;
 import kg.peaksoft.ebookb4.exceptions.BadRequestException;
 import kg.peaksoft.ebookb4.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -26,17 +25,15 @@ import java.util.List;
 @AllArgsConstructor
 public class PromoServiceImpl implements PromoService {
 
-    private PromocodeRepository promoRepository;
+    private PromoCodeRepository promoRepository;
     private UserRepository userRepository;
     private PromoMapper promoMapper;
 
     @Override
     @Transactional
-    public ResponseEntity<?> createPromo(PromoRequest promoRequest, String username) {
-        //Getting authenticated vendor from db if exists
+    public ResponseEntity<?> createPromo(PromoRequest request, String username) {
         User user = userRepository.getUser(username).orElseThrow(() ->
-                new NotFoundException(String.format("User with username: %s doesn't exist!",
-                        username)));
+                new NotFoundException(String.format("User with username: %s doesn't exist!", username)));
 
         //If vendor already have active will be a bad request
         if (promoRepository.ifVendorAlreadyCreatedPromo(user, LocalDate.now())) {
@@ -44,7 +41,7 @@ public class PromoServiceImpl implements PromoService {
         }
 
         //creating promo
-        Promocode promo = promoMapper.create(promoRequest);
+        PromoCode promo = promoMapper.create(request);
         if (Period.between(promo.getBeginningDay(), promo.getEndDay()).getDays() < 0) {
             throw new BadRequestException("You entered invalid date!");
         }
@@ -58,18 +55,15 @@ public class PromoServiceImpl implements PromoService {
         }
         promoRepository.save(promo);
         log.info("Create promo works");
-        return ResponseEntity.ok(new MessageResponse(
-                String.format("Promo with promo_name %s has been saved", promoRequest.getPromoName())
-        ));
+        return ResponseEntity.ok(new MessageResponse(String.format("Promo with promo_name %s has been saved", request.getPromoName())));
     }
 
-
     public void checkPromos() {
-        List<Promocode> promos = promoRepository.getPromos().orElseThrow(() ->
+        List<PromoCode> promos = promoRepository.getPromos().orElseThrow(() ->
                 new BadRequestException("There are no promo codes yes!"));
         log.info("Promocode size: " + promos.size());
 
-        for (Promocode i : promos) {
+        for (PromoCode i : promos) {
             if (Period.between(i.getBeginningDay(), i.getEndDay()).getDays() < 0) {
                 log.info("Срок прошёл!");
                 i.setIsActive(false);
@@ -85,4 +79,5 @@ public class PromoServiceImpl implements PromoService {
             }
         }
     }
+
 }
