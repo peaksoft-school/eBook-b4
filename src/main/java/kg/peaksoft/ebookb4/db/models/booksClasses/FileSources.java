@@ -1,18 +1,21 @@
 package kg.peaksoft.ebookb4.db.models.booksClasses;
 
-import kg.peaksoft.ebookb4.db.models.entity.Book;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class FileSources {
 
     @Id
@@ -23,11 +26,11 @@ public class FileSources {
     private String images;
 
     private String line1;
+
     private String line2;
+
     private String line3;
+
     private String line4;
 
-//    @ManyToOne
-//    @JoinColumn(name = "book_id")
-//    private Book book;
 }
