@@ -43,25 +43,25 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT b FROM Book b WHERE b.user.email = ?1")
     List<Book> findBooksFromVendor(String username);
 
-    @Query("select b from Book b where b.likes>0 and b.user.email = ?1")
+    @Query("SELECT b FROM Book b WHERE b.likes>0 AND b.user.email = ?1")
     List<Book> findLikedBooksFromVendor(String username);
 
-    @Query("select b from Book b where b.baskets>0 and b.user.email = ?1")
+    @Query("SELECT b FROM Book b WHERE b.baskets>0 AND b.user.email = ?1")
     List<Book> findBooksFromVendorAddedToBasket(String username);
 
-    @Query("select u.basket.books from User u where u.email = :name")
+    @Query("SELECT u.basket.books FROM User u WHERE u.email = :name")
     List<Book> findBasketByClientId(@Param("name") String name);
 
-    @Query("select u.basket.books from User u where u.id = ?1")
+    @Query("SELECT u.basket.books FROM User u WHERE u.id = ?1")
     List<Book> findBasketByClientIdAdmin(Long id);
 
-    @Query("select b from Book b where b.discount is not null and b.user.email = ?1")
+    @Query("SELECT b FROM Book b WHERE b.discount is not null AND b.user.email = ?1")
     List<Book> findBooksFromVendorWithDiscount(String username);
 
-    @Query("select b from Book b where b.requestStatus = ?2 and b.user.email = ?1")
+    @Query("SELECT b FROM Book b WHERE b.requestStatus = ?2 AND b.user.email = ?1")
     List<Book> findBooksFromVendorWithCancel(String username, RequestStatus requestStatus);
 
-    @Query("select b from Book b where b.requestStatus = ?2 and b.user.email = ?1")
+    @Query("SELECT b FROM Book b WHERE b.requestStatus = ?2 AND b.user.email = ?1")
     List<Book> findBooksFromVendorInProgress(String username, RequestStatus requestStatus);
 
     @Transactional
