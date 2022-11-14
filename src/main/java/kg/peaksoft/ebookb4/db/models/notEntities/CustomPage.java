@@ -1,13 +1,11 @@
 package kg.peaksoft.ebookb4.db.models.notEntities;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * Author: Zhanarbek Abdurasulov
- * Date: 20/4/22
- */
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class CustomPage {
 
