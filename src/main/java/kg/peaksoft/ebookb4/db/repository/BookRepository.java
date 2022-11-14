@@ -111,19 +111,19 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "WHERE u.user_id = ?1 ", nativeQuery = true)
     List<Book> getBooksInPurchased(Long id);
 
-    @Query(value = "select count(b) from Book b where b.requestStatus =:requestStatus")
+    @Query(value = "SELECT COUNT (b) FROM Book b WHERE b.requestStatus =:requestStatus")
     Integer getCountOfBooksInProgress(RequestStatus requestStatus);
 
-    @Query("select b from  Book b where  b.requestStatus =:requestStatus")
+    @Query("SELECT b FROM  Book b WHERE  b.requestStatus =:requestStatus")
     List<Book> findOnlyInProgressBooks(RequestStatus requestStatus);
 
-    @Query("select b from Book b where b.bookType = ?1 and b.requestStatus = ?2")
+    @Query("SELECT b FROM Book b WHERE b.bookType = ?1 AND b.requestStatus = ?2")
     List<Book> getAllAudioBook(BookType bookType, RequestStatus requestStatus);
 
-    @Query("select b from Book b where b.bookType = ?1 and b.requestStatus = ?2")
+    @Query("SELECT b FROM Book b WHERE b.bookType = ?1 AND b.requestStatus = ?2")
     List<Book> getAllEBook(BookType ebook, RequestStatus requestStatus);
 
-    @Query(value = "select * from book order by title desc limit 3;", nativeQuery = true)
+    @Query(value = "SELECT * FROM book ORDER BY title DESC limit 3;", nativeQuery = true)
     List<Book> getBook(RequestStatus accepted);
 
 }
