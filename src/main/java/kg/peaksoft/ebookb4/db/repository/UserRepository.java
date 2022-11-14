@@ -36,7 +36,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     //change discountPromo to null if it is expired
     @Transactional
     @Modifying
-    @Query("update Book b set b.discountFromPromo = null where b.user = ?1")
+    @Query("UPDATE Book b SET b.discountFromPromo = null WHERE b.user = ?1")
     void checkForPromos(User user);
 
     //We give here a promo
