@@ -66,22 +66,22 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Transactional
     @Modifying
-    @Query("update Book b set b.likes = b.likes+1 where b.bookId = ?1")
+    @Query("UPDATE Book b SET b.likes = b.likes+1 WHERE b.bookId = ?1")
     void incrementLikesOfBook(Long bookId);
 
     @Transactional
     @Modifying
-    @Query("update Book b set b.baskets = b.baskets+1 where b.bookId = ?1")
+    @Query("UPDATE Book b SET b.baskets = b.baskets+1 WHERE b.bookId = ?1")
     void incrementBasketsOfBooks(Long bookId);
 
-    @Query("select b from Book b where b.requestStatus = ?2 and b.bookId = ?1")
+    @Query("SELECT b FROM Book b WHERE b.requestStatus = ?2 AND b.bookId = ?1")
     Optional<Book> findBookInProgress(Long bookId, RequestStatus requestStatus);
 
     //find books by genre / admin panel
-    @Query(value = "select b from Book b where b.genre.name like %?1% and b.requestStatus = ?2 ")
+    @Query(value = "SELECT b FROM Book b WHERE b.genre.name LIKE %?1% AND b.requestStatus = ?2 ")
     List<Book> findAllByGenre(String genreName, RequestStatus requestStatus);
 
-    @Query("select count(b) from Book b where b.genre.id = ?1 and b.requestStatus = ?2")
+    @Query("SELECT COUNT (b) FROM Book b WHERE b.genre.id = ?1 AND b.requestStatus = ?2")
     int getCountGenre(Long genre, RequestStatus requestStatus);
 
     @Query(value = "select case when count(*) > 0 then 1 else 0 end " +
