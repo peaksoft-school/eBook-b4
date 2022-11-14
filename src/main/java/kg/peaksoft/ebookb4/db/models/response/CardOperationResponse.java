@@ -15,11 +15,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 
-
 @Slf4j
 @Component
 @AllArgsConstructor
 public class CardOperationResponse {
+
     private BookRepository bookRepository;
 
     private UserRepository userRepository;
@@ -27,10 +27,8 @@ public class CardOperationResponse {
     private PromocodeRepository promocodeRepository;
 
     public List<CardResponse> create(String name, List<CardResponse> cardResponseList, String plusOrMinus, Long bookId, String promoCode) {
-        User user = userRepository.findByEmail(name)
-                .orElseThrow(() -> new BadRequestException(
-                        "Client with email = " + name + " does not exists"
-                ));
+        User user = userRepository.findByEmail(name).orElseThrow(() ->
+                new BadRequestException("Client with email = " + name + " does not exists"));
         List<Book> bookListFromBasketOfClient = bookRepository.findBasketByClientId(name);
         for (int i = 0; i < cardResponseList.size(); i++) {
             cardResponseList.get(i).setBookId(bookListFromBasketOfClient.get(i).getBookId());
@@ -66,7 +64,6 @@ public class CardOperationResponse {
                             bookRepository.save(bookListFromBasketOfClient.get(i));
                         } else {
                             log.info("the paper books under this id = {} are over", bookListFromBasketOfClient.get(i).getBookId());
-                            continue;
                         }
                     } else if (plusOrMinus.equals("minus")) {
                         Integer numberOfSelectedCopy = bookListFromBasketOfClient.get(i).getPaperBook().getNumberOfSelectedCopy();
@@ -114,7 +111,6 @@ public class CardOperationResponse {
                     sumAfterDiscount += (book.getPrice() * book.getDiscount()) / 100;
                 } else {
                     log.info("if Discount in book with id {} = null you can check promo code!", book.getBookId());
-                    continue;
                 }
             } else
                 log.error("if you want to calculate the sum after the discount, the book must be e-book or audio book");
@@ -147,7 +143,7 @@ public class CardOperationResponse {
     }
 
     public Double total(List<Book> list) {
-        Double sumAfterDiscount = 0.0;
+        double sumAfterDiscount = 0.0;
         Double sum = 0.0;
         for (Book book : list) {
             if (book.getBookType().equals(BookType.EBOOK) || book.getBookType().equals(BookType.AUDIOBOOK)) {
@@ -155,7 +151,6 @@ public class CardOperationResponse {
                     sumAfterDiscount += (book.getPrice() * book.getDiscount()) / 100;
                 } else {
                     log.info("if Discount in book with id {} = null you can check promo code!", book.getBookId());
-                    continue;
                 }
             } else
                 log.error("The priseSum method works only with e-books and audiobooks");
@@ -171,7 +166,7 @@ public class CardOperationResponse {
 
     public Double totalForPaperBook(Long bookId) {
         Book bookById = bookRepository.getById(bookId);
-        Double sumAfterDiscount = 0.0;
+        double sumAfterDiscount = 0.0;
         Double sum = 0.0;
         if (bookById.getBookType().equals(BookType.PAPERBOOK)) {
             if (bookById.getDiscount() != null) {
@@ -213,7 +208,6 @@ public class CardOperationResponse {
         int numForReturn = 0;
         if (book1.getBookType().equals(BookType.PAPERBOOK)) {
             int numberOfSelected = book1.getPaperBook().getNumberOfSelected();
-            numForReturn = numberOfSelected - 1;
             book1.getPaperBook().setNumberOfSelected(numberOfSelected - 1);
             bookRepository.save(book1);
             return (numberOfSelected - 1);
@@ -227,7 +221,6 @@ public class CardOperationResponse {
         int numForReturn = 0;
         if (book1.getBookType().equals(BookType.PAPERBOOK)) {
             int numberOfSelected = book1.getPaperBook().getNumberOfSelected();
-            numForReturn = numberOfSelected + 1;
             book1.getPaperBook().setNumberOfSelected(numberOfSelected + 1);
             bookRepository.save(book1);
             return (numberOfSelected + 1);
@@ -252,7 +245,7 @@ public class CardOperationResponse {
 
     public Double sumAfterPromoPaperBook(String promo, Long id) {
         Book book = bookRepository.getById(id);
-        Double sum = 0.0;
+        double sum = 0.0;
         if (book.getDiscountFromPromo() != null) {
             if (checkPromo(promo)) {
                 sum += (book.getPrice() * book.getDiscountFromPromo()) / 100;
@@ -263,7 +256,7 @@ public class CardOperationResponse {
     }
 
     public Double sumAfterPromo(List<Book> list, String promo) {
-        Double sum = 0.0;
+        double sum = 0.0;
         for (Book book : list) {
             if (book.getBookType().equals(BookType.EBOOK) || book.getBookType().equals(BookType.AUDIOBOOK)) {
                 if (book.getDiscountFromPromo() != null) {
@@ -272,9 +265,9 @@ public class CardOperationResponse {
                     } else
                         log.info("Your promo code is not suitable");
                 }
-                continue;
             }
         }
         return sum;
     }
+
 }
