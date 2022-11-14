@@ -45,7 +45,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE Book b SET b.discountFromPromo = ?2 WHERE b.user = ?1 AND b.discount is null ")
     void givePromo(User user, int discount);
 
-    @Query("select b from User b where b.id = ?1 and b.role.name = ?2")
+    @Query("SELECT b FROM User b WHERE b.id = ?1 AND b.role.name = ?2")
     Optional<User> getUserById(Long id, ERole roleClient);
 
 }
