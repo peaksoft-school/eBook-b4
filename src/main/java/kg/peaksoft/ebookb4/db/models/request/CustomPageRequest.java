@@ -15,7 +15,7 @@ public class CustomPageRequest<B> {
 
     CustomPage customPage;
 
-    public  CustomPageRequest(Page<B> page) {
+    public CustomPageRequest(Page<B> page) {
         this.content = page.getContent();
         this.customPage = new CustomPage(page.getTotalElements(),
                 page.getTotalPages(), page.getNumber(), page.getSize());
